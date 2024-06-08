@@ -2,7 +2,7 @@
 
 Bringing component-based design to Django templates.
 
-<a href="https://www.django-cotton.com" target="_blank">Document site</a>
+<a href="https://django-cotton.com" target="_blank">Document site</a>
 
 ## Overview
 Cotton enhances Django templates by allowing component-based design, making UI composition more efficient and reusable. It integrates seamlessly with Tailwind CSS and retains full compatibility with native Django template features.

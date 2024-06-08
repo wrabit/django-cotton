@@ -1,0 +1,197 @@
+<c-layouts.with-sidebar>
+    <h1 id="components">Components</h1>
+
+    <c-slot name="page_index">
+        <c-index-link><a href="#components" class="no-underline">Components</a></c-index-link>
+        <c-index-link><a href="#attributes" class="no-underline">Atributes</a></c-index-link>
+            <c-index-sublink><a href="#variables-in-attributes" class="no-underline">Variables in attributes</a></c-index-sublink>
+            <c-index-sublink><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
+            <c-index-sublink><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
+        <c-index-link><a href="#props" class="no-underline">Props</a></c-index-link>
+            <c-index-sublink><a href="#default-attributes" class="no-underline">Default attributes</a></c-index-sublink>
+            <c-index-sublink><a href="#excluded" class="no-underline">Excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
+    </c-slot>
+
+    <p>Components are reusable pieces of view template. They can contain native django template syntax and can be used
+        inside standard django templates. The only requirement is that both, the component and the view that contains
+        the component must use a <c-highlight>.cotton.html</c-highlight> extension. </p>
+
+    <h3>A minimal example:</h3>
+
+<c-snippet label="my_component.cotton.html">{% cotton_verbatim %}{% verbatim %}
+{{ slot }}
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+<c-snippet label="my_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-my-component>
+    <p>Some content</p>
+</c-my-component>
+{% endverbatim %}{% endcotton_verbatim %}
+<c-slot name="preview">
+    <p class="m-0">Some content</p>
+</c-slot>
+</c-snippet>
+
+    <p>The <c-highlight>{% verbatim %}{{ slot }}{% endverbatim %}</c-highlight> variable will contain all of the content provided between the opening and closing tag of the current component as defined in the parent.</p>
+
+    <c-hr />
+
+    <h2 class="mt-0" id="attributes">Attributes</h2>
+
+    <p>Components are highly configurable. One way to control the content and behaviour of a component is through attributes.</p>
+
+<c-snippet label="weather.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<p>It's {{ temperature }}<sup>{{ unit }}</sup> and the condition is {{ condition }}.</p>
+    {% endcotton_verbatim %}{% endverbatim %}
+    </c-snippet>
+
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-weather temperature="23" unit="c" condition="windy"></c-weather>
+{% endcotton_verbatim %}{% endverbatim %}
+<c-slot name="preview">
+    It's 23<sup>c</sup> and the condition is windy.
+</c-slot>
+</c-snippet>
+
+    <h3 id="variables-in-attributes">Passing variables as attributes</h3>
+
+    <p>Sometimes you'll want to pass a variable from the parent's context. To do so, prepend the attribute with a "<c-highlight>:</c-highlight>".</p>
+
+<c-snippet language="python" label="views.py">{% cotton_verbatim %}{% verbatim %}
+def weather_view(request):
+    return render(request, 'view.cotton.html', {
+        'unit': get_weather_unit()
+    })
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+    <c-snippet label="view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-weather :unit="unit"></c-weather>
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+    <h3 id="named-slots">Passing other types of data using named slots</h3>
+
+    <p>There are occasions when you will need to pass different types of content other than a simple string or variable to a component. In these cases, you can use <c-highlight>named slots</c-highlight>.</p>
+
+    <p>Named slots are defined with the <c-highlight>{{ '<c-slot name="...">...</c-slot>'|force_escape }}</c-highlight> tag. The content is passed to the component like a standard template variable.</p>
+
+<c-snippet label="weather_card.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<div class="flex ...">
+    <h2>{{ day }}:</h2> {{ icon }} {{ label }}
+</div>
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+    <c-snippet label="view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-weather-card day="Tuesday">
+    <c-slot name="icon">
+        <svg>...</svg>
+    </c-slot>
+
+    <c-slot name="label">
+        <h2 class="text-yellow-500">Sunny</h2>
+    </c-slot>
+</c-weather-card>
+{% endcotton_verbatim %}{% endverbatim %}
+<c-slot name="preview">
+    <div class="flex items-center justify-center space-x-5 rounded border p-5">
+        <h3 class="m-0">Tuesday:</h3>
+        <svg id="Capa_1" enable-background="new 0 0 512 512" viewBox="0 0 512 512" class="w-20 h-20" xmlns="http://www.w3.org/2000/svg"><g><g><g fill="#fed402"><circle cx="176.39" cy="63.836" r="16"/><circle cx="335.61" cy="448.228" r="16"/></g></g><g><g fill="#fed402"><circle cx="63.804" cy="176.422" r="16"/><circle cx="448.196" cy="335.642" r="16"/></g></g><g><g fill="#fed402"><circle cx="63.804" cy="335.642" r="16"/><circle cx="448.196" cy="176.422" r="16"/></g></g><g><g fill="#fed402"><circle cx="176.39" cy="448.228" r="16"/><circle cx="335.61" cy="63.836" r="16"/></g></g><circle cx="256" cy="256.001" fill="#fed402" r="160.001"/><path d="m147.509 256.001c0-79.597 58.133-145.619 134.252-157.938-8.385-1.357-16.992-2.063-25.761-2.063-88.366 0-160.001 71.635-160.001 160.001s71.635 160 160.001 160c8.769 0 17.37-.705 25.755-2.062-76.119-12.319-134.246-78.341-134.246-157.938z" fill="#fac600"/><g><g fill="#fed402"><path d="m255.531 0h.938c8.578 0 15.531 6.954 15.531 15.531v32.938c0 8.578-6.953 15.531-15.531 15.531h-.938c-8.578 0-15.531-6.953-15.531-15.531v-32.938c0-8.577 6.953-15.531 15.531-15.531z"/><path d="m255.531 448h.938c8.578 0 15.531 6.954 15.531 15.531v32.938c0 8.578-6.954 15.531-15.531 15.531h-.938c-8.578 0-15.531-6.954-15.531-15.531v-32.938c0-8.578 6.953-15.531 15.531-15.531z"/></g></g><g><g fill="#fed402"><path d="m74.649 75.312.663-.663c6.065-6.065 15.899-6.065 21.964 0l23.291 23.291c6.065 6.065 6.065 15.899 0 21.964l-.663.663c-6.065 6.065-15.899 6.065-21.964 0l-23.291-23.29c-6.065-6.066-6.065-15.899 0-21.965z"/><path d="m391.433 392.096.663-.663c6.065-6.065 15.899-6.065 21.964 0l23.291 23.291c6.065 6.065 6.065 15.899 0 21.964l-.663.663c-6.065 6.065-15.899 6.065-21.964 0l-23.291-23.291c-6.065-6.065-6.065-15.899 0-21.964z"/></g></g><g><g fill="#fed402"><path d="m0 256.469v-.938c0-8.578 6.954-15.531 15.531-15.531h32.938c8.578 0 15.531 6.953 15.531 15.531v.938c0 8.578-6.953 15.531-15.531 15.531h-32.938c-8.577 0-15.531-6.953-15.531-15.531z"/><path d="m448 256.469v-.938c0-8.578 6.954-15.531 15.531-15.531h32.938c8.578 0 15.531 6.954 15.531 15.531v.938c0 8.578-6.954 15.531-15.531 15.531h-32.938c-8.578 0-15.531-6.953-15.531-15.531z"/></g></g><g><g fill="#fed402"><path d="m75.312 437.351-.663-.663c-6.065-6.065-6.065-15.899 0-21.964l23.291-23.291c6.065-6.065 15.899-6.065 21.964 0l.663.663c6.065 6.065 6.065 15.899 0 21.964l-23.291 23.291c-6.065 6.065-15.898 6.065-21.964 0z"/><path d="m392.096 120.567-.663-.663c-6.065-6.065-6.065-15.899 0-21.964l23.291-23.291c6.065-6.065 15.899-6.065 21.964 0l.663.663c6.065 6.065 6.065 15.899 0 21.964l-23.291 23.291c-6.065 6.065-15.899 6.065-21.964 0z"/></g></g></g></svg>
+        <h3 class="text-yellow-500 m-0">Sunny</h3>
+    </div>
+</c-slot>
+</c-snippet>
+
+    <h3 id="attrs">Using all attributes with {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
+
+    <p>It's sometimes useful to be able to print all provided attributes to the components in one "key=value" string. This is particularly useful when you are building form input components.</p>
+
+<c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<input type="text" class="border ..." {{ attrs }} />
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-input name="first_name" placeholder="First name" />
+<c-input name="last_name" placeholder="Last name" value="Smith" readonly  />
+{% endcotton_verbatim %}{% endverbatim %}
+<c-slot name="preview">
+    <div class="mb-2"><input type="text" autocomplete="off" class="border px-2 py-1 shadow" name="first_name" placeholder="First name" /></div>
+    <div><input type="text" autocomplete="off" class="border px-2 py-1 shadow" name="last_name" placeholder="Last name" value="Smith" readonly /></div>
+</c-slot>
+</c-snippet>
+
+    <c-hr />
+
+    <h2 class="mt-0" id="props">Props</h2>
+
+    <p>Props are defined using a <c-highlight>c-props</c-highlight> tag at the top of a component file. It can contain numerous key="value" pairs. It can also be a single key without a default value. Specifying an attribute as a 'prop' will remove the item from {% verbatim %}{{ attrs }}{% endverbatim %}.</p>
+
+    <h3 id="default-attributes">Props give attributes default values</h3>
+
+    <p>You may design a component that will often have a default behaviour and rarely needs overriding. In this case, you may opt to give a default value to your component.</p>
+
+<c-snippet label="alert.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-props type="success"></c-props>
+
+<div class="{% if type == 'success' %} .. {% elif type == 'danger' %} .. {% endif %}">
+    {{ slot }}
+</div>
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-alert>All good!</c-alert>
+<c-alert type="danger">Oh no!</c-alert>
+{% endcotton_verbatim %}{% endverbatim %}
+<c-slot name="preview">
+    <div class="bg-green-100 border-2 border-green-300 text-green-600 rounded-lg px-5 py-2 mb-2">All good!</div>
+    <div class="bg-red-100 border-2 border-red-200 text-red-600 rounded-lg px-5 py-2">Oh no!</div>
+</c-slot>
+</c-snippet>
+
+    <h3 id="excluded">Props are excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
+
+    <p>In order to provide more control when using {{ attrs }} to pass down all attributes as a key=value string to a component. Keys defined as props will not be included in this string. This is beneficial when you want to pass any attribute to an html element inside a component using {% verbatim %}{{ attrs }}{% endverbatim %}, but also want to provide additional props for some other reason.</p>
+
+<c-snippet label="input_group.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-props label errors></c-props>
+
+<label>{{ label }}</label>
+
+<input type="text" class="border ..." {{ attrs }} />
+
+{% if errors %}
+    {% for error in errors %}
+        {{ error }}
+    {% endfor %}
+{% endif %}
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-input-group label="First name" placeholder="First name" :errors="errors.first_name" />
+<c-input-group label="Last name" placeholder="Last name" :errors="errors.last_name" />
+{% endcotton_verbatim %}{% endverbatim %}
+<c-slot name="preview">
+    <div class="mb-1">
+        <label>First name</label><br>
+        <input type="text" autocomplete="off" class="border px-2 py-1" name="first_name" placeholder="First name" />
+    </div>
+    <div>
+        <label>Last name</label><br>
+        <input type="text" autocomplete="off" class="border px-2 py-1" name="last_name" placeholder="Last name" /><br>
+        <div class="text-sm text-red-500">Last name is required</div>
+    </div>
+</c-slot>
+</c-snippet>
+
+    <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'components' %}">Components</a>
+        </c-slot>
+        <c-slot name="next">
+            <a href="{% url 'layouts' %}">Layouts</a>
+        </c-slot>
+    </c-navigation>
+
+</c-layouts.with-sidebar>

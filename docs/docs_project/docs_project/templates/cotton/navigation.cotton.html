@@ -1,0 +1,29 @@
+<div class="flex items-center space-x-3 mt-16 mb-10">
+    {% if prev %}
+        <div class="w-1/2 px-0 py-2  border border-yellow-800 dark:border-gray-700 border-opacity-20 rounded no-underline text-right flex items-center">
+            <c-icons.chevron-left class="w-14 h-14 text-yellow-900 opacity-20 dark:text-teal-600 dark:opacity-100" />
+            <span class="text-left">
+                <span class="uppercase text-xs tracking-wider block text-gray-400">back</span>
+                <span class="text-white text-lg prose-a:text-gray-900 prose-a:dark:text-white prose-a:no-underline">
+                    {{ prev }}
+                </span>
+            </span>
+        </div>
+    {% else %}
+        <span class="w-1/2"></span>
+    {% endif %}
+
+    {% if next %}
+        <div class="w-1/2 justify-end px-0 py-2 border border-yellow-800 dark:border-gray-700 border-opacity-20 rounded no-underline text-right flex items-center">
+            <span>
+                <span class="uppercase text-xs tracking-wider block text-gray-400">next</span>
+                <span class="text-white text-lg prose-a:text-gray-900 prose-a:dark:text-white prose-a:no-underline">
+                    {{ next }}
+                </span>
+            </span>
+            <c-icons.chevron-right class="w-14 h-14 text-yellow-900 opacity-20 dark:text-teal-600 dark:opacity-100" />
+        </div>
+    {% else %}
+        <span class="w-1/2"></span>
+    {% endif %}
+</div>

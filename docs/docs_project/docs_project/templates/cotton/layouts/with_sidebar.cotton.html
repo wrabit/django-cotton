@@ -1,0 +1,22 @@
+<c-layouts.base>
+    <div class="max-w-8xl mx-auto grid sm:grid-cols-[200px_auto] lg:grid-cols-[250px_auto_230px] flex-1 px-5">
+        <div class="relative h-full pr-10 border-r-yellow-800 border-opacity-10 hidden sm:block">
+            <c-sidebar />
+        </div>
+        <div class="overflow-auto flex-1 pb-10">
+            <div class="px-0 pt-3 md:pt-0 md:px-5 py-0 prose !text-[16.5px] max-w-none prose-a:text-teal-600 prose-h2:text-3xl prose-h3:text-2xl dark:text-white dark:text-opacity-70 prose-headings:font-semibold dark:prose-headings:text-white">
+                {{ slot }}
+            </div>
+        </div>
+        <div class="relative h-full pl-10 border-opacity-10 hidden lg:block">
+            {% if hide_index != "true" %}
+                <div class="sticky top-0 pt-5 pb-10">
+                    <c-sidebar-heading>On this page</c-sidebar-heading>
+                    <ul class="ml-0 pl-0 mt-4 list-none list-inside">
+                        {{ page_index }}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</c-layouts.base>

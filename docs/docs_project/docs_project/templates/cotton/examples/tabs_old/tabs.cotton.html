@@ -1,0 +1,17 @@
+<div x-data="{
+    currentTab: 0,
+}">
+    <ul>
+        {% for t in tab %}
+            <li><a href="#" @click="currentTab = {{ counter }}">{{ counter }}</a></li>
+        {%  endfor %}
+    </ul>
+
+    <div>
+        {% for t in tab %}
+            <div x-show="currentTab == {{ counter }}">
+                {{ t }}
+            </div>
+        {%  endfor %}
+    </div>
+</div>

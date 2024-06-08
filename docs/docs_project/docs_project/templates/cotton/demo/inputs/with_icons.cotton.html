@@ -1,0 +1,13 @@
+<c-props type="text" leading_icon trailing_icon />
+
+<div class="border border-gray-300 rounded-md shadow flex items-center">
+    {% if leading_icon %}
+        <div class="pl-3">{{ leading_icon }}</div>
+    {% endif %}
+
+    <input type="{{ type }}" {{ attrs }} class="px-3 py-1.5 w-full focus:outline-0 bg-transparent">
+
+    {% if trailing_icon %}
+        <div class="pr-3">{{ trailing_icon }}</div>
+    {% endif %}
+</div>

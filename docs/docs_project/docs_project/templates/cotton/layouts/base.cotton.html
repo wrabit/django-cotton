@@ -1,0 +1,58 @@
+{% load static %}<html class="text-[15px]">
+<head>
+    <title>Django Cotton</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'app.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+
+    <script src="{% static 'highlight/highlight.min.js' %}"></script>
+    <script defer src="{% static 'alpine3.min.js' %}"></script>
+{#    <link href="{% static 'highlight/styles/vs2015.min.css' %}" rel="stylesheet" />#}
+    <link href="{% static 'highlight/styles/atom-one-dark.min.css' %}" rel="stylesheet" />
+{#    <link href="{% static 'highlight/styles/github.min.css' %}" rel="stylesheet" />#}
+    <script>
+        hljs.highlightAll();
+    </script>
+
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+<body class="bg-amber-50 dark:bg-gray-900 flex flex-col min-h-screen bg-fixed text-[16.5px]">
+    <c-navbar />
+
+    <div class="flex flex-1">
+        {{ slot }}
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('tabs', () => ({
+                tabs: [],
+                active: 0,
+                tabs_id: undefined,
+                updateTab(index) {
+                    this.active = index;
+                    this.$dispatch(`tab-change`, {
+                        tabs_id: this.tabs_id,
+                        index: index,
+                    });
+                },
+                onTabChange(event) {
+                    if (event.detail.tabs_id === this.tabs_id) {
+                        console.log('true')
+                        this.active = event.detail.index;
+                    }
+                },
+            }))
+        })
+    </script>
+</body>
+</html>

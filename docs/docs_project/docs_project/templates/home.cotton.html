@@ -1,0 +1,222 @@
+<c-layouts.with-sidebar hide_index="true">
+
+    <div class="max-w-5xl mx-auto px-3">
+        <div class="text-center mx-auto max-w-4xl leading-normal mb-6">
+            <h1 class="text-4xl md:text-5xl mb-15 dark:text-gray-200 font-medium mb-3 inline-flex flex-wrap items-center justify-center space-x-3 space-y-3">
+                <span class="w-full md:w-auto">Goodbye</span>
+                <c-tag class="text-2xl md:text-4xl">
+                    {% verbatim %}{% extends %}{% endverbatim %}
+                </c-tag>
+                <c-tag class="text-2xl md:text-4xl">
+                    {% verbatim %}{% block %}{% endverbatim %}
+                </c-tag>
+                <c-tag class="text-2xl md:text-4xl">
+                    {% verbatim %}{% include %}{% endverbatim %}
+                </c-tag>
+                <c-tag class="text-2xl md:text-4xl">
+                    {% verbatim %}{% custom_tag %}{% endverbatim %}
+                </c-tag>
+                <span class="pt-5 clear-both flex-wrap inline-flex justify-center items-center space-x-2">
+                    <span class="">Hello</span>
+                    <span class="shrink-0 px-3 py-1 bg-teal-600 font-mono text-2xl md:text-4xl rounded-lg text-white inline-block font-normal leading-normal">{{ '&lt;c-component />' }}</span>
+                </span>
+            </h1>
+
+            <!-- A Faster, More Expressive Approach to Templating in Django-->
+            <h2 class="!text-2xl italic !font-normal mt-8 mb-10 pt-0 dark:!text-teal-300 text-yellow-900 text-opacity-50 brightness-75 dark:opacity-100">Bringing component-based design to django templates</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+            <div class="col-span-1 flex flex-col">
+                <h2 class="!font-normal !text-xl mb-3 mt-0 text-center"><span class="font-semibold">Before:</span> Verbose, Rigid</h2>
+                <div class="flex h-full rounded-xl overflow-hidden">
+                    <c-demo.snippet-tabs labels="'view.html|product_layout.html'" tabs_id="compare">
+                        <div class="flex flex-col h-full" x-show="active === 0">
+
+<c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+{% extends "product_layout.html" %}
+
+{% block img_url %}
+icon.png
+{% endblock %}
+
+{% block header %}
+Item Title
+{% endblock %}
+
+{% block content %}
+    Description of the product
+
+    {% block price %}
+    $10
+    {% endblock %}
+{% endblock %}
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+                        </div>
+                        <div class="flex flex-col h-full" x-show="active === 1">
+
+<c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+<div id="container">
+    <div id="header">
+        <img src="{% block img_url %}{% endblock %}" />
+        <h1>
+            {% block title %}
+            {% endblock %}
+        </h1>
+    </div>
+
+    <div id="content">
+        {% block content %}
+
+            <div id="price">
+                {% block price %}
+                {% endblock %}
+            </div>
+
+        {% endblock %}
+    </div>
+</div>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+                        </div>
+                    </c-demo.snippet-tabs>
+                </div>
+            </div>
+            <div class="col-span-1 rounded-lg overflow-hidden  flex flex-col">
+                <h2 class="!font-normal !text-xl mb-3 mt-0 text-center"><span class="font-semibold">After:</span> Compact, Re-usable</h2>
+                <div class="flex h-full rounded-xl overflow-hidden">
+                    <c-demo.snippet-tabs labels="'view.cotton.html|product.cotton.html'" tabs_id="compare">
+                        <div class="flex flex-col h-full" x-show="active === 0">
+
+<c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+
+<c-product img_url="icon.png" title="Item Title" price="$10">
+    Description of the product
+</c-product>{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+                        </div>
+
+                        <div class="flex flex-col h-full" x-show="active === 1">
+
+<c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+<div id="container">
+    <div id="header">
+        <img src="{{ img_url }}" />
+        <h1>{{ title }}</h1>
+    </div>
+
+    <div id="content">
+        {{ slot }}
+
+        {% if price %}
+            <div id="price">
+                {{ price }}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+                        </div>
+                    </c-demo.snippet-tabs>
+                </div>
+            </div>
+        </div>
+
+
+    {% comment %}
+            <c-demo.row>
+                <c-demo.example-multi labels="'product_view.html|product_layout.html'" tabs_id="compare">
+
+                </c-demo.example-multi>
+
+                <c-demo.example-multi labels="'template.cotton.html|product.cotton.html'" tabs_id="compare">
+                    <div class="flex flex-col h-full" x-show="active === 0">
+                        <c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+
+<c-product img_url="icon.png" title="Item Title" price="$10">
+Description of the product
+</c-product>{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+                    </div>
+
+                    <div class="flex flex-col h-full" x-show="active === 1">
+                        <c-snippet>{% cotton_verbatim %}{% verbatim %}
+<div id="container">
+    <div id="header">
+        <img id="icon" src="{{ img_url }}" />
+        <span id="title">{{ title }}</span>
+    </div>
+
+    <div id="content">
+        {% if slot %}
+            {{ slot }}
+        {% else %}
+            This product has no description
+        {% endif %}
+
+        {% if price %}
+            <div id="price">
+                {{ price }}
+            </div>
+        {% endif %}
+    </div>
+</div>{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+                    </div>
+                </c-demo.example-multi>
+            </c-demo.row>
+        </c-demo.card>
+
+    {% endcomment %}
+
+    <div>
+        <h3 class="text-center pb-10">Why cotton?</h3>
+
+        <div class="grid md:grid-cols-2 gap-5 flex [&>div]:min-h-56">
+            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
+                {% heroicon_outline 'fire' class="shrink-0 text-teal-600 w-16 h-16 mr-5 mt-1" stroke_width="1.8" %}
+                <div>
+                    <div class="text-xl mb-3 font-semibold dark:text-white">Rapid UI composition </div>
+                    <div class="text-[15px]">Efficiently compose and reuse UI components. Adopting a modular design system streamlines workflow and boosts productivity.</div>
+                </div>
+            </div>
+            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
+                <c-icons.tailwind class="shrink-0 text-teal-600 w-16 h-16 mr-5 mt-1" />
+                <div>
+                    <div class="text-xl mb-3 font-semibold dark:text-white">Harmonious with Tailwind CSS</div>
+                    <div class="text-[15px]">Tailwind's utility-first approach compliments component based design - isolating style in re-usable components, enhancing maintainability.</div>
+                </div>
+            </div>
+            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
+                <div class="shrink-0 text-teal-600 text-[45px] font-medium mr-5 -mt-[1rem]">
+                    &#123;&#37;
+                </div>
+                <div>
+                    <div class="text-xl mb-3 font-semibold dark:text-white">Interoperable Django Templates</div>
+                    <div class="text-[15px]">Cotton enhances Django templates without replacing them, allowing progressive enhancement while maintaining full use of existing template features.</div>
+                </div>
+            </div>
+            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
+                {% heroicon_outline 'code-bracket' class="shrink-0 text-teal-600 w-16 h-16 mr-5 mt-1" stroke_width="1.8" %}
+                <div>
+                    <div class="text-xl mb-3 font-semibold dark:text-white">Semantic Syntax</div>
+                    <div class="text-[15px]">Cotton's HTML-like syntax allows code editors to recognize its components as HTML elements, enabling features like syntax highlighting and automatic tag closing.</div>
+                </div>
+            </div>
+            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
+                {% heroicon_outline 'presentation-chart-line' class="shrink-0 text-teal-600 w-16 h-16 mr-5 mt-1" stroke_width="1.8" %}
+                <div>
+                    <div class="text-xl mb-3 font-semibold dark:text-white">Minimal Overhead</div>
+                    <div class="text-[15px]">Cotton compiles to native django components and the compilation step is automatically cached and dynamically managed. </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+{#    <div class="fixed bottom-0 right-0 p-5 bg-white w-full">#}
+{#        Cotton helps Silica to create fullstack components for Django#}
+{#    </div>#}
+
+</c-layouts.with-sidebar>

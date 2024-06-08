@@ -1,0 +1,30 @@
+name: Test
+
+on:
+  workflow_dispatch:
+
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: |
+          docker build -f dev/docker/Dockerfile -t cotton-test-app dev/example_project
+
+      - name: Start Container
+        run: |
+          docker-compose -f dev/docker/docker-compose.yaml up -d
+
+      - name: Run Tests
+        run: docker exec -t cotton-dev-app python manage.py test
+
+      - name: Stop and Remove Services
+        run: docker-compose -f dev/docker/docker-compose.yaml down

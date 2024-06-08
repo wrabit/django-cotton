@@ -1,0 +1,7 @@
+<div class="bg-white flex flex-col px-1 {% if label %}pt-5{% endif %} pb-0 relative w-full">
+    {% if label %}
+        <div class="text-sm italic absolute px-4 py-0.5 bg-gray-100 left-0 top-0 rounded-br-lg text-gray-500">{{ label }}</div>
+    {% endif %}
+
+    {{ slot }}
+</div>

@@ -1,0 +1,28 @@
+<div x-data="example_tabs" x-init="$watch('tabs', () => currentTab = tabs[0])" class="bg-white rounded-lg overflow-hidden border shadow">
+    <div class="flex items-center w-full bg-gray-100">
+        <template x-for="tab in tabs">
+            <div @click="currentTab = tab" x-text="tab" class="px-10 py-3 cursor-pointer" :class="currentTab === tab ? 'text-teal-600 font-semibold bg-white' : 'text-gray-500'">
+
+            </div>
+        </template>
+    </div>
+
+    <div class="px-5 py-2">
+        {{ slot }}
+    </div>
+</div>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('example_tabs', () => ({
+            tabs: [],
+            currentTab: null,
+            isCurrent(tab) {
+                return this.currentTab === tab
+            },
+            register(name) {
+                this.tabs.push(name)
+            }
+        }))
+    })
+</script>

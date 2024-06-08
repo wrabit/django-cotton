@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  cotton-docs-web:
+    container_name: cotton-docs-web
+    restart: always
+    image: cotton-docs-app
+    working_dir: /app
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DEBUG=True
+    volumes:
+      - ../docs_project:/app
+      - ../../django_cotton:/app/django_cotton
+    ports:
+      - 8002:8000
+
+  cotton-docs-tailwind:
+    container_name: cotton-docs-tailwind
+    stop_signal: SIGINT
+    image: node:16
+    working_dir: /app
+    tty: true
+    volumes:
+      - ../docs_project:/app
+    # call the tailwind build before the watch
+    #    command: /bin/sh -c "npm install && npx tailwindcss -c ./tailwind.config.js -o ./luma/static/app.css && npx tailwindcss -c ./tailwind.config.js -o ./luma/static/app.css --watch"
+    command: /bin/sh -c "trap 'exit' INT; npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css --watch"

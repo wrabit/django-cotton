@@ -1,0 +1,78 @@
+<c-layouts.with-sidebar>
+
+    <c-slot name="page_index">
+        <c-index-link><a href="#layouts" class="no-underline">Layouts</a></c-index-link>
+            <c-index-sublink><a href="#variants" class="no-underline">Layout variants</a></c-index-sublink>
+            <c-index-sublink><a href="#usage" class="no-underline">Usage</a></c-index-sublink>
+    </c-slot>
+
+    <h1 id="layouts">Layouts</h1>
+
+    <p>Cottons makes building layouts a piece of cake. Let's start with composing a base layout that contains the base of our view:</p>
+
+<c-snippet label="layouts/base.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<html>
+    <head>
+        ...
+    </head>
+    <body>
+        {{ slot }}
+    </body>
+</html>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+<h2 id="variants">Create layout variants</h2>
+
+    <p>Imagine that we're creating a web app with an authenticated area, so we'll need areas for guests and users. Let's create these, extending from the base component.</p>
+
+<c-snippet label="layouts/guest.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-layouts.base>
+    {{ slot }}
+</c-layouts.base>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+<c-snippet label="layouts/app.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-layouts.base>
+    <div class="sidebar">
+        {{ sidebar }}
+    </div>
+
+    <div class="main">
+        {{ slot }}
+    </div>
+</c-layouts.base>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+<h2 id="usage">Using the layouts</h2>
+
+<c-snippet label="login.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-layouts.guest>
+    <div id="loginForm">
+        <input name="email" type="email" placeholder="Email">
+        ...
+    </div>
+</c-layouts.guest>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+<c-snippet label="dashboard.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-layouts.app>
+    <c-slot name="sidebar">
+        <a href="/dashboard">Dashboard</a>
+        ...
+    </c-slot>
+    <div id="dashboard">
+        ...
+    </div>
+</c-layouts.app>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+    <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'components' %}">Components</a>
+        </c-slot>
+        <c-slot name="next">
+            <a href="{% url 'form-fields' %}">Flexible Inputs</a>
+        </c-slot>
+    </c-navigation>
+
+</c-layouts.with-sidebar>

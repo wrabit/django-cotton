@@ -1,0 +1,203 @@
+<c-layouts.with-sidebar>
+
+    <c-slot name="page_index">
+        <c-index-link><a href="#tabs" class="no-underline">Alpine Tabs</a></c-index-link>
+        <c-index-sublink><a href="#goals" class="no-underline">Goals</a></c-index-sublink>
+        <c-index-sublink><a href="#prototype" class="no-underline">Prototyping</a></c-index-sublink>
+        <c-index-sublink><a href="#preparation" class="no-underline">Preparation</a></c-index-sublink>
+        <c-index-link><a href="#interactivity" class="no-underline">Interactivity</a></c-index-link>
+        <c-index-sublink><a href="#data-component" class="no-underline">Data component</a></c-index-sublink>
+        <c-index-sublink><a href="#modify-tabs" class="no-underline">tabs.cotton.html</a></c-index-sublink>
+        <c-index-sublink><a href="#modify-tab" class="no-underline">tab.cotton.html</a></c-index-sublink>
+        <c-index-sublink><a href="#example" class="no-underline">Example</a></c-index-sublink>
+    </c-slot>
+
+    <h1 id="tabs">Re-usable tabs with alpine.js</h1>
+
+    <p>Let's tackle together a common UI requirement - tabs.</p>
+
+    <h3 class="mt-0 pt-2 mb-5" id="goals">We'll start by defining some goals:</h3>
+
+    <c-ul>
+        <li>A tab component should be re-usable</li>
+        <li>The usage should be simple, keeping markup to a minimum</li>
+        <li>It should be able to contain any number of tabs</li>
+        <li>It should indicate the active tab</li>
+    </c-ul>
+
+    <h2 id="prototype">Start with a static prototype</h2>
+
+    <p>Before we think about components and adding interactivity, we'll create the design in HTML and Tailwind CSS. This way we can make sure we're happy with the overall look and design.</p>
+
+    <c-snippet label="Static example">{% cotton_verbatim %}{% verbatim %}
+<div class="bg-white rounded-lg overflow-hidden border shadow">
+
+    <!-- the navigation for the tabs -->
+    <div class="flex items-center space-x-5 w-full bg-gray-100">
+        <div class="px-5 py-3 cursor-pointer bg-white text-teal-500">
+            Tab 1
+        </div>
+        <div class="px-5 py-3 cursor-pointer border-b-[3px] border-b-transparent">
+            Tab 2
+        </div>
+    </div>
+
+    <!-- tab's content will go here -->
+    <div class="px-5 py-2">
+        <p>Lorem ipsum ...</p>
+    </div>
+</div>
+    {% endcotton_verbatim %}{% endverbatim %}
+    <c-slot name="preview">
+<div class="bg-white rounded-lg overflow-hidden border shadow">
+    <div class="flex items-center space-x-5 w-full bg-gray-100">
+        <div class="px-5 py-3 cursor-pointer bg-white text-teal-600 font-semibold">
+            Tab 1
+        </div>
+        <div class="text-gray-500">
+            Tab 2
+        </div>
+    </div>
+    <div class="px-5 py-2">
+        <p>Lorem ipsum ...</p>
+    </div>
+</div>
+    </c-slot>
+    </c-snippet>
+
+    <h2 id="preparation">Preparing cotton components</h2>
+
+    <p>Now we have the design right, let's chop it up into components.</p>
+
+    <h4>tabs.cotton.html</h4>
+
+    <c-snippet>{% cotton_verbatim %}{% verbatim %}
+<div class="bg-white rounded-lg overflow-hidden border shadow">
+    <div class="flex items-center space-x-5 w-full bg-gray-100">
+        <!-- tab navigation will go here -->
+    </div>
+
+    <div class="px-5 py-2">
+        <!-- tab content will go here -->
+        {{ slot }}
+    </div>
+</div>
+    {% endcotton_verbatim %}{% endverbatim %}
+    </c-snippet>
+
+    <h4>tab.cotton.html</h4>
+
+    <c-snippet>{% cotton_verbatim %}{% verbatim %}
+<div>
+    {{ slot }}
+</div>
+    {% endcotton_verbatim %}{% endverbatim %}
+    </c-snippet>
+
+    <p>This will give us the ability to initiate a set of tabs using markup like:</p>
+
+    <c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-tabs>
+    <c-tab>Content for tab 1</c-tab>
+    <c-tab>Content for tab 2</c-tab>
+    <c-tab>Content for tab 3</c-tab>
+</c-tabs>
+    {% endcotton_verbatim %}{% endverbatim %}
+    </c-snippet>
+
+    <c-hr />
+
+    <h2 id="interactivity">Adding interactivity</h2>
+
+    <p>Up to this point, we still don't have a working tabs component. We'll join up the dots now and pull in alpine.js, a lightweight javascript library designed to assist in front end interactions. Follow the <a href="https://alpinejs.dev/essentials/installation" target="_blank">installation guide</a> before continuing.</p>
+
+    <h3 id="data-component">Add an Alpine data component</h3>
+
+    <p>In alpine you can define re-usable data functions. Place this code somewhere globally in your project.</p>
+
+<c-snippet language="xml">{% cotton_verbatim %}{% verbatim %}
+<!-- Place this in somewhere like base layout of your app -->
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('tabs', () => ({
+            tabs: [],
+            currentTab: null,
+            isCurrent(tab) {
+                return this.currentTab === tab
+            },
+            register(name) {
+                this.tabs.push(name)
+            }
+        }))
+    })
+</script>
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+    <h3 id="modify-tabs">Modifying tabs.cotton.html</h3>
+
+    <p>Next we'll make the appropriate changes to our tabs.cotton.html component to integrate alpine.js</p>
+
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<div x-data="tabs" x-init="$watch('tabs', () => currentTab = tabs[0])" class="...">
+    <!-- The $watch function will set the first tab as the active tab. -->
+    <div class="...">
+        <template x-for="tab in tabs">
+            <div @click="currentTab = tab" x-text="tab" class="..." :class="currentTab === tab ? 'text-teal-600 font-semibold bg-white' : 'text-gray-500'"></div>
+            <!-- Here, we dynamically create the tab navigation items based on the child 'tabs' that are registered. -->
+        </template>
+    </div>
+
+    <div class="px-5 py-2">
+        {{ slot }}
+        <!-- All of the <c-tab /> items will go here. -->
+    </div>
+</div>
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+    <h3 id="modify-tab">Modifying tab.cotton.html</h3>
+
+    <p>We now need to modify the tab component so that it is registered each time it is imported into the dom.</p>
+
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<div x-data x-show="isCurrent('{{ name }}')" x-init="register('{{ name }}')">
+    {{ slot }}
+</div>
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+<h2 id="example">Usage and example</h2>
+
+<p>We have now built a re-usable tab component that satisfies all of our initial goals.</p>
+
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-tabs>
+    <c-tab name="Tab 1">Tab 1 content</c-tab>
+    <c-tab name="Tab 2">Tab 2 content</c-tab>
+    <c-tab name="Tab 3">Tab 3 content</c-tab>
+</c-tabs>
+{% endcotton_verbatim %}{% endverbatim %}
+<c-slot name="preview">
+    <c-examples.tabs.tabs>
+        <c-examples.tabs.tab name="Tab 1">
+            <p>Tab 1 content</p>
+        </c-examples.tabs.tab>
+        <c-examples.tabs.tab name="Tab 2">
+            <p>Tab 2 content</p>
+        </c-examples.tabs.tab>
+        <c-examples.tabs.tab name="Tab 3">
+            <p>Tab 3 content</p>
+        </c-examples.tabs.tab>
+    </c-examples.tabs.tabs>
+</c-slot>
+
+</c-snippet>
+
+<c-navigation>
+    <c-slot name="prev">
+        <a href="{% url 'icons' %}">Icons</a>
+    </c-slot>
+</c-navigation>
+
+</c-layouts.with-sidebar>

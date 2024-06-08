@@ -1,0 +1,26 @@
+<c-layouts.with-sidebar>
+    <h1>About</h1>
+
+    <p>Using components are at the core of Cotton. They achieve a similar result to extends, block and include tags but provide a different mental model than the current way of building interfaces in Django.</p>
+
+    <p>Components are a way to encapsulate a piece of HTML, CSS and JavaScript into a single reusable unit. They are a way to break down a page into smaller, reusable parts that can be used in multiple places.</p>
+
+
+    <p>Front-end JavaScript frameworks have standardized the way we compose interfaces. Custom components within these frameworks often mirror the native elements found in HTML. This similarity is hardly surprising, given that HTML's inherently nested layout provides clarity and structure, while its native elements offer flexibility and reusability.</p>
+
+    <p>View components typically encapsulate content, layout, and styling, serving a singular or narrowly focused purpose. This design approach makes them straightforward to understand and maintain. Moreover, their design for high reusability reinforces the DRY (Don't Repeat Yourself) principle.</p>
+
+    <p>It appears that utility-first CSS frameworks like Tailwind are here to stay. Their adoption means we can avoid maintaining external stylesheets, allowing us to concentrate our design efforts within components. This focus minimizes concerns about external influences on design integrity.</p>
+
+    <p>Overall, adopting a component-based design system for interfaces can significantly enhance reusability, flexibility, maintainability, and productivity.</p>
+
+    <p>The inspiration for Cotton came from several popular JavaScript libraries and Laravel's Blade Components, which was among the first monolithic frameworks to adopt view components in this manner.</p>
+
+    <h1>How it works</h1>
+
+    <p>Cotton hooks into Django's template loading process, offering a new approach to template composition. This integration facilitates the development of more modular templates and the reuse of components throughout your app.</p>
+
+    <p>Components and slots compile to native django components which render and manipulate context to the template. This means that you can use all the power of Django's template language in your components and more.</p>
+
+    <p>When cotton syntax is compiled to Django template it is cached, this happens for every cotton component and view template.</p>
+</c-layouts.with-sidebar>

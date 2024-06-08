@@ -1,0 +1,130 @@
+<c-layouts.with-sidebar>
+    <c-slot name="page_index">
+        <c-index-link><a href="#install" class="no-underline">Install Cotton</a></c-index-link>
+        <c-index-link><a href="#create-a-component" class="no-underline">Create a component</a></c-index-link>
+        <c-index-link><a href="#include-a-component" class="no-underline">Include a component</a></c-index-link>
+        <c-index-link><a href="#usage" class="no-underline">Usage</a></c-index-link>
+            <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
+            <c-index-sublink><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
+            <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
+            <c-index-sublink><a href="#tag-styles" class="no-underline">Tag Styles</a></c-index-sublink>
+    </c-slot>
+
+    <h1 id="install">Quickstart</h1>
+
+    <h2>Install cotton</h2>
+    <p>Run the following command:</p>
+    <c-snippet language="python">pip install django-cotton</c-snippet>
+    <p>Then update your settings.py:</p>
+
+    <c-snippet language="python" label="settings.py">{% cotton_verbatim %}{% verbatim %}
+INSTALLED_APPS = [
+    ...
+    'django_cotton',
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['your_project/templates'], # Add your template directories here
+        'APP_DIRS': False,
+        'OPTIONS': {
+            'loaders': [
+                'django_cotton.template.loaders.CottonLoader', # First position
+                # continue with default loaders, typically:
+                # "django.template.loaders.filesystem.Loader",
+                # "django.template.loaders.app_directories.Loader",
+            ],
+            'builtins': [
+                'django_cotton.templatetags.cotton',
+            ],
+        },
+    },
+]
+    {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+    <c-hr id="create-a-component" />
+
+    <h2>Create a component</h2>
+
+    <p>Create a new directory in your templates directory called <span class="font-mono">cotton</span>. Inside this directory create a new file called <span class="font-mono">card.cotton.html</span> with the following content:</p>
+
+    <c-snippet label="templates/cotton/card.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<div class="bg-white shadow rounded border p-4">
+    <h2>{{ title }}</h2>
+    <p>{{ slot }}</p>
+    <button href="{% url url %}">Read more</button>
+</div>
+    {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+
+    <c-hr id="include-a-component" />
+
+    <h2>Include a component</h2>
+
+    <p>Create a view with template. View templates that contain cotton components must also carry the ".cotton.html" extension.</p>
+
+<c-snippet language="python" label="views.py">{% cotton_verbatim %}{% verbatim %}
+def dashboard_view(request):
+    return render(request, "dashboard.cotton.html")
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+    <c-snippet label="templates/dashboard.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-card title="Trees" url="trees">
+    We have the best trees
+</c-card>
+
+<c-card title="Spades" url="spades">
+    The best spades in the land
+</c-card>
+    {% endverbatim %}{% endcotton_verbatim %}
+<c-slot name="preview">
+<div class="bg-white shadow rounded border p-4 mb-3">
+    <h2 class="m-0">Trees</h2>
+    <p>We have the best trees</p>
+    <button href="/trees" class="text-teal-600">Read more</button>
+</div>
+<div class="bg-white shadow rounded border p-4 mb-3">
+    <h2 class="m-0">Spades</h2>
+    <p>The best spades in the land</p>
+    <button href="/spades" class="text-teal-600">Read more</button>
+</div>
+</c-slot>
+    </c-snippet>
+
+    <c-hr />
+
+    <h2 id="usage">Usage</h2>
+
+    <h3 id="basics">Basics</h3>
+    <c-ul>
+        <li>View templates that include cotton components should have <c-highlight>.cotton.html</c-highlight> extension</li>
+        <li>Cotton components should also be suffixed with <c-highlight>.cotton.html</c-highlight> and be placed in the <c-highlight>templates/cotton</c-highlight> folder</li>
+    </c-ul>
+
+    <h3 id="naming">Naming</h3>
+    <p>Cotton uses the following naming conventions:</p>
+    <c-ul>
+        <li>Component file names are in snake_case: <c-highlight>my_component.cotton.html</c-highlight></li>
+        <li>but are called using kebab-case: <c-highlight>{{ "<c-my-component />"|force_escape }}</c-highlight></li>
+    </c-ul>
+
+    <h3 id="subfolders">Subfolders</h3>
+
+    <c-ul>
+        <li>Components in subfolders can be defined using dot notation</li>
+        <li>A component in <c-highlight>sidebar/menu/link.cotton.html</c-highlight> would be included as <c-highlight>{{ "<c-sidebar.menu.link />"|force_escape }}</c-highlight></li>
+    </c-ul>
+
+    <h3 class="tag-style">Tag Style</h3>
+    <c-ul>
+        <li>Components can either be self-closing <c-highlight>{{ "<c-my-component />"|force_escape }}</c-highlight> or have a closing tag <c-highlight>{{ "<c-my-component></c-my-component>"|force_escape }}</c-highlight></li>
+    </c-ul>
+
+    <c-navigation>
+        <c-slot name="next">
+            <a href="{% url 'components' %}">Components</a>
+        </c-slot>
+    </c-navigation>
+
+</c-layouts.with-sidebar>

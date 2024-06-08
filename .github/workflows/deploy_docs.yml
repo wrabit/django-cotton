@@ -1,0 +1,43 @@
+name: "Deploy Documentation"
+run-name: "Deploy Documentation (@${{ github.actor }})"
+
+on:
+  workflow_call:
+    secrets:
+      RAILWAY_PROJECT_TOKEN:
+        required: true
+      RAILWAY_SERVICE:
+        required: true
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+
+jobs:
+  deploy_docs:
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install Documentation Dependencies
+        run: |
+          cd docs/docs_project
+          npm install          
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy Documentation
+        run: |
+          cp -r django_cotton docs/docs_project
+          railway up --service=${{ secrets.RAILWAY_SERVICE }}

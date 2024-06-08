@@ -1,0 +1,11 @@
+{
+  "name": "cotton docs",
+  "version": "1.0.0",
+  "scripts": {
+    "build:css": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3",
+    "@tailwindcss/typography": "^0.5.1"
+  }
+}

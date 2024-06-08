@@ -1,0 +1,164 @@
+<c-layouts.with-sidebar>
+
+    <c-slot name="page_index">
+        <c-index-link><a href="#inputs" class="no-underline">Flexible Inputs</a></c-index-link>
+        <c-index-sublink><a href="#type" class="no-underline">Changing <code>type</code></a></c-index-sublink>
+        <c-index-sublink><a href="#validation" class="no-underline">Adding validation</a></c-index-sublink>
+        <c-index-sublink><a href="#icons" class="no-underline">Adding icons</a></c-index-sublink>
+    </c-slot>
+
+    <h1 id="inputs">Building a flexible input field</h1>
+
+    <p>Componentizing form fields enable you to easily maintain a consistent style across your whole app. This approach is particularly favourable when using a utility first CSS design system like Tailwind where every aspect of the style is detailed and maintained in isolated component files.</p>
+
+    <p>For this example, we're using Tailwind for styling. Let's start with a standard input:</p>
+
+<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<input type="text" name="shoe_size" placeholder="Shoe Size" class="border rounded shadow px-3 py-1.5">
+{% endverbatim %}{% endcotton_verbatim %}
+    <c-slot name="preview">
+        <input type="text" name="shoe_size" placeholder="Shoe Size" class="border border-gray-300 rounded-md shadow px-3 py-1.5">
+    </c-slot>
+</c-snippet>
+
+    <p>Having to repeat this code more than once may get tedious and difficult to maintain. Let's componentize.</p>
+
+<c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<input type="text" name="{{ name }}" placeholder="{{ placeholder }}" class="border rounded shadow px-3 py-1.5">
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-input name="shoe_size" placeholder="Show Size" />
+<c-input name="country" placeholder="Country" />
+<c-input name="age" placeholder="Age" />
+{% endverbatim %}{% endcotton_verbatim %}
+    <c-slot name="preview">
+        <div class="mb-2"><input type="text" placeholder="Shoe Size" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
+        <div class="mb-2"><input type="text" placeholder="Country" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
+        <div class="mb-2"><input type="text" placeholder="Age" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
+    </c-slot>
+</c-snippet>
+
+    <h2 id="type">Change the input type</h2>
+
+    <p>You will probably need more than just a text input in your project. So let's declare an attribute `text` as a prop. Adding it as a prop will allow us to set "text" as the default. Additionally, it will be excluded from <c-highlight>{% verbatim %}`{{ attrs }}`{% endverbatim %}</c-highlight>:</p>
+
+<c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-props type="text" />
+
+<input type="{{ type }}" {{ attrs }} class="border rounded shadow px-3 py-1.5">
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-input name="some_text" placeholder="Just a text field" />
+<c-input type="email" name="email" placeholder="Email" />
+<c-input type="password" name="password" placeholder="Password" />
+<c-input type="number" name="Count" placeholder="Password" />
+{% endverbatim %}{% endcotton_verbatim %}
+    <c-slot name="preview">
+        <div class="mb-2"><input type="text" placeholder="Just a text field" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
+        <div class="mb-2"><input type="email" placeholder="Email" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
+        <div class="mb-2"><input type="password" placeholder="Password" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
+        <div class="mb-2"><input type="number" placeholder="Count" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
+    </c-slot>
+</c-snippet>
+
+    <h2 id="validation">Adding validation state</h2>
+
+    <p>Let's also handle displaying errors when we need to.</p>
+
+<c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-props type="text" errors />
+
+<input type="{{ type }}" {{ attrs }} class="border rounded shadow px-3 py-1.5 {% if errors %}border-red-500{% endif %}">
+
+{% if errors %}
+    <div class="text-red-500 text-sm mt-1">{{ errors.as_text }}</div>
+{% endif %}
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-input name="surname" placeholder="Surname" errors="form.surname.errors" />
+{% endverbatim %}{% endcotton_verbatim %}
+    <c-slot name="preview">
+        <div class="mb-2"><input type="text" placeholder="Surname" class="border rounded-md shadow px-3 py-1.5 border-red-500"></div>
+        <div class="text-red-500 text-sm mt-1">Your surname is required.</div>
+    </c-slot>
+</c-snippet>
+
+    <h2 id="icons">Bonus - Adding icons</h2>
+
+    <p>To take customization a step further and to demonstrate the flexibility of cotton, let's now give our input component the ability to display icons.</p>
+
+<c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-props type="text" leading_icon trailing_icon />
+
+<div class="border rounded shadow flex items-center">
+    {% if leading_icon %}
+        <div class="pl-3">{{ leading_icon }}</div>
+    {% endif %}
+
+    <input type="{{ type }}" {{ attrs }} class="px-3 py-1.5 w-full">
+</div>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+
+<c-input name="text" name="username" placeholder="Username">
+    <c-slot name="leading_icon">
+        <svg>...</svg>
+    </c-slot>
+</c-input>
+
+<c-input type="password" name="password" name="password" placeholder="Password">
+    <c-slot name="leading_icon">
+        <svg>...</svg>
+    </c-slot>
+</c-input>
+
+{% endverbatim %}{% endcotton_verbatim %}
+    <c-slot name="preview">
+        <div class="flex flex-col space-y-3 max-w-[300px]">
+            <c-demo.inputs.with-icons name="username" placeholder="Username">
+                <c-slot name="leading_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-gray-400 w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </c-slot>
+            </c-demo.inputs.with-icons>
+
+            <c-demo.inputs.with-icons type="password" name="password" placeholder="Password">
+                <c-slot name="leading_icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-gray-400 w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                    </svg>
+                </c-slot>
+            </c-demo.inputs.with-icons>
+        </div>
+    </c-slot>
+</c-snippet>
+
+<c-navigation>
+    <c-slot name="prev">
+        <a href="{% url 'layouts' %}">Layouts</a>
+    </c-slot>
+    <c-slot name="next">
+        <a href="{% url 'icons' %}">Icons</a>
+    </c-slot>
+</c-navigation>
+
+    <!-- <h2>Adding validation</h2> -->
+    <!-- <h2>Adding icons</h2> -->
+    <!-- <h2>Adding a form group</h2> -->
+    <!-- <h2>Adding a label</h2> -->
+    <!-- <h2>Adding a hint</h2> -->
+    <!-- <h2>Adding a prefix</h2> -->
+    <!-- <h2>Adding a suffix</h2> -->
+    <!-- <h2>Adding a button</h2> -->
+    <!-- <h2>Adding a textarea</h2> -->
+    <!-- <h2>Adding a select</h2> -->
+    <!-- <h2>Adding a checkbox</h2> -->
+
+
+
+</c-layouts.with-sidebar>

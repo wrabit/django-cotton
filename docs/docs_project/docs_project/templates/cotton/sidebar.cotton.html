@@ -1,0 +1,27 @@
+<div class="sticky top-6 pb-6 pt-2">
+    <c-sidebar-block>
+        <c-slot name="title">Getting Started</c-slot>
+        <ul>
+            <c-sidebar-link>Quickstart <c-slot name="path">{% url 'quickstart' %}</c-slot></c-sidebar-link>
+            <c-sidebar-link>Components <c-slot name="path">{%  url 'components' %}</c-slot></c-sidebar-link>
+        </ul>
+    </c-sidebar-block>
+    <c-sidebar-block>
+        <c-slot name="title">Examples</c-slot>
+        <ul>
+            <c-sidebar-link>Layouts <c-slot name="path">{% url 'layouts' %}</c-slot></c-sidebar-link>
+            <c-sidebar-link>Flexible Inputs <c-slot name="path">{% url 'form-fields' %}</c-slot></c-sidebar-link>
+            <c-sidebar-link>Icons <c-slot name="path">{% url 'icons' %}</c-slot></c-sidebar-link>
+            <c-sidebar-link>Tabs with Alpine.js<c-slot name="path">{% url 'alpine-js' %}</c-slot></c-sidebar-link>
+        </ul>
+    </c-sidebar-block>
+    {% comment %}
+    <c-sidebar-block>
+        <c-slot name="title">More</c-slot>
+        <ul>
+            <c-sidebar-link>Why & How <c-slot name="path">{% url 'how-it-works' %}</c-slot></c-sidebar-link>
+            <c-sidebar-link>Cheatsheet</c-sidebar-link>
+        </ul>
+    </c-sidebar-block>
+    {% endcomment %}
+</div>

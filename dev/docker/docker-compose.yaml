@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  web:
+    container_name: cotton-dev-app
+    restart: always
+    image: cotton-test-app
+    working_dir: /app
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DEBUG=True
+    volumes:
+      - ../example_project:/app
+      - ../../django_cotton:/app/django_cotton
+    ports:
+      - 8001:8000

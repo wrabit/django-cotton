@@ -38,7 +38,7 @@ TEMPLATES = [
         'APP_DIRS': False,
         'OPTIONS': {
             'loaders': [
-                'django_cotton.template.loaders.CottonLoader',
+                'django_cotton.cotton_loader.Loader',
                 # continue with default loaders:
                 # "django.template.loaders.filesystem.Loader",
                 # "django.template.loaders.app_directories.Loader",

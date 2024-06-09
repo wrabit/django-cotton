@@ -122,6 +122,9 @@ def dashboard_view(request):
     </c-ul>
 
     <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'home' %}">Home</a>
+        </c-slot>
         <c-slot name="next">
             <a href="{% url 'components' %}">Components</a>
         </c-slot>

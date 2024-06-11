@@ -7,6 +7,7 @@
             <c-index-sublink><a href="#variables-in-attributes" class="no-underline">Variables in attributes</a></c-index-sublink>
             <c-index-sublink><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
             <c-index-sublink><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
+            <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
         <c-index-link><a href="#props" class="no-underline">Props</a></c-index-link>
             <c-index-sublink><a href="#default-attributes" class="no-underline">Default attributes</a></c-index-sublink>
             <c-index-sublink><a href="#excluded" class="no-underline">Excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
@@ -94,9 +95,9 @@ def weather_view(request):
 {% endcotton_verbatim %}{% endverbatim %}
 <c-slot name="preview">
     <div class="flex items-center justify-center space-x-5 rounded border p-5">
-        <h3 class="m-0">Tuesday:</h3>
+        <h3 class="m-0 text-gray-800">Tuesday:</h3>
         <svg id="Capa_1" enable-background="new 0 0 512 512" viewBox="0 0 512 512" class="w-20 h-20" xmlns="http://www.w3.org/2000/svg"><g><g><g fill="#fed402"><circle cx="176.39" cy="63.836" r="16"/><circle cx="335.61" cy="448.228" r="16"/></g></g><g><g fill="#fed402"><circle cx="63.804" cy="176.422" r="16"/><circle cx="448.196" cy="335.642" r="16"/></g></g><g><g fill="#fed402"><circle cx="63.804" cy="335.642" r="16"/><circle cx="448.196" cy="176.422" r="16"/></g></g><g><g fill="#fed402"><circle cx="176.39" cy="448.228" r="16"/><circle cx="335.61" cy="63.836" r="16"/></g></g><circle cx="256" cy="256.001" fill="#fed402" r="160.001"/><path d="m147.509 256.001c0-79.597 58.133-145.619 134.252-157.938-8.385-1.357-16.992-2.063-25.761-2.063-88.366 0-160.001 71.635-160.001 160.001s71.635 160 160.001 160c8.769 0 17.37-.705 25.755-2.062-76.119-12.319-134.246-78.341-134.246-157.938z" fill="#fac600"/><g><g fill="#fed402"><path d="m255.531 0h.938c8.578 0 15.531 6.954 15.531 15.531v32.938c0 8.578-6.953 15.531-15.531 15.531h-.938c-8.578 0-15.531-6.953-15.531-15.531v-32.938c0-8.577 6.953-15.531 15.531-15.531z"/><path d="m255.531 448h.938c8.578 0 15.531 6.954 15.531 15.531v32.938c0 8.578-6.954 15.531-15.531 15.531h-.938c-8.578 0-15.531-6.954-15.531-15.531v-32.938c0-8.578 6.953-15.531 15.531-15.531z"/></g></g><g><g fill="#fed402"><path d="m74.649 75.312.663-.663c6.065-6.065 15.899-6.065 21.964 0l23.291 23.291c6.065 6.065 6.065 15.899 0 21.964l-.663.663c-6.065 6.065-15.899 6.065-21.964 0l-23.291-23.29c-6.065-6.066-6.065-15.899 0-21.965z"/><path d="m391.433 392.096.663-.663c6.065-6.065 15.899-6.065 21.964 0l23.291 23.291c6.065 6.065 6.065 15.899 0 21.964l-.663.663c-6.065 6.065-15.899 6.065-21.964 0l-23.291-23.291c-6.065-6.065-6.065-15.899 0-21.964z"/></g></g><g><g fill="#fed402"><path d="m0 256.469v-.938c0-8.578 6.954-15.531 15.531-15.531h32.938c8.578 0 15.531 6.953 15.531 15.531v.938c0 8.578-6.953 15.531-15.531 15.531h-32.938c-8.577 0-15.531-6.953-15.531-15.531z"/><path d="m448 256.469v-.938c0-8.578 6.954-15.531 15.531-15.531h32.938c8.578 0 15.531 6.954 15.531 15.531v.938c0 8.578-6.954 15.531-15.531 15.531h-32.938c-8.578 0-15.531-6.953-15.531-15.531z"/></g></g><g><g fill="#fed402"><path d="m75.312 437.351-.663-.663c-6.065-6.065-6.065-15.899 0-21.964l23.291-23.291c6.065-6.065 15.899-6.065 21.964 0l.663.663c6.065 6.065 6.065 15.899 0 21.964l-23.291 23.291c-6.065 6.065-15.898 6.065-21.964 0z"/><path d="m392.096 120.567-.663-.663c-6.065-6.065-6.065-15.899 0-21.964l23.291-23.291c6.065-6.065 15.899-6.065 21.964 0l.663.663c6.065 6.065 6.065 15.899 0 21.964l-23.291 23.291c-6.065 6.065-15.899 6.065-21.964 0z"/></g></g></g></svg>
-        <h3 class="text-yellow-500 m-0">Sunny</h3>
+        <h3 class="!text-yellow-500 m-0">Sunny</h3>
     </div>
 </c-slot>
 </c-snippet>
@@ -117,6 +118,27 @@ def weather_view(request):
 <c-slot name="preview">
     <div class="mb-2"><input type="text" autocomplete="off" class="border px-2 py-1 shadow" name="first_name" placeholder="First name" /></div>
     <div><input type="text" autocomplete="off" class="border px-2 py-1 shadow" name="last_name" placeholder="Last name" value="Smith" readonly /></div>
+</c-slot>
+</c-snippet>
+
+    <h3 id="boolean-attributes">Boolean Attributes</h3>
+
+    <p>Sometimes you just want to pass a simple boolean to a component so Cotton supports providing the attribute name without a value which will provide a boolean True to the component. (This is an <a href="https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes">html spec</a>).</p>
+
+<c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<input type="text" {{ attrs }} />
+
+{% if required is True %}
+    <span class="text-red-500">*</span>
+{% endif %}
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-input name="telephone" required />
+{% endcotton_verbatim %}{% endverbatim %}
+<c-slot name="preview">
+    <input type="text" autocomplete="off" class="border px-2 py-1 shadow" name="telephone" placeholder="Telephone" /> <span class="text-red-500 text-3xl">*</span>
 </c-slot>
 </c-snippet>
 

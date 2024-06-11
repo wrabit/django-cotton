@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-cotton"
-version = "0.9.3"
+version = "0.9.4"
 description = "Bringing component based design to Django templates."
 authors = [ "Will Abbott <wabbott@dyvenia.com>",]
 license = "MIT"

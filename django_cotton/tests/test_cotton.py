@@ -98,14 +98,7 @@ class CottonTestCase(TestCase):
         self.assertTrue("attr1: 'variable'" in rendered)
         self.assertTrue("attr2: '1'" in rendered)
 
-    def test_int_attributes(self):
-        pass
+    def test_valueless_attributes_are_process_as_true(self):
+        response = self.client.get("/test/valueless-attributes")
 
-    def test_none_attributes(self):
-        pass
-
-    def test_list_attributes(self):
-        pass
-
-    def quotes_inside_quotes(self):
-        pass
+        self.assertContains(response, "It's True")

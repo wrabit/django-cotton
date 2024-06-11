@@ -44,7 +44,10 @@ class CottonComponentNode(Node):
                 except template.VariableDoesNotExist:
                     pass  # Handle variable not found, if necessary
             else:
-                attrs[key] = value  # Use literal string
+                if value == "":
+                    attrs[key] = True  # Treat as boolean attribute
+                else:
+                    attrs[key] = value  # Use literal string
 
         # Add the remainder as the default slot
         rendered = self.nodelist.render(context)

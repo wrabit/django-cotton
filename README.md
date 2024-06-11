@@ -137,3 +137,10 @@ To pass a variable from the parent's context, prepend the attribute with a `:`.
     </c-slot>
 </c-weather-card>
 ```
+
+### Changelog
+
+v0.9.1 (2024-06-08) - Initial release  
+v0.9.2 (2024-06-08) - Readme update  
+v0.9.3 (2024-06-09) - Fixed loader docs + readme   
+v0.9.4 (2024-06-11) - Added boolean attributes   

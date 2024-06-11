@@ -33,6 +33,7 @@ urlpatterns = [
     path("test/cotton", views.cotton_test_view),
     path("test/native-extends", views.native_extends_test_view),
     path("test/native-include", views.native_include_test_view),
+    path("test/valueless-attributes", views.valueless_attributes_test_view),
     path("attribute-merging", views.attribute_merging_test_view),
     path("attribute-passing", views.attribute_passing_test_view),
     path("django-syntax-decoding", views.django_syntax_decoding_test_view),

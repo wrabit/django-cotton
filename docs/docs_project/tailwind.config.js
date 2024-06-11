@@ -12,7 +12,6 @@ module.exports = {
         extend: {
             fontFamily: {
                 'sans': ['Plus Jakarta Sans', ...defaultTheme.fontFamily.sans],
-                'logo': ['Velux Transform', ...defaultTheme.fontFamily.sans],
                 'mono': ['Roboto Mono', ...defaultTheme.fontFamily.mono],
             },
             spacing: {

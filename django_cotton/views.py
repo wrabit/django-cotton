@@ -38,3 +38,7 @@ def variable_parsing_test_view(request):
     return render(
         request, "variable_parsing_test.cotton.html", {"variable": "some-class"}
     )
+
+
+def valueless_attributes_test_view(request):
+    return render(request, "valueless_attributes_test_view.cotton.html")

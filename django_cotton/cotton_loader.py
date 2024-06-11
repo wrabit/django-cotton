@@ -47,7 +47,7 @@ class Loader(BaseLoader):
         template_string = self._get_template_string(origin.name)
 
         # We need to provide a key to the current view or component (in this case, view) so that we can namespace
-        # slot data, preventing bleeding and ensure component's clear only data in the context applicable to itself
+        # slot data, preventing bleeding and ensure components only clear data in their own context
         # in this case, we're top level, likely in a view so we use the view template name as the key
         component_key = (
             origin.template_name.lstrip("cotton/")
@@ -185,8 +185,8 @@ class Loader(BaseLoader):
 
     def _wrap_with_cotton_props_frame(self, soup):
         """Wrap content with {% cotton_props_frame %} to be able to govern props and attributes. In order to recognise
-        props defined in a component and also have them available in context, we wrap the entire contents in another
-        component: cotton_props_frame."""
+        props defined in a component and also have them available in the same component's context, we wrap the entire
+        contents in another component: cotton_props_frame."""
         props_with_defaults = []
         c_props = soup.find("c-props")
 
@@ -244,6 +244,7 @@ class Loader(BaseLoader):
 
             # Construct the opening tag
             opening_tag = f"{{% cotton_component {'cotton/{}.cotton.html'.format(path)} {component_name} "
+
             for attr, value in tag.attrs.items():
                 if attr == "class":
                     value = " ".join(value)

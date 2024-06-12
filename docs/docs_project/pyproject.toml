@@ -19,7 +19,7 @@ authors = [
 name = "cotton-docs-app"
 version = "0.1"
 description = "Docs site for django_cotton."
-authors = ["Will Abbott <wabbott@dyvenia.com>"]
+authors = ["Will Abbott <willabb83@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"

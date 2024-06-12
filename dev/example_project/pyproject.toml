@@ -13,7 +13,7 @@ dependencies = [
 name = "cotton-dev-app"
 version = "0.1"
 description = "Development and test app for the django package."
-authors = ["Will Abbott <wabbott@dyvenia.com>"]
+authors = ["Will Abbott <willabb83@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"

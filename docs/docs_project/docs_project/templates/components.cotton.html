@@ -69,7 +69,7 @@ def weather_view(request):
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-    <h3 id="named-slots">Passing other types of data using named slots</h3>
+    <h3 id="named-slots">Named slots</h3>
 
     <p>There are occasions when you will need to pass different types of content other than a simple string or variable to a component. In these cases, you can use <c-highlight>named slots</c-highlight>.</p>
 
@@ -116,14 +116,14 @@ def weather_view(request):
 <c-input name="last_name" placeholder="Last name" value="Smith" readonly  />
 {% endcotton_verbatim %}{% endverbatim %}
 <c-slot name="preview">
-    <div class="mb-2"><input type="text" autocomplete="off" class="border px-2 py-1 shadow" name="first_name" placeholder="First name" /></div>
-    <div><input type="text" autocomplete="off" class="border px-2 py-1 shadow" name="last_name" placeholder="Last name" value="Smith" readonly /></div>
+    <div class="mb-2"><input type="text" autocomplete="off" class="border px-2 py-1 shadow rounded" name="first_name" placeholder="First name" /></div>
+    <div><input type="text" autocomplete="off" class="border px-2 py-1 shadow rounded" name="last_name" placeholder="Last name" value="Smith" readonly /></div>
 </c-slot>
 </c-snippet>
 
-    <h3 id="boolean-attributes">Boolean Attributes</h3>
+    <h3 id="boolean-attributes">Boolean attributes</h3>
 
-    <p>Sometimes you just want to pass a simple boolean to a component so Cotton supports providing the attribute name without a value which will provide a boolean True to the component. (This is an <a href="https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#boolean-attributes">html spec</a>).</p>
+    <p>Sometimes you just want to pass a simple boolean to a component. Cotton supports providing the attribute name without a value which will provide a boolean True to the component.</p>
 
 <c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
 <input type="text" {{ attrs }} />
@@ -138,7 +138,7 @@ def weather_view(request):
 <c-input name="telephone" required />
 {% endcotton_verbatim %}{% endverbatim %}
 <c-slot name="preview">
-    <input type="text" autocomplete="off" class="border px-2 py-1 shadow" name="telephone" placeholder="Telephone" /> <span class="text-red-500 text-3xl">*</span>
+    <input type="text" autocomplete="off" class="border px-2 py-1 shadow rounded" name="telephone" placeholder="Telephone" /> <span class="text-red-500 text-3xl">*</span>
 </c-slot>
 </c-snippet>
 
@@ -197,11 +197,11 @@ def weather_view(request):
 <c-slot name="preview">
     <div class="mb-1">
         <label>First name</label><br>
-        <input type="text" autocomplete="off" class="border px-2 py-1" name="first_name" placeholder="First name" />
+        <input type="text" autocomplete="off" class="border px-2 py-1 rounded" name="first_name" placeholder="First name" />
     </div>
     <div>
         <label>Last name</label><br>
-        <input type="text" autocomplete="off" class="border px-2 py-1" name="last_name" placeholder="Last name" /><br>
+        <input type="text" autocomplete="off" class="border px-2 py-1 rounded" name="last_name" placeholder="Last name" /><br>
         <div class="text-sm text-red-500">Last name is required</div>
     </div>
 </c-slot>

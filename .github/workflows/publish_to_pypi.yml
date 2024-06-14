@@ -2,12 +2,13 @@ name: "Publish to PyPI"
 run-name: "Publish to PyPI (@${{ github.actor }})"
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - '**'
-      - '!docs/**'
+  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
+#    paths:
+#      - '**'
+#      - '!docs/**'
 
 jobs:
   publish_pypi:

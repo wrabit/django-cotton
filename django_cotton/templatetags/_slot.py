@@ -24,25 +24,11 @@ class CottonSlotNode(template.Node):
         if "cotton_slots" not in context:
             context.update({"cotton_slots": {}})
 
-        # context["cotton_slots"][self.slot_name] = mark_safe(output)
-
         output = self.nodelist.render(context)
-
-        # with context.push():
-        # Temporarily store the slot's content in the new layer
-        # if "cotton_slots" not in context:
-        #     context["cotton_slots"] = {}
 
         if self.component_key not in context["cotton_slots"]:
             context["cotton_slots"][self.component_key] = {}
 
-        # if self.slot_name not in context["cotton_slots"][self.component_key]:
-        #     context["cotton_slots"][self.component_key][self.slot_name] = mark_safe(output)
         context["cotton_slots"][self.component_key][self.slot_name] = mark_safe(output)
-
-        # context.push()
-
-        # todo add scoping by component
-        # context["cotton_slots"][self.component_key][self.slot_name] = mark_safe(output)
 
         return ""

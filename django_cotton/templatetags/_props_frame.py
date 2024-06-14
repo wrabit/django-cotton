@@ -6,11 +6,12 @@ register = template.Library()
 
 
 def cotton_props_frame(parser, token):
-    """The job of the props frame is to filter component kwargs (attributes) against declared props. It has to be
-    second component because we desire to declare props (<c-props />) inside the component template and therefore the
-    component can not manipulate its own context from it's own template, instead we declare the props frame
-    directly inside component"""
+    """The job of the props frame is to filter component kwargs (attributes) against declared props. Because we
+    desire to declare props (<c-props />) inside the same component that wants the props in their context and
+    therefore the component can not manipulate its own context from it's own template, instead we declare the
+    props frame directly inside component"""
     bits = token.split_contents()[1:]  # Skip the tag name
+
     # Parse token kwargs while maintaining token order
     tag_kwargs = token_kwargs(bits, parser)
 

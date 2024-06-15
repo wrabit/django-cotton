@@ -1,5 +1,8 @@
 # Cotton
 
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 Bringing component-based design to Django templates.
 
 - <a href="https://django-cotton.com" target="_blank">Document site</a>

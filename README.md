@@ -6,16 +6,12 @@ Bringing component-based design to Django templates.
 
 Cotton aims to overcome certain limitations that exist in the django template system that hold us back when we want to apply modern practises to compose UIs in a modular and reusable way.
 
-### Limitations applying modern UI composition to Django
-
-| Subject                              | Limitation                                                                                        | Cotton's Solution                                                                                                                  |
-|--------------------------------------|---------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| **{% include %}**                    | Designed for simple partial inclusion. Can pass variables and string arguments but not HTML.      | Highly configurable components with the ability to pass values, variables, and HTML to the component.                              |
-| **{% block %} + {% extends %}**      | Forces tight coupling between templates limiting reusability. Can pass HTML but not variables.    | Cotton components are modular, can be reused anywhere, and allow passing both variables and HTML.                                  |
-| **Unsemantic hierarchy**             | Block                                                                                             | HTML-like syntax for better code editor support, clearer comprehension of hierarchy.                                               |
-| **Custom components**                | Components must be manually registered or included, adding overhead to development.               | Cotton components are auto-discovered, available immediately using the `<c-` syntax, streamlining the development process.         |
-| **Limited default attribute values** | Django templates do not provide a way to set default attribute values within the template itself. | Cotton allows setting default attribute values using `<c-props>`, enhancing component flexibility and reducing backend complexity. |
-
+## Key Features
+- **Modern UI Composition:** Efficiently compose and reuse UI components.
+- **Interoperable with Django:** Cotton compliments django's existing templates.
+- **HTML-like Syntax:** Better code editor support as component tags are similar to html tags.
+- **Minimal Overhead:** Compiles to native Django components with dynamic caching.
+- **Tailwind CSS:** Integrates well with Tailwind's utility-class approach.
 
 ## Walkthrough
 
@@ -160,49 +156,6 @@ Now we have a default theme for our button, but it is overridable:
 <c-button theme="bg-green-500">But I'm green</c-button>
 ```
 
-## Key Features
-- **Rapid UI Composition:** Efficiently compose and reuse UI components.
-- **Tailwind CSS Harmony:** Integrates with Tailwind's utility-first approach.
-- **Interoperable with Django:** Enhances Django templates without replacing them.
-- **Semantic Syntax:** HTML-like syntax for better code editor support.
-- **Minimal Overhead:** Compiles to native Django components with automatic caching.
-
-
-## Installation
-To install Cotton, run the following command:
-
-```bash
-pip install django-cotton
-```
-
-Then update your `settings.py`:
-
-```python
-INSTALLED_APPS = [
-    ...
-    'django_cotton',
-]
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['your_project/templates'],
-        'APP_DIRS': False,
-        'OPTIONS': {
-            'loaders': [
-                'django_cotton.cotton_loader.Loader',
-                # continue with default loaders:
-                # "django.template.loaders.filesystem.Loader",
-                # "django.template.loaders.app_directories.Loader",
-            ],
-            'builtins': [
-                'django_cotton.templatetags.cotton',
-            ],
-        },
-    },
-]
-```
-
 ## Usage Basics
 - **File Extensions:** Views templates that contain Cotton and Cotton components themselves should use the `.cotton.html` extension.
 - **Component Placement:** Components should be placed in the `templates/cotton` folder.
@@ -210,20 +163,9 @@ TEMPLATES = [
   - Component filenames use snake_case: `my_component.cotton.html`
   - Components are called using kebab-case: `<c-my-component />`
 
-### Changelog
-
-v0.9.1 (2024-06-08) - Initial release  
+## Changelog
+ 
+v0.9.1 (2024-06-08) - Initial open source release  
 v0.9.2 (2024-06-08) - Readme update  
 v0.9.3 (2024-06-09) - Fixed loader docs + readme   
-v0.9.4 (2024-06-11) - Added boolean attributes   
-
-
-### Existing limitations
-Modern component-based frameworks provide multiple ways to customise components. One powerful option is passing HTML to appear in one or more areas in the component. Whilst the `{% include %}` lets us include a template and provide template variables and strings, it’s not possible to provide HTML.
-
-
-Design for rapid UI composition
-- cotton features html-like syntax. Code editors and IDE's recognise these as html tags so you get syntax highlighting and auto-completion out of the box
-- components don't need a data component or class
-- components are auto discovered, you create file and immediately available using the <c- syntax
-- 
+v0.9.4 (2024-06-11) - Added boolean attributes

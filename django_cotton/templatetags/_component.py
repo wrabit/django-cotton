@@ -5,7 +5,6 @@ from django.template.loader import render_to_string
 
 def cotton_component(parser, token):
     bits = token.split_contents()
-    tag_name = bits[0]
     template_path = bits[1]
     component_key = bits[2]
 
@@ -37,7 +36,7 @@ class CottonComponentNode(Node):
 
         attrs = {}
         for key, value in self.kwargs.items():
-            if isinstance(value, template.Variable):  # Resolve variables
+            if isinstance(value, template.Variable):
                 try:
                     resolved_value = value.resolve(context)
                     attrs[key] = resolved_value
@@ -45,7 +44,9 @@ class CottonComponentNode(Node):
                     pass  # Handle variable not found, if necessary
             else:
                 if value == "":
-                    attrs[key] = True  # Treat as boolean attribute
+                    attrs[
+                        key
+                    ] = True  # Treat empty valued attributes as boolean attributes
                 else:
                     attrs[key] = value  # Use literal string
 

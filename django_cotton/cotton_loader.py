@@ -159,29 +159,12 @@ class Loader(BaseLoader):
         """Convert cotton <c-* syntax to {%."""
         soup = BeautifulSoup(html_content, "html.parser")
 
+        # TODO: Performance optimisation - Make props_frame optional, only adding it when the user actually provided
+        # props in a component
         soup = self._wrap_with_cotton_props_frame(soup)
         self._transform_components(soup, component_key)
 
         return str(soup)
-
-    def _transform_prop_tags(self, soup):
-        c_props = soup.find_all("c-props")
-
-        for tag in c_props:
-            # Build the cotton_props tag string
-            props_list = []
-            for prop, value in tag.attrs.items():
-                if value is None:
-                    props_list.append(prop)
-                else:
-                    props_list.append(f'{prop}="{value}"')
-
-            cotton_props_str = "{% cotton_props " + " ".join(props_list) + " %}"
-
-            # Replace the <c-props> tag with the cotton_props string.
-            tag.replace_with(cotton_props_str)
-
-        return soup
 
     def _wrap_with_cotton_props_frame(self, soup):
         """Wrap content with {% cotton_props_frame %} to be able to govern props and attributes. In order to recognise

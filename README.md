@@ -11,10 +11,11 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 
 ## Key Features
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
-- **Interoperable with Django:** Cotton compliments django's existing templates.
+- **Interoperable with Django:** Cotton enhances django's existing template system.
 - **HTML-like Syntax:** Better code editor support as component tags are similar to html tags.
 - **Minimal Overhead:** Compiles to native Django components with dynamic caching.
-- **Tailwind CSS:** Integrates well with Tailwind's utility-class approach.
+- **Ideal for Tailwind usage:** Helps encapsulate content and style in one file.
+- **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
 
 ## Walkthrough
 
@@ -71,6 +72,21 @@ Named slots are a powerful concept. It allows us to provide HTML to appear in on
     Contact
     <c-slot name="icon">
         <svg>...</svg>
+    </c-slot>
+</c-button>
+```
+
+Named slots can also contain any django native template logic:
+
+```html
+<!-- template -->
+<c-button url="/contact">
+    <c-slot name="icon">
+      {% if mode == 'edit' %}
+          <svg id="pencil">...</svg>
+      {% else %}
+          <svg id="disk">...</svg>
+      {% endif %}
     </c-slot>
 </c-button>
 ```
@@ -157,6 +173,63 @@ Now we have a default theme for our button, but it is overridable:
 ```html
 <!-- template -->
 <c-button theme="bg-green-500">But I'm green</c-button>
+```
+
+### Create flexible, re-usable inputs with `{{ attrs }}`
+
+`{{ attrs }}` is a special variable that contains all the attributes passed to the component in an key="value" format. This is useful when you want to pass all attributes to a child element. For example, you have inputs that can have any number of attributes defined:
+
+```html
+<!-- input.cotton.html -->
+<input type="text" class="..." {{ attrs }} />
+```
+
+```html
+<!-- example usage -->
+<c-input placeholder="Enter your name" />
+<c-input name="country" id="country" value="Japan" />
+<c-input class="highlighted" required />
+```
+
+If you combine this with the `c-props` tag, any property defined there will be excluded from `{{ attrs }}`. For example:
+
+```html
+<!-- input.cotton.html -->
+<c-props type="text" />
+
+<input {{ attrs }} class="..." />
+```
+
+```html
+<!-- example usage -->
+<c-input type="password" placeholder="Password" />
+<!-- `type` will not be in {{ attrs }} -->
+```
+
+### An example with HTMLX
+
+Cotton helps carve out re-usable components, here we show how to make a re-usable form, reducing code repetition and improving maintainability:
+
+```html
+<!-- form.cotton.html -->
+<div id="result" class="..."></div>
+<form hx-post="{{ url }}" hx-target="#result" hx-swap="outerHTML">
+    {{ slot }}
+</form>
+```
+
+```html
+<!-- template -->
+<c-form url="/contact">
+    <input type="text" name="name" placeholder="Enter your name" />
+    <button type="submit">Submit</button>
+</c-form>
+
+<c-form url="/buy">
+    <input type="text" name="type" />
+    <input type="text" name="quantity" />
+    <button type="submit">Submit</button>
+</c-form>
 ```
 
 ## Usage Basics

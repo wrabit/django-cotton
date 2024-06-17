@@ -41,6 +41,6 @@ urlpatterns = [
         "string-with-spaces",
         TemplateView.as_view(template_name="string_with_spaces.cotton.html"),
     ),
-    path("props-test", TemplateView.as_view(template_name="props_test.cotton.html")),
+    path("vars-test", TemplateView.as_view(template_name="vars_test.cotton.html")),
     path("variable-parsing", views.variable_parsing_test_view),
 ]

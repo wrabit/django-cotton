@@ -4,11 +4,11 @@
     <c-slot name="page_index">
         <c-index-link><a href="#components" class="no-underline">Components</a></c-index-link>
         <c-index-link><a href="#attributes" class="no-underline">Atributes</a></c-index-link>
-            <c-index-sublink><a href="#variables-in-attributes" class="no-underline">Variables in attributes</a></c-index-sublink>
+            <c-index-sublink><a href="#variables-in-attributes" class="no-underline">Template variables in attributes</a></c-index-sublink>
             <c-index-sublink><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
             <c-index-sublink><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
             <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
-        <c-index-link><a href="#props" class="no-underline">Props</a></c-index-link>
+        <c-index-link><a href="#vars" class="no-underline">Vars</a></c-index-link>
             <c-index-sublink><a href="#default-attributes" class="no-underline">Default attributes</a></c-index-sublink>
             <c-index-sublink><a href="#excluded" class="no-underline">Excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
     </c-slot>
@@ -53,7 +53,7 @@
 </c-slot>
 </c-snippet>
 
-    <h3 id="variables-in-attributes">Passing variables as attributes</h3>
+    <h3 id="variables-in-attributes">Passing template variables as attributes</h3>
 
     <p>Sometimes you'll want to pass a variable from the parent's context. To do so, prepend the attribute with a "<c-highlight>:</c-highlight>".</p>
 
@@ -144,16 +144,16 @@ def weather_view(request):
 
     <c-hr />
 
-    <h2 class="mt-0" id="props">Props</h2>
+    <h2 class="mt-0" id="vars">Vars</h2>
 
-    <p>Props are defined using a <c-highlight>c-props</c-highlight> tag at the top of a component file. It can contain numerous key="value" pairs. It can also be a single key without a default value. Specifying an attribute as a 'prop' will remove the item from {% verbatim %}{{ attrs }}{% endverbatim %}.</p>
+    <p>Vars are defined using a <c-highlight>{{ '<c-vars />'|force_escape }}</c-highlight> tag at the top of a component file. It can contain numerous key="value" pairs. It can also be a single key without a default value. Specifying an attribute as a 'var' will remove the item from {% verbatim %}{{ attrs }}{% endverbatim %}.</p>
 
-    <h3 id="default-attributes">Props give attributes default values</h3>
+    <h3 id="default-attributes">{{ '<c-vars />'|force_escape }} gives attributes default values</h3>
 
     <p>You may design a component that will often have a default behaviour and rarely needs overriding. In this case, you may opt to give a default value to your component.</p>
 
 <c-snippet label="alert.cotton.html">{% cotton_verbatim %}{% verbatim %}
-<c-props type="success"></c-props>
+<c-vars type="success" />
 
 <div class="{% if type == 'success' %} .. {% elif type == 'danger' %} .. {% endif %}">
     {{ slot }}
@@ -171,12 +171,12 @@ def weather_view(request):
 </c-slot>
 </c-snippet>
 
-    <h3 id="excluded">Props are excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
+    <h3 id="excluded">Vars are excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
 
-    <p>In order to provide more control when using {{ attrs }} to pass down all attributes as a key=value string to a component. Keys defined as props will not be included in this string. This is beneficial when you want to pass any attribute to an html element inside a component using {% verbatim %}{{ attrs }}{% endverbatim %}, but also want to provide additional props for some other reason.</p>
+    <p>In order to provide more control when using {{ attrs }} to pass down all attributes as a key=value string to a component. Keys defined in {{ '<c-vars />'|force_escape }} will not be included in this string. This is beneficial when you want to pass any attribute to an html element inside a component using {% verbatim %}{{ attrs }}{% endverbatim %}, but also want to provide additional vars for some other reason.</p>
 
 <c-snippet label="input_group.cotton.html">{% cotton_verbatim %}{% verbatim %}
-<c-props label errors></c-props>
+<c-vars label errors />
 
 <label>{{ label }}</label>
 

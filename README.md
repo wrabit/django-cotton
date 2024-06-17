@@ -151,13 +151,13 @@ By passing just the attribute name without a value, it will automatically be pro
 </a>
 ```
 
-### Default attribute values with `<c-props>`
+### Default attribute values with `<c-vars>`
 
 Django templates adhere quite strictly to the MVC model and does not permit much data control in the View. But what if we want to handle data for the purpose of UI state only? Having this in the back would surely convolute the backend code. For this, Cotton can set simple attribute values that help us decide on sensible defaults for our components.
 
 ```html
 <!-- button.cotton.html -->
-<c-props theme="bg-purple-500" />
+<c-vars theme="bg-purple-500" />
 
 <a href="..." class="{{ theme }}">
     {{ slot }}
@@ -191,11 +191,11 @@ Now we have a default theme for our button, but it is overridable:
 <c-input class="highlighted" required />
 ```
 
-If you combine this with the `c-props` tag, any property defined there will be excluded from `{{ attrs }}`. For example:
+If you combine this with the `c-vars` tag, any property defined there will be excluded from `{{ attrs }}`. For example:
 
 ```html
 <!-- input.cotton.html -->
-<c-props type="text" />
+<c-vars type="text" />
 
 <input {{ attrs }} class="..." />
 ```

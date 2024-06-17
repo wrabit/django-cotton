@@ -27,6 +27,10 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 <!-- template -->
 <c-button />
 ```
+```html
+<!-- output -->
+<a href="/" class="...">I'm a static button</a>
+```
 
 An unlikely example but it shows we can use cotton like an include tag. Let's make this more useful:
 
@@ -37,6 +41,10 @@ An unlikely example but it shows we can use cotton like an include tag. Let's ma
 ```html
 <!-- template -->
 <c-button>Contact</c-button>
+```
+```html
+<!-- output -->
+<a href="/" class="...">Contact</a>
 ```
 
 ### Add attributes
@@ -50,6 +58,12 @@ An unlikely example but it shows we can use cotton like an include tag. Let's ma
 ```html
 <!-- template -->
 <c-button url="/contact">Contact</c-button>
+```
+```html
+<!-- output -->
+<a href="/contact" class="...">
+    Contact
+</a>
 ```
 
 ### Utilize named slots
@@ -151,13 +165,13 @@ By passing just the attribute name without a value, it will automatically be pro
 </a>
 ```
 
-### Default attribute values with `<c-props>`
+### Default attributes with `<c-vars>`
 
-Django templates adhere quite strictly to the MVC model and does not permit much data control in the View. But what if we want to handle data for the purpose of UI state only? Having this in the back would surely convolute the backend code. For this, Cotton can set simple attribute values that help us decide on sensible defaults for our components.
+Django templates adhere quite strictly to the MVC model and does not permit much data control in the View. But what if we want to handle data for the purpose of UI state only? Having this in the back would surely convolute the backend code. For this, Cotton can set simple attribute values that help allow us to set default values for our component attributes.
 
 ```html
 <!-- button.cotton.html -->
-<c-props theme="bg-purple-500" />
+<c-vars theme="bg-purple-500" />
 
 <a href="..." class="{{ theme }}">
     {{ slot }}
@@ -167,12 +181,24 @@ Django templates adhere quite strictly to the MVC model and does not permit much
 <!-- template -->
 <c-button>I'm a purple button</c-button>
 ```
+```html
+<!-- output -->
+<a href="..." class="bg-purple-500">
+    I'm a purple button
+</a>
+```
 
 Now we have a default theme for our button, but it is overridable:
 
 ```html
 <!-- template -->
 <c-button theme="bg-green-500">But I'm green</c-button>
+```
+```html
+<!-- output -->
+<a href="..." class="bg-green-500">
+    But I'm green
+</a>
 ```
 
 ### Create flexible, re-usable inputs with `{{ attrs }}`
@@ -191,11 +217,11 @@ Now we have a default theme for our button, but it is overridable:
 <c-input class="highlighted" required />
 ```
 
-If you combine this with the `c-props` tag, any property defined there will be excluded from `{{ attrs }}`. For example:
+If you combine this with the `c-vars` tag, any property defined there will be excluded from `{{ attrs }}`. For example:
 
 ```html
 <!-- input.cotton.html -->
-<c-props type="text" />
+<c-vars type="text" />
 
 <input {{ attrs }} class="..." />
 ```

@@ -3,12 +3,12 @@ from django.utils.html import format_html_join
 
 from django_cotton.templatetags._component import cotton_component
 from django_cotton.templatetags._slot import cotton_slot
-from django_cotton.templatetags._props_frame import cotton_props_frame
+from django_cotton.templatetags._vars_frame import cotton_vars_frame
 
 register = template.Library()
 register.tag("cotton_component", cotton_component)
 register.tag("cotton_slot", cotton_slot)
-register.tag("cotton_props_frame", cotton_props_frame)
+register.tag("cotton_vars_frame", cotton_vars_frame)
 
 
 @register.filter

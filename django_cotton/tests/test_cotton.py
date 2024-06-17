@@ -39,10 +39,10 @@ class CottonTestCase(TestCase):
         response = self.client.get("/django-syntax-decoding")
         self.assertContains(response, "some-class")
 
-    def test_props_are_converted_to_props_frame_tags(self):
+    def test_vars_are_converted_to_vars_frame_tags(self):
         compiled = get_compiled(
             """
-            <c-props prop1="string with space" />
+            <c-vars var1="string with space" />
             
             content
         """
@@ -50,20 +50,20 @@ class CottonTestCase(TestCase):
 
         self.assertEquals(
             compiled,
-            """{% cotton_props_frame prop1=prop1|default:"string with space" %}content{% endcotton_props_frame %}""",
+            """{% cotton_vars_frame var1=var1|default:"string with space" %}content{% endcotton_vars_frame %}""",
         )
 
-    def test_attrs_do_not_contain_props(self):
-        response = self.client.get("/props-test")
+    def test_attrs_do_not_contain_vars(self):
+        response = self.client.get("/vars-test")
         self.assertContains(response, "attr1: 'im an attr'")
-        self.assertContains(response, "prop1: 'im a prop'")
+        self.assertContains(response, "var1: 'im a var'")
         self.assertContains(response, """attrs: 'attr1="im an attr"'""")
 
     def test_strings_with_spaces_can_be_passed(self):
         response = self.client.get("/string-with-spaces")
         self.assertContains(response, "attr1: 'I have spaces'")
-        self.assertContains(response, "prop1: 'string with space'")
-        self.assertContains(response, "default_prop: 'default prop'")
+        self.assertContains(response, "var1: 'string with space'")
+        self.assertContains(response, "default_var: 'default var'")
         self.assertContains(response, "named_slot: '")
         self.assertContains(response, "named_slot with spaces")
         self.assertContains(response, """attrs: 'attr1="I have spaces"'""")

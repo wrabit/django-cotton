@@ -10,9 +10,9 @@ urlpatterns = [
     path("docs/components", views.build_view("components"), name="components"),
     path("docs/slots", views.build_view("slots"), name="slots"),
     path(
-        "docs/attributes-and-props",
-        views.build_view("attributes_and_props"),
-        name="attributes-and-props",
+        "docs/attributes-and-vars",
+        views.build_view("attributes_and_vars"),
+        name="attributes-and-vars",
     ),
     # Examples
     path("docs/layouts", views.build_view("layouts"), name="layouts"),

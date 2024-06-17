@@ -159,35 +159,35 @@ class Loader(BaseLoader):
         """Convert cotton <c-* syntax to {%."""
         soup = BeautifulSoup(html_content, "html.parser")
 
-        # TODO: Performance optimisation - Make props_frame optional, only adding it when the user actually provided
-        # props in a component
-        soup = self._wrap_with_cotton_props_frame(soup)
+        # TODO: Performance optimisation - Make vars_frame optional, only adding it when the user actually provided
+        # vars in a component
+        soup = self._wrap_with_cotton_vars_frame(soup)
         self._transform_components(soup, component_key)
 
         return str(soup)
 
-    def _wrap_with_cotton_props_frame(self, soup):
-        """Wrap content with {% cotton_props_frame %} to be able to govern props and attributes. In order to recognise
-        props defined in a component and also have them available in the same component's context, we wrap the entire
-        contents in another component: cotton_props_frame."""
-        props_with_defaults = []
-        c_props = soup.find("c-props")
+    def _wrap_with_cotton_vars_frame(self, soup):
+        """Wrap content with {% cotton_vars_frame %} to be able to govern vars and attributes. In order to recognise
+        vars defined in a component and also have them available in the same component's context, we wrap the entire
+        contents in another component: cotton_vars_frame."""
+        vars_with_defaults = []
+        c_vars = soup.find("c-vars")
 
-        # parse c-props tag to extract properties and defaults
-        if c_props:
-            props_with_defaults = []
-            for prop, value in c_props.attrs.items():
+        # parse c-vars tag to extract variables and defaults
+        if c_vars:
+            vars_with_defaults = []
+            for var, value in c_vars.attrs.items():
                 if value is None:
-                    props_with_defaults.append(f"{prop}={prop}")
+                    vars_with_defaults.append(f"{var}={var}")
                 else:
                     # Assuming value is already a string that represents the default value
-                    props_with_defaults.append(f'{prop}={prop}|default:"{value}"')
+                    vars_with_defaults.append(f'{var}={var}|default:"{value}"')
 
-            c_props.decompose()
+            c_vars.decompose()
 
         # Construct the {% with %} opening tag
-        opening = "{% cotton_props_frame " + " ".join(props_with_defaults) + " %}"
-        closing = "{% endcotton_props_frame %}"
+        opening = "{% cotton_vars_frame " + " ".join(vars_with_defaults) + " %}"
+        closing = "{% endcotton_vars_frame %}"
 
         # Convert the remaining soup back to a string and wrap it within {% with %} block
         wrapped_content = opening + str(soup).strip() + closing

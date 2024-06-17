@@ -41,10 +41,10 @@
 
     <h2 id="type">Change the input type</h2>
 
-    <p>You will probably need more than just a text input in your project. So let's declare an attribute `text` as a prop. Adding it as a prop will allow us to set "text" as the default. Additionally, it will be excluded from <c-highlight>{% verbatim %}`{{ attrs }}`{% endverbatim %}</c-highlight>:</p>
+    <p>You will probably need more than just a text input in your project. So let's declare an attribute `text` in <c-highlight>{{ '<c-vars />'|force_escape }}</c-highlight>. Adding it as a var will allow us to set "text" as the default. Additionally, it will be excluded from <c-highlight>{% verbatim %}{{ attrs }}{% endverbatim %}</c-highlight>:</p>
 
 <c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
-<c-props type="text" />
+<c-vars type="text" />
 
 <input type="{{ type }}" {{ attrs }} class="border rounded shadow px-3 py-1.5">
 {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
@@ -68,7 +68,7 @@
     <p>Let's also handle displaying errors when we need to.</p>
 
 <c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
-<c-props type="text" errors />
+<c-vars type="text" errors />
 
 <input type="{{ type }}" {{ attrs }} class="border rounded shadow px-3 py-1.5 {% if errors %}border-red-500{% endif %}">
 
@@ -91,7 +91,7 @@
     <p>To take customization a step further and to demonstrate the flexibility of cotton, let's now give our input component the ability to display icons.</p>
 
 <c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
-<c-props type="text" leading_icon trailing_icon />
+<c-vars type="text" leading_icon trailing_icon />
 
 <div class="border rounded shadow flex items-center">
     {% if leading_icon %}

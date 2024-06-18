@@ -239,22 +239,24 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
 ```html
 <!-- form.cotton.html -->
 <div id="result" class="..."></div>
-<form hx-post="{{ url }}" hx-target="#result" hx-swap="outerHTML">
+
+<form {{ attrs }} hx-target="#result" hx-swap="outerHTML">
     {{ slot }}
+    <button type="submit">Submit</button>
 </form>
 ```
 
 ```html
 <!-- template -->
-<c-form url="/contact">
-    <input type="text" name="name" placeholder="Enter your name" />
-    <button type="submit">Submit</button>
+<c-form hx-post="/contact">
+    <input type="text" name="name" placeholder="Name" />
+    <input type="text" name="email" placeholder="Email" />
+    <input type="checkbox" name="signup" />
 </c-form>
 
 <c-form url="/buy">
     <input type="text" name="type" />
     <input type="text" name="quantity" />
-    <button type="submit">Submit</button>
 </c-form>
 ```
 

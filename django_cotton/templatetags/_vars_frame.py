@@ -6,10 +6,12 @@ register = template.Library()
 
 
 def cotton_vars_frame(parser, token):
-    """The job of the vars frame is to filter component kwargs (attributes) against declared vars. Because we
-    desire to declare vars (<c-vars />) inside the same component that wants the vars in their context andbecause the
-    component can not manipulate its own context from within it's own template, instead we wrap the vars frame around
-    the contents of the component"""
+    """The job of the vars frame is:
+    1. to filter out attributes declared as vars inside {{ attrs }} string.
+    2. to provide default values to attributes. We want to be able to declare these in the same file as the component
+    definition. Because we're effecting variables inside the same component, which is not possible usually, we we wrap
+    the vars frame around the contents of the component so we can govern the attributes and vars that are available.
+    """
     bits = token.split_contents()[1:]  # Skip the tag name
 
     # Parse token kwargs while maintaining token order
@@ -27,21 +29,21 @@ class CottonVarsFrameNode(template.Node):
 
     def render(self, context):
         # Assume 'attrs' are passed from the parent and are available in the context
-        parent_attrs = context.get("attrs_dict", {})
+        component_attrs = context.get("attrs_dict", {})
 
         # Initialize vars based on the frame's kwargs and parent attrs
         vars = {}
         for key, value in self.kwargs.items():
-            # Attempt to resolve each kwarg value (which may include template variables)
-            resolved_value = value.resolve(context)
-            # Check if the var exists in parent attrs; if so, use it, otherwise use the resolved default
-            if key in parent_attrs:
-                vars[key] = parent_attrs[key]
+            # Check if the var exists in component attrs; if so, use it, otherwise use the resolved default
+            if key in component_attrs:
+                vars[key] = component_attrs[key]
             else:
+                # Attempt to resolve each kwarg value (which may include template variables)
+                resolved_value = value.resolve(context)
                 vars[key] = resolved_value
 
         # Overwrite 'attrs' in the local context by excluding keys that are identified as vars
-        attrs_without_vars = {k: v for k, v in parent_attrs.items() if k not in vars}
+        attrs_without_vars = {k: v for k, v in component_attrs.items() if k not in vars}
         context["attrs_dict"] = attrs_without_vars
 
         # Provide all of the attrs as a string to pass to the component

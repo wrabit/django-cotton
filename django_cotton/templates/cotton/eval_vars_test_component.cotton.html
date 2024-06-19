@@ -1,0 +1,25 @@
+<c-vars :none="None" :number="1" :boolean_true="True" :boolean_false="False" :dict="{key: 'value'}" :list="[1, 2, 3]" />
+
+{% if none is None %}
+    <p>none is None</p>
+{% endif %}
+
+{% if number == 1 %}
+    <p>number is 1</p>
+{% endif %}
+
+{% if boolean_true is True %}
+    <p>boolean_true is True</p>
+{% endif %}
+
+{% if boolean_false is False %}
+    <p>boolean_false is False</p>
+{% endif %}
+
+{% if dict.key == 'value' %}
+    <p>dict.key is 'value'</p>
+{% endif %}
+
+{% if list.0 == 1 %}
+    <p>list.0 is 1</p>
+{% endif %}

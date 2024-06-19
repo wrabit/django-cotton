@@ -43,4 +43,6 @@ urlpatterns = [
     ),
     path("vars-test", TemplateView.as_view(template_name="vars_test.cotton.html")),
     path("variable-parsing", views.variable_parsing_test_view),
+    path("test/eval-vars", views.eval_vars_test_view),
+    path("test/eval-attributes", views.eval_attributes_test_view),
 ]

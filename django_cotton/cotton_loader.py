@@ -179,6 +179,11 @@ class Loader(BaseLoader):
             for var, value in c_vars.attrs.items():
                 if value is None:
                     vars_with_defaults.append(f"{var}={var}")
+                elif var.startswith(":"):
+                    # If ':' is present, the user wants to parse a literal string as the default value,
+                    # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
+                    var = var[1:]  # Remove the ':' prefix
+                    vars_with_defaults.append(f'{var}={var}|eval_default:"{value}"')
                 else:
                     # Assuming value is already a string that represents the default value
                     vars_with_defaults.append(f'{var}={var}|default:"{value}"')
@@ -259,7 +264,7 @@ class CottonTemplateCacheHandler:
     """Handles caching of cotton templates so the html parsing is only done on first load of each view or component."""
 
     def __init__(self):
-        self.enabled = getattr(settings, "TEMPLATE_CACHING_ENABLED", True)
+        self.enabled = getattr(settings, "COTTON_TEMPLATE_CACHING_ENABLED", True)
 
     def get_cache_key(self, template_name, mtime):
         template_hash = hashlib.sha256(template_name.encode()).hexdigest()

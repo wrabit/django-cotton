@@ -183,7 +183,7 @@ def weather_view(request):
 
     <h2 class="mt-0" id="vars">Vars</h2>
 
-    <p>Vars are defined using a <h3 id="boolean-attributes">Boolean attributes</h3> tag at the top of a component file. It can contain numerous key="value" pairs. It can also be a single key without a default value. Specifying an attribute as a 'var' will remove the item from {% verbatim %}{{ attrs }}{% endverbatim %}.</p>
+    <p>Vars are defined using a <c-highlight>{{ '<c-vars />'|force_escape }}</c-highlight> tag at the top of a component file. It can contain numerous key="value" pairs. It can also be a single key without a default value. Specifying an attribute as a 'var' will remove the item from {% verbatim %}{{ attrs }}{% endverbatim %}.</p>
 
     <h3 id="default-attributes">{{ '<c-vars />'|force_escape }} gives attributes default values</h3>
 

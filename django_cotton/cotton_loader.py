@@ -73,9 +73,8 @@ class Loader(BaseLoader):
         # First handle cotton_verbatim blocks, this is designed to preserve and display cotton syntax,
         # akin to the verbatim tag in Django.
         def replace_cotton_verbatim(match):
-            inner_content = match.group(
-                1
-            )  # Get the inner content without the cotton_verbatim tags
+            # Get the inner content without the cotton_verbatim tags
+            inner_content = match.group(1)
             self.django_syntax_placeholders.append(inner_content)
             return f"__django_syntax__{len(self.django_syntax_placeholders)}__"
 
@@ -86,13 +85,14 @@ class Loader(BaseLoader):
             content,
             flags=re.DOTALL,
         )
-
+        # Replace {% ... %}
         content = re.sub(
             r"\{%.*?%\}",
             lambda x: self.django_syntax_placeholders.append(x.group(0))
             or f"__django_syntax__{len(self.django_syntax_placeholders)}__",
             content,
         )
+        # Replace {{ ... }}
         content = re.sub(
             r"\{\{.*?\}\}",
             lambda x: self.django_syntax_placeholders.append(x.group(0))

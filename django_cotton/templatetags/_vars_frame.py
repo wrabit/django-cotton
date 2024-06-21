@@ -8,13 +8,12 @@ register = template.Library()
 def cotton_vars_frame(parser, token):
     """The job of the vars frame is:
     1. to filter out attributes declared as vars inside {{ attrs }} string.
-    2. to provide default values to attributes. We want to be able to declare these in the same file as the component
-    definition. Because we're effecting variables inside the same component, which is not possible usually, we we wrap
+    2. to provide default values to attributes.
+    Because we're effecting variables inside the same component, which is not possible usually, we we wrap
     the vars frame around the contents of the component so we can govern the attributes and vars that are available.
     """
     bits = token.split_contents()[1:]  # Skip the tag name
 
-    # Parse token kwargs while maintaining token order
     tag_kwargs = token_kwargs(bits, parser)
 
     nodelist = parser.parse(("endcotton_vars_frame",))

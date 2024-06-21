@@ -42,3 +42,11 @@ def variable_parsing_test_view(request):
 
 def valueless_attributes_test_view(request):
     return render(request, "valueless_attributes_test_view.cotton.html")
+
+
+def eval_vars_test_view(request):
+    return render(request, "eval_vars_test_view.cotton.html")
+
+
+def eval_attributes_test_view(request):
+    return render(request, "eval_attributes_test_view.cotton.html")

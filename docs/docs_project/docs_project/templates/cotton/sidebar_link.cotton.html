@@ -1,9 +1,14 @@
-<li><a
-        href="{{ path }}"
-        class="dark:text-white my-1 py-0  border-b-[2px]
-            {% if request.path == path %}
-                dark:text-opacity-100 border-teal-600 font-semibold
-            {% else %}
-                dark:text-opacity-70 border-transparent
-            {% endif %}"
->{{ slot }}</a></li>
+<li class="relative my-1">
+    {% if request.path == path %}
+        <div class="absolute left-[-17px] w-[3px] h-full bg-teal-600"></div>
+    {% endif %}
+    <a href="{{ path }}"
+       class="dark:text-white
+        {% if request.path == path %}
+            dark:text-opacity-100 font-semibold
+        {% else %}
+            dark:text-opacity-70
+        {% endif %}">
+        {{ slot }}
+    </a>
+</li>

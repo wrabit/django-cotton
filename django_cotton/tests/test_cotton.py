@@ -102,3 +102,25 @@ class CottonTestCase(TestCase):
         response = self.client.get("/test/valueless-attributes")
 
         self.assertContains(response, "It's True")
+
+    def test_component_attributes_can_converted_to_python_types(self):
+        response = self.client.get("/test/eval-attributes")
+
+        self.assertContains(response, "none is None")
+        self.assertContains(response, "number is 1")
+        self.assertContains(response, "boolean_true is True")
+        self.assertContains(response, "boolean_false is False")
+        self.assertContains(response, "list.0 is 1")
+        self.assertContains(response, "dict.key is 'value'")
+        self.assertContains(response, "listdict.0.key is 'value'")
+
+    def test_cvars_can_be_converted_to_python_types(self):
+        response = self.client.get("/test/eval-vars")
+
+        self.assertContains(response, "none is None")
+        self.assertContains(response, "number is 1")
+        self.assertContains(response, "boolean_true is True")
+        self.assertContains(response, "boolean_false is False")
+        self.assertContains(response, "list.0 is 1")
+        self.assertContains(response, "dict.key is 'value'")
+        self.assertContains(response, "listdict.0.key is 'value'")

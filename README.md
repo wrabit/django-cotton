@@ -3,6 +3,8 @@
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
+**Whilst we are still in 0.9.x versions, there could be breaking changes.**
+
 Bringing component-based design to Django templates.
 
 - <a href="https://django-cotton.com" target="_blank">Document site</a>
@@ -138,7 +140,7 @@ To demonstrate another example of passing a variable by reference, consider a bi
 <c-bio-card :user="user" />
 ```
 
-That has a component definiton like:
+That has a component definition like:
 
 ```html
 <!-- bio_card.cotton.html -->
@@ -163,6 +165,40 @@ By passing just the attribute name without a value, it will automatically be pro
 <a href="{{ url }}" {% if external %} target="_blank" {% endif %} class="...">
     {{ slot }}
 </a>
+```
+
+### Passing Python data types
+
+Using the ':' to prefix an attribute tells Cotton we're passing a dynamic type down. We already know we can use this to send a variable, but you can also send basic python types, namely:
+
+- Integers and Floats
+- None
+- True and False
+- Lists
+- Dictionaries
+
+This benefits a number of use-cases, for example if you have a select component that you want to provide some value:
+
+```html
+<!-- select.cotton.html -->
+<select {{ attrs }}>
+    {% for option in options %}
+        <option value="{{ option }}">{{ option }}</option>
+    {% endfor %}
+</select>
+```
+
+```html
+<c-select name="q1" :options="['yes', 'no', 'maybe']" />
+```
+
+```html
+<!-- output -->
+<select name="q1">
+    <option value="yes">yes</option>
+    <option value="no">no</option>
+    <option value="maybe">maybe</option>
+</select>
 ```
 
 ### Default attributes with `<c-vars>`
@@ -273,3 +309,7 @@ v0.9.1 (2024-06-08) - Initial open source release
 v0.9.2 (2024-06-08) - Readme update  
 v0.9.3 (2024-06-09) - Fixed loader docs + readme   
 v0.9.4 (2024-06-11) - Added boolean attributes
+v0.9.5 (2024-06-12) - Minor fixes
+v0.9.6 (2024-06-17) - Renamed `c-props` to `c-vars`
+v0.9.7 (2024-06-21) - Allowed python types to be sent as attribute values
+

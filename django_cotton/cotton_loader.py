@@ -73,9 +73,8 @@ class Loader(BaseLoader):
         # First handle cotton_verbatim blocks, this is designed to preserve and display cotton syntax,
         # akin to the verbatim tag in Django.
         def replace_cotton_verbatim(match):
-            inner_content = match.group(
-                1
-            )  # Get the inner content without the cotton_verbatim tags
+            # Get the inner content without the cotton_verbatim tags
+            inner_content = match.group(1)
             self.django_syntax_placeholders.append(inner_content)
             return f"__django_syntax__{len(self.django_syntax_placeholders)}__"
 
@@ -86,13 +85,14 @@ class Loader(BaseLoader):
             content,
             flags=re.DOTALL,
         )
-
+        # Replace {% ... %}
         content = re.sub(
             r"\{%.*?%\}",
             lambda x: self.django_syntax_placeholders.append(x.group(0))
             or f"__django_syntax__{len(self.django_syntax_placeholders)}__",
             content,
         )
+        # Replace {{ ... }}
         content = re.sub(
             r"\{\{.*?\}\}",
             lambda x: self.django_syntax_placeholders.append(x.group(0))
@@ -179,6 +179,11 @@ class Loader(BaseLoader):
             for var, value in c_vars.attrs.items():
                 if value is None:
                     vars_with_defaults.append(f"{var}={var}")
+                elif var.startswith(":"):
+                    # If ':' is present, the user wants to parse a literal string as the default value,
+                    # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
+                    var = var[1:]  # Remove the ':' prefix
+                    vars_with_defaults.append(f'{var}={var}|eval_default:"{value}"')
                 else:
                     # Assuming value is already a string that represents the default value
                     vars_with_defaults.append(f'{var}={var}|default:"{value}"')
@@ -259,7 +264,7 @@ class CottonTemplateCacheHandler:
     """Handles caching of cotton templates so the html parsing is only done on first load of each view or component."""
 
     def __init__(self):
-        self.enabled = getattr(settings, "TEMPLATE_CACHING_ENABLED", True)
+        self.enabled = getattr(settings, "COTTON_TEMPLATE_CACHING_ENABLED", True)
 
     def get_cache_key(self, template_name, mtime):
         template_hash = hashlib.sha256(template_name.encode()).hexdigest()

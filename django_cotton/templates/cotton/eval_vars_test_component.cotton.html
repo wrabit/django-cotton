@@ -1,4 +1,4 @@
-<c-vars :none="None" :number="1" :boolean_true="True" :boolean_false="False" :dict="{key: 'value'}" :list="[1, 2, 3]" />
+<c-vars :none="None" :number="1" :boolean_true="True" :boolean_false="False" :dict="{'key': 'value'}" :list="[1, 2, 3]" :listdict="[{'key': 'value'}]" />
 
 {% if none is None %}
     <p>none is None</p>
@@ -22,4 +22,8 @@
 
 {% if list.0 == 1 %}
     <p>list.0 is 1</p>
+{% endif %}
+
+{% if listdict.0.key == 'value' %}
+    <p>listdict.0.key is 'value'</p>
 {% endif %}

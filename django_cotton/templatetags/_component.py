@@ -50,24 +50,27 @@ class CottonComponentNode(Node):
                 attrs[key] = value
 
         # Add the remainder as the default slot
-        rendered = self.nodelist.render(context)
-        local_context.update({"slot": rendered})
+        local_context["slot"] = self.nodelist.render(context)
 
         # Merge slots and attributes into the local context
-        slots = context.get("cotton_slots", {})
-        component_slots = slots.get(self.component_key, {})
+        all_slots = context.get("cotton_slots", {})
+        component_slots = all_slots.get(self.component_key, {})
         local_context.update(component_slots)
         local_context.update(attrs)
-        local_context.update({"attrs_dict": attrs})
 
-        rendered = render_to_string(self.template_path, local_context)
+        # We need to check if any dynamic attributes are present in the component slots and move them over to attrs
+        if "ctn_template_expression_attrs" in component_slots:
+            for expression_attr in component_slots["ctn_template_expression_attrs"]:
+                attrs[expression_attr] = component_slots[expression_attr]
 
-        # Reset the component's slots in context to prevent bleeding
-        if self.component_key in slots:
-            slots[self.component_key] = {}
-        context.update({"cotton_slots": slots})
+        local_context["attrs_dict"] = attrs
 
-        return rendered
+        # Reset the component's slots in context to prevent bleeding into sibling components
+        if self.component_key in all_slots:
+            all_slots[self.component_key] = {}
+
+        context.update({"cotton_slots": all_slots})
+        return render_to_string(self.template_path, local_context)
 
     def process_dynamic_attribute(self, value, context):
         """

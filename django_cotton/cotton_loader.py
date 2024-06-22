@@ -50,11 +50,6 @@ class Loader(BaseLoader):
         # We need to provide a key to the current view or component (in this case, view) so that we can namespace
         # slot data, preventing bleeding and ensure components only clear data in their own context
         # in this case, we're top level, likely in a view so we use the view template name as the key
-        # component_key = (
-        #     origin.template_name.lstrip("cotton/")
-        #     .rstrip(".cotton.html")
-        #     .replace("/", ".")
-        # )
         component_key = origin.template_name
 
         compiled_template = self._compile_template_from_string(
@@ -207,13 +202,11 @@ class Loader(BaseLoader):
         return new_soup
 
     def _transform_named_slot(self, slot_tag, component_key):
-        """Replace <c-slot> tags with the {% cotton_slot %} template tag"""
-        # for c_slot in soup.find_all("c-slot"):
+        """Compile <c-slot> to {% cotton_slot %}"""
         slot_name = slot_tag.get("name", "").strip()
         inner_html = "".join(str(content) for content in slot_tag.contents)
 
         # Check and process any components in the slot content
-
         slot_soup = BeautifulSoup(inner_html, "html.parser")
         self._transform_components(slot_soup, component_key)
 
@@ -230,37 +223,31 @@ class Loader(BaseLoader):
                 continue
 
             component_key = tag.name[2:]
-
-            # Convert dot notation to path structure and replace hyphens with underscores
             component_path = component_key.replace(".", "/").replace("-", "_")
-
-            # Construct the opening tag
             opening_tag = f"{{% cotton_component {'cotton/{}.cotton.html'.format(component_path)} {component_key} "
 
-            # Store dyanmically extracted slots, they are when we use '{{' or '{%' in the value of an attribute
-            dynamic_slots = []
+            # Store attributes that contain template expressions, they are when we use '{{' or '{%' in the value of an attribute
+            expression_attrs = []
 
             # Build the attributes
-            for attr, value in tag.attrs.items():
-                if attr == "class":
-                    # BS4 stores class values as a list, so we need to join them back into a string
+            for key, value in tag.attrs.items():
+                # BS4 stores class values as a list, so we need to join them back into a string
+                if key == "class":
                     value = " ".join(value)
 
                 # check if we have django syntax in the value, if so, we need to extract and place them inside as a slot
                 if self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX in value:
-                    # move the key and value pair to dynamic_slots so we can add them as slots later
-                    dynamic_slots.append((attr, value))
-                    # don't add this attribute in normal way
+                    expression_attrs.append((key, value))
                     continue
 
-                opening_tag += ' {}="{}"'.format(attr, value)
+                opening_tag += ' {}="{}"'.format(key, value)
             opening_tag += " %}"
 
             component_tag = opening_tag
 
-            if dynamic_slots:
-                for attr, value in dynamic_slots:
-                    component_tag += f"{{% cotton_slot {attr} {component_key} %}}{value}{{% end_cotton_slot %}}"
+            if expression_attrs:
+                for key, value in expression_attrs:
+                    component_tag += f"{{% cotton_slot {key} {component_key} expression_attr %}}{value}{{% end_cotton_slot %}}"
 
             if tag.contents:
                 tag_soup = BeautifulSoup(tag.decode_contents(), "html.parser")
@@ -269,7 +256,7 @@ class Loader(BaseLoader):
 
             component_tag += "{% end_cotton_component %}"
 
-            # Replace the original tag with the new content
+            # Replace the original tag with the compiled django syntax
             new_soup = BeautifulSoup(component_tag, "html.parser")
             tag.replace_with(new_soup)
 

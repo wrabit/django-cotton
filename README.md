@@ -316,11 +316,12 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
 
 ## Changelog
  
-v0.9.1 (2024-06-08) - Initial open source release  
-v0.9.2 (2024-06-08) - Readme update  
-v0.9.3 (2024-06-09) - Fixed loader docs + readme   
-v0.9.4 (2024-06-11) - Added boolean attributes  
-v0.9.5 (2024-06-12) - Minor fixes  
-v0.9.6 (2024-06-17) - Renamed `c-props` to `c-vars`  
-v0.9.7 (2024-06-21) - Allowed python types to be sent as attribute values  
-
+v0.9.1 - Initial open source release  
+v0.9.2 - Readme update  
+v0.9.3 - Fixed loader docs + readme   
+v0.9.4 - Added boolean attributes  
+v0.9.5 - Minor fixes  
+v0.9.6 - Renamed `c-props` to `c-vars`  
+v0.9.7 - Allowed python types to be sent as attribute values  
+v0.9.9 - Allow template expressions inside attributes
+v0.9.10 - Template expression attributes are now in {{ attrs }}

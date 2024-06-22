@@ -3,8 +3,9 @@
 
     <c-slot name="page_index">
         <c-index-link><a href="#components" class="no-underline">Components</a></c-index-link>
-        <c-index-link><a href="#attributes" class="no-underline">Atributes</a></c-index-link>
+        <c-index-link><a href="#attributes" class="no-underline">Attributes</a></c-index-link>
             <c-index-sublink><a href="#variables-in-attributes" class="no-underline">Template variables in attributes</a></c-index-sublink>
+            <c-index-sublink><a href="#variables-as-attributes" class="no-underline">Passing variables by reference</a></c-index-sublink>
             <c-index-sublink><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
             <c-index-sublink><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
             <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
@@ -14,8 +15,8 @@
             <c-index-sublink><a href="#excluded" class="no-underline">Excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
     </c-slot>
 
-    <p>Components are reusable pieces of view template. They can contain native django template syntax and can be used
-        inside standard django templates. The only requirement is that both, the component and the view that contains
+    <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
+        inside standard Django templates. The only requirement is that both, the component and the view that contains
         the component must use a <c-highlight>.cotton.html</c-highlight> extension. </p>
 
     <h3>A minimal example:</h3>
@@ -44,7 +45,7 @@
 <c-snippet label="weather.cotton.html">{% cotton_verbatim %}{% verbatim %}
 <p>It's {{ temperature }}<sup>{{ unit }}</sup> and the condition is {{ condition }}.</p>
     {% endcotton_verbatim %}{% endverbatim %}
-    </c-snippet>
+</c-snippet>
 
 <c-snippet>{% cotton_verbatim %}{% verbatim %}
 <c-weather temperature="23" unit="c" condition="windy"></c-weather>
@@ -54,27 +55,51 @@
 </c-slot>
 </c-snippet>
 
-    <h3 id="variables-in-attributes">Passing template variables as attributes</h3>
+    <h3 id="variables-in-attributes">Using template variables in attributes</h3>
 
-    <p>Sometimes you'll want to pass a variable from the parent's context. To do so, prepend the attribute with a "<c-highlight>:</c-highlight>".</p>
+    <p>Cotton allows you to include template variables inside attributes.</p>
+
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-weather temperature="{{ temperature|floatformat:0 }}"
+           unit="{{ unit|default:'c' }}"
+           condition="very {% get_intensity %}"
+/>
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+    <h3 id="variables-as-attributes">Passing template variables by reference</h3>
+
+    <p>Sometimes you'll want to pass a variable from the parent's context 'as is' for the child component to perform what it wants.</p>
+
+    <p>To pass data by reference, prepend the attribute with a "<c-highlight>:</c-highlight>".</p>
 
 <c-snippet language="python" label="views.py">{% cotton_verbatim %}{% verbatim %}
 def weather_view(request):
     return render(request, 'view.cotton.html', {
-        'unit': get_weather_unit()
+        'today': get_weather()
     })
 {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
     <c-snippet label="view.cotton.html">{% cotton_verbatim %}{% verbatim %}
-<c-weather :unit="unit"></c-weather>
+<c-weather :today="today"></c-weather>
 {% endcotton_verbatim %}{% endverbatim %}
-</c-snippet>
+    </c-snippet>
+
+    <c-snippet label="weather.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<p>It's {{ today.temperature }}<sup>{{ today.unit }}</sup> and the condition is {{ today.condition }}.</p>
+    {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
 
     <h3 id="named-slots">Named slots</h3>
 
-    <p>There are occasions when you will need to pass different types of content other than a simple string or variable to a component. In these cases, you can use <c-highlight>named slots</c-highlight>.</p>
+    <p>There are occasions when you will need to pass blocks of HTML or dynamic content. In these cases, we can reach to <c-highlight>named slots</c-highlight>.</p>
 
     <p>Named slots are defined with the <c-highlight>{{ '<c-slot name="...">...</c-slot>'|force_escape }}</c-highlight> tag. The content is passed to the component like a standard template variable.</p>
+
+    <p>They allow you to define mixed markup, HTML and Django native tags and the rendered block will be provided as a template variable to the child component.</p>
+
+    <p>Adopting the nested HTML approach here keeps readability and integrates well with how editors already treat html-like tags and patterns.</p>
+
+    <p>After writing a couple of components like this, you will notice the fluidity of this approach.</p>
 
 <c-snippet label="weather_card.cotton.html">{% cotton_verbatim %}{% verbatim %}
 <div class="flex ...">
@@ -178,6 +203,21 @@ def weather_view(request):
     </select>
 </c-slot>
 </c-snippet>
+
+    <p>This approach can also be utilised by in-component vars in the c-vars tag:</p>
+
+<c-snippet label="search.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-vars :config="{'category': 'fruit', 'limit': 10}" />
+
+<div>
+    Current category: {{ config.category }}
+    Current limit: {{ config.limit }}
+    ...
+</div>
+{% endcotton_verbatim %}{% endverbatim %}
+</c-snippet>
+
+    <p>This example shows we can use c-vars to provide a default to an optional dictionary variable `config` from the parent.</p>
 
     <c-hr />
 

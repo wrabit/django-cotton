@@ -124,3 +124,12 @@ class CottonTestCase(TestCase):
         self.assertContains(response, "list.0 is 1")
         self.assertContains(response, "dict.key is 'value'")
         self.assertContains(response, "listdict.0.key is 'value'")
+
+    def test_attributes_can_contain_django_native_tags(self):
+        response = self.client.get("/test/native-tags-in-attributes")
+
+        self.assertContains(response, "Attribute 1 says: 'Hello Will'")
+        self.assertContains(response, "Attribute 2 says: 'world'")
+        self.assertContains(response, "Attribute 3 says: 'cowabonga!'")
+
+    # TODO: implement inline test asset creation, i.e. store_template("native-tags-in-attributes", """)

@@ -19,6 +19,7 @@ warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
 class Loader(BaseLoader):
     is_usable = True
+    DJANGO_SYNTAX_PLACEHOLDER_PREFIX = "__django_syntax__"
 
     def __init__(self, engine, dirs=None):
         super().__init__(engine)
@@ -49,11 +50,12 @@ class Loader(BaseLoader):
         # We need to provide a key to the current view or component (in this case, view) so that we can namespace
         # slot data, preventing bleeding and ensure components only clear data in their own context
         # in this case, we're top level, likely in a view so we use the view template name as the key
-        component_key = (
-            origin.template_name.lstrip("cotton/")
-            .rstrip(".cotton.html")
-            .replace("/", ".")
-        )
+        # component_key = (
+        #     origin.template_name.lstrip("cotton/")
+        #     .rstrip(".cotton.html")
+        #     .replace("/", ".")
+        # )
+        component_key = origin.template_name
 
         compiled_template = self._compile_template_from_string(
             template_string, component_key
@@ -76,7 +78,7 @@ class Loader(BaseLoader):
             # Get the inner content without the cotton_verbatim tags
             inner_content = match.group(1)
             self.django_syntax_placeholders.append(inner_content)
-            return f"__django_syntax__{len(self.django_syntax_placeholders)}__"
+            return f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__"
 
         # Replace cotton_verbatim blocks, capturing inner content
         content = re.sub(
@@ -89,14 +91,14 @@ class Loader(BaseLoader):
         content = re.sub(
             r"\{%.*?%\}",
             lambda x: self.django_syntax_placeholders.append(x.group(0))
-            or f"__django_syntax__{len(self.django_syntax_placeholders)}__",
+            or f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__",
             content,
         )
         # Replace {{ ... }}
         content = re.sub(
             r"\{\{.*?\}\}",
             lambda x: self.django_syntax_placeholders.append(x.group(0))
-            or f"__django_syntax__{len(self.django_syntax_placeholders)}__",
+            or f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__",
             content,
         )
 
@@ -105,7 +107,9 @@ class Loader(BaseLoader):
     def _replace_placeholders_with_syntax(self, content):
         """After modifying the content, replace the placeholders with the django template tags and variables."""
         for i, placeholder in enumerate(self.django_syntax_placeholders, 1):
-            content = content.replace(f"__django_syntax__{i}__", placeholder)
+            content = content.replace(
+                f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__", placeholder
+            )
 
         return content
 
@@ -217,44 +221,56 @@ class Loader(BaseLoader):
 
         slot_tag.replace_with(BeautifulSoup(cotton_slot_tag, "html.parser"))
 
-    def _transform_components(self, soup, component_key):
+    def _transform_components(self, soup, parent_key):
         """Replace <c-[component path]> tags with the {% cotton_component %} template tag"""
         for tag in soup.find_all(re.compile("^c-"), recursive=True):
             if tag.name == "c-slot":
-                self._transform_named_slot(tag, component_key)
+                self._transform_named_slot(tag, parent_key)
 
                 continue
 
-            component_name = tag.name[2:]
+            component_key = tag.name[2:]
 
             # Convert dot notation to path structure and replace hyphens with underscores
-            path = component_name.replace(".", "/").replace("-", "_")
+            component_path = component_key.replace(".", "/").replace("-", "_")
 
             # Construct the opening tag
-            opening_tag = f"{{% cotton_component {'cotton/{}.cotton.html'.format(path)} {component_name} "
+            opening_tag = f"{{% cotton_component {'cotton/{}.cotton.html'.format(component_path)} {component_key} "
 
+            # Store dyanmically extracted slots, they are when we use '{{' or '{%' in the value of an attribute
+            dynamic_slots = []
+
+            # Build the attributes
             for attr, value in tag.attrs.items():
                 if attr == "class":
+                    # BS4 stores class values as a list, so we need to join them back into a string
                     value = " ".join(value)
+
+                # check if we have django syntax in the value, if so, we need to extract and place them inside as a slot
+                if self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX in value:
+                    # move the key and value pair to dynamic_slots so we can add them as slots later
+                    dynamic_slots.append((attr, value))
+                    # don't add this attribute in normal way
+                    continue
+
                 opening_tag += ' {}="{}"'.format(attr, value)
             opening_tag += " %}"
 
-            # Construct the closing tag
-            closing_tag = "{% end_cotton_component %}"
+            component_tag = opening_tag
+
+            if dynamic_slots:
+                for attr, value in dynamic_slots:
+                    component_tag += f"{{% cotton_slot {attr} {component_key} %}}{value}{{% end_cotton_slot %}}"
 
             if tag.contents:
                 tag_soup = BeautifulSoup(tag.decode_contents(), "html.parser")
-                self._transform_components(tag_soup, component_name)
+                self._transform_components(tag_soup, component_key)
+                component_tag += str(tag_soup)
 
-                # Create new content with opening tag, tag content, and closing tag
-                new_content = opening_tag + str(tag_soup) + closing_tag
-
-            else:
-                # Create new content with opening tag and closing tag
-                new_content = opening_tag + closing_tag
+            component_tag += "{% end_cotton_component %}"
 
             # Replace the original tag with the new content
-            new_soup = BeautifulSoup(new_content, "html.parser")
+            new_soup = BeautifulSoup(component_tag, "html.parser")
             tag.replace_with(new_soup)
 
         return soup

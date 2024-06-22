@@ -132,4 +132,9 @@ class CottonTestCase(TestCase):
         self.assertContains(response, "Attribute 2 says: 'world'")
         self.assertContains(response, "Attribute 3 says: 'cowabonga!'")
 
+        self.assertContains(
+            response,
+            """attrs tag is: 'normal="normal" attr1="Hello Will" attr2="world" attr3="cowabonga!"'""",
+        )
+
     # TODO: implement inline test asset creation, i.e. store_template("native-tags-in-attributes", """)

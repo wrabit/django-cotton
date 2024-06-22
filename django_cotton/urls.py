@@ -45,4 +45,10 @@ urlpatterns = [
     path("variable-parsing", views.variable_parsing_test_view),
     path("test/eval-vars", views.eval_vars_test_view),
     path("test/eval-attributes", views.eval_attributes_test_view),
+    path(
+        "test/native-tags-in-attributes",
+        TemplateView.as_view(
+            template_name="native_tags_in_attributes_view.cotton.html"
+        ),
+    ),
 ]

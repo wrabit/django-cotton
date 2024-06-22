@@ -2,17 +2,18 @@ name: "Deploy Documentation"
 run-name: "Deploy Documentation (@${{ github.actor }})"
 
 on:
+  workflow_dispatch:
   workflow_call:
     secrets:
       RAILWAY_PROJECT_TOKEN:
         required: true
       RAILWAY_SERVICE:
         required: true
-  push:
-    branches:
-      - main
-    paths:
-      - 'docs/**'
+#  push:
+#    branches:
+#      - main
+#    paths:
+#      - 'docs/**'
 
 jobs:
   deploy_docs:

@@ -107,6 +107,17 @@ Named slots can also contain any django native template logic:
 </c-button>
 ```
 
+### Using template variables in attributes
+
+Cotton allows you to include template variables inside attributes.
+
+```html
+<c-weather icon="fa-{{ icon }}"
+           unit="{{ unit|default:'c' }}"
+           condition="very {% get_intensity %}"
+/>
+```
+
 ### Pass template variable as an attribute
 
 To pass a template variable you prepend the attribute name with a colon `:`

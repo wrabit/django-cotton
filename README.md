@@ -14,7 +14,7 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 ## Key Features
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
 - **Interoperable with Django:** Cotton enhances django's existing template system.
-- **HTML-like Syntax:** Better code editor support as component tags are similar to html tags.
+- **HTML-like Syntax:** Better code editor support and productivity as component tags are similar to html tags.
 - **Minimal Overhead:** Compiles to native Django components with dynamic caching.
 - **Ideal for Tailwind usage:** Helps encapsulate content and style in one file.
 - **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.

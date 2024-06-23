@@ -1,9 +1,9 @@
-{% cotton_component cotton/benchmarks/partials/main.cotton.html %}
+{% cotton_component cotton/benchmarks/partials/main.cotton.html test_key %}
     I'm default
-    {% cotton_slot top %}
+    {% cotton_slot top test_key %}
         I'm top
     {% end_cotton_slot %}
-    {% cotton_slot bottom %}
+    {% cotton_slot bottom test_key %}
         I'm bottom
     {% end_cotton_slot %}
 {% end_cotton_component %}

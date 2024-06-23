@@ -4,8 +4,8 @@ from django_cotton.cotton_loader import Loader as CottonLoader
 
 
 def get_compiled(template_string):
-    return CottonLoader(engine=None)._compile_template_from_string(
-        template_string, component_key="test_key"
+    return CottonLoader(engine=None).template_processor.process(
+        template_string, "test_key"
     )
 
 

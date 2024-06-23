@@ -1,7 +1,8 @@
-from django.conf import settings
 import time
-from django.template.loader import render_to_string
+
 import django
+from django.conf import settings
+from django.template.loader import render_to_string
 
 # Configure Django settings
 settings.configure(
@@ -38,6 +39,8 @@ settings.configure(
             },
         },
     ],
+    # Toggle this to turn caching on and off
+    COTTON_TEMPLATE_CACHING_ENABLED=True,
 )
 
 django.setup()
@@ -55,7 +58,6 @@ def benchmark_template_rendering(template_name, iterations=1000):
 time_native_extends, output_native_extends = benchmark_template_rendering(
     "cotton/benchmarks/native_extends.html"
 )
-# time_native_include, output_native_include = benchmark_template_rendering('cotton/benchmarks/native_include.html')
 time_compiled_cotton, output_compiled_cotton = benchmark_template_rendering(
     "cotton/benchmarks/cotton_compiled.html"
 )
@@ -63,9 +65,7 @@ time_cotton, output_cotton = benchmark_template_rendering(
     "cotton/benchmarks/cotton.cotton.html"
 )
 
-
 # Output results
 print(f"Native Django Template using extend: {time_native_extends} seconds")
-# print(f"Native Django Template using include: {time_native_include} seconds")
 print(f"Compiled Cotton Template: {time_compiled_cotton} seconds")
 print(f"Cotton Template: {time_cotton} seconds")

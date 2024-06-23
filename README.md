@@ -323,5 +323,5 @@ v0.9.4 - Added boolean attributes
 v0.9.5 - Minor fixes  
 v0.9.6 - Renamed `c-props` to `c-vars`  
 v0.9.7 - Allowed python types to be sent as attribute values  
-v0.9.9 - Allow template expressions inside attributes
+v0.9.9 - Allow template expressions inside attributes  
 v0.9.10 - Template expression attributes are now in {{ attrs }}

@@ -1,11 +1,12 @@
+import warnings
+import hashlib
 import os
 import re
-import hashlib
-import warnings
 
 from django.template.loaders.base import Loader as BaseLoader
 from django.core.exceptions import SuspiciousFileOperation
 from django.template import TemplateDoesNotExist
+from bs4.formatter import HTMLFormatter
 from django.utils._os import safe_join
 from django.template import Template
 from django.core.cache import cache
@@ -82,6 +83,12 @@ class Loader(BaseLoader):
                 )
 
 
+class UnsortedAttributes(HTMLFormatter):
+    def attributes(self, tag):
+        for k, v in tag.attrs.items():
+            yield k, v
+
+
 class CottonTemplateProcessor:
     DJANGO_SYNTAX_PLACEHOLDER_PREFIX = "__django_syntax__"
     COTTON_VERBATIM_PATTERN = re.compile(
@@ -137,7 +144,7 @@ class CottonTemplateProcessor:
         soup = self._wrap_with_cotton_vars_frame(soup)
         self._transform_components(soup, component_key)
 
-        return str(soup)
+        return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
 
     def _replace_placeholders_with_syntax(self, content):
         """After modifying the content, replace the placeholders with the django template tags and variables."""
@@ -149,11 +156,23 @@ class CottonTemplateProcessor:
         return content
 
     def _revert_bs4_attribute_empty_attribute_fixing(self, contents):
-        """Django's template parser adds ="" to empty attribute-like parts in any html-like node, i.e. <div {{ something }}> gets
-        compiled to <div {{ something }}=""> Then if 'something' is holding attributes sets, the last attribute value is
-        not quoted. i.e. model=test not model="test"."""
-        cleaned_content = re.sub('}}=""', "}}", contents)
-        return cleaned_content
+        """
+        Removes empty attribute values added by BeautifulSoup to Django template tags.
+
+        BeautifulSoup adds ="" to empty attribute-like parts in HTML-like nodes.
+        This method removes these additions for Django template tags.
+
+        Examples:
+        - <div {{ something }}=""> becomes <div {{ something }}>
+        - <div {% something %}=""> becomes <div {% something %}>
+        """
+        # Remove ="" after Django variable tags
+        contents = contents.replace('}}=""', "}}")
+
+        # Remove ="" after Django template tags
+        contents = contents.replace('%}=""', "%}")
+
+        return contents
 
     def _wrap_with_cotton_vars_frame(self, soup):
         """Wrap content with {% cotton_vars_frame %} to be able to govern vars and attributes. In order to recognise
@@ -184,7 +203,11 @@ class CottonTemplateProcessor:
         closing = "{% endcotton_vars_frame %}"
 
         # Convert the remaining soup back to a string and wrap it within {% with %} block
-        wrapped_content = opening + str(soup).strip() + closing
+        wrapped_content = (
+            opening
+            + str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8")).strip()
+            + closing
+        )
 
         # Since we can't replace the soup object itself, we create new soup instead
         new_soup = BeautifulSoup(wrapped_content, "html.parser")
@@ -229,7 +252,9 @@ class CottonTemplateProcessor:
             if tag.contents:
                 tag_soup = BeautifulSoup(tag.decode_contents(), "html.parser")
                 self._transform_components(tag_soup, component_key)
-                component_tag += str(tag_soup)
+                component_tag += str(
+                    tag_soup.encode(formatter=UnsortedAttributes()).decode("utf-8")
+                )
 
             component_tag += "{% end_cotton_component %}"
 
@@ -248,7 +273,7 @@ class CottonTemplateProcessor:
         slot_soup = BeautifulSoup(inner_html, "html.parser")
         self._transform_components(slot_soup, component_key)
 
-        cotton_slot_tag = f"{{% cotton_slot {slot_name} {component_key} %}}{str(slot_soup)}{{% end_cotton_slot %}}"
+        cotton_slot_tag = f"{{% cotton_slot {slot_name} {component_key} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% end_cotton_slot %}}"
 
         slot_tag.replace_with(BeautifulSoup(cotton_slot_tag, "html.parser"))
 

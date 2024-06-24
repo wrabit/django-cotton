@@ -7,7 +7,8 @@
 
 Bringing component-based design to Django templates.
 
-- <a href="https://django-cotton.com" target="_blank">Document site</a>
+- Docs + demos: <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
+- <a href="https://github.com/wrabit/django-cotton/releases">Changelog</a>
 
 Cotton aims to overcome certain limitations that exist in the django template system that hold us back when we want to apply modern practises to compose UIs in a modular and reusable way.
 
@@ -313,15 +314,5 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
 - **Naming Conventions:** 
   - Component filenames use snake_case: `my_component.cotton.html`
   - Components are called using kebab-case: `<c-my-component />`
-
-## Changelog
  
-v0.9.1 - Initial open source release  
-v0.9.2 - Readme update  
-v0.9.3 - Fixed loader docs + readme   
-v0.9.4 - Added boolean attributes  
-v0.9.5 - Minor fixes  
-v0.9.6 - Renamed `c-props` to `c-vars`  
-v0.9.7 - Allowed python types to be sent as attribute values  
-v0.9.9 - Allow template expressions inside attributes  
-v0.9.10 - Template expression attributes are now in {{ attrs }}
+For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>

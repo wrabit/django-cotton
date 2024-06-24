@@ -1,6 +1,39 @@
 from django.test import TestCase
 
+from django_cotton.tests.inline_test_case import CottonInlineTestCase
 from django_cotton.tests.utils import get_compiled, get_rendered
+
+
+class InlineTestCase(CottonInlineTestCase):
+    def test_parent_component_is_rendered(self):
+        # Create component
+        self.create_template(
+            "cotton/parent.cotton.html",
+            """
+            <div class="i-am-parent">
+                {{ slot }}
+            </div>
+            """,
+        )
+
+        # Create view template
+        self.create_template(
+            "parent_view.cotton.html",
+            """
+            <c-parent>
+                Hello, World!
+            </c-parent>
+        """,
+        )
+
+        # Create URL
+        self.create_url("parent/", self.create_view("parent_view.cotton.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/parent/")
+            self.assertContains(response, '<div class="i-am-parent">')
+            self.assertContains(response, "Hello, World!")
 
 
 class CottonTestCase(TestCase):
@@ -26,7 +59,7 @@ class CottonTestCase(TestCase):
     def test_attribute_passing(self):
         response = self.client.get("/attribute-passing")
         self.assertContains(
-            response, '<div and-another="woo1" attribute_1="hello" thirdforluck="yes">'
+            response, '<div attribute_1="hello" and-another="woo1" thirdforluck="yes">'
         )
 
     def test_attribute_merging(self):

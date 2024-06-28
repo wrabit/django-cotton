@@ -3,8 +3,6 @@
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-**Whilst we are still in 0.9.x versions, there could be breaking changes.**
-
 Bringing component-based design to Django templates.
 
 - Docs + demos: <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>

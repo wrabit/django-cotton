@@ -20,20 +20,7 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 
 ## Walkthrough
 
-```html
-<!-- button.cotton.html -->
-<a href="/" class="...">I'm a static button</a>
-```
-```html
-<!-- template -->
-<c-button />
-```
-```html
-<!-- output -->
-<a href="/" class="...">I'm a static button</a>
-```
-
-An unlikely example but it shows we can use cotton like an include tag. Let's make this more useful:
+### Your first component
 
 ```html
 <!-- button.cotton.html -->

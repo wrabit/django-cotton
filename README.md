@@ -106,31 +106,7 @@ Cotton allows you to include template variables inside attributes.
 
 ### Pass template variable as an attribute
 
-To pass a template variable you prepend the attribute name with a colon `:`
-
-```html
-<!-- button.cotton.html -->
-<a href="{{ url }}" class="...">
-  {{ slot }} <strong>{{ click_count }}</strong>
-</a>
-```
-```html
-<!-- template -->
-<c-button :click_count="click_count">Contact</c-button>
-```
-
-You are effectively passing the variable by reference. You could achieve a similar thing by using a named slot, which will be passing the value of the variable instead:
-
-```html
-<!-- template -->
-<c-button>
-  Contact
-  <c-slot name="click_count">
-    {{ click_count }}
-  </c-slot>
-</c-button>
-```
-To demonstrate another example of passing a variable by reference, consider a bio card component:
+To pass a template variable you prepend the attribute name with a colon `:`. Consider a bio card component:
 
 ```html
 <!-- template -->
@@ -169,12 +145,11 @@ By passing just the attribute name without a value, it will automatically be pro
 Using the ':' to prefix an attribute tells Cotton we're passing a dynamic type down. We already know we can use this to send a variable, but you can also send basic python types, namely:
 
 - Integers and Floats
-- None
-- True and False
+- None, True and False
 - Lists
 - Dictionaries
 
-This benefits a number of use-cases, for example if you have a select component that you want to provide some value:
+This benefits a number of use-cases, for example if you have a select component that you want to provide the possible options from the parent:
 
 ```html
 <!-- select.cotton.html -->
@@ -200,7 +175,7 @@ This benefits a number of use-cases, for example if you have a select component 
 
 ### Default attributes with `<c-vars>`
 
-Django templates adhere quite strictly to the MVC model and does not permit much data control in the View. But what if we want to handle data for the purpose of UI state only? Having this in the back would surely convolute the backend code. For this, Cotton can set simple attribute values that help allow us to set default values for our component attributes.
+Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in the View. Fair enough, but what if we want to handle data for the purpose of UI state only? Having this in the back would surely convolute the backend code. For this, Cotton can set simple attribute values that help allow us to set default values for our component attributes.
 
 ```html
 <!-- button.cotton.html -->

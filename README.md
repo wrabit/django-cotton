@@ -304,7 +304,7 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 | Date       | Version    | Title and Description                                                                                                                                                            |
 |------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 2024.07-03 | v0.9.12 ⚠️ | **Dropped ".cotton.html" Requirement**<br><small>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do. </small>          |
+| 2024.07-03 | v0.9.12    | **Dropped ".cotton.html" Requirement**<br><small>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do. </small>          |
 | 2024-06-24 | v0.9.11    | **Attribute Ordering Fix**<br><small>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions inside tags.</small> |
 | 2024-06-22 | v0.9.10    | **Template Expression Attributes**<br><small>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.</small>     |
 | 2024-06-22 | v0.9.9     | **Native Tags in Attributes**<br><small>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.</small>             |

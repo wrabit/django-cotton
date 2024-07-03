@@ -8,7 +8,7 @@ class InlineTestCase(CottonInlineTestCase):
     def test_parent_component_is_rendered(self):
         # Create component
         self.create_template(
-            "cotton/parent.cotton.html",
+            "cotton/parent.html",
             """
             <div class="i-am-parent">
                 {{ slot }}
@@ -18,7 +18,7 @@ class InlineTestCase(CottonInlineTestCase):
 
         # Create view template
         self.create_template(
-            "parent_view.cotton.html",
+            "parent_view.html",
             """
             <c-parent>
                 Hello, World!
@@ -27,7 +27,7 @@ class InlineTestCase(CottonInlineTestCase):
         )
 
         # Create URL
-        self.create_url("parent/", self.create_view("parent_view.cotton.html"))
+        self.create_url("parent/", self.create_view("parent_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):

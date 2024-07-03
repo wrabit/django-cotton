@@ -23,7 +23,7 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 ### Your first component
 
 ```html
-<!-- button.cotton.html -->
+<!-- cotton/button.html -->
 <a href="/" class="...">{{ slot }}</a>
 ```
 ```html
@@ -38,7 +38,7 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 ### Add attributes
 
 ```html
-<!-- button.cotton.html -->
+<!-- cotton/button.html -->
 <a href="{{ url }}" class="...">
     {{ slot }}
 </a>
@@ -59,7 +59,7 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 Named slots are a powerful concept. It allows us to provide HTML to appear in one or more areas in the component. Here we allow the button to optionally display an icon: 
 
 ```html
-<!-- button.cotton.html -->
+<!-- cotton/button.html -->
 <a href="{{ url }}" class="...">
     {{ slot }}
   
@@ -116,7 +116,7 @@ To pass a template variable you prepend the attribute name with a colon `:`. Con
 That has a component definition like:
 
 ```html
-<!-- bio_card.cotton.html -->
+<!-- cotton/bio_card.html -->
 <div class="...">
   <img src="{{ user.avatar }}" alt="...">
   {{ user.username }} {{ user.country_code }}
@@ -134,7 +134,7 @@ Boolean attributes reduce boilerplate when we just want to indicate a certain at
 By passing just the attribute name without a value, it will automatically be provided to the component as `True`
 
 ```html
-<!-- button.cotton.html -->
+<!-- cotton/button.html -->
 <a href="{{ url }}" {% if external %} target="_blank" {% endif %} class="...">
     {{ slot }}
 </a>
@@ -152,7 +152,7 @@ Using the ':' to prefix an attribute tells Cotton we're passing a dynamic type d
 This benefits a number of use-cases, for example if you have a select component that you want to provide the possible options from the parent:
 
 ```html
-<!-- select.cotton.html -->
+<!-- cotton/select.html -->
 <select {{ attrs }}>
     {% for option in options %}
         <option value="{{ option }}">{{ option }}</option>
@@ -165,7 +165,7 @@ This benefits a number of use-cases, for example if you have a select component 
 ```
 
 ```html
-<!-- output -->
+<!-- cotton/output -->
 <select name="q1">
     <option value="yes">yes</option>
     <option value="no">no</option>
@@ -178,7 +178,7 @@ This benefits a number of use-cases, for example if you have a select component 
 Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in the View. Fair enough, but what if we want to handle data for the purpose of UI state only? Having this in the back would surely convolute the backend code. For this, Cotton can set simple attribute values that help allow us to set default values for our component attributes.
 
 ```html
-<!-- button.cotton.html -->
+<!-- cotton/button.html -->
 <c-vars theme="bg-purple-500" />
 
 <a href="..." class="{{ theme }}">
@@ -214,7 +214,7 @@ Now we have a default theme for our button, but it is overridable:
 `{{ attrs }}` is a special variable that contains all the attributes passed to the component in an key="value" format. This is useful when you want to pass all attributes to a child element. For example, you have inputs that can have any number of attributes defined:
 
 ```html
-<!-- input.cotton.html -->
+<!-- cotton/input.html -->
 <input type="text" class="..." {{ attrs }} />
 ```
 
@@ -228,7 +228,7 @@ Now we have a default theme for our button, but it is overridable:
 If you combine this with the `c-vars` tag, any property defined there will be excluded from `{{ attrs }}`. For example:
 
 ```html
-<!-- input.cotton.html -->
+<!-- cotton/input.html -->
 <c-vars type="text" />
 
 <input {{ attrs }} class="..." />
@@ -245,7 +245,7 @@ If you combine this with the `c-vars` tag, any property defined there will be ex
 Cotton helps carve out re-usable components, here we show how to make a re-usable form, reducing code repetition and improving maintainability:
 
 ```html
-<!-- form.cotton.html -->
+<!-- cotton/form.html -->
 <div id="result" class="..."></div>
 
 <form {{ attrs }} hx-target="#result" hx-swap="outerHTML">
@@ -269,10 +269,9 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
 ```
 
 ## Usage Basics
-- **File Extensions:** Views templates that contain Cotton and Cotton components themselves should use the `.cotton.html` extension.
 - **Component Placement:** Components should be placed in the `templates/cotton` folder.
 - **Naming Conventions:** 
-  - Component filenames use snake_case: `my_component.cotton.html`
+  - Component filenames use snake_case: `my_component.html`
   - Components are called using kebab-case: `<c-my-component />`
  
 For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>

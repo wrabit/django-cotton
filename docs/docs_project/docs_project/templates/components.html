@@ -16,15 +16,14 @@
     </c-slot>
 
     <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
-        inside standard Django templates. The only requirement is that both, the component and the view that contains
-        the component must use a <c-highlight>.cotton.html</c-highlight> extension. </p>
+        inside standard Django templates.</p>
 
     <h3>A minimal example:</h3>
 
-<c-snippet label="my_component.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/my_component.html">{% cotton_verbatim %}{% verbatim %}
 {{ slot }}
 {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-<c-snippet label="my_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="my_view.html">{% cotton_verbatim %}{% verbatim %}
 <c-my-component>
     <p>Some content</p>
 </c-my-component>
@@ -42,7 +41,7 @@
 
     <p>Components are highly configurable. One way to control the content and behaviour of a component is through attributes.</p>
 
-<c-snippet label="weather.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/weather.html">{% cotton_verbatim %}{% verbatim %}
 <p>It's {{ temperature }}<sup>{{ unit }}</sup> and the condition is {{ condition }}.</p>
     {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
@@ -75,17 +74,17 @@
 
 <c-snippet language="python" label="views.py">{% cotton_verbatim %}{% verbatim %}
 def weather_view(request):
-    return render(request, 'view.cotton.html', {
+    return render(request, 'view.html', {
         'today': get_weather()
     })
 {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
-    <c-snippet label="view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
 <c-weather :today="today"></c-weather>
 {% endcotton_verbatim %}{% endverbatim %}
     </c-snippet>
 
-    <c-snippet label="weather.cotton.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/weather.html">{% cotton_verbatim %}{% verbatim %}
 <p>It's {{ today.temperature }}<sup>{{ today.unit }}</sup> and the condition is {{ today.condition }}.</p>
     {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
 
@@ -101,14 +100,14 @@ def weather_view(request):
 
     <p>After writing a couple of components like this, you will notice the fluidity of this approach.</p>
 
-<c-snippet label="weather_card.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/weather_card.html">{% cotton_verbatim %}{% verbatim %}
 <div class="flex ...">
     <h2>{{ day }}:</h2> {{ icon }} {{ label }}
 </div>
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-    <c-snippet label="view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
 <c-weather-card day="Tuesday">
     <c-slot name="icon">
         <svg>...</svg>
@@ -132,12 +131,12 @@ def weather_view(request):
 
     <p>It's sometimes useful to be able to print all provided attributes to the components in one "key=value" string. This is particularly useful when you are building form input components.</p>
 
-<c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
 <input type="text" class="border ..." {{ attrs }} />
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
 <c-input name="first_name" placeholder="First name" />
 <c-input name="last_name" placeholder="Last name" value="Smith" readonly  />
 {% endcotton_verbatim %}{% endverbatim %}
@@ -151,7 +150,7 @@ def weather_view(request):
 
     <p>Sometimes you just want to pass a simple boolean to a component. Cotton supports providing the attribute name without a value which will provide a boolean True to the component.</p>
 
-<c-snippet label="input.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
 <input type="text" {{ attrs }} />
 
 {% if required is True %}
@@ -160,7 +159,7 @@ def weather_view(request):
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
 <c-input name="telephone" required />
 {% endcotton_verbatim %}{% endverbatim %}
 <c-slot name="preview">
@@ -182,7 +181,7 @@ def weather_view(request):
 
     <p>This benefits a number of use-cases, for example if you have a select component that you want to provide some value:</p>
 
-<c-snippet label="select.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/select.html">{% cotton_verbatim %}{% verbatim %}
 <select {{ attrs }}>
     {% for option in options %}
         <option value="{{ option }}">{{ option }}</option>
@@ -191,7 +190,7 @@ def weather_view(request):
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet label="question_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="question_view.html">{% cotton_verbatim %}{% verbatim %}
 <c-select name="q1" :options="['yes', 'no', 'maybe']" />
 {% endcotton_verbatim %}{% endverbatim %}
 <c-slot name="preview">
@@ -206,7 +205,7 @@ def weather_view(request):
 
     <p>This approach can also be utilised by in-component vars in the c-vars tag:</p>
 
-<c-snippet label="search.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/search.html">{% cotton_verbatim %}{% verbatim %}
 <c-vars :config="{'category': 'fruit', 'limit': 10}" />
 
 <div>
@@ -229,7 +228,7 @@ def weather_view(request):
 
     <p>You may design a component that will often have a default behaviour and rarely needs overriding. In this case, you may opt to give a default value to your component.</p>
 
-<c-snippet label="alert.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/alert.html">{% cotton_verbatim %}{% verbatim %}
 <c-vars type="success" />
 
 <div class="{% if type == 'success' %} .. {% elif type == 'danger' %} .. {% endif %}">
@@ -238,7 +237,7 @@ def weather_view(request):
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
 <c-alert>All good!</c-alert>
 <c-alert type="danger">Oh no!</c-alert>
 {% endcotton_verbatim %}{% endverbatim %}
@@ -252,7 +251,7 @@ def weather_view(request):
 
     <p>In order to provide more control when using {{ attrs }} to pass down all attributes as a key=value string to a component. Keys defined in {{ '<c-vars />'|force_escape }} will not be included in this string. This is beneficial when you want to pass any attribute to an html element inside a component using {% verbatim %}{{ attrs }}{% endverbatim %}, but also want to provide additional vars for some other reason.</p>
 
-<c-snippet label="input_group.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input_group.html">{% cotton_verbatim %}{% verbatim %}
 <c-vars label errors />
 
 <label>{{ label }}</label>
@@ -267,7 +266,7 @@ def weather_view(request):
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet label="form_view.cotton.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
 <c-input-group label="First name" placeholder="First name" :errors="errors.first_name" />
 <c-input-group label="Last name" placeholder="Last name" :errors="errors.last_name" />
 {% endcotton_verbatim %}{% endverbatim %}

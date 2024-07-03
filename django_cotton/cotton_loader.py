@@ -67,20 +67,19 @@ class Loader(BaseLoader):
         """Return an Origin object pointing to an absolute path in each directory
         in template_dirs. For security reasons, if a path doesn't lie inside
         one of the template_dirs it is excluded from the result set."""
-        if template_name.endswith(".cotton.html"):
-            for template_dir in self.get_dirs():
-                try:
-                    name = safe_join(template_dir, template_name)
-                except SuspiciousFileOperation:
-                    # The joined path was located outside of this template_dir
-                    # (it might be inside another one, so this isn't fatal).
-                    continue
+        for template_dir in self.get_dirs():
+            try:
+                name = safe_join(template_dir, template_name)
+            except SuspiciousFileOperation:
+                # The joined path was located outside of this template_dir
+                # (it might be inside another one, so this isn't fatal).
+                continue
 
-                yield Origin(
-                    name=name,
-                    template_name=template_name,
-                    loader=self,
-                )
+            yield Origin(
+                name=name,
+                template_name=template_name,
+                loader=self,
+            )
 
 
 class UnsortedAttributes(HTMLFormatter):
@@ -224,7 +223,7 @@ class CottonTemplateProcessor:
 
             component_key = tag.name[2:]
             component_path = component_key.replace(".", "/").replace("-", "_")
-            opening_tag = f"{{% cotton_component {'cotton/{}.cotton.html'.format(component_path)} {component_key} "
+            opening_tag = f"{{% cotton_component {'cotton/{}.html'.format(component_path)} {component_key} "
 
             # Store attributes that contain template expressions, they are when we use '{{' or '{%' in the value of an attribute
             expression_attrs = []
@@ -291,6 +290,7 @@ class CottonTemplateCacheHandler:
     def get_cached_template(self, cache_key):
         if not self.enabled:
             return None
+
         return cache.get(cache_key)
 
     def cache_template(self, cache_key, content, timeout=None):

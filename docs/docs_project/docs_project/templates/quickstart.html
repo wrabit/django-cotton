@@ -47,9 +47,9 @@ TEMPLATES = [
 
     <h2>Create a component</h2>
 
-    <p>Create a new directory in your templates directory called <span class="font-mono">cotton</span>. Inside this directory create a new file called <span class="font-mono">card.cotton.html</span> with the following content:</p>
+    <p>Create a new directory in your templates directory called <span class="font-mono">cotton</span>. Inside this directory create a new file called <span class="font-mono">card.html</span> with the following content:</p>
 
-    <c-snippet label="templates/cotton/card.cotton.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="templates/cotton/card.html">{% cotton_verbatim %}{% verbatim %}
 <div class="bg-white shadow rounded border p-4">
     <h2>{{ title }}</h2>
     <p>{{ slot }}</p>
@@ -62,14 +62,12 @@ TEMPLATES = [
 
     <h2>Include a component</h2>
 
-    <p>Create a view with template. View templates that contain cotton components must also carry the ".cotton.html" extension.</p>
-
 <c-snippet language="python" label="views.py">{% cotton_verbatim %}{% verbatim %}
 def dashboard_view(request):
-    return render(request, "dashboard.cotton.html")
+    return render(request, "dashboard.html")
 {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
-    <c-snippet label="templates/dashboard.cotton.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="templates/dashboard.html">{% cotton_verbatim %}{% verbatim %}
 <c-card title="Trees" url="trees">
     We have the best trees
 </c-card>
@@ -98,14 +96,13 @@ def dashboard_view(request):
 
     <h3 id="basics">Basics</h3>
     <c-ul>
-        <li>View templates that include cotton components should have <c-highlight>.cotton.html</c-highlight> extension</li>
-        <li>Cotton components should also be suffixed with <c-highlight>.cotton.html</c-highlight> and be placed in the <c-highlight>templates/cotton</c-highlight> folder</li>
+        <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder</li>
     </c-ul>
 
     <h3 id="naming">Naming</h3>
     <p>Cotton uses the following naming conventions:</p>
     <c-ul>
-        <li>Component file names are in snake_case: <c-highlight>my_component.cotton.html</c-highlight></li>
+        <li>Component file names are in snake_case: <c-highlight>my_component.html</c-highlight></li>
         <li>but are called using kebab-case: <c-highlight>{{ "<c-my-component />"|force_escape }}</c-highlight></li>
     </c-ul>
 
@@ -113,7 +110,7 @@ def dashboard_view(request):
 
     <c-ul>
         <li>Components in subfolders can be defined using dot notation</li>
-        <li>A component in <c-highlight>sidebar/menu/link.cotton.html</c-highlight> would be included as <c-highlight>{{ "<c-sidebar.menu.link />"|force_escape }}</c-highlight></li>
+        <li>A component in <c-highlight>sidebar/menu/link.html</c-highlight> would be included as <c-highlight>{{ "<c-sidebar.menu.link />"|force_escape }}</c-highlight></li>
     </c-ul>
 
     <h3 class="tag-style">Tag Style</h3>

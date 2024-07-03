@@ -54,7 +54,7 @@
 </c-slot>
 </c-snippet>
 
-    <h3 id="variables-in-attributes">Using template variables in attributes</h3>
+    <h3 id="variables-in-attributes">Using template expressions in attributes</h3>
 
     <p>Cotton allows you to include template variables inside attributes.</p>
 
@@ -71,13 +71,6 @@
     <p>Sometimes you'll want to pass a variable from the parent's context 'as is' for the child component to perform what it wants.</p>
 
     <p>To pass data by reference, prepend the attribute with a "<c-highlight>:</c-highlight>".</p>
-
-<c-snippet language="python" label="views.py">{% cotton_verbatim %}{% verbatim %}
-def weather_view(request):
-    return render(request, 'view.html', {
-        'today': get_weather()
-    })
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
     <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
 <c-weather :today="today"></c-weather>
@@ -129,7 +122,6 @@ def weather_view(request):
 
     <h3 id="attrs">Pass all attributes with {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
 
-    This is beneficial when you want to reflect any attribute set in the parent onto an HTML element in the component.
     <p>It's sometimes useful to be able to reflect all attributes provided in the parent down to an HTML element in the component. This is particularly powerful when you are building <a href="{% url 'form-fields' %}">form inputs</a>.</p>
 
 <c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}

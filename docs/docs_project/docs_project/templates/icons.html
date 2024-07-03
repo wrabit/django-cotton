@@ -17,7 +17,7 @@
   </g>
 </svg>{% endverbatim %}{% endcotton_verbatim %}
 <c-slot name="preview">
-<svg viewBox="0 0 512 512" class="w-20 h-20 mx-auto">
+<svg viewBox="0 0 512 512" class="size-20 mx-auto">
   <g fill="none" stroke="#000" stroke-width="30" stroke-linejoin="round">
     <path d="M143.533 256 79.267 384.533v-192.8L497 127.467z"/>
     <path d="M143.533 256 79.267 384.533l119.352-73.448zM15 127.467h482L79.267 191.733z"/>
@@ -42,27 +42,24 @@
     </c-snippet>
 
     <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
-<c-icons.plane class="w-20 h-20 text-red-500" />
-<c-icons.plane class="w-20 h-20 text-teal-500" />
-<c-icons.plane class="w-20 h-20 text-gray-500 animate-bounce" />
-<c-icons.plane class="w-24 h-24 text-purple-500" stroke_width="10" />
+<c-icons.plane class="size-20 text-red-500" />
+<c-icons.plane class="size-20 text-teal-500" />
+<c-icons.plane class="size-20 text-gray-500 animate-bounce" />
+<c-icons.plane class="size-24 text-purple-500" stroke_width="10" />
     {% endverbatim %}{% endcotton_verbatim %}
     <c-slot name="preview">
         <div class="flex items-center space-x-10 justify-center">
-            <c-examples.icons.plane class="w-20 h-20 text-red-500" />
-            <c-examples.icons.plane class="w-20 h-20 text-teal-500" />
-            <c-examples.icons.plane class="w-20 h-20 text-gray-500 animate-bounce" />
-            <c-examples.icons.plane class="w-24 h-24 text-purple-500" stroke_width="10" />
+            <c-examples.icons.plane class="size-20 text-red-500" />
+            <c-examples.icons.plane class="size-20 text-teal-500" />
+            <c-examples.icons.plane class="size-20 text-gray-500 animate-bounce" />
+            <c-examples.icons.plane class="size-24 text-purple-500" stroke_width="10" />
         </div>
     </c-slot>
     </c-snippet>
 
 <c-navigation>
     <c-slot name="prev">
-        <a href="{% url 'form-fields' %}">Flexible Inputs</a>
-    </c-slot>
-    <c-slot name="next">
-        <a href="{% url 'alpine-js' %}">Tabs with Alpine.js</a>
+        <a href="{% url 'layouts' %}">Layouts</a>
     </c-slot>
 </c-navigation>
 

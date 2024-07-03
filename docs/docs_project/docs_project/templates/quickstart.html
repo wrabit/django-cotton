@@ -7,7 +7,7 @@
         <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
         <c-index-sublink><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
         <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
-        <c-index-sublink><a href="#tag-styles" class="no-underline">Tag Styles</a></c-index-sublink>
+        <c-index-sublink><a href="#tag-style" class="no-underline">Tag Style</a></c-index-sublink>
     </c-slot>
 
     <h1 id="install">Quickstart</h1>
@@ -113,7 +113,7 @@ def dashboard_view(request):
         <li>A component in <c-highlight>sidebar/menu/link.html</c-highlight> would be included as <c-highlight>{{ "<c-sidebar.menu.link />"|force_escape }}</c-highlight></li>
     </c-ul>
 
-    <h3 class="tag-style">Tag Style</h3>
+    <h3 id="tag-style">Tag Style</h3>
     <c-ul>
         <li>Components can either be self-closing <c-highlight>{{ "<c-my-component />"|force_escape }}</c-highlight> or have a closing tag <c-highlight>{{ "<c-my-component></c-my-component>"|force_escape }}</c-highlight></li>
     </c-ul>

@@ -52,7 +52,7 @@
         </div>
 
         <div class="flex items-center space-x-3">
-            <a href="#" @click="toggleDark" x-data="{
+            <a href="#" @click.prevent="toggleDark" x-data="{
                     'dark': false,
                     init() {
                         this.dark = document.documentElement.classList.contains('dark')

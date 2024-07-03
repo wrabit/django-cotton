@@ -8,6 +8,24 @@ Bringing component-based design to Django templates.
 - Docs + demos: <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
 - <a href="https://github.com/wrabit/django-cotton/releases">Changelog</a>
 
+## Contents
+
+[Why?](#why-cotton)  
+[Your First component](#your-first-component)  
+[Attributes](#add-attributes)  
+[Names Slots](#add-attributes)  
+[Pass Template Variables](#pass-template-variable-as-an-attribute)  
+[Template expressions in attributes](#template-expressions-inside-attributes)  
+[Boolean attributes](#boolean-attributes)  
+[Passing Python data types](#passing-python-data-types)  
+[Default attributes](#default-attributes-with-c-vars)  
+[Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
+[HTMLX Example](#an-example-with-htmlx)  
+[Usage Basics](#usage-basics)  
+
+
+## Why Cotton?
+
 Cotton aims to overcome certain limitations that exist in the django template system that hold us back when we want to apply modern practises to compose UIs in a modular and reusable way.
 
 ## Key Features
@@ -17,6 +35,7 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 - **Minimal Overhead:** Compiles to native Django components with dynamic caching.
 - **Ideal for Tailwind usage:** Helps encapsulate content and style in one file.
 - **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
+
 
 ## Walkthrough
 
@@ -34,6 +53,8 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 <!-- output -->
 <a href="/" class="...">Contact</a>
 ```
+
+Everything provided between the opening and closing tag is provided to the component as `{{ slot }}`. It can contain HTML and any Django template expression.
 
 ### Add attributes
 
@@ -54,7 +75,7 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 </a>
 ```
 
-### Utilize named slots
+### Named slots
 
 Named slots are a powerful concept. It allows us to provide HTML to appear in one or more areas in the component. Here we allow the button to optionally display an icon: 
 
@@ -93,17 +114,6 @@ Named slots can also contain any django native template logic:
 </c-button>
 ```
 
-### Using template variables in attributes
-
-Cotton allows you to include template variables inside attributes.
-
-```html
-<c-weather icon="fa-{{ icon }}"
-           unit="{{ unit|default:'c' }}"
-           condition="very {% get_intensity %}"
-/>
-```
-
 ### Pass template variable as an attribute
 
 To pass a template variable you prepend the attribute name with a colon `:`. Consider a bio card component:
@@ -123,7 +133,19 @@ That has a component definition like:
 </div>
 ```
 
-### Add boolean attribute
+
+### Template expressions inside attributes
+
+You can use template expression statements inside attributes.
+
+```html
+<c-weather icon="fa-{{ icon }}"
+           unit="{{ unit|default:'c' }}"
+           condition="very {% get_intensity %}"
+/>
+```
+
+### Boolean attributes
 
 Boolean attributes reduce boilerplate when we just want to indicate a certain attribute should be `True` or not.
 
@@ -209,7 +231,7 @@ Now we have a default theme for our button, but it is overridable:
 </a>
 ```
 
-### Create flexible, re-usable inputs with `{{ attrs }}`
+### Increase Re-usability with `{{ attrs }}`
 
 `{{ attrs }}` is a special variable that contains all the attributes passed to the component in an key="value" format. This is useful when you want to pass all attributes to a child element. For example, you have inputs that can have any number of attributes defined:
 

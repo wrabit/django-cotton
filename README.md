@@ -22,6 +22,7 @@ Bringing component-based design to Django templates.
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [HTMLX Example](#an-example-with-htmlx)  
 [Usage Basics](#usage-basics)  
+[Changelog](#changelog)
 
 
 ## Why Cotton?
@@ -297,3 +298,16 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
   - Components are called using kebab-case: `<c-my-component />`
  
 For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
+
+
+## Changelog
+
+| Date       | Version | Title and Description                                                                                                                                                                                  |
+|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2024-06-24 | v0.9.11 | **Attribute Ordering Fix**<br><small>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions to govern attributes in HTML tags.</small> |
+| 2024-06-22 | v0.9.10 | **Template Expression Attributes**<br><small>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.</small>                           |
+| 2024-06-22 | v0.9.9  | **Native Tags in Attributes**<br><small>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.</small>                                   |
+| 2024-06-21 | v0.9.7  | **Dynamic Type Attributes**<br><small>Using the `:` to prefix an attribute tells Cotton we're passing a dynamic type down. You can also send basic Python types.</small>                               |
+| 2024-06-17 | v0.9.6  | **Rename c-props to c-vars**<br><small>Rename c props, all `<c-props />` are now `<c-vars />`.</small>                                                                                                 |
+| 2024-06-11 | v0.9.4  | **Boolean Attributes**<br><small>Support for Boolean attributes added with docs update.</small>                                                                                                        |
+| 2024-06-08 | v0.9.1  | **Open Source Release**<br><small>Open source release.</small>                                                                                                                                         |

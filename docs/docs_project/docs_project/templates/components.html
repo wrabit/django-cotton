@@ -129,7 +129,8 @@ def weather_view(request):
 
     <h3 id="attrs">Pass all attributes with {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
 
-    <p>It's sometimes useful to be able to print all provided attributes to the components in one "key=value" string. This is particularly useful when you are building form input components.</p>
+    This is beneficial when you want to reflect any attribute set in the parent onto an HTML element in the component.
+    <p>It's sometimes useful to be able to reflect all attributes provided in the parent down to an HTML element in the component. This is particularly powerful when you are building <a href="{% url 'form-fields' %}">form inputs</a>.</p>
 
 <c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
 <input type="text" class="border ..." {{ attrs }} />
@@ -249,7 +250,7 @@ def weather_view(request):
 
     <h3 id="excluded">Vars are excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
 
-    <p>In order to provide more control when using {{ attrs }} to pass down all attributes as a key=value string to a component. Keys defined in {{ '<c-vars />'|force_escape }} will not be included in this string. This is beneficial when you want to pass any attribute to an html element inside a component using {% verbatim %}{{ attrs }}{% endverbatim %}, but also want to provide additional vars for some other reason.</p>
+    <p>Keys defined in {{ '<c-vars />'|force_escape }} will not be included in {% verbatim %}{{ attrs }}{% endverbatim %}. This is useful when some of the properties you pass down to a component are for configuration purposes only and not intended as attributes.</p>
 
 <c-snippet label="cotton/input_group.html">{% cotton_verbatim %}{% verbatim %}
 <c-vars label errors />

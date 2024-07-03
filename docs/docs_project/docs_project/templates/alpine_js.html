@@ -7,8 +7,8 @@
         <c-index-sublink><a href="#preparation" class="no-underline">Preparation</a></c-index-sublink>
         <c-index-link><a href="#interactivity" class="no-underline">Interactivity</a></c-index-link>
         <c-index-sublink><a href="#data-component" class="no-underline">Data component</a></c-index-sublink>
-        <c-index-sublink><a href="#modify-tabs" class="no-underline">tabs.cotton.html</a></c-index-sublink>
-        <c-index-sublink><a href="#modify-tab" class="no-underline">tab.cotton.html</a></c-index-sublink>
+        <c-index-sublink><a href="#modify-tabs" class="no-underline">tabs.html</a></c-index-sublink>
+        <c-index-sublink><a href="#modify-tab" class="no-underline">tab.html</a></c-index-sublink>
         <c-index-sublink><a href="#example" class="no-underline">Example</a></c-index-sublink>
     </c-slot>
 
@@ -69,9 +69,9 @@
 
     <p>Now we have the design right, let's chop it up into components.</p>
 
-    <h4>tabs.cotton.html</h4>
+    <h4>Tabs component</h4>
 
-    <c-snippet>{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/tabs.html">{% cotton_verbatim %}{% verbatim %}
 <div class="bg-white rounded-lg overflow-hidden border shadow">
     <div class="flex items-center space-x-5 w-full bg-gray-100">
         <!-- tab navigation will go here -->
@@ -85,9 +85,9 @@
     {% endcotton_verbatim %}{% endverbatim %}
     </c-snippet>
 
-    <h4>tab.cotton.html</h4>
+    <h4>Tab component</h4>
 
-    <c-snippet>{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/tab.html">{% cotton_verbatim %}{% verbatim %}
 <div>
     {{ slot }}
 </div>
@@ -134,9 +134,9 @@
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-    <h3 id="modify-tabs">Modifying tabs.cotton.html</h3>
+    <h3 id="modify-tabs">Modifying tabs.html</h3>
 
-    <p>Next we'll make the appropriate changes to our tabs.cotton.html component to integrate alpine.js</p>
+    <p>Next we'll make the appropriate changes to our tabs.html component to integrate alpine.js</p>
 
 <c-snippet>{% cotton_verbatim %}{% verbatim %}
 <div x-data="tabs" x-init="$watch('tabs', () => currentTab = tabs[0])" class="...">
@@ -156,7 +156,7 @@
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-    <h3 id="modify-tab">Modifying tab.cotton.html</h3>
+    <h3 id="modify-tab">Modifying tab.html</h3>
 
     <p>We now need to modify the tab component so that it is registered each time it is imported into the dom.</p>
 

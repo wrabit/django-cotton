@@ -8,7 +8,7 @@ def compiled_cotton_test_view(request):
 
 
 def cotton_test_view(request):
-    return render(request, "cotton_test.cotton.html")
+    return render(request, "cotton_test.html")
 
 
 def native_extends_test_view(request):
@@ -23,30 +23,28 @@ def native_include_test_view(request):
 
 
 def attribute_merging_test_view(request):
-    return render(request, "attribute_merging_test.cotton.html")
+    return render(request, "attribute_merging_test.html")
 
 
 def attribute_passing_test_view(request):
-    return render(request, "attribute_passing_test.cotton.html")
+    return render(request, "attribute_passing_test.html")
 
 
 def django_syntax_decoding_test_view(request):
-    return render(request, "django_syntax_decoding_test.cotton.html")
+    return render(request, "django_syntax_decoding_test.html")
 
 
 def variable_parsing_test_view(request):
-    return render(
-        request, "variable_parsing_test.cotton.html", {"variable": "some-class"}
-    )
+    return render(request, "variable_parsing_test.html", {"variable": "some-class"})
 
 
 def valueless_attributes_test_view(request):
-    return render(request, "valueless_attributes_test_view.cotton.html")
+    return render(request, "valueless_attributes_test_view.html")
 
 
 def eval_vars_test_view(request):
-    return render(request, "eval_vars_test_view.cotton.html")
+    return render(request, "eval_vars_test_view.html")
 
 
 def eval_attributes_test_view(request):
-    return render(request, "eval_attributes_test_view.cotton.html")
+    return render(request, "eval_attributes_test_view.html")

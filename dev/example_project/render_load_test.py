@@ -62,7 +62,7 @@ time_compiled_cotton, output_compiled_cotton = benchmark_template_rendering(
     "cotton/benchmarks/cotton_compiled.html"
 )
 time_cotton, output_cotton = benchmark_template_rendering(
-    "cotton/benchmarks/cotton.cotton.html"
+    "cotton/benchmarks/cotton.html"
 )
 
 # Output results

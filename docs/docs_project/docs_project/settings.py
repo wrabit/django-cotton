@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import tempfile
 from pathlib import Path
+
 
 # SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
@@ -152,4 +154,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-TEMPLATE_CACHING_ENABLED = True
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "TIMEOUT": None,
+        "LOCATION": tempfile.gettempdir() + "/django_cache",
+    }
+}

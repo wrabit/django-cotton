@@ -301,6 +301,7 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 ## Changelog
 
+
 | Date       | Version    | Title and Description                                                                                                                                                            |
 |------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 2024.07-03 | v0.9.12 ⚠️ | **Dropped ".cotton.html" Requirement**<br><small>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do. </small>          |

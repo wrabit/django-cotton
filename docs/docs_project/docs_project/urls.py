@@ -15,10 +15,10 @@ urlpatterns = [
         name="attributes-and-vars",
     ),
     # Examples
-    path("docs/layouts", views.build_view("layouts"), name="layouts"),
-    path("docs/icons", views.build_view("icons"), name="icons"),
     path("docs/form-fields", views.build_view("form_fields"), name="form-fields"),
     path("docs/alpine-js", views.build_view("alpine_js"), name="alpine-js"),
+    path("docs/layouts", views.build_view("layouts"), name="layouts"),
+    path("docs/icons", views.build_view("icons"), name="icons"),
     # More
     path("docs/how-it-works", views.build_view("how_it_works"), name="how-it-works"),
 ]

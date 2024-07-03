@@ -302,12 +302,14 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 ## Changelog
 
-| Date       | Version | Title and Description                                                                                                                                                                                  |
-|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 2024-06-24 | v0.9.11 | **Attribute Ordering Fix**<br><small>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions to govern attributes in HTML tags.</small> |
-| 2024-06-22 | v0.9.10 | **Template Expression Attributes**<br><small>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.</small>                           |
-| 2024-06-22 | v0.9.9  | **Native Tags in Attributes**<br><small>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.</small>                                   |
-| 2024-06-21 | v0.9.7  | **Dynamic Type Attributes**<br><small>Using the `:` to prefix an attribute tells Cotton we're passing a dynamic type down. You can also send basic Python types.</small>                               |
-| 2024-06-17 | v0.9.6  | **Rename c-props to c-vars**<br><small>Rename c props, all `<c-props />` are now `<c-vars />`.</small>                                                                                                 |
-| 2024-06-11 | v0.9.4  | **Boolean Attributes**<br><small>Support for Boolean attributes added with docs update.</small>                                                                                                        |
-| 2024-06-08 | v0.9.1  | **Open Source Release**<br><small>Open source release.</small>                                                                                                                                         |
+
+| Date       | Version    | Title and Description                                                                                                                                                            |
+|------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2024.07-03 | v0.9.12 ⚠️ | **Dropped ".cotton.html" Requirement**<br><small>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do. </small>          |
+| 2024-06-24 | v0.9.11    | **Attribute Ordering Fix**<br><small>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions inside tags.</small> |
+| 2024-06-22 | v0.9.10    | **Template Expression Attributes**<br><small>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.</small>     |
+| 2024-06-22 | v0.9.9     | **Native Tags in Attributes**<br><small>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.</small>             |
+| 2024-06-21 | v0.9.7     | **Dynamic Type Attributes**<br><small>Using the `:` to prefix an attribute tells Cotton we're passing a dynamic type down. You can also send basic Python types.</small>         |
+| 2024-06-17 | v0.9.6     | **Rename c-props to c-vars**<br><small>Rename c props, all `<c-props />` are now `<c-vars />`.</small>                                                                           |
+| 2024-06-11 | v0.9.4     | **Boolean Attributes**<br><small>Support for Boolean attributes added with docs update.</small>                                                                                  |
+| 2024-06-08 | v0.9.1     | **Open Source Release**<br><small>Open source release.</small>                                                                                                                   |

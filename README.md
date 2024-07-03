@@ -5,8 +5,7 @@
 
 Bringing component-based design to Django templates.
 
-- Docs + demos: <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
-- <a href="https://github.com/wrabit/django-cotton/releases">Changelog</a>
+- Docs site + demos: <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
 
 ## Contents
 

@@ -78,7 +78,7 @@
 {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
 <c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
-<c-input name="surname" placeholder="Surname" errors="form.surname.errors" />
+<c-input name="surname" placeholder="Surname" :errors="form.surname.errors" />
 {% endverbatim %}{% endcotton_verbatim %}
     <c-slot name="preview">
         <div class="mb-2"><input type="text" placeholder="Surname" class="border rounded-md shadow px-3 py-1.5 border-red-500"></div>

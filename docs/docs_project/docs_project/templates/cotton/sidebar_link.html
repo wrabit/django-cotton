@@ -3,11 +3,12 @@
         <div class="absolute left-[-17px] w-[3px] h-full bg-teal-600"></div>
     {% endif %}
     <a href="{{ path }}"
-       class="dark:text-white
+       class="dark:text-white font-semibold
         {% if request.path == path %}
             dark:text-opacity-100 font-semibold
         {% else %}
-            dark:text-opacity-70
+            opacity-50
+            dark:opacity-70
         {% endif %}">
         {{ slot }}
     </a>

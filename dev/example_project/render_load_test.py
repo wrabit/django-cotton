@@ -46,7 +46,7 @@ settings.configure(
 django.setup()
 
 
-def benchmark_template_rendering(template_name, iterations=1):
+def benchmark_template_rendering(template_name, iterations=10000):
     start_time = time.time()
     for _ in range(iterations):
         render_to_string(template_name)

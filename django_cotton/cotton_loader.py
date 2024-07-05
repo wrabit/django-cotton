@@ -85,6 +85,7 @@ class Loader(BaseLoader):
 class UnsortedAttributes(HTMLFormatter):
     def attributes(self, tag):
         for k, v in tag.attrs.items():
+            # remove any new lines in v
             yield k, v
 
 
@@ -234,8 +235,9 @@ class CottonTemplateProcessor:
                 if key == "class":
                     value = " ".join(value)
 
-                # check if we have django syntax in the value, if so, we need to extract and place them inside as a slot
-                if self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX in value:
+                # Django templates tags cannot have {{ or {% expressions in their attribute values
+                # Neither can they have new lines, let's treat them both as "expression attrs"
+                if self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX in value or "\n" in value:
                     expression_attrs.append((key, value))
                     continue
 

@@ -5,35 +5,73 @@ from django_cotton.tests.utils import get_compiled, get_rendered
 
 
 class InlineTestCase(CottonInlineTestCase):
-    def test_parent_component_is_rendered(self):
-        # Create component
+    def test_component_is_rendered(self):
         self.create_template(
-            "cotton/parent.html",
+            "cotton/component.html",
             """
-            <div class="i-am-parent">
+            <div class="i-am-component">
                 {{ slot }}
             </div>
             """,
         )
 
-        # Create view template
         self.create_template(
-            "parent_view.html",
+            "view.html",
             """
-            <c-parent>
+            <c-component>
                 Hello, World!
-            </c-parent>
+            </c-component>
         """,
         )
 
         # Create URL
-        self.create_url("parent/", self.create_view("parent_view.html"))
+        self.create_url("view/", self.create_view("view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
-            response = self.client.get("/parent/")
-            self.assertContains(response, '<div class="i-am-parent">')
+            response = self.client.get("/view/")
+            self.assertContains(response, '<div class="i-am-component">')
             self.assertContains(response, "Hello, World!")
+
+    def test_new_lines_in_attributes_are_preserved(self):
+        self.create_template(
+            "cotton/component.html",
+            """
+            <div {{ attrs }}>
+                {{ slot }}
+            </div>
+            """,
+        )
+
+        self.create_template(
+            "view.html",
+            """
+            <c-component x-data="{
+                attr1: 'im an attr',
+                var1: 'im a var',
+                method() {
+                    return 'im a method';
+                }
+            }" />
+            """,
+        )
+
+        # Create URL
+        self.create_url("view/", self.create_view("view.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertTrue(
+                """{
+                attr1: 'im an attr',
+                var1: 'im a var',
+                method() {
+                    return 'im a method';
+                }
+            }"""
+                in response.content.decode()
+            )
 
 
 class CottonTestCase(TestCase):

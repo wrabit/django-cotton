@@ -46,7 +46,7 @@ settings.configure(
 django.setup()
 
 
-def benchmark_template_rendering(template_name, iterations=1000):
+def benchmark_template_rendering(template_name, iterations=10000):
     start_time = time.time()
     for _ in range(iterations):
         render_to_string(template_name)
@@ -56,7 +56,7 @@ def benchmark_template_rendering(template_name, iterations=1000):
 
 # Benchmarking each template
 time_native_extends, output_native_extends = benchmark_template_rendering(
-    "cotton/benchmarks/native_extends.html"
+    "benchmarks/native_extends.html"
 )
 time_compiled_cotton, output_compiled_cotton = benchmark_template_rendering(
     "cotton/benchmarks/cotton_compiled.html"

@@ -3,6 +3,9 @@ import ast
 from django import template
 from django.template import Node
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
+
+from django_cotton.utils import ensure_quoted
 
 
 def cotton_component(parser, token):
@@ -42,7 +45,7 @@ class CottonComponentNode(Node):
             value = value.strip("'\"")
 
             if key.startswith(":"):
-                key = key[1:]  # Remove ':' prefix
+                key = key[1:]
                 attrs[key] = self.process_dynamic_attribute(value, context)
             elif value == "":
                 attrs[key] = True
@@ -63,13 +66,19 @@ class CottonComponentNode(Node):
             for expression_attr in component_slots["ctn_template_expression_attrs"]:
                 attrs[expression_attr] = component_slots[expression_attr]
 
+        # Make the attrs available in the context for the vars frame
         local_context["attrs_dict"] = attrs
 
         # Reset the component's slots in context to prevent bleeding into sibling components
-        if self.component_key in all_slots:
-            all_slots[self.component_key] = {}
+        all_slots[self.component_key] = {}
 
-        context.update({"cotton_slots": all_slots})
+        # Provide all of the attrs as a string to pass to the component
+        local_context.update(attrs)
+        attrs_string = " ".join(
+            f"{key}={ensure_quoted(value)}" for key, value in attrs.items()
+        )
+        local_context["attrs"] = mark_safe(attrs_string)
+
         return render_to_string(self.template_path, local_context)
 
     def process_dynamic_attribute(self, value, context):
@@ -85,7 +94,8 @@ class CottonComponentNode(Node):
         if value == "":
             return True
 
-        # Evaluate literal string or pass back raw value
+        # It's not a template var or boolean attribute,
+        # attempt to evaluate literal string or pass back raw value
         try:
             return ast.literal_eval(value)
         except (ValueError, SyntaxError):

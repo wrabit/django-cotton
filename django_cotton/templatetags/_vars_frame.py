@@ -2,6 +2,8 @@ from django import template
 from django.template.base import token_kwargs
 from django.utils.safestring import mark_safe
 
+from django_cotton.utils import ensure_quoted
+
 register = template.Library()
 
 
@@ -46,12 +48,6 @@ class CottonVarsFrameNode(template.Node):
         context["attrs_dict"] = attrs_without_vars
 
         # Provide all of the attrs as a string to pass to the component
-        def ensure_quoted(value):
-            if isinstance(value, str) and value.startswith('"') and value.endswith('"'):
-                return value
-            else:
-                return f'"{value}"'
-
         attrs = " ".join(
             [
                 f"{key}={ensure_quoted(value)}"
@@ -59,8 +55,7 @@ class CottonVarsFrameNode(template.Node):
             ]
         )
 
-        context.update({"attrs": mark_safe(attrs)})
-        context.update(attrs_without_vars)
+        context["attrs"] = mark_safe(attrs)
         context.update(vars)
 
         return self.nodelist.render(context)

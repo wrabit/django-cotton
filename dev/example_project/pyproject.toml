@@ -1,13 +1,6 @@
 [project]
 name = "cotton-dev-app"
 requires-python = ">=3.8, <4"
-dependencies = [
-    "django~=4.2.6",
-    "beautifulsoup4~=4.12.2",
-    "selenium~=4.13.0",
-    "chromedriver-py~=117.0.5938.92",
-    "webdriver-manager~=4.0.1"
-]
 
 [tool.poetry]
 name = "cotton-dev-app"
@@ -19,6 +12,3 @@ authors = ["Will Abbott <willabb83@gmail.com>"]
 python = "^3.8"
 Django = "^4.2"
 beautifulsoup4 = "~4.12.2"
-selenium = "~4.13.0"
-chromedriver-py = "~117.0.5938.92"
-webdriver-manager = "~4.0.1"

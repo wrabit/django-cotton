@@ -85,7 +85,6 @@ class Loader(BaseLoader):
 class UnsortedAttributes(HTMLFormatter):
     def attributes(self, tag):
         for k, v in tag.attrs.items():
-            # remove any new lines in v
             yield k, v
 
 
@@ -139,9 +138,10 @@ class CottonTemplateProcessor:
         """Convert cotton <c-* syntax to {%."""
         soup = BeautifulSoup(html_content, "html.parser")
 
-        # TODO: Performance optimisation - Make vars_frame optional, only adding it when the user actually provided
-        # vars in a component
-        soup = self._wrap_with_cotton_vars_frame(soup)
+        # check if soup contains a 'c-vars' tag
+        if cvars_el := soup.find("c-vars"):
+            soup = self._wrap_with_cotton_vars_frame(soup, cvars_el)
+
         self._transform_components(soup, component_key)
 
         return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
@@ -174,29 +174,25 @@ class CottonTemplateProcessor:
 
         return contents
 
-    def _wrap_with_cotton_vars_frame(self, soup):
+    def _wrap_with_cotton_vars_frame(self, soup, cvars_el):
         """Wrap content with {% cotton_vars_frame %} to be able to govern vars and attributes. In order to recognise
         vars defined in a component and also have them available in the same component's context, we wrap the entire
         contents in another component: cotton_vars_frame."""
+
         vars_with_defaults = []
-        c_vars = soup.find("c-vars")
+        for var, value in cvars_el.attrs.items():
+            if value is None:
+                vars_with_defaults.append(f"{var}={var}")
+            elif var.startswith(":"):
+                # If ':' is present, the user wants to parse a literal string as the default value,
+                # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
+                var = var[1:]  # Remove the ':' prefix
+                vars_with_defaults.append(f'{var}={var}|eval_default:"{value}"')
+            else:
+                # Assuming value is already a string that represents the default value
+                vars_with_defaults.append(f'{var}={var}|default:"{value}"')
 
-        # parse c-vars tag to extract variables and defaults
-        if c_vars:
-            vars_with_defaults = []
-            for var, value in c_vars.attrs.items():
-                if value is None:
-                    vars_with_defaults.append(f"{var}={var}")
-                elif var.startswith(":"):
-                    # If ':' is present, the user wants to parse a literal string as the default value,
-                    # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
-                    var = var[1:]  # Remove the ':' prefix
-                    vars_with_defaults.append(f'{var}={var}|eval_default:"{value}"')
-                else:
-                    # Assuming value is already a string that represents the default value
-                    vars_with_defaults.append(f'{var}={var}|default:"{value}"')
-
-            c_vars.decompose()
+        cvars_el.decompose()
 
         # Construct the {% with %} opening tag
         opening = "{% cotton_vars_frame " + " ".join(vars_with_defaults) + " %}"

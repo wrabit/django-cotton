@@ -70,7 +70,6 @@ class CottonComponentNode(Node):
         local_context["attrs_dict"] = attrs
 
         # Reset the component's slots in context to prevent bleeding into sibling components
-        # if self.component_key in all_slots:
         all_slots[self.component_key] = {}
 
         # Provide all of the attrs as a string to pass to the component

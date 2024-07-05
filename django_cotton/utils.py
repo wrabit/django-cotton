@@ -9,3 +9,10 @@ def eval_string(value):
         return ast.literal_eval(value)
     except (ValueError, SyntaxError):
         return value
+
+
+def ensure_quoted(value):
+    if isinstance(value, str) and value.startswith('"') and value.endswith('"'):
+        return value
+    else:
+        return f'"{value}"'

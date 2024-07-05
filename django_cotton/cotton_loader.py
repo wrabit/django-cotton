@@ -141,6 +141,11 @@ class CottonTemplateProcessor:
 
         # TODO: Performance optimisation - Make vars_frame optional, only adding it when the user actually provided
         # vars in a component
+
+        # check if soup contains a 'c-vars' tag
+        # if soup.find("c-vars"):
+        # soup = self._wrap_with_cotton_vars_frame(soup)
+
         soup = self._wrap_with_cotton_vars_frame(soup)
         self._transform_components(soup, component_key)
 

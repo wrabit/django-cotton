@@ -62,6 +62,9 @@ class InlineTestCase(CottonInlineTestCase):
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
             response = self.client.get("/view/")
+
+            print(response.content.decode())
+
             self.assertTrue(
                 """{
                 attr1: 'im an attr',

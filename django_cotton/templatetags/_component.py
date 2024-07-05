@@ -69,6 +69,13 @@ class CottonComponentNode(Node):
         if self.component_key in all_slots:
             all_slots[self.component_key] = {}
 
+        # Provide all of the attrs as a string to pass to the component
+        # local_context.update(attrs)
+        # attrs = " ".join(
+        #     [f"{key}={ensure_quoted(value)}" for key, value in attrs.items()]
+        # )
+        # local_context.update({"attrs": mark_safe(attrs)})
+
         context.update({"cotton_slots": all_slots})
         return render_to_string(self.template_path, local_context)
 
@@ -85,7 +92,8 @@ class CottonComponentNode(Node):
         if value == "":
             return True
 
-        # Evaluate literal string or pass back raw value
+        # It's not a template var or boolean attribute,
+        # attempt to evaluate literal string or pass back raw value
         try:
             return ast.literal_eval(value)
         except (ValueError, SyntaxError):

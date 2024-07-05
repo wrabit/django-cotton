@@ -85,7 +85,6 @@ class Loader(BaseLoader):
 class UnsortedAttributes(HTMLFormatter):
     def attributes(self, tag):
         for k, v in tag.attrs.items():
-            # remove any new lines in v
             yield k, v
 
 

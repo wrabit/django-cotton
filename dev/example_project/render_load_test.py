@@ -56,7 +56,7 @@ def benchmark_template_rendering(template_name, iterations=1000):
 
 # Benchmarking each template
 time_native_extends, output_native_extends = benchmark_template_rendering(
-    "cotton/benchmarks/native_extends.html"
+    "benchmarks/native_extends.html"
 )
 time_compiled_cotton, output_compiled_cotton = benchmark_template_rendering(
     "cotton/benchmarks/cotton_compiled.html"

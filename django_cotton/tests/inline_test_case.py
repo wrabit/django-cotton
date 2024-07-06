@@ -3,6 +3,7 @@ import sys
 import shutil
 import tempfile
 
+from django.core.cache import cache
 from django.urls import path
 from django.test import override_settings
 from django.views.generic import TemplateView
@@ -46,6 +47,10 @@ class CottonInlineTestCase(TestCase):
         shutil.rmtree(cls.temp_dir, ignore_errors=True)
         del sys.modules[cls.url_module_name]
         super().tearDownClass()
+
+    def tearDown(self):
+        """Clear cache between tests"""
+        cache.clear()
 
     def create_template(self, name, content):
         """Create a template file in the temporary directory and return the path"""

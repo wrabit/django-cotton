@@ -24,7 +24,9 @@
             </h1>
 
             <!-- A Faster, More Expressive Approach to Templating in Django-->
-            <h2 class="!text-2xl italic !font-normal mt-3 md:mt-8 mb-10 pt-0 dark:!text-teal-300 text-yellow-900 text-opacity-50 brightness-75 dark:opacity-100">Bringing component-based design to django templates</h2>
+            <h2 class="!text-xl sm:!text-2xl italic !font-normal mt-3 md:mt-8 mb-10 pt-0 dark:!text-teal-300 text-yellow-900 text-opacity-50 brightness-75 dark:opacity-100">
+                Bringing component-based design to django templates
+            </h2>
         </div>
 
         <div class="grid md:grid-cols-2 gap-4">
@@ -92,7 +94,9 @@ Item Title
 
 <c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
 
-<c-product img_url="icon.png" title="Item Title" price="$10">
+<c-product img_url="icon.png"
+    title="Item Title"
+    price="$10">
     Description of the product
 </c-product>{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
@@ -125,104 +129,52 @@ Item Title
             </div>
         </div>
 
+        <div>
+            <h3 class="text-center pb-10">Why cotton?</h3>
 
-    {% comment %}
-            <c-demo.row>
-                <c-demo.example-multi labels="'product_view.html|product_layout.html'" tabs_id="compare">
-
-                </c-demo.example-multi>
-
-                <c-demo.example-multi labels="'template.html|product.html'" tabs_id="compare">
-                    <div class="flex flex-col h-full" x-show="active === 0">
-                        <c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
-
-<c-product img_url="icon.png" title="Item Title" price="$10">
-Description of the product
-</c-product>{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-                    </div>
-
-                    <div class="flex flex-col h-full" x-show="active === 1">
-                        <c-snippet>{% cotton_verbatim %}{% verbatim %}
-<div id="container">
-    <div id="header">
-        <img id="icon" src="{{ img_url }}" />
-        <span id="title">{{ title }}</span>
-    </div>
-
-    <div id="content">
-        {% if slot %}
-            {{ slot }}
-        {% else %}
-            This product has no description
-        {% endif %}
-
-        {% if price %}
-            <div id="price">
-                {{ price }}
-            </div>
-        {% endif %}
-    </div>
-</div>{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-                    </div>
-                </c-demo.example-multi>
-            </c-demo.row>
-        </c-demo.card>
-
-    {% endcomment %}
-
-    <div>
-        <h3 class="text-center pb-10">Why cotton?</h3>
-
-        <div class="grid md:grid-cols-2 gap-5 flex [&>div]:min-h-56">
-            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
-                {% heroicon_outline 'fire' class="shrink-0 text-teal-600 w-16 h-16 mr-5 mt-1" stroke_width="1.8" %}
-                <div>
-                    <div class="text-xl mb-3 font-semibold dark:text-white">Rapid UI composition </div>
-                    <div class="text-[15px]">Efficiently compose and reuse UI components. Adopting a modular design system streamlines workflow and boosts productivity.</div>
-                </div>
-            </div>
-            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
-                <c-icons.tailwind class="shrink-0 text-teal-600 w-16 h-16 mr-5 mt-1" />
-                <div>
-                    <div class="text-xl mb-3 font-semibold dark:text-white">Harmonious with Tailwind CSS</div>
-                    <div class="text-[15px]">Tailwind's utility-first approach compliments component based design - isolating style in re-usable components, enhancing maintainability.</div>
-                </div>
-            </div>
-            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
-                <div class="shrink-0 text-teal-600 text-[45px] font-medium mr-5 -mt-[1rem]">
-                    &#123;&#37;
-                </div>
-                <div>
-                    <div class="text-xl mb-3 font-semibold dark:text-white">Interoperable with Django Templates</div>
-                    <div class="text-[15px]">Cotton enhances Django templates without replacing them, allowing progressive enhancement while maintaining full use of existing template features.</div>
-                </div>
-            </div>
-            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
-                {% heroicon_outline 'code-bracket' class="shrink-0 text-teal-600 w-16 h-16 mr-5 mt-1" stroke_width="1.8" %}
-                <div>
-                    <div class="text-xl mb-3 font-semibold dark:text-white">Enhanced Productivity</div>
-                    <div class="text-[15px]">Cotton's HTML tag-like syntax allows code editors to recognize its components as HTML elements, enabling features like syntax highlighting and automatic tag completion. </div>
-                </div>
-            </div>
-            <div class="flex space-x-2 rounded-lg px-8 py-5 dark:border border-gray-700 bg-white shadow-md dark:bg-transparent">
-                {% heroicon_outline 'presentation-chart-line' class="shrink-0 text-teal-600 w-16 h-16 mr-5 mt-1" stroke_width="1.8" %}
-                <div>
-                    <div class="text-xl mb-3 font-semibold dark:text-white">Minimal Overhead</div>
-                    <div class="text-[15px]">Cotton compiles to native django components and the compilation step is automatically cached and dynamically managed. </div>
-                </div>
-            </div>
+            <c-feature-tiles>
+                <c-feature-tile title="Rapid UI composition">
+                    <c-slot name="icon">
+                        {% heroicon_outline 'fire' class="shrink-0 text-teal-600 size-16 mr-5 mt-1" stroke_width="1.8" %}
+                    </c-slot>
+                    Efficiently compose and reuse UI components. Adopting a modular design system streamlines workflow and boosts productivity.
+                </c-feature-tile>
+                <c-feature-tile title="Harmonious with Tailwind CSS">
+                    <c-slot name="icon">
+                        <c-icons.tailwind class="shrink-0 text-teal-600 size-14 mr-5 mt-1" />
+                    </c-slot>
+                    Tailwind's utility-first approach compliments component based design - isolating style in re-usable components, enhancing maintainability.
+                </c-feature-tile>
+                <c-feature-tile title="Interoperable with Django Templates">
+                    <c-slot name="icon">
+                        <div class="shrink-0 text-teal-600 text-[45px] font-medium mr-5 -mt-[1rem]">&#123;&#37;</div>
+                    </c-slot>
+                    Cotton enhances Django templates without replacing them, allowing progressive enhancement while maintaining full use of existing template features.
+                </c-feature-tile>
+                <c-feature-tile title="Enhanced Productivity">
+                    <c-slot name="icon">
+                        {% heroicon_outline 'code-bracket' class="shrink-0 text-teal-600 size-16 mr-5 mt-1" stroke_width="1.8" %}
+                    </c-slot>
+                    Cotton's HTML tag-like syntax allows code editors to recognize its components as HTML elements, enabling features like syntax highlighting and automatic tag completion.
+                </c-feature-tile>
+                <c-feature-tile title="Minimal Overhead">
+                    <c-slot name="icon">
+                        {% heroicon_outline 'presentation-chart-line' class="shrink-0 text-teal-600 size-16 mr-5 mt-1" stroke_width="1.8" %}
+                    </c-slot>
+                    Cotton compiles to native django components and the compilation step is automatically cached and dynamically managed.
+                </c-feature-tile>
+            </c-feature-tiles>
         </div>
-    </div>
 
-    <div class="w-1/2 mt-5 ml-auto justify-end px-0 py-2 border border-yellow-800 dark:border-gray-700 border-opacity-20 rounded no-underline text-right flex items-center">
-        <span>
-            <span class="uppercase text-xs tracking-wider block text-gray-400">next</span>
-            <span class="text-white text-lg prose-a:text-gray-900 prose-a:dark:text-white prose-a:no-underline">
-                <a href="{% url 'quickstart' %}">Quickstart</a>
+        <div class="w-1/2 mt-5 ml-auto justify-end px-0 py-2 border border-yellow-800 dark:border-gray-700 border-opacity-20 rounded no-underline text-right flex items-center">
+            <span>
+                <span class="uppercase text-xs tracking-wider block text-gray-400">next</span>
+                <span class="text-white text-lg prose-a:text-gray-900 prose-a:dark:text-white prose-a:no-underline">
+                    <a href="{% url 'quickstart' %}">Quickstart</a>
+                </span>
             </span>
-        </span>
-        <c-icons.chevron-right class="w-14 h-14 text-yellow-900 opacity-20 dark:text-teal-600 dark:opacity-100" />
-    </div>
+            <c-icons.chevron-right class="size-14 text-yellow-900 opacity-20 dark:text-teal-600 dark:opacity-100" />
+        </div>
 
     </div>
 

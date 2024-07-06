@@ -22,6 +22,7 @@ class InlineTestCase(CottonInlineTestCase):
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
             response = self.client.get("/view/")
+            print(response.content.decode())
             self.assertContains(response, '<div class="i-am-component">')
             self.assertContains(response, "Hello, World!")
 

@@ -17,7 +17,7 @@ Bringing component-based design to Django templates.
 [Template expressions in attributes](#template-expressions-inside-attributes)  
 [Boolean attributes](#boolean-attributes)  
 [Passing Python data types](#passing-python-data-types)  
-[Default attributes](#default-attributes-with-c-vars)  
+[In-component Variables with <c-vars>](#default-attributes-with-c-vars)  
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [HTMLX Example](#an-example-with-htmlx)  
 [Usage Basics](#usage-basics)  

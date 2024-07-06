@@ -36,6 +36,8 @@ class InlineTestCase(CottonInlineTestCase):
             "view.html",
             """
 <c-component x-data="{
+test
+test
 }" />
             """,
         )
@@ -48,8 +50,8 @@ class InlineTestCase(CottonInlineTestCase):
             response = self.client.get("/view/")
 
             self.assertTrue(
-                """{
-}"""
+                """test
+test"""
                 in response.content.decode()
             )
 

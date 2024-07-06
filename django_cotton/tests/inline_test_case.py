@@ -22,39 +22,45 @@ class CottonInlineTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+
+        # Set tmp dir and register a url module for our tmp files
         cls.temp_dir = tempfile.mkdtemp()
         cls.url_module = DynamicURLModule()
         cls.url_module_name = f"dynamic_urls_{cls.__name__}"
         sys.modules[cls.url_module_name] = cls.url_module
 
-        # Create a new TEMPLATES setting
+        # Register our temp directory as a TEMPLATES path
         cls.new_templates_setting = settings.TEMPLATES.copy()
         cls.new_templates_setting[0]["DIRS"] = [
             cls.temp_dir
         ] + cls.new_templates_setting[0]["DIRS"]
 
-        # Apply the new setting
+        # Apply the setting
         cls.templates_override = override_settings(TEMPLATES=cls.new_templates_setting)
         cls.templates_override.enable()
 
     @classmethod
     def tearDownClass(cls):
+        """Remove temporary directory and clean up modules"""
         cls.templates_override.disable()
         shutil.rmtree(cls.temp_dir, ignore_errors=True)
         del sys.modules[cls.url_module_name]
         super().tearDownClass()
 
     def create_template(self, name, content):
+        """Create a template file in the temporary directory and return the path"""
         path = os.path.join(self.temp_dir, name)
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as f:
             f.write(content)
         return path
 
-    def create_view(self, template_name):
+    def make_view(self, template_name):
+        """Make a view that renders the given template"""
         return TemplateView.as_view(template_name=template_name)
 
-    def create_url(self, url, view):
+    def register_url(self, url, view):
+        """Register a URL pattern and returns path"""
         url_pattern = path(url, view)
         self.url_module.urlpatterns.append(url_pattern)
         return url_pattern

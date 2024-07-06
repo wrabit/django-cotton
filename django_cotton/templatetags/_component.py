@@ -59,25 +59,27 @@ class CottonComponentNode(Node):
         all_slots = context.get("cotton_slots", {})
         component_slots = all_slots.get(self.component_key, {})
         local_context.update(component_slots)
-        local_context.update(attrs)
 
         # We need to check if any dynamic attributes are present in the component slots and move them over to attrs
         if "ctn_template_expression_attrs" in component_slots:
             for expression_attr in component_slots["ctn_template_expression_attrs"]:
                 attrs[expression_attr] = component_slots[expression_attr]
 
-        # Make the attrs available in the context for the vars frame
-        local_context["attrs_dict"] = attrs
-
-        # Reset the component's slots in context to prevent bleeding into sibling components
-        all_slots[self.component_key] = {}
-
-        # Provide all of the attrs as a string to pass to the component
-        local_context.update(attrs)
+        # Build attrs string before formatting any '-' to '_' in attr names
         attrs_string = " ".join(
             f"{key}={ensure_quoted(value)}" for key, value in attrs.items()
         )
         local_context["attrs"] = mark_safe(attrs_string)
+
+        # Make the attrs available in the context for the vars frame, also before formatting the attr names
+        local_context["attrs_dict"] = attrs
+
+        # Store attr names in a callable format, i.e. 'x-init' will be accessible by {{ x_init }} when called explicitly and not in {{ attrs }}
+        attrs = {key.replace("-", "_"): value for key, value in attrs.items()}
+        local_context.update(attrs)
+
+        # Reset the component's slots in context to prevent bleeding into sibling components
+        all_slots[self.component_key] = {}
 
         return render_to_string(self.template_path, local_context)
 

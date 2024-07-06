@@ -8,24 +8,16 @@ class InlineTestCase(CottonInlineTestCase):
     def test_component_is_rendered(self):
         self.create_template(
             "cotton/component.html",
-            """
-            <div class="i-am-component">
-                {{ slot }}
-            </div>
-            """,
+            """<div class="i-am-component">{{ slot }}</div>""",
         )
 
         self.create_template(
             "view.html",
-            """
-            <c-component>
-                Hello, World!
-            </c-component>
-        """,
+            """<c-component>Hello, World!</c-component>""",
         )
 
-        # Create URL
-        self.create_url("view/", self.create_view("view.html"))
+        # Register Url
+        self.register_url("view/", self.make_view("view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -36,11 +28,7 @@ class InlineTestCase(CottonInlineTestCase):
     def test_new_lines_in_attributes_are_preserved(self):
         self.create_template(
             "cotton/component.html",
-            """
-            <div {{ attrs }}>
-                {{ slot }}
-            </div>
-            """,
+            """<div {{ attrs }}>{{ slot }}</div>""",
         )
 
         self.create_template(
@@ -56,8 +44,8 @@ class InlineTestCase(CottonInlineTestCase):
             """,
         )
 
-        # Create URL
-        self.create_url("view/", self.create_view("view.html"))
+        # Register Url
+        self.register_url("view/", self.make_view("view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -73,6 +61,60 @@ class InlineTestCase(CottonInlineTestCase):
             }"""
                 in response.content.decode()
             )
+
+    def test_attribute_names_on_component_containing_hyphens_are_converted_to_underscores(
+        self,
+    ):
+        self.create_template(
+            "cotton/component.html",
+            """
+            <div x-data="{{ x_data }}" x-init="{{ x_init }}"></div>
+            """,
+        )
+
+        self.create_template(
+            "view.html",
+            """
+            <c-component x-data="{}" x-init="do_something()" />
+            """,
+        )
+
+        # Register Url
+        self.register_url("view/", self.make_view("view.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, 'x-data="{}" x-init="do_something()"')
+
+    def test_attribute_names_on_cvars_containing_hyphens_are_converted_to_underscores(
+        self,
+    ):
+        self.create_template(
+            "cotton/component.html",
+            """
+            <c-vars x-data="{}" x-init="do_something()" />
+            
+            <div x-data="{{ x_data }}" x-init="{{ x_init }}"></div>
+            """,
+        )
+
+        self.create_template(
+            "view.html",
+            """
+            <c-component />
+            """,
+        )
+
+        # Register Url
+        self.register_url("view/", self.make_view("view.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, 'x-data="{}" x-init="do_something()"')
 
 
 class CottonTestCase(TestCase):

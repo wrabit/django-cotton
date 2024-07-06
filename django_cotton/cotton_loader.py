@@ -83,6 +83,8 @@ class Loader(BaseLoader):
 
 
 class UnsortedAttributes(HTMLFormatter):
+    """This keeps BS4 from re-ordering attributes"""
+
     def attributes(self, tag):
         for k, v in tag.attrs.items():
             yield k, v
@@ -181,16 +183,22 @@ class CottonTemplateProcessor:
 
         vars_with_defaults = []
         for var, value in cvars_el.attrs.items():
+            # Attributes in context at this point will already have been formatted in _component to be accessible, so in order to cascade match the style.
+            accessible_var = var.replace("-", "_")
+
             if value is None:
-                vars_with_defaults.append(f"{var}={var}")
+                vars_with_defaults.append(f"{var}={accessible_var}")
             elif var.startswith(":"):
                 # If ':' is present, the user wants to parse a literal string as the default value,
                 # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
                 var = var[1:]  # Remove the ':' prefix
-                vars_with_defaults.append(f'{var}={var}|eval_default:"{value}"')
+                accessible_var = accessible_var[1:]  # Remove the ':' prefix
+                vars_with_defaults.append(
+                    f'{var}={accessible_var}|eval_default:"{value}"'
+                )
             else:
                 # Assuming value is already a string that represents the default value
-                vars_with_defaults.append(f'{var}={var}|default:"{value}"')
+                vars_with_defaults.append(f'{var}={accessible_var}|default:"{value}"')
 
         cvars_el.decompose()
 

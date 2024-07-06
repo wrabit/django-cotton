@@ -1,5 +1,4 @@
 from django import template
-from django.template.base import token_kwargs
 from django.utils.safestring import mark_safe
 
 from django_cotton.utils import ensure_quoted
@@ -16,7 +15,11 @@ def cotton_vars_frame(parser, token):
     """
     bits = token.split_contents()[1:]  # Skip the tag name
 
-    tag_kwargs = token_kwargs(bits, parser)
+    # We dont use token_kwargs because it doesn't allow for hyphens in key names, i.e. x-data=""
+    tag_kwargs = {}
+    for bit in bits:
+        key, value = bit.split("=")
+        tag_kwargs[key] = parser.compile_filter(value)
 
     nodelist = parser.parse(("endcotton_vars_frame",))
     parser.delete_first_token()
@@ -45,17 +48,18 @@ class CottonVarsFrameNode(template.Node):
 
         # Overwrite 'attrs' in the local context by excluding keys that are identified as vars
         attrs_without_vars = {k: v for k, v in component_attrs.items() if k not in vars}
+
+        # Provide all of the attrs as a string to pass to the component before any '-' to '_' replacing
+        attrs = " ".join(
+            f"{key}={ensure_quoted(value)}" for key, value in attrs_without_vars.items()
+        )
+        context["attrs"] = mark_safe(attrs)
+
         context["attrs_dict"] = attrs_without_vars
 
-        # Provide all of the attrs as a string to pass to the component
-        attrs = " ".join(
-            [
-                f"{key}={ensure_quoted(value)}"
-                for key, value in attrs_without_vars.items()
-            ]
-        )
+        # Store attr names in a callable format, i.e. 'x-init' will be accessible by {{ x_init }} when called explicitly and not in {{ attrs }}
+        formatted_vars = {key.replace("-", "_"): value for key, value in vars.items()}
 
-        context["attrs"] = mark_safe(attrs)
-        context.update(vars)
+        context.update(formatted_vars)
 
         return self.nodelist.render(context)

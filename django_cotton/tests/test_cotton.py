@@ -22,7 +22,6 @@ class InlineTestCase(CottonInlineTestCase):
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
             response = self.client.get("/view/")
-            print(response.content.decode())
             self.assertContains(response, '<div class="i-am-component">')
             self.assertContains(response, "Hello, World!")
 
@@ -35,10 +34,13 @@ class InlineTestCase(CottonInlineTestCase):
         self.create_template(
             "view.html",
             """
-<c-component x-data="{
-test
-test
-}" />
+            <c-component x-data="{
+                attr1: 'im an attr',
+                var1: 'im a var',
+                method() {
+                    return 'im a method';
+                }
+            }" />
             """,
         )
 
@@ -50,8 +52,13 @@ test
             response = self.client.get("/view/")
 
             self.assertTrue(
-                """test
-test"""
+                """{
+                attr1: 'im an attr',
+                var1: 'im a var',
+                method() {
+                    return 'im a method';
+                }
+            }"""
                 in response.content.decode()
             )
 

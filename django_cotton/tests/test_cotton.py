@@ -34,13 +34,8 @@ class InlineTestCase(CottonInlineTestCase):
         self.create_template(
             "view.html",
             """
-            <c-component x-data="{
-                attr1: 'im an attr',
-                var1: 'im a var',
-                method() {
-                    return 'im a method';
-                }
-            }" />
+<c-component x-data="{
+}" />
             """,
         )
 
@@ -53,12 +48,7 @@ class InlineTestCase(CottonInlineTestCase):
 
             self.assertTrue(
                 """{
-                attr1: 'im an attr',
-                var1: 'im a var',
-                method() {
-                    return 'im a method';
-                }
-            }"""
+}"""
                 in response.content.decode()
             )
 

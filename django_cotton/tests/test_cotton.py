@@ -116,6 +116,28 @@ class InlineTestCase(CottonInlineTestCase):
 
             self.assertContains(response, 'x-data="{}" x-init="do_something()"')
 
+    def test_cotton_directory_can_be_configured(self):
+        custom_dir = "components"
+
+        self.create_template(
+            f"{custom_dir}/component.html",
+            """<div class="i-am-component">{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "view.html",
+            """<c-component>Hello, World!</c-component>""",
+        )
+
+        # Register Url
+        self.register_url("view/", self.make_view("view.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf(), COTTON_DIR=custom_dir):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<div class="i-am-component">')
+            self.assertContains(response, "Hello, World!")
+
 
 class CottonTestCase(TestCase):
     def test_parent_component_is_rendered(self):

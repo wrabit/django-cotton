@@ -20,5 +20,5 @@ urlpatterns = [
     path("docs/layouts", views.build_view("layouts"), name="layouts"),
     path("docs/icons", views.build_view("icons"), name="icons"),
     # More
-    path("docs/how-it-works", views.build_view("how_it_works"), name="how-it-works"),
+    path("docs/configuration", views.build_view("configuration"), name="configuration"),
 ]

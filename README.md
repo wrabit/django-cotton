@@ -17,7 +17,7 @@ Bringing component-based design to Django templates.
 [Template expressions in attributes](#template-expressions-inside-attributes)  
 [Boolean attributes](#boolean-attributes)  
 [Passing Python data types](#passing-python-data-types)  
-[In-component Variables with `<c-vars>`](#default-attributes-with-c-vars)  
+[In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [HTMLX Example](#an-example-with-htmlx)  
 [Usage Basics](#usage-basics)  
@@ -195,9 +195,29 @@ This benefits a number of use-cases, for example if you have a select component 
 </select>
 ```
 
-### Default attributes with `<c-vars>`
+### Increase Re-usability with `{{ attrs }}`
 
-Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in the View. Fair enough, but what if we want to handle data for the purpose of UI state only? Having this in the back would surely convolute the backend code. For this, Cotton can set simple attribute values that help allow us to set default values for our component attributes.
+`{{ attrs }}` is a special variable that contains all the attributes passed to the component in an key="value" format. This is useful when you want to pass all attributes to a child element. For example, you have inputs that can have any number of attributes defined:
+
+```html
+<!-- cotton/input.html -->
+<input type="text" class="..." {{ attrs }} />
+```
+
+```html
+<!-- example usage -->
+<c-input placeholder="Enter your name" />
+<c-input name="country" id="country" value="Japan" />
+<c-input class="highlighted" required />
+```
+
+### In-component Variables with `<c-vars>`
+
+Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in views. Fair enough, but what if we want to handle data for the purpose of UI state only? Having presentation related variables defined in the back is overkill and can quickly lead to higher maintenance cost and loses encapuslation of the component. Cotton allows you define in-component variables for the following reasons:
+
+#### 1. Using `<c-vars>` for default attributes
+
+In this example we have a button component with a default "theme" but it can be overridden.
 
 ```html
 <!-- cotton/button.html -->
@@ -231,35 +251,29 @@ Now we have a default theme for our button, but it is overridable:
 </a>
 ```
 
-### Increase Re-usability with `{{ attrs }}`
+#### 2. Using `<c-vars>` to govern `{{ attrs }}`
 
-`{{ attrs }}` is a special variable that contains all the attributes passed to the component in an key="value" format. This is useful when you want to pass all attributes to a child element. For example, you have inputs that can have any number of attributes defined:
+Using `{{ attrs }}` to pass all attributes from parent scope onto an element in the component, you'll sometimes want to provide additional properties to the component which are not intended to be an attributes. In this case you can declare them in `<c-vars />` and it will prevent it from being in `{{ attrs }}`
 
+Take this example where we want to provide any number of attributes to an input but also an icon setting which is not intened to be an attribute on `<input>`:
+
+```html
+<!-- template -->
+<c-input type="password" id="password" icon="padlock" />
+```
 ```html
 <!-- cotton/input.html -->
-<input type="text" class="..." {{ attrs }} />
+<c-vars icon />
+
+<img src="icons/{{ icon }}.png" />
+
+<input {{ attrs }} />
 ```
 
-```html
-<!-- example usage -->
-<c-input placeholder="Enter your name" />
-<c-input name="country" id="country" value="Japan" />
-<c-input class="highlighted" required />
-```
-
-If you combine this with the `c-vars` tag, any property defined there will be excluded from `{{ attrs }}`. For example:
+Input will have all attributes provided apart from the `icon`:
 
 ```html
-<!-- cotton/input.html -->
-<c-vars type="text" />
-
-<input {{ attrs }} class="..." />
-```
-
-```html
-<!-- example usage -->
-<c-input type="password" placeholder="Password" />
-<!-- `type` will not be in {{ attrs }} -->
+<input type="password" id="password" />
 ```
 
 ### An example with HTMLX

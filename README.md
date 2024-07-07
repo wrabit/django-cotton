@@ -21,8 +21,8 @@ Bringing component-based design to Django templates.
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [HTMLX Example](#an-example-with-htmlx)  
 [Usage Basics](#usage-basics)
-[How it works](#how-it-works)
-[Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)
+[How it works](#how-it-works)  
+[Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Changelog](#changelog)
 
 

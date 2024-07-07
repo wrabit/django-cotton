@@ -20,13 +20,15 @@ Bringing component-based design to Django templates.
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [HTMLX Example](#an-example-with-htmlx)  
-[Usage Basics](#usage-basics)  
+[Usage Basics](#usage-basics)
+[How it works](#how-it-works)
+[Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)
 [Changelog](#changelog)
 
 
 ## Why Cotton?
 
-Cotton aims to overcome certain limitations that exist in the django template system that hold us back when we want to apply modern practises to compose UIs in a modular and reusable way.
+Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton-overcomes) that exist in the django template system that hold us back when we want to apply modern practises to compose UIs in a modular and reusable way.
 
 ## Key Features
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
@@ -35,7 +37,6 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 - **Minimal Overhead:** Compiles to native Django components with dynamic caching.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
 - **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
-
 
 ## Walkthrough
 
@@ -46,7 +47,7 @@ Cotton aims to overcome certain limitations that exist in the django template sy
 <a href="/" class="...">{{ slot }}</a>
 ```
 ```html
-<!-- template -->
+<!-- in view -->
 <c-button>Contact</c-button>
 ```
 ```html
@@ -65,7 +66,7 @@ Everything provided between the opening and closing tag is provided to the compo
 </a>
 ```
 ```html
-<!-- template -->
+<!-- in view -->
 <c-button url="/contact">Contact</c-button>
 ```
 ```html
@@ -90,7 +91,7 @@ Named slots are a powerful concept. It allows us to provide HTML to appear in on
 </a>
 ```
 ```html
-<!-- template -->
+<!-- in view -->
 <c-button url="/contact">
     Contact
     <c-slot name="icon">
@@ -102,7 +103,7 @@ Named slots are a powerful concept. It allows us to provide HTML to appear in on
 Named slots can also contain any django native template logic:
 
 ```html
-<!-- template -->
+<!-- in view -->
 <c-button url="/contact">
     <c-slot name="icon">
       {% if mode == 'edit' %}
@@ -119,7 +120,7 @@ Named slots can also contain any django native template logic:
 To pass a template variable you prepend the attribute name with a colon `:`. Consider a bio card component:
 
 ```html
-<!-- template -->
+<!-- in view -->
 <c-bio-card :user="user" />
 ```
 
@@ -150,7 +151,7 @@ You can use template expression statements inside attributes.
 Boolean attributes reduce boilerplate when we just want to indicate a certain attribute should be `True` or not.
 
 ```html
-<!-- template -->
+<!-- in view -->
 <c-button url="/contact" external>Contact</c-button>
 ```
 By passing just the attribute name without a value, it will automatically be provided to the component as `True`
@@ -228,7 +229,7 @@ In this example we have a button component with a default "theme" but it can be 
 </a>
 ```
 ```html
-<!-- template -->
+<!-- in view -->
 <c-button>I'm a purple button</c-button>
 ```
 ```html
@@ -241,7 +242,7 @@ In this example we have a button component with a default "theme" but it can be 
 Now we have a default theme for our button, but it is overridable:
 
 ```html
-<!-- template -->
+<!-- in view -->
 <c-button theme="bg-green-500">But I'm green</c-button>
 ```
 ```html
@@ -258,7 +259,7 @@ Using `{{ attrs }}` to pass all attributes from parent scope onto an element in 
 Take this example where we want to provide any number of attributes to an input but also an icon setting which is not intened to be an attribute on `<input>`:
 
 ```html
-<!-- template -->
+<!-- in view -->
 <c-input type="password" id="password" icon="padlock" />
 ```
 ```html
@@ -291,7 +292,7 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
 ```
 
 ```html
-<!-- template -->
+<!-- in view -->
 <c-form hx-post="/contact">
     <input type="text" name="name" placeholder="Name" />
     <input type="text" name="email" placeholder="Email" />
@@ -311,6 +312,66 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
   - Components are called using kebab-case: `<c-my-component />`
  
 For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
+
+## How it works
+
+<img width="2115" alt="image" src="https://github.com/wrabit/django-cotton/assets/5918271/8d8fa517-1052-44a5-a4e0-34e423d52b6f">
+
+
+## Limitations in Django that Cotton overcomes
+
+### HTML in attributes
+❌ **Django native:**
+```html
+{% my_component header="<h1>Header</h1>" %}
+```
+✅ **Cotton:**
+```html
+<c-my-component>
+    <c-slot name="header">
+        <h1>Header</h1>
+    </c-slot>
+</c-my-component>
+```
+
+### Template expressions in attributes
+❌ **Django native:**
+```html
+{% my_component model="todos.{{ index }}.name" extra="{% get_extra %}" %}
+```
+✅ **Cotton:**
+```html
+<c-my-component model="todos.{{ index }}.name" extra="{% get_extra %} />
+```
+
+### Pass simple python types
+❌ **Django native:**
+```html
+{% my_component default_options="['yes', 'no', 'maybe']" %}
+{% my_component config="{'open': True}" %}
+```
+✅ **Cotton:**
+```html
+<c-my-component :default_options="['yes', 'no', 'maybe']" />
+<c-my-component :config="{'open': True}" />
+```
+
+### Multi-line definitions
+❌ **Django native:** 
+```html
+{% my_component
+    arg=1 %}
+```
+✅ **Cotton:**
+```html
+<c-my-component
+    class="blue"
+    x-data="{
+        something: 1
+    }" />
+```
+
+
 ## Changelog
 
 | Date                     | Version    | Title and Description                                                                                                                                                                 |

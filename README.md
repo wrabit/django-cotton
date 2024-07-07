@@ -20,10 +20,10 @@ Bringing component-based design to Django templates.
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [HTMLX Example](#an-example-with-htmlx)  
-[Usage Basics](#usage-basics)
+[Usage Basics](#usage-basics)  
 [How it works](#how-it-works)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
-[Changelog](#changelog)
+[Changelog](#changelog)  
 
 
 ## Why Cotton?

@@ -1,3 +1,7 @@
+<img src="https://github.com/wrabit/django-cotton/assets/5918271/0f98c960-ab30-43b6-8eb5-51933d02ea0e" width="400">
+
+<!--<img src="https://github.com/wrabit/django-cotton/assets/5918271/e1c204dd-a91d-4883-8b76-b47af264c251" width="400">-->
+
 # Django Cotton
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)

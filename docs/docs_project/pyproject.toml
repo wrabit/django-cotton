@@ -2,6 +2,16 @@
 name = "cotton-dev-app"
 version = "0.9"
 requires-python = ">=3.8, <4"
+dependencies = [
+    "django~=4.2.6",
+    "beautifulsoup4~=4.12.2",
+    "selenium~=4.13.0",
+    "heroicons~=2.6.0",
+    "gunicorn~=20.1.0",
+    "asgiref>=3.6.0,<4",
+    "whitenoise~=6.2.0",
+    "redis~=5.0.1",
+]
 authors = [
   { name = "Will Abbott", email = "willabb83@gmail.com" }
 ]
@@ -20,4 +30,3 @@ heroicons = "2.6.0"
 gunicorn = "20.1.0"
 asgiref = ">=3.6.0,<4"
 whitenoise = "6.2.0"
-redis = "5.0.1"

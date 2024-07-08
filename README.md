@@ -25,7 +25,6 @@ Bringing component-based design to Django templates.
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [HTMLX Example](#an-example-with-htmlx)  
 [Usage Basics](#usage-basics)  
-[How it works](#how-it-works)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Changelog](#changelog)  
 
@@ -316,10 +315,6 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
   - Components are called using kebab-case: `<c-my-component />`
  
 For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
-
-## How it works
-
-<img width="2115" alt="image" src="https://github.com/wrabit/django-cotton/assets/5918271/8d8fa517-1052-44a5-a4e0-34e423d52b6f">
 
 
 ## Limitations in Django that Cotton overcomes

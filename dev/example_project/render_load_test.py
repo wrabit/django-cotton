@@ -55,6 +55,14 @@ def benchmark_template_rendering(template_name, iterations=10000):
 
 
 # Benchmarking each template
+time_native_include, output_native_include = benchmark_template_rendering(
+    "benchmarks/native_include.html"
+)
+time_cotton_include, output_cotton_include = benchmark_template_rendering(
+    "cotton/benchmarks/cotton_include.html"
+)
+
+
 time_native_extends, output_native_extends = benchmark_template_rendering(
     "benchmarks/native_extends.html"
 )
@@ -66,6 +74,11 @@ time_cotton, output_cotton = benchmark_template_rendering(
 )
 
 # Output results
-print(f"Native Django Template using extend: {time_native_extends} seconds")
+print("Include, native vs cotton:")
+print(f"Native {{% include %}}: {time_native_include} seconds")
+print(f"Cotton for include:: {time_cotton_include} seconds")
+print("-------")
+print("Block + Extends, native vs cotton:")
+print(f"Native {{% block %}} and {{% extends %}}: {time_native_extends} seconds")
+print(f"Uncompiled Cotton Template: {time_cotton} seconds")
 print(f"Compiled Cotton Template: {time_compiled_cotton} seconds")
-print(f"Cotton Template: {time_cotton} seconds")

@@ -10,7 +10,7 @@
             }
         }
     },
-    "buildCommand": "npm ci && npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css"
+    "buildCommand": "npm ci && npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css --minify"
   },
   "deploy": {
     "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn docs_project.wsgi --bind 0.0.0.0:8000",

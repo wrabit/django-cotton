@@ -1,5 +1,7 @@
+import os
 from django import template
 from django.utils.html import escape
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -18,3 +20,8 @@ class EscapeNode(template.Node):
     def render(self, context):
         output = self.nodelist.render(context)
         return escape(output)
+
+
+@register.filter
+def env(key):
+    return mark_safe(os.environ.get(key, ""))

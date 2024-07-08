@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-import tempfile
 from pathlib import Path
 
 
@@ -155,10 +154,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "TIMEOUT": None,
-        "LOCATION": tempfile.gettempdir() + "/django_cache",
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": (
+            f"""redis://{os.getenv('REDISUSER')}:{os.getenv("REDISPASSWORD")}@{os.getenv("REDISHOST")}:{os.getenv("REDISPORT")}"""
+        ),
+        "TIMEOUT": 86400,
     }
 }

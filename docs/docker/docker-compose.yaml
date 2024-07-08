@@ -9,6 +9,10 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     environment:
       - DEBUG=True
+      - REDISHOST=cotton-docs-redis
+      - REDISPASSWORD=password
+      - REDISPORT=6379
+      - REDISUSER=default
     volumes:
       - ../docs_project:/app
       - ../../django_cotton:/app/django_cotton
@@ -23,6 +27,19 @@ services:
     tty: true
     volumes:
       - ../docs_project:/app
-    # call the tailwind build before the watch
-    #    command: /bin/sh -c "npm install && npx tailwindcss -c ./tailwind.config.js -o ./luma/static/app.css && npx tailwindcss -c ./tailwind.config.js -o ./luma/static/app.css --watch"
     command: /bin/sh -c "trap 'exit' INT; npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css --watch"
+
+  cotton-docs-redis:
+    container_name: cotton-docs-redis
+    image: redis/redis-stack-server:latest
+    command: redis-server --maxmemory 200mb --maxmemory-policy allkeys-lru --requirepass password
+    restart: always
+    environment:
+      - REDIS_ARGS=--requirepass password
+    ports:
+      - "6379:6379"
+    volumes:
+      - cotton-docs-redis-data:/data
+
+volumes:
+  cotton-docs-redis-data:

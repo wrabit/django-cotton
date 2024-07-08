@@ -21,12 +21,6 @@ WORKDIR /app
 RUN pip install --upgrade pip \
     && pip install poetry
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    chromium \
-    chromium-driver \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy only dependencies definition to the docker image
 COPY . /app/
 

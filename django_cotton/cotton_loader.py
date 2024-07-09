@@ -38,7 +38,10 @@ class Loader(BaseLoader):
         cached_content = self.cache_handler.get_cached_template(cache_key)
 
         if cached_content is not None:
+            print("CACHE HIT", origin.name)
             return cached_content
+
+        print("CACHE MISS", origin.name)
 
         template_string = self._get_template_string(origin.name)
         compiled_template = self.template_processor.process(

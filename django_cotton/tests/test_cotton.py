@@ -27,14 +27,14 @@ class InlineTestCase(CottonInlineTestCase):
 
     def test_new_lines_in_attributes_are_preserved(self):
         self.create_template(
-            "cotton/component.html",
+            "cotton/preserved.html",
             """<div {{ attrs }}>{{ slot }}</div>""",
         )
 
         self.create_template(
-            "view.html",
+            "preserved_view.html",
             """
-            <c-component x-data="{
+            <c-preserved x-data="{
                 attr1: 'im an attr',
                 var1: 'im a var',
                 method() {
@@ -45,7 +45,7 @@ class InlineTestCase(CottonInlineTestCase):
         )
 
         # Register Url
-        self.register_url("view/", self.make_view("view.html"))
+        self.register_url("view/", self.make_view("preserved_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -66,21 +66,21 @@ class InlineTestCase(CottonInlineTestCase):
         self,
     ):
         self.create_template(
-            "cotton/component.html",
+            "cotton/hyphens.html",
             """
             <div x-data="{{ x_data }}" x-init="{{ x_init }}"></div>
             """,
         )
 
         self.create_template(
-            "view.html",
+            "hyphens_view.html",
             """
-            <c-component x-data="{}" x-init="do_something()" />
+            <c-hyphens x-data="{}" x-init="do_something()" />
             """,
         )
 
         # Register Url
-        self.register_url("view/", self.make_view("view.html"))
+        self.register_url("view/", self.make_view("hyphens_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -92,7 +92,7 @@ class InlineTestCase(CottonInlineTestCase):
         self,
     ):
         self.create_template(
-            "cotton/component.html",
+            "cotton/cvar_hyphens.html",
             """
             <c-vars x-data="{}" x-init="do_something()" />
             
@@ -101,14 +101,14 @@ class InlineTestCase(CottonInlineTestCase):
         )
 
         self.create_template(
-            "view.html",
+            "cvar_hyphens_view.html",
             """
-            <c-component />
+            <c-cvar-hyphens />
             """,
         )
 
         # Register Url
-        self.register_url("view/", self.make_view("view.html"))
+        self.register_url("view/", self.make_view("cvar_hyphens_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):

@@ -1,11 +1,22 @@
 import ast
+from functools import lru_cache
 
 from django import template
 from django.template import Node
-from django.template.loader import render_to_string
+from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
 from django_cotton.utils import ensure_quoted
+
+
+@lru_cache(maxsize=128)
+def get_cached_template(template_name):
+    return get_template(template_name)
+
+
+def render_template(template_name, context):
+    template = get_cached_template(template_name)
+    return template.render(context)
 
 
 def cotton_component(parser, token):
@@ -81,7 +92,7 @@ class CottonComponentNode(Node):
         # Reset the component's slots in context to prevent bleeding into sibling components
         all_slots[self.component_key] = {}
 
-        return render_to_string(self.template_path, local_context)
+        return render_template(self.template_path, local_context)
 
     def process_dynamic_attribute(self, value, context):
         """

@@ -54,7 +54,7 @@ def benchmark_template_rendering(template_name, iterations=10000):
     return end_time - start_time, render_to_string(template_name)
 
 
-def benchmark_template_rendering_alt(template_name, iterations=10000):
+def benchmark_template_rendering_alt(template_name, iterations=1000):
     data = list(range(1, iterations))
     start_time = time.time()
     render_to_string(template_name, context={"data": data})

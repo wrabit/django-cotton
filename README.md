@@ -1,4 +1,4 @@
-<img src="https://github.com/wrabit/django-cotton/assets/5918271/0f98c960-ab30-43b6-8eb5-51933d02ea0e" width="400">
+<img alt="Django Cotton Logo" src="https://github.com/wrabit/django-cotton/assets/5918271/1b0de6be-e943-4250-84c5-4662e2be07f5" width="400">
 
 <!--<img src="https://github.com/wrabit/django-cotton/assets/5918271/e1c204dd-a91d-4883-8b76-b47af264c251" width="400">-->
 

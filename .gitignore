@@ -112,4 +112,4 @@ GitHub.sublime-settings
 .history
 
 .DS_Store
-
+node_modules/

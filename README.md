@@ -23,7 +23,7 @@ Bringing component-based design to Django templates.
 [Passing Python data types](#passing-python-data-types)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
-[HTMLX Example](#an-example-with-htmx)  
+[HTMX Example](#an-example-with-htmx)  
 [Usage Basics](#usage-basics)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Changelog](#changelog)  

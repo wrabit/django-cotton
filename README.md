@@ -302,7 +302,7 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
     <input type="checkbox" name="signup" />
 </c-form>
 
-<c-form url="/buy">
+<c-form hx-post="/buy">
     <input type="text" name="type" />
     <input type="text" name="quantity" />
 </c-form>

@@ -23,7 +23,7 @@ Bringing component-based design to Django templates.
 [Passing Python data types](#passing-python-data-types)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
-[HTMLX Example](#an-example-with-htmlx)  
+[HTMLX Example](#an-example-with-htmx)  
 [Usage Basics](#usage-basics)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Changelog](#changelog)  
@@ -280,7 +280,7 @@ Input will have all attributes provided apart from the `icon`:
 <input type="password" id="password" />
 ```
 
-### An example with HTMLX
+### An example with HTMX
 
 Cotton helps carve out re-usable components, here we show how to make a re-usable form, reducing code repetition and improving maintainability:
 

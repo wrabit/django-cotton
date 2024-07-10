@@ -39,14 +39,14 @@ settings.configure(
             },
         },
     ],
-    # Toggle this to turn caching on and off
     COTTON_TEMPLATE_CACHING_ENABLED=True,
+    DEBUG=False,
 )
 
 django.setup()
 
 
-def benchmark_template_rendering(template_name, iterations=10000):
+def template_bench(template_name, iterations=10000):
     start_time = time.time()
     for _ in range(iterations):
         render_to_string(template_name)
@@ -54,31 +54,30 @@ def benchmark_template_rendering(template_name, iterations=10000):
     return end_time - start_time, render_to_string(template_name)
 
 
-# Benchmarking each template
-time_native_include, output_native_include = benchmark_template_rendering(
-    "benchmarks/native_include.html"
-)
-time_cotton_include, output_cotton_include = benchmark_template_rendering(
-    "cotton/benchmarks/cotton_include.html"
-)
+def template_bench_alt(template_name, iterations=10000):
+    data = list(range(1, iterations))
+    start_time = time.time()
+    render_to_string(template_name, context={"data": data})
+    end_time = time.time()
+    return end_time - start_time, render_to_string(template_name)
 
 
-time_native_extends, output_native_extends = benchmark_template_rendering(
-    "benchmarks/native_extends.html"
-)
-time_compiled_cotton, output_compiled_cotton = benchmark_template_rendering(
-    "cotton/benchmarks/cotton_compiled.html"
-)
-time_cotton, output_cotton = benchmark_template_rendering(
-    "cotton/benchmarks/cotton.html"
-)
+simple_native, _ = template_bench_alt("simple_native.html")
+simple_cotton, _ = template_bench_alt("simple_cotton.html")
 
-# Output results
-print("Include, native vs cotton:")
+print(f"Native Django Template: {simple_native} seconds")
+print(f"Cotton Template: {simple_cotton} seconds")
+
+time_native_include, _ = template_bench("benchmarks/native_include.html")
+time_cotton_include, _ = template_bench("cotton/benchmarks/cotton_include.html")
+
 print(f"Native {{% include %}}: {time_native_include} seconds")
 print(f"Cotton for include:: {time_cotton_include} seconds")
-print("-------")
-print("Block + Extends, native vs cotton:")
+
+time_native_extends, _ = template_bench("benchmarks/native_extends.html")
+time_compiled_cotton, _ = template_bench("cotton/benchmarks/cotton_compiled.html")
+time_cotton, _ = template_bench("cotton/benchmarks/cotton.html")
+
 print(f"Native {{% block %}} and {{% extends %}}: {time_native_extends} seconds")
 print(f"Uncompiled Cotton Template: {time_cotton} seconds")
 print(f"Compiled Cotton Template: {time_compiled_cotton} seconds")

@@ -51,7 +51,7 @@ class CottonVarsFrameNode(template.Node):
 
         # Provide all of the attrs as a string to pass to the component before any '-' to '_' replacing
         attrs = " ".join(
-            f"{key}={ensure_quoted(value)}" for key, value in attrs_without_vars.items()
+            f"{k}={ensure_quoted(v)}" for k, v in attrs_without_vars.items()
         )
         context["attrs"] = mark_safe(attrs)
 

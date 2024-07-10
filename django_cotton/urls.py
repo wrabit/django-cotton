@@ -19,6 +19,7 @@ class NamedSlotInLoop(TemplateView):
 
 
 urlpatterns = [
+    path("", TemplateView.as_view(template_name="index.html")),
     path("parent", TemplateView.as_view(template_name="parent_test.html")),
     path("child", TemplateView.as_view(template_name="child_test.html")),
     path(

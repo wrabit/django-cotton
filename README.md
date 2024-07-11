@@ -370,19 +370,28 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
     }" />
 ```
 
+## Caching
+
+Cotton components are cached whilst in production (`DEBUG = False`). The cache's TTL is for the duration of your app's lifetime. So on deployment, when the app is normally restarted, caches are cleared. During development, changes are detected on every component render. This feature is a work in progress and some refinement is planned.
+
 
 ## Changelog
 
-| Date                     | Version    | Title and Description                                                                                                                                                                 |
-|--------------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 2024.07-06 &nbsp;&nbsp;  | v0.9.15    | **Hyphen to Underscore Conversion**<br><small>Converts variable names with hyphens to underscores for attribute access. i.e. `<c-component x-data="{}" />` -> `{{ x_data }}`</small>  |
-| 2024.07-05               | v0.9.14    | **c-vars Optimization**<br><small>Optimizes `c-vars` processing for performance, yielding a 15% speed improvement in component rendering.</small>                                     |
-| 2024.07-05               | v0.9.13    | **Multi-line Attribute Support**<br><small>Enables multi-line values in attributes, allowing more support for js-expression style attributes like in alpine.js</small>                |
-| 2024.07-03               | v0.9.12    | **Dropped ".cotton.html" Requirement**<br><small>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do. </small>               |
-| 2024-06-24               | v0.9.11    | **Attribute Ordering Fix**<br><small>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions inside tags.</small>      |
-| 2024-06-22               | v0.9.10    | **Template Expression Attributes**<br><small>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.</small>          |
-| 2024-06-22               | v0.9.9     | **Native Tags in Attributes**<br><small>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.</small>                  |
-| 2024-06-21               | v0.9.7     | **Dynamic Type Attributes**<br><small>Using the `:` to prefix an attribute tells Cotton we're passing a dynamic type down. You can also send basic Python types.</small>              |
-| 2024-06-17               | v0.9.6     | **Rename c-props to c-vars**<br><small>Rename c props, all `<c-props />` are now `<c-vars />`.</small>                                                                                |
-| 2024-06-11               | v0.9.4     | **Boolean Attributes**<br><small>Support for Boolean attributes added with docs update.</small>                                                                                       |
-| 2024-06-08               | v0.9.1     | **Open Source Release**<br><small>Open source release.</small>                                                                                                                        |
+| Version    | Date                                 | Title and Description                                                                                                                                                        |
+|------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v0.9.16    | 2024-07-10                           | **Cotton Component Caching**<br>Cotton components are now cached whilst in production / `DEBUG = False`. LRU cache type with a record count of 1024, cleared on app restart. |
+| v0.9.15    | 2024-07-06 &nbsp;&nbsp;&nbsp;&nbsp;  | **Hyphen to Underscore Conversion**<br>Converts variable names with hyphens to underscores for attribute access. i.e. `<c-component x-data="{}" />` -> `{{ x_data }}`        |
+| v0.9.14    | 2024-07-05                           | **c-vars Optimization**<br>Optimizes `c-vars` processing for performance, yielding a 15% speed improvement in component rendering.                                           |
+| v0.9.13    | 2024-07-05                           | **Multi-line Attribute Support**<br>Enables multi-line values in attributes, allowing more support for js-expression style attributes like in alpine.js                      |
+| v0.9.12    | 2024-07-03                           | **Dropped ".cotton.html" Requirement**<br>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do.                      |
+| v0.9.11    | 2024-06-24                           | **Attribute Ordering Fix**<br>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions inside tags.            |
+| v0.9.10    | 2024-06-22                           | **Template Expression Attributes**<br>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.                |
+| v0.9.9     | 2024-06-22                           | **Native Tags in Attributes**<br>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.                        |
+| v0.9.7     | 2024-06-21                           | **Dynamic Type Attributes**<br>Using the `:` to prefix an attribute tells Cotton we're passing a dynamic type down. You can also send basic Python types.                    |
+| v0.9.6     | 2024-06-17                           | **Rename c-props to c-vars**<br>Rename c props, all `<c-props />` are now `<c-vars />`.                                                                                      |
+| v0.9.4     | 2024-06-11                           | **Boolean Attributes**<br>Support for Boolean attributes added with docs update.                                                                                             |
+| v0.9.1     | 2024-06-08                           | **Open Source Release**<br>Open source release.                                                                                                                              |
+
+| v0.9.4     | 2024-06-11               | **Boolean Attributes**<br>Support for Boolean attributes added with docs update.                                                                                             |
+| v0.9.1     | 2024-06-08               | **Open Source Release**<br>Open source release.                                                                                                                              |
+

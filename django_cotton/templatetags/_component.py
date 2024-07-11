@@ -18,7 +18,6 @@ def get_cached_template(template_name):
 
 def render_template(template_name, context):
     if settings.DEBUG:
-        print("non cached")
         return get_template(template_name).render(context)
     else:
         return get_cached_template(template_name).render(context)

@@ -16,7 +16,7 @@ Bringing component-based design to Django templates.
 [Why?](#why-cotton)  
 [Your First component](#your-first-component)  
 [Attributes](#add-attributes)  
-[Names Slots](#add-attributes)  
+[Named Slots](#named-slots)  
 [Pass Template Variables](#pass-template-variable-as-an-attribute)  
 [Template expressions in attributes](#template-expressions-inside-attributes)  
 [Boolean attributes](#boolean-attributes)  

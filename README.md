@@ -26,6 +26,7 @@ Bringing component-based design to Django templates.
 [HTMX Example](#an-example-with-htmx)  
 [Usage Basics](#usage-basics)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
+[Caching](#caching)  
 [Changelog](#changelog)  
 
 
@@ -391,7 +392,3 @@ Cotton components are cached whilst in production (`DEBUG = False`). The cache's
 | v0.9.6     | 2024-06-17                           | **Rename c-props to c-vars**<br>Rename c props, all `<c-props />` are now `<c-vars />`.                                                                                      |
 | v0.9.4     | 2024-06-11                           | **Boolean Attributes**<br>Support for Boolean attributes added with docs update.                                                                                             |
 | v0.9.1     | 2024-06-08                           | **Open Source Release**<br>Open source release.                                                                                                                              |
-
-| v0.9.4     | 2024-06-11               | **Boolean Attributes**<br>Support for Boolean attributes added with docs update.                                                                                             |
-| v0.9.1     | 2024-06-08               | **Open Source Release**<br>Open source release.                                                                                                                              |
-

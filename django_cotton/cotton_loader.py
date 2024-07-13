@@ -105,7 +105,9 @@ class CottonTemplateProcessor:
         content = self._replace_syntax_with_placeholders(content)
         content = self._compile_cotton_to_django(content, component_key)
         content = self._replace_placeholders_with_syntax(content)
-        return self._revert_bs4_attribute_empty_attribute_fixing(content)
+        content = self._revert_bs4_attribute_empty_attribute_fixing(content)
+
+        return content
 
     def _replace_syntax_with_placeholders(self, content):
         """# replace {% ... %} and {{ ... }} with placeholders so they dont get touched

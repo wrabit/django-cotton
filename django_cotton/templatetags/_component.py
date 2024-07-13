@@ -57,7 +57,9 @@ class CottonComponentNode(Node):
         attrs = {}
 
         for key, value in self.kwargs.items():
-            value = value.strip("'\"")
+            # strip single or double quotes only if both sides have them
+            if value and value[0] == value[-1] and value[0] in ('"', "'"):
+                value = value[1:-1]
 
             if key.startswith(":"):
                 key = key[1:]

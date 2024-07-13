@@ -62,6 +62,30 @@ class InlineTestCase(CottonInlineTestCase):
                 in response.content.decode()
             )
 
+    def test_attributes_that_end_or_start_with_quotes_are_preserved(self):
+        self.create_template(
+            "cotton/preserve_quotes.html",
+            """
+        <div {{ attrs }}><div>
+        """,
+        )
+
+        self.create_template(
+            "preserve_quotes_view.html",
+            """
+            <c-preserve-quotes something="var ? 'this' : 'that'" />
+            """,
+        )
+
+        # Register Url
+        self.register_url("view/", self.make_view("preserve_quotes_view.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, '''"var ? 'this' : 'that'"''')
+
     def test_attribute_names_on_component_containing_hyphens_are_converted_to_underscores(
         self,
     ):

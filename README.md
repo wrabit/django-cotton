@@ -335,6 +335,8 @@ Whilst {% with %} tags allow us to provide variables and strings it quickly busi
 ### Custom `{% templatetags %}`
 Cotton does essentially compiles to custom templatetags but there is some extra work it performs above it to help with scoping and auto-managing keys which will be difficult to manage manually in complex nested structures.
 
+<a href="https://medium.com/@willabbott/introducing-django-cotton-revolutionizing-ui-composition-in-django-ea7fe06156b0" target="_blank">[Source article]</a>
+
 ## Native Django template tags vs Cotton
 
 In addition, Cotton enables you to navigate around some of the limitations with Django's native tags and template language:

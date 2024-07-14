@@ -321,6 +321,24 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 ## Limitations in Django that Cotton overcomes
 
+Whilst you can build frontends with Django’s native tags, there are a few things that hold us back when we want to apply modern practices:
+
+### `{% block %}` and `{% extends %}`
+This system strongly couples child and parent templates making it hard to create a truly re-usable component that can be used in places without it having a related base template.
+
+### What about `{% include %}` ?
+Modern libraries allow components to be highly configurable, whether it’s by attributes, passing variables, passing HTML with default and named slots. {% include %} tags, whilst they have the ability to pass simple variables and text, they will not allow you to easily send HTML blocks with template expressions let alone other niceties such as boolean attributes, named slots etc.
+
+### What's with `{% with %}`?
+Whilst {% with %} tags allow us to provide variables and strings it quickly busies up your code and has the same limitations about passing more complex types.
+
+### Custom `{% templatetags %}`
+Cotton does essentially compiles to custom templatetags but there is some extra work it performs above it to help with scoping and auto-managing keys which will be difficult to manage manually in complex nested structures.
+
+## Native Django template tags vs Cotton
+
+In addition, Cotton enables you to navigate around some of the limitations with Django's native tags and template language:
+
 ### HTML in attributes
 ❌ **Django native:**
 ```html
@@ -379,20 +397,22 @@ Cotton components are cached whilst in production (`DEBUG = False`). The cache's
 
 ## Changelog
 
-| Version    | Date                                 | Title and Description                                                                                                                                                        |
-|------------|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| v0.9.16    | 2024-07-10                           | **Cotton Component Caching**<br>Cotton components are now cached whilst in production / `DEBUG = False`. LRU cache type with a record count of 1024, cleared on app restart. |
-| v0.9.15    | 2024-07-06 &nbsp;&nbsp;&nbsp;&nbsp;  | **Hyphen to Underscore Conversion**<br>Converts variable names with hyphens to underscores for attribute access. i.e. `<c-component x-data="{}" />` -> `{{ x_data }}`        |
-| v0.9.14    | 2024-07-05                           | **c-vars Optimization**<br>Optimizes `c-vars` processing for performance, yielding a 15% speed improvement in component rendering.                                           |
-| v0.9.13    | 2024-07-05                           | **Multi-line Attribute Support**<br>Enables multi-line values in attributes, allowing more support for js-expression style attributes like in alpine.js                      |
-| v0.9.12    | 2024-07-03                           | **Dropped ".cotton.html" Requirement**<br>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do.                      |
-| v0.9.11    | 2024-06-24                           | **Attribute Ordering Fix**<br>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions inside tags.            |
-| v0.9.10    | 2024-06-22                           | **Template Expression Attributes**<br>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.                |
-| v0.9.9     | 2024-06-22                           | **Native Tags in Attributes**<br>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.                        |
-| v0.9.7     | 2024-06-21                           | **Dynamic Type Attributes**<br>Using the `:` to prefix an attribute tells Cotton we're passing a dynamic type down. You can also send basic Python types.                    |
-| v0.9.6     | 2024-06-17                           | **Rename c-props to c-vars**<br>Rename c props, all `<c-props />` are now `<c-vars />`.                                                                                      |
-| v0.9.4     | 2024-06-11                           | **Boolean Attributes**<br>Support for Boolean attributes added with docs update.                                                                                             |
-| v0.9.1     | 2024-06-08                           | **Open Source Release**<br>Open source release.                                                                                                                              |
+| Version | Date                                                               | Title and Description                                                                                                                                                        |
+|---------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v0.9.18 | 2024-07-14                                                         | **Fix: Cotton loader permits duplicate attributes in html tags in the compiled django template.**                                                                           |
+| v0.9.17 | 2024-07-13                                                         | **Fix: Allow trailing/leading quotes in attributes**                                                                                                                         |
+| v0.9.16 | 2024-07-10                                                         | **Cotton Component Caching**<br>Cotton components are now cached whilst in production / `DEBUG = False`. LRU cache type with a record count of 1024, cleared on app restart. |
+| v0.9.15 | 2024-07-06 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  | **Hyphen to Underscore Conversion**<br>Converts variable names with hyphens to underscores for attribute access. i.e. `<c-component x-data="{}" />` -> `{{ x_data }}`        |
+| v0.9.14 | 2024-07-05                                                         | **c-vars Optimization**<br>Optimizes `c-vars` processing for performance, yielding a 15% speed improvement in component rendering.                                           |
+| v0.9.13 | 2024-07-05                                                         | **Multi-line Attribute Support**<br>Enables multi-line values in attributes, allowing more support for js-expression style attributes like in alpine.js                      |
+| v0.9.12 | 2024-07-03                                                         | **Dropped ".cotton.html" Requirement**<br>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do.                      |
+| v0.9.11 | 2024-06-24                                                         | **Attribute Ordering Fix**<br>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions inside tags.            |
+| v0.9.10 | 2024-06-22                                                         | **Template Expression Attributes**<br>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.                |
+| v0.9.9  | 2024-06-22                                                         | **Native Tags in Attributes**<br>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.                        |
+| v0.9.7  | 2024-06-21                                                         | **Dynamic Type Attributes**<br>Using the `:` to prefix an attribute tells Cotton we're passing a dynamic type down. You can also send basic Python types.                    |
+| v0.9.6  | 2024-06-17                                                         | **Rename c-props to c-vars**<br>Rename c props, all `<c-props />` are now `<c-vars />`.                                                                                      |
+| v0.9.4  | 2024-06-11                                                         | **Boolean Attributes**<br>Support for Boolean attributes added with docs update.                                                                                             |
+| v0.9.1  | 2024-06-08                                                         | **Open Source Release**<br>Open source release.                                                                                                                              |
 
 
 ## Comparison with other packages

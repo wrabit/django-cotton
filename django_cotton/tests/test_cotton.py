@@ -86,6 +86,30 @@ class InlineTestCase(CottonInlineTestCase):
 
             self.assertContains(response, '''"var ? 'this' : 'that'"''')
 
+    def test_we_can_govern_whole_attributes_in_html_elements(self):
+        self.create_template(
+            "cotton/attribute_govern.html",
+            """
+            <div {% if something %} class="first" {% else %} class="second" {% endif %}><div>
+            """,
+        )
+
+        self.create_template(
+            "attribute_govern_view.html",
+            """
+            <c-attribute-govern :something="False" />
+            """,
+        )
+
+        # Register Url
+        self.register_url("view/", self.make_view("attribute_govern_view.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, 'class="second"')
+            self.assertNotContains(response, 'class="first"')
+
     def test_attribute_names_on_component_containing_hyphens_are_converted_to_underscores(
         self,
     ):
@@ -213,6 +237,14 @@ class CottonTestCase(TestCase):
             """{% cotton_vars_frame var1=var1|default:"string with space" %}content{% endcotton_vars_frame %}""",
         )
 
+    def test_loader_preserves_duplicate_attributes(self):
+        compiled = get_compiled("""<a href="#" class="test" class="test2">hello</a>""")
+
+        self.assertEquals(
+            compiled,
+            """<a href="#" class="test" class="test2">hello</a>""",
+        )
+
     def test_attrs_do_not_contain_vars(self):
         response = self.client.get("/vars-test")
         self.assertContains(response, "attr1: 'im an attr'")
@@ -296,5 +328,3 @@ class CottonTestCase(TestCase):
             response,
             """attrs tag is: 'normal="normal" attr1="Hello Will" attr2="world" attr3="cowabonga!"'""",
         )
-
-    # TODO: implement inline test asset creation, i.e. store_template("native-tags-in-attributes", """)

@@ -60,7 +60,7 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 <a href="/" class="...">Contact</a>
 ```
 
-Everything provided between the opening and closing tag is provided to the component as `{{ slot }}`. It can contain any HTML and any Django template expressions.
+Everything provided between the opening and closing tag is provided to the component as `{{ slot }}`. It can contain any content, HTML or Django template expression.
 
 ### Add attributes
 

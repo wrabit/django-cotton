@@ -56,7 +56,7 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 <c-button>Contact</c-button>
 ```
 ```html
-<!-- output -->
+<!-- html output -->
 <a href="/" class="...">Contact</a>
 ```
 
@@ -75,7 +75,7 @@ Everything provided between the opening and closing tag is provided to the compo
 <c-button url="/contact">Contact</c-button>
 ```
 ```html
-<!-- output -->
+<!-- html output -->
 <a href="/contact" class="...">
     Contact
 </a>
@@ -193,7 +193,7 @@ This benefits a number of use-cases, for example if you have a select component 
 ```
 
 ```html
-<!-- cotton/output -->
+<!-- source code output -->
 <select name="q1">
     <option value="yes">yes</option>
     <option value="no">no</option>
@@ -217,6 +217,13 @@ This benefits a number of use-cases, for example if you have a select component 
 <c-input class="highlighted" required />
 ```
 
+```html
+<!-- html output -->
+<input type="text" class="..." placeholder="Enter your name" />
+<input type="text" class="..." name="country" id="country" value="Japan" />
+<input type="text" class="..." class="highlighted" required />
+```
+
 ### In-component Variables with `<c-vars>`
 
 Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in views. Fair enough, but what if we want to handle data for the purpose of UI state only? Having presentation related variables defined in the back is overkill and can quickly lead to higher maintenance cost and loses encapuslation of the component. Cotton allows you define in-component variables for the following reasons:
@@ -238,7 +245,7 @@ In this example we have a button component with a default "theme" but it can be 
 <c-button>I'm a purple button</c-button>
 ```
 ```html
-<!-- output -->
+<!-- html output -->
 <a href="..." class="bg-purple-500">
     I'm a purple button
 </a>
@@ -251,7 +258,7 @@ Now we have a default theme for our button, but it is overridable:
 <c-button theme="bg-green-500">But I'm green</c-button>
 ```
 ```html
-<!-- output -->
+<!-- html output -->
 <a href="..." class="bg-green-500">
     But I'm green
 </a>

@@ -226,7 +226,7 @@ This benefits a number of use-cases, for example if you have a select component 
 
 ### In-component Variables with `<c-vars>`
 
-Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in views. Fair enough, but what if we want to handle data for the purpose of UI state only? Having presentation related variables defined in the back is overkill and can quickly lead to higher maintenance cost and loses encapuslation of the component. Cotton allows you define in-component variables for the following reasons:
+Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in views. Fair enough, but what if we want to handle data for the purpose of UI state only? Having presentation related variables defined in the back is overkill and can quickly lead to higher maintenance cost and loses encapsulation of the component. Cotton allows you define in-component variables for the following reasons:
 
 #### 1. Using `<c-vars>` for default attributes
 

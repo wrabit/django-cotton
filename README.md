@@ -83,7 +83,7 @@ Everything provided between the opening and closing tag is provided to the compo
 
 ### Named slots
 
-Named slots are a powerful concept. It allows us to provide HTML to appear in one or more areas in the component. Here we allow the button to optionally display an icon: 
+Named slots are a powerful concept. They allow us to provide HTML to appear in one or more areas in the component. Here we allow the button to optionally display an svg icon: 
 
 ```html
 <!-- cotton/button.html -->

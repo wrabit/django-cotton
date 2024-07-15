@@ -53,7 +53,44 @@ class CottonComponentNode(Node):
         self.kwargs = kwargs
 
     def render(self, context):
+        attrs = self._build_attrs(context)
+
+        # Add the remainder as the default slot
         local_ctx = context.flatten()
+        local_ctx["slot"] = self.nodelist.render(context)
+
+        # Merge slots and attributes into the local context
+        all_named_slots_ctx = context.get("cotton_named_slots", {})
+        local_named_slots_ctx = all_named_slots_ctx.get(self.component_key, {})
+        local_ctx.update(local_named_slots_ctx)
+
+        # We need to check if any dynamic attributes are present in the component slots and move them over to attrs
+        if "ctn_template_expression_attrs" in local_named_slots_ctx:
+            for expression_attr in local_named_slots_ctx[
+                "ctn_template_expression_attrs"
+            ]:
+                attrs[expression_attr] = local_named_slots_ctx[expression_attr]
+
+        # Build attrs string before formatting any '-' to '_' in attr names
+        attrs_string = " ".join(
+            f"{key}={ensure_quoted(value)}" for key, value in attrs.items()
+        )
+        local_ctx["attrs"] = mark_safe(attrs_string)
+        local_ctx["attrs_dict"] = attrs
+
+        # Store attr names in a callable format, i.e. 'x-init' will be accessible by {{ x_init }}
+        attrs = {key.replace("-", "_"): value for key, value in attrs.items()}
+        local_ctx.update(attrs)
+
+        # Reset the component's slots in context to prevent data leaking between components
+        all_named_slots_ctx[self.component_key] = {}
+
+        return render_template(self.template_path, local_ctx)
+
+    def _build_attrs(self, context):
+        """
+        Build the attributes dictionary for the component
+        """
         attrs = {}
 
         for key, value in self.kwargs.items():
@@ -63,44 +100,15 @@ class CottonComponentNode(Node):
 
             if key.startswith(":"):
                 key = key[1:]
-                attrs[key] = self.process_dynamic_attribute(value, context)
+                attrs[key] = self._process_dynamic_attribute(value, context)
             elif value == "":
                 attrs[key] = True
             else:
                 attrs[key] = value
 
-        # Add the remainder as the default slot
-        local_ctx["slot"] = self.nodelist.render(context)
+        return attrs
 
-        # Merge slots and attributes into the local context
-        all_slots_ctx = context.get("cotton_slots", {})
-        component_slots_ctx = all_slots_ctx.get(self.component_key, {})
-        local_ctx.update(component_slots_ctx)
-
-        # We need to check if any dynamic attributes are present in the component slots and move them over to attrs
-        if "ctn_template_expression_attrs" in component_slots_ctx:
-            for expression_attr in component_slots_ctx["ctn_template_expression_attrs"]:
-                attrs[expression_attr] = component_slots_ctx[expression_attr]
-
-        # Build attrs string before formatting any '-' to '_' in attr names
-        attrs_string = " ".join(
-            f"{key}={ensure_quoted(value)}" for key, value in attrs.items()
-        )
-        local_ctx["attrs"] = mark_safe(attrs_string)
-
-        # Make the attrs available in the context for the vars frame, also before formatting the attr names
-        local_ctx["attrs_dict"] = attrs
-
-        # Store attr names in a callable format, i.e. 'x-init' will be accessible by {{ x_init }}
-        attrs = {key.replace("-", "_"): value for key, value in attrs.items()}
-        local_ctx.update(attrs)
-
-        # Reset the component's slots in context to prevent data leaking between components
-        all_slots_ctx[self.component_key] = {}
-
-        return render_template(self.template_path, local_ctx)
-
-    def process_dynamic_attribute(self, value, context):
+    def _process_dynamic_attribute(self, value, context):
         """
         Process a dynamic attribute (prefixed with ":")
         """

@@ -340,7 +340,7 @@ Modern libraries allow components to be highly configurable, whether it’s by a
 Whilst {% with %} tags allow us to provide variables and strings it quickly busies up your code and has the same limitations about passing more complex types.
 
 ### Custom `{% templatetags %}`
-Cotton does essentially compiles to custom templatetags but there is some extra work it performs above it to help with scoping and auto-managing keys which will be difficult to manage manually in complex nested structures.
+Cotton does essentially compile down to templatetags but there is some extra work it performs above it to help with scoping and auto-managing keys which will be difficult to manage manually in complex nested structures.
 
 <a href="https://medium.com/@willabbott/introducing-django-cotton-revolutionizing-ui-composition-in-django-ea7fe06156b0" target="_blank">[Source article]</a>
 

@@ -328,7 +328,7 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 ## Limitations in Django that Cotton overcomes
 
-Whilst you can build frontends with Django’s native tags, there are a few things that hold us back when we want to apply modern practices:
+Whilst you _can_ build frontends with Django’s native tags, there are a few things that hold us back when we want to apply modern practices:
 
 ### `{% block %}` and `{% extends %}`
 This system strongly couples child and parent templates making it hard to create a truly re-usable component that can be used in places without it having a related base template.

@@ -56,7 +56,7 @@ class Loader(BaseLoader):
 
     def _get_template_string(self, template_name):
         try:
-            with open(template_name, "r") as f:
+            with open(template_name, "r", encoding=self.engine.file_charset) as f:
                 return f.read()
         except FileNotFoundError:
             raise TemplateDoesNotExist(template_name)

@@ -43,7 +43,7 @@ The development environment is set up using Docker. To build the project, run th
 Please ensure that your changes pass all existing tests and, if applicable, add new tests to cover your changes.
 
 ```bash
-./dev/docker/bin/test.sh # append the test module path to test one module or test
+./dev/docker/bin/test.sh # append the test module path to test one module or test method
 ```
 
 ### Documentation

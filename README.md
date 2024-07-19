@@ -403,13 +403,15 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 
 Cotton components are cached whilst in production (`DEBUG = False`). The cache's TTL is for the duration of your app's lifetime. So on deployment, when the app is normally restarted, caches are cleared. During development, changes are detected on every component render. This feature is a work in progress and some refinement is planned.
 
-
 ## Changelog
 
 | Version | Date                                                               | Title and Description                                                                                                                                                        |
 |---------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| v0.9.18 | 2024-07-14                                                         | **Fix: Cotton loader permits duplicate attributes in html tags in the compiled django template.**                                                                           |
-| v0.9.17 | 2024-07-13                                                         | **Fix: Allow trailing/leading quotes in attributes**                                                                                                                         |
+| v0.9.21 | 2024-07-19                                                         | **Fixed issue where '=' was breaking the attribute parsing by _component.                                             |
+| v0.9.20 | 2024-07-17                                                         | **Set Charset from Engine **<br>Charset when processing template files should be utf-8 or as defined in the loader settings.                                    |
+| v0.9.19 | 2024-07-14                                                         | **Fix: Cotton Loader Permits Duplicate Attributes in HTML Tags**<br>Fixed issue where the loader was not allowing Django template expressions to govern whole attributes inside HTML elements.|
+| v0.9.18 | 2024-07-13                                                         | **Fix: Allow Trailing/Leading Quotes in Attributes**                                                                                                                         |
+| v0.9.17 | 2024-07-11                                                         | **Minor Cleanup**                                                                                                                                                            |
 | v0.9.16 | 2024-07-10                                                         | **Cotton Component Caching**<br>Cotton components are now cached whilst in production / `DEBUG = False`. LRU cache type with a record count of 1024, cleared on app restart. |
 | v0.9.15 | 2024-07-06 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  | **Hyphen to Underscore Conversion**<br>Converts variable names with hyphens to underscores for attribute access. i.e. `<c-component x-data="{}" />` -> `{{ x_data }}`        |
 | v0.9.14 | 2024-07-05                                                         | **c-vars Optimization**<br>Optimizes `c-vars` processing for performance, yielding a 15% speed improvement in component rendering.                                           |

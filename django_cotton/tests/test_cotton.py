@@ -186,6 +186,32 @@ class InlineTestCase(CottonInlineTestCase):
             self.assertContains(response, '<div class="i-am-component">')
             self.assertContains(response, "Hello, World!")
 
+    def test_equals_in_attribute_values(self):
+        self.create_template(
+            "cotton/equals.html",
+            """
+            <div {{ attrs }}><div>
+            """,
+        )
+
+        self.create_template(
+            "equals_view.html",
+            """
+            <c-equals
+              @click="this=test"
+            />
+            """,
+        )
+
+        # Register Url
+        self.register_url("view/", self.make_view("equals_view.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, '@click="this=test"')
+
 
 class CottonTestCase(TestCase):
     def test_parent_component_is_rendered(self):
@@ -215,9 +241,7 @@ class CottonTestCase(TestCase):
 
     def test_attribute_merging(self):
         response = self.client.get("/attribute-merging")
-        self.assertContains(
-            response, 'class="form-group another-class-with:colon extra-class"'
-        )
+        self.assertContains(response, 'class="form-group another-class-with:colon extra-class"')
 
     def test_django_syntax_decoding(self):
         response = self.client.get("/django-syntax-decoding")

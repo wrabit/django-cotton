@@ -14,7 +14,7 @@ keywords = [ "django", "cotton", "reusable", "app",]
 exclude = [ "dev", "docs", "django_cotton/tests", "django_cotton/templates",]
 
 [tool.black]
-line-length = 88
+line-length = 100
 exclude = "/(\n    \\.git\n  | \\.mypy_cache\n  | \\\\.tox\n  | \\\\.venv\n  | _build\n  | buck-out\n  | build\n  | dist\n  | venv\n)/\n"
 
 [tool.isort]
@@ -23,14 +23,3 @@ profile = "black"
 [tool.poetry.dependencies]
 python = ">=3.8,<4"
 beautifulsoup4 = "~4.12.2"
-
-[tool.poetry.dev-dependencies]
-pytest = ">=7.1,<8.0"
-pytest-cov = ">=3.0,<4"
-coverage = ">=6.4,<7"
-selenium = "~4.13.0"
-chromedriver-py = "~117.0.5938.92"
-webdriver-manager = "~4.0.1"
-
-[tool.poetry.extras]
-test = [ "pytest", "pytest-cov", "coverage", "selenium", "chromedriver-py", "webdriver-manager",]

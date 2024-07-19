@@ -42,9 +42,7 @@ class Loader(BaseLoader):
             return cached_content
 
         template_string = self._get_template_string(origin.name)
-        compiled_template = self.cotton_compiler.process(
-            template_string, origin.template_name
-        )
+        compiled_template = self.cotton_compiler.process(template_string, origin.template_name)
 
         self.cache_handler.cache_template(cache_key, compiled_template)
 
@@ -123,11 +121,15 @@ class CottonCompiler:
         def replace_cotton_verbatim(match):
             inner_content = match.group(1)
             self.django_syntax_placeholders.append(inner_content)
-            return f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__"
+            return (
+                f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__"
+            )
 
         def replace_django_syntax(match):
             self.django_syntax_placeholders.append(match.group(0))
-            return f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__"
+            return (
+                f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__"
+            )
 
         # Replace cotton_verbatim blocks
         content = replace_pattern(self.COTTON_VERBATIM_PATTERN, replace_cotton_verbatim)
@@ -159,9 +161,7 @@ class CottonCompiler:
     def _replace_placeholders_with_syntax(self, content):
         """After modifying the content, replace the placeholders with the django template tags and variables."""
         for i, placeholder in enumerate(self.django_syntax_placeholders, 1):
-            content = content.replace(
-                f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__", placeholder
-            )
+            content = content.replace(f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__", placeholder)
 
         return content
 
@@ -204,9 +204,7 @@ class CottonCompiler:
                 # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
                 var = var[1:]  # Remove the ':' prefix
                 accessible_var = accessible_var[1:]  # Remove the ':' prefix
-                vars_with_defaults.append(
-                    f'{var}={accessible_var}|eval_default:"{value}"'
-                )
+                vars_with_defaults.append(f'{var}={accessible_var}|eval_default:"{value}"')
             else:
                 # Assuming value is already a string that represents the default value
                 vars_with_defaults.append(f'{var}={accessible_var}|default:"{value}"')
@@ -256,7 +254,7 @@ class CottonCompiler:
 
                 # Django templates tags cannot have {{ or {% expressions in their attribute values
                 # Neither can they have new lines, let's treat them both as "expression attrs"
-                if self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX in value or "\n" in value:
+                if self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX in value or "\n" in value or "=" in value:
                     expression_attrs.append((key, value))
                     continue
 

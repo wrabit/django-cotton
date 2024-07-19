@@ -50,4 +50,8 @@ urlpatterns = [
         "test/native-tags-in-attributes",
         TemplateView.as_view(template_name="native_tags_in_attributes_view.html"),
     ),
+    path(
+        "test/unspecified-app-directory-template",
+        TemplateView.as_view(template_name="unspecified_view.html"),
+    ),
 ]

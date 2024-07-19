@@ -352,3 +352,11 @@ class CottonTestCase(TestCase):
             response,
             """attrs tag is: 'normal="normal" attr1="Hello Will" attr2="world" attr3="cowabonga!"'""",
         )
+
+    def test_loader_scans_all_app_directories(self):
+        response = self.client.get("/test/unspecified-app-directory-template")
+
+        self.assertContains(
+            response,
+            """My template was not specified in settings!""",
+        )

@@ -13,6 +13,7 @@ from django.template import Template
 from django.core.cache import cache
 from django.template import Origin
 from django.conf import settings
+from django.apps import apps
 
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 
@@ -60,7 +61,15 @@ class Loader(BaseLoader):
             raise TemplateDoesNotExist(template_name)
 
     def get_dirs(self):
-        return self.dirs if self.dirs is not None else self.engine.dirs
+        dirs = self.dirs if self.dirs is not None else self.engine.dirs
+
+        # Add app-specific template directories
+        for app_config in apps.get_app_configs():
+            template_dir = os.path.join(app_config.path, "templates")
+            if os.path.isdir(template_dir):
+                dirs.append(template_dir)
+
+        return dirs
 
     def get_template_sources(self, template_name):
         """Return an Origin object pointing to an absolute path in each directory

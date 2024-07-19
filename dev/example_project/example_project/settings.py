@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_cotton",
+    "unspecified_app_directory",
 ]
 
 MIDDLEWARE = [

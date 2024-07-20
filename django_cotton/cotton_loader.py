@@ -103,8 +103,8 @@ class CottonCompiler:
     COTTON_VERBATIM_PATTERN = re.compile(
         r"\{% cotton_verbatim %\}(.*?)\{% endcotton_verbatim %\}", re.DOTALL
     )
-    DJANGO_TAG_PATTERN = re.compile(r"\{%.*?%\}")
-    DJANGO_VAR_PATTERN = re.compile(r"\{\{.*?\}\}")
+    DJANGO_TAG_PATTERN = re.compile(r"(\s?)(\{%.*?%\})(\s?)")
+    DJANGO_VAR_PATTERN = re.compile(r"(\s?)(\{\{.*?\}\})(\s?)")
 
     def __init__(self):
         self.django_syntax_placeholders = []
@@ -129,15 +129,23 @@ class CottonCompiler:
 
         def replace_cotton_verbatim(match):
             inner_content = match.group(1)
-            self.django_syntax_placeholders.append(inner_content)
+            self.django_syntax_placeholders.append({"type": "verbatim", "content": inner_content})
             return (
                 f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__"
             )
 
         def replace_django_syntax(match):
-            self.django_syntax_placeholders.append(match.group(0))
+            left_space, syntax, right_space = match.groups()
+            self.django_syntax_placeholders.append(
+                {
+                    "type": "django",
+                    "content": syntax,
+                    "left_space": bool(left_space),
+                    "right_space": bool(right_space),
+                }
+            )
             return (
-                f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__"
+                f" {self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{len(self.django_syntax_placeholders)}__ "
             )
 
         # Replace cotton_verbatim blocks
@@ -168,9 +176,27 @@ class CottonCompiler:
         return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
 
     def _replace_placeholders_with_syntax(self, content):
-        """After modifying the content, replace the placeholders with the django template tags and variables."""
         for i, placeholder in enumerate(self.django_syntax_placeholders, 1):
-            content = content.replace(f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__", placeholder)
+            if placeholder["type"] == "verbatim":
+                placeholder_pattern = f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__"
+                content = content.replace(placeholder_pattern, placeholder["content"])
+            else:
+                """
+                Construct the regex pattern based on original whitespace. This is to avoid unnecessary whitespace
+                changes in the output.
+                i.e.
+                    1. post: <div{% expr %}></div>
+                    2. mid process: <div__placeholder></div__placeholder>
+                    3. post: <div{% expr %}></div{% expr %}>
+                So we wrap in whitespace and revert in post-processing to matching original
+                """
+                left_group = r"(\s?)" if not placeholder["left_space"] else ""
+                right_group = r"(\s?)" if not placeholder["right_space"] else ""
+                placeholder_pattern = (
+                    f"{left_group}{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__{right_group}"
+                )
+
+                content = re.sub(placeholder_pattern, placeholder["content"], content)
 
         return content
 

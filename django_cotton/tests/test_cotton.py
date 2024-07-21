@@ -360,3 +360,13 @@ class CottonTestCase(TestCase):
             response,
             """My template was not specified in settings!""",
         )
+
+    def test_expression_tags_close_to_tag_elements_doesnt_corrupt_the_tag(self):
+        html = """
+            <div{% if 1 = 1 %} attr1="variable" {% endif %}></div>
+        """
+
+        rendered = get_compiled(html)
+
+        self.assertFalse("</div{% if 1 = 1 %}>" in rendered, "Tag corrupted")
+        self.assertTrue("</div>" in rendered, "</div> not found in rendered string")

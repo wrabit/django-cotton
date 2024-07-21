@@ -407,6 +407,7 @@ Cotton components are cached whilst in production (`DEBUG = False`). The cache's
 
 | Version | Date                                                               | Title and Description                                                                                                                                                        |
 |---------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v0.9.23 | 2024-07-21                                                         | Fixed an issue causing closing tags to become mutated, resolved with better whitespace handling.                  |
 | v0.9.22 | 2024-07-19                                                         | We now scan all app directories for templates, as if APP_DIRS = True.                                             |
 | v0.9.21 | 2024-07-19                                                         | Fixed issue where '=' was breaking the attribute parsing by _component.                                             |
 | v0.9.20 | 2024-07-17                                                         | **Set Charset from Engine**<br>Charset when processing template files should be utf-8 or as defined in the loader settings.                                    |

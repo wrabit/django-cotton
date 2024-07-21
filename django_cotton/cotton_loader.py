@@ -1,6 +1,6 @@
-import random
 import warnings
 import hashlib
+import random
 import os
 import re
 
@@ -61,9 +61,9 @@ class Loader(BaseLoader):
             raise TemplateDoesNotExist(template_name)
 
     def get_dirs(self):
+        """This works like the file loader with APP_DIRS = True."""
         dirs = self.dirs if self.dirs is not None else self.engine.dirs
 
-        # Add app-specific template directories
         for app_config in apps.get_app_configs():
             template_dir = os.path.join(app_config.path, "templates")
             if os.path.isdir(template_dir):
@@ -119,15 +119,16 @@ class CottonCompiler:
         return content
 
     def _replace_syntax_with_placeholders(self, content):
-        """# replace {% ... %} and {{ ... }} with placeholders so they dont get touched
-        or encoded by bs4. Store them to later switch them back in after transformation.
-        """
+        """Replace {% ... %} and {{ ... }} with placeholders so they dont get touched
+        or encoded by bs4. We will replace them back after bs4 has done its job."""
         self.django_syntax_placeholders = []
 
         def replace_pattern(pattern, replacement_func):
             return pattern.sub(replacement_func, content)
 
         def replace_cotton_verbatim(match):
+            """{% cotton_verbatim %} protects the content through the bs4 parsing process when we want to actually print
+            cotton syntax in <pre> blocks."""
             inner_content = match.group(1)
             self.django_syntax_placeholders.append({"type": "verbatim", "content": inner_content})
             return (
@@ -135,6 +136,7 @@ class CottonCompiler:
             )
 
         def replace_django_syntax(match):
+            """Store if the match had at least one space on the left or right side of the syntax so we can restore it later"""
             left_space, syntax, right_space = match.groups()
             self.django_syntax_placeholders.append(
                 {
@@ -176,6 +178,7 @@ class CottonCompiler:
         return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
 
     def _replace_placeholders_with_syntax(self, content):
+        """Replace placeholders with original syntax."""
         for i, placeholder in enumerate(self.django_syntax_placeholders, 1):
             if placeholder["type"] == "verbatim":
                 placeholder_pattern = f"{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__"
@@ -183,12 +186,8 @@ class CottonCompiler:
             else:
                 """
                 Construct the regex pattern based on original whitespace. This is to avoid unnecessary whitespace
-                changes in the output.
-                i.e.
-                    1. post: <div{% expr %}></div>
-                    2. mid process: <div__placeholder></div__placeholder>
-                    3. post: <div{% expr %}></div{% expr %}>
-                So we wrap in whitespace and revert in post-processing to matching original
+                changes in the output that can lead to unintended tag type mutations,
+                i.e. <div{% expr %}></div> --> <div__placeholder></div__placeholder> --> <div{% expr %}></div{% expr %}>
                 """
                 left_group = r"(\s?)" if not placeholder["left_space"] else ""
                 right_group = r"(\s?)" if not placeholder["right_space"] else ""
@@ -204,28 +203,18 @@ class CottonCompiler:
         return re.sub(r"__COTTON_DUPE_ATTR__[0-9A-F]{5}", "", content)
 
     def _revert_bs4_attribute_empty_attribute_fixing(self, contents):
-        """
-        Removes empty attribute values added by BeautifulSoup to Django template tags.
-
-        BeautifulSoup adds ="" to empty attribute-like parts in HTML-like nodes.
-        This method removes these additions for Django template tags.
-
-        Examples:
-        - <div {{ something }}=""> becomes <div {{ something }}>
-        - <div {% something %}=""> becomes <div {% something %}>
-        """
-        # Remove ="" after Django variable tags
+        """Bs4 adds ="" to empty attribute-like parts in HTML-like nodes.
+        This method removes these additions for Django template tags."""
         contents = contents.replace('}}=""', "}}")
-
-        # Remove ="" after Django template tags
         contents = contents.replace('%}=""', "%}")
 
         return contents
 
     def _wrap_with_cotton_vars_frame(self, soup, cvars_el):
-        """Wrap content with {% cotton_vars_frame %} to be able to govern vars and attributes. In order to recognise
-        vars defined in a component and also have them available in the same component's context, we wrap the entire
-        contents in another component: cotton_vars_frame."""
+        """If the user has defined a <c-vars> tag, wrap content with {% cotton_vars_frame %} to be able to create and
+        govern vars and attributes. To be able to defined new vars within a component and also have them available in the
+        same component's context, we wrap the entire contents in another component: cotton_vars_frame. Only when <c-vars>
+        is present."""
 
         vars_with_defaults = []
         for var, value in cvars_el.attrs.items():

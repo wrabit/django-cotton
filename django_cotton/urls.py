@@ -1,5 +1,6 @@
 from . import views
 from django.urls import path
+from django.contrib import admin
 from django.views.generic import TemplateView
 
 app_name = "django_cotton"
@@ -19,6 +20,7 @@ class NamedSlotInLoop(TemplateView):
 
 
 urlpatterns = [
+    path("admin/", admin.site.urls),
     path("", TemplateView.as_view(template_name="index.html")),
     path("parent", TemplateView.as_view(template_name="parent_test.html")),
     path("child", TemplateView.as_view(template_name="child_test.html")),

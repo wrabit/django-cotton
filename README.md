@@ -213,15 +213,13 @@ This benefits a number of use-cases, for example if you have a select component 
 ```html
 <!-- example usage -->
 <c-input placeholder="Enter your name" />
-<c-input name="country" id="country" value="Japan" />
-<c-input class="highlighted" required />
+<c-input name="country" id="country" value="Japan" required />
 ```
 
 ```html
 <!-- html output -->
 <input type="text" class="..." placeholder="Enter your name" />
-<input type="text" class="..." name="country" id="country" value="Japan" />
-<input type="text" class="..." class="highlighted" required />
+<input type="text" class="..." name="country" id="country" value="Japan" required />
 ```
 
 ### In-component Variables with `<c-vars>`

@@ -87,6 +87,7 @@ class CottonComponentNode(Node):
 
         # Check for dynamic component.
         if self.component_path == "component":
+            # 'is' at this point is already processed from kwargs so it's already expression attribute, dynamic + template var enabled.
             if "is" in attrs:
                 component_path = attrs["is"]
 

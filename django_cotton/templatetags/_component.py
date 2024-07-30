@@ -10,6 +10,10 @@ from django.utils.safestring import mark_safe
 from django_cotton.utils import ensure_quoted
 
 
+class CottonIncompleteDynamicComponentException(Exception):
+    pass
+
+
 @lru_cache(maxsize=1024)
 def get_cached_template(template_name):
     """App runtime cache for cotton templates. Turned on only when DEBUG=False."""
@@ -28,10 +32,10 @@ def cotton_component(parser, token):
     Template tag to render a cotton component with dynamic attributes.
 
     Usage:
-        {% cotton_component 'template_path' 'component_key' key1="value1" :key2="dynamic_value" %}
+        {% cotton_component 'component_path' 'component_key' key1="value1" :key2="dynamic_value" %}
     """
     bits = token.split_contents()
-    template_path = bits[1]
+    component_path = bits[1]
     component_key = bits[2]
 
     kwargs = {}
@@ -42,13 +46,13 @@ def cotton_component(parser, token):
     nodelist = parser.parse(("end_cotton_component",))
     parser.delete_first_token()
 
-    return CottonComponentNode(nodelist, template_path, component_key, kwargs)
+    return CottonComponentNode(nodelist, component_path, component_key, kwargs)
 
 
 class CottonComponentNode(Node):
-    def __init__(self, nodelist, template_path, component_key, kwargs):
+    def __init__(self, nodelist, component_path, component_key, kwargs):
         self.nodelist = nodelist
-        self.template_path = template_path
+        self.component_path = component_path
         self.component_key = component_key
         self.kwargs = kwargs
 
@@ -66,15 +70,11 @@ class CottonComponentNode(Node):
 
         # We need to check if any dynamic attributes are present in the component slots and move them over to attrs
         if "ctn_template_expression_attrs" in local_named_slots_ctx:
-            for expression_attr in local_named_slots_ctx[
-                "ctn_template_expression_attrs"
-            ]:
+            for expression_attr in local_named_slots_ctx["ctn_template_expression_attrs"]:
                 attrs[expression_attr] = local_named_slots_ctx[expression_attr]
 
         # Build attrs string before formatting any '-' to '_' in attr names
-        attrs_string = " ".join(
-            f"{key}={ensure_quoted(value)}" for key, value in attrs.items()
-        )
+        attrs_string = " ".join(f"{key}={ensure_quoted(value)}" for key, value in attrs.items())
         local_ctx["attrs"] = mark_safe(attrs_string)
         local_ctx["attrs_dict"] = attrs
 
@@ -82,10 +82,27 @@ class CottonComponentNode(Node):
         attrs = {key.replace("-", "_"): value for key, value in attrs.items()}
         local_ctx.update(attrs)
 
-        # Reset the component's slots in context to prevent data leaking between components
+        # Reset the component's slots in context to prevent data leaking between components.
         all_named_slots_ctx[self.component_key] = {}
 
-        return render_template(self.template_path, local_ctx)
+        # Check for dynamic component.
+        if self.component_path == "component":
+            if "is" in attrs:
+                component_path = attrs["is"]
+
+            else:
+                return CottonIncompleteDynamicComponentException(
+                    'Cotton error: "<c-component>" should be accompanied by a "is" attribute.'
+                )
+        else:
+            component_path = self.component_path
+
+        component_tpl_path = component_path.replace(".", "/").replace("-", "_")
+        component_tpl_path_full = "{}/{}.html".format(
+            settings.COTTON_DIR if hasattr(settings, "COTTON_DIR") else "cotton", component_tpl_path
+        )
+
+        return render_template(component_tpl_path_full, local_ctx)
 
     def _build_attrs(self, context):
         """

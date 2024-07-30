@@ -169,3 +169,6 @@ CACHES = {
         "TIMEOUT": 86400,
     }
 }
+
+
+COTTON_TEMPLATE_CACHING_ENABLED = True

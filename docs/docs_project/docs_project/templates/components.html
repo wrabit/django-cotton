@@ -13,6 +13,7 @@
         <c-index-link><a href="#vars" class="no-underline">Vars</a></c-index-link>
             <c-index-sublink><a href="#default-attributes" class="no-underline">Default attributes</a></c-index-sublink>
             <c-index-sublink><a href="#excluded" class="no-underline">Excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
+        <c-index-link><a href="#dynamic-components" class="no-underline">Dynamic Components</a></c-index-link>
     </c-slot>
 
     <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
@@ -275,6 +276,24 @@
     </div>
 </c-slot>
 </c-snippet>
+
+
+    <h3 id="dynamic-components">Dynamic Components</h3>
+
+    <p>There can be times where components need to be included dynamically. For these cases we can reach for a special <c-highlight>{{ '<c-component>'|force_escape }}</c-highlight> tag:</p>
+
+<c-snippet label="cotton/icon_list.html">{% cotton_verbatim %}{% verbatim %}
+{% for icon in icons %}
+    <c-component is="icons.{{ icon }}" />
+{% endfor %}
+{% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+
+    <p>The <c-highlight>is</c-highlight> attribute is similar to other attributes so we have a number of possibilities to define it:</p>
+
+<c-snippet label="cotton/icon_list.html">{% cotton_verbatim %}{% verbatim %}
+<c-component :is="icon" />
+{% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+
 
     <c-navigation>
         <c-slot name="prev">

@@ -85,25 +85,9 @@ class CottonComponentNode(Node):
         # Reset the component's slots in context to prevent data leaking between components.
         all_named_slots_ctx[self.component_key] = {}
 
-        # Check for dynamic component.
-        if self.component_path == "component":
-            # 'is' at this point is already processed from kwargs so it's already expression attribute, dynamic + template var enabled.
-            if "is" in attrs:
-                component_path = attrs["is"]
+        template_path = self._generate_component_template_path(attrs)
 
-            else:
-                return CottonIncompleteDynamicComponentException(
-                    'Cotton error: "<c-component>" should be accompanied by a "is" attribute.'
-                )
-        else:
-            component_path = self.component_path
-
-        component_tpl_path = component_path.replace(".", "/").replace("-", "_")
-        component_tpl_path_full = "{}/{}.html".format(
-            settings.COTTON_DIR if hasattr(settings, "COTTON_DIR") else "cotton", component_tpl_path
-        )
-
-        return render_template(component_tpl_path_full, local_ctx)
+        return render_template(template_path, local_ctx)
 
     def _build_attrs(self, context):
         """
@@ -145,3 +129,24 @@ class CottonComponentNode(Node):
             return ast.literal_eval(value)
         except (ValueError, SyntaxError):
             return value
+
+    def _generate_component_template_path(self, attrs):
+        """Check if the component is dynamic else process the path as is"""
+
+        if self.component_path == "component":
+            # 'is' at this point is already processed from kwargs to attrs, so it's already expression attribute, dynamic + template var enabled.
+            if "is" in attrs:
+                component_path = attrs["is"]
+
+            else:
+                return CottonIncompleteDynamicComponentException(
+                    'Cotton error: "<c-component>" should be accompanied by a "is" attribute.'
+                )
+        else:
+            component_path = self.component_path
+
+        component_tpl_path = component_path.replace(".", "/").replace("-", "_")
+
+        return "{}/{}.html".format(
+            settings.COTTON_DIR if hasattr(settings, "COTTON_DIR") else "cotton", component_tpl_path
+        )

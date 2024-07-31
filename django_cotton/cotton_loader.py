@@ -19,6 +19,10 @@ from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
+# If an update changes the API that a cached version of a template will break, we increment the cache version in order to
+# force the re-rendering of the template
+cache_version = "1"
+
 
 class Loader(BaseLoader):
     is_usable = True
@@ -264,8 +268,8 @@ class CottonCompiler:
                 continue
 
             component_key = tag.name[2:]
-            component_path = component_key.replace(".", "/").replace("-", "_")
-            opening_tag = f"{{% cotton_component {'{}/{}.html'.format(settings.COTTON_DIR if hasattr(settings, 'COTTON_DIR') else 'cotton', component_path)} {component_key} "
+
+            opening_tag = f"{{% cotton_component {component_key} {component_key} "
 
             # Store attributes that contain template expressions, they are when we use '{{' or '{%' in the value of an attribute
             expression_attrs = []
@@ -361,7 +365,7 @@ class CottonTemplateCacheHandler:
 
     def get_cache_key(self, template_name, mtime):
         template_hash = hashlib.sha256(template_name.encode()).hexdigest()
-        return f"cotton_cache_{template_hash}_{mtime}"
+        return f"cotton_v{cache_version}_cache_{template_hash}_{mtime}"
 
     def get_cached_template(self, cache_key):
         if not self.enabled:

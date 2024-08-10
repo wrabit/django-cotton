@@ -134,7 +134,8 @@ class CottonComponentNode(Node):
         """Check if the component is dynamic else process the path as is"""
 
         if self.component_path == "component":
-            # 'is' at this point is already processed from kwargs to attrs, so it's already expression attribute, dynamic + template var enabled.
+            # 'is' at this point is already processed from kwargs to attrs, so it's already expression attribute,
+            # dynamic + template var enabled. Therefore we can do either :is="variable" or is="some.path.{{ variable }}"
             if "is" in attrs:
                 component_path = attrs["is"]
 

@@ -365,7 +365,7 @@ class CottonTemplateCacheHandler:
 
     def get_cache_key(self, template_name, mtime):
         template_hash = hashlib.sha256(template_name.encode()).hexdigest()
-        return f"cotton_v{cache_version}_cache_{template_hash}_{mtime}"
+        return f"cotton_cache_v{cache_version}_{template_hash}_{mtime}"
 
     def get_cached_template(self, cache_key):
         if not self.enabled:

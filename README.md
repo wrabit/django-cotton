@@ -37,7 +37,7 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 
 ## Key Features
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
-- **Interoperable with Django:** Cotton enhances django's existing template system.
+- **Interoperable with Django:** Cotton only enhances django's existing template system (no Jinja needed).
 - **HTML-like Syntax:** Better code editor support and productivity as component tags are similar to html tags.
 - **Minimal Overhead:** Compiles to native Django components with dynamic caching.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)

@@ -4,8 +4,8 @@ from functools import lru_cache
 from django import template
 from django.conf import settings
 from django.template import Node
-from django.template.loader import get_template
 from django.utils.safestring import mark_safe
+from django.template.loader import get_template
 
 from django_cotton.utils import ensure_quoted
 
@@ -141,7 +141,7 @@ class CottonComponentNode(Node):
 
             else:
                 return CottonIncompleteDynamicComponentException(
-                    'Cotton error: "<c-component>" should be accompanied by a "is" attribute.'
+                    'Cotton error: "<c-component>" should be accompanied by an "is" attribute.'
                 )
         else:
             component_path = self.component_path

@@ -404,6 +404,7 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 | Version | Date                                                               | Title and Description                                                                                                                                                        |
 |---------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v0.9.24 | 2024-08-12                                                         | Fixes whitespace preservation around template expressions used in attribute names.                  |
 | v0.9.23 | 2024-07-21                                                         | Fixed an issue causing closing tags to become mutated, resolved with better whitespace handling.                  |
 | v0.9.22 | 2024-07-19                                                         | We now scan all app directories for templates, as if APP_DIRS = True.                                             |
 | v0.9.21 | 2024-07-19                                                         | Fixed issue where '=' was breaking the attribute parsing by _component.                                             |

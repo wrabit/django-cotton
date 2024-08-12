@@ -36,7 +36,13 @@ def cotton_component(parser, token):
 
     kwargs = {}
     for bit in bits[3:]:
-        key, value = bit.split("=")
+        try:
+            key, value = bit.split("=")
+        except ValueError:
+            # No value provided, assume boolean attribute
+            key = bit
+            value = ""
+
         kwargs[key] = value
 
     nodelist = parser.parse(("end_cotton_component",))
@@ -66,15 +72,11 @@ class CottonComponentNode(Node):
 
         # We need to check if any dynamic attributes are present in the component slots and move them over to attrs
         if "ctn_template_expression_attrs" in local_named_slots_ctx:
-            for expression_attr in local_named_slots_ctx[
-                "ctn_template_expression_attrs"
-            ]:
+            for expression_attr in local_named_slots_ctx["ctn_template_expression_attrs"]:
                 attrs[expression_attr] = local_named_slots_ctx[expression_attr]
 
         # Build attrs string before formatting any '-' to '_' in attr names
-        attrs_string = " ".join(
-            f"{key}={ensure_quoted(value)}" for key, value in attrs.items()
-        )
+        attrs_string = " ".join(f"{key}={ensure_quoted(value)}" for key, value in attrs.items())
         local_ctx["attrs"] = mark_safe(attrs_string)
         local_ctx["attrs_dict"] = attrs
 

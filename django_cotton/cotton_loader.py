@@ -19,6 +19,10 @@ from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
+# If an update changes the API that a cached version of a template will break, we increment the cache version in order to
+# force the re-rendering of the template
+cache_version = "1"
+
 
 class Loader(BaseLoader):
     is_usable = True
@@ -360,7 +364,7 @@ class CottonTemplateCacheHandler:
 
     def get_cache_key(self, template_name, mtime):
         template_hash = hashlib.sha256(template_name.encode()).hexdigest()
-        return f"cotton_cache_{template_hash}_{mtime}"
+        return f"cotton_cache_v{cache_version}_{template_hash}_{mtime}"
 
     def get_cached_template(self, cache_key):
         if not self.enabled:

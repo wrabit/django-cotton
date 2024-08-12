@@ -32,9 +32,7 @@ class CottonInlineTestCase(TestCase):
 
         # Register our temp directory as a TEMPLATES path
         cls.new_templates_setting = settings.TEMPLATES.copy()
-        cls.new_templates_setting[0]["DIRS"] = [
-            cls.temp_dir
-        ] + cls.new_templates_setting[0]["DIRS"]
+        cls.new_templates_setting[0]["DIRS"] = [cls.temp_dir] + cls.new_templates_setting[0]["DIRS"]
 
         # Apply the setting
         cls.templates_override = override_settings(TEMPLATES=cls.new_templates_setting)
@@ -52,12 +50,16 @@ class CottonInlineTestCase(TestCase):
         """Clear cache between tests so that we can use the same file names for simplicity"""
         cache.clear()
 
-    def create_template(self, name, content):
+    def create_template(self, name, content, url=None):
         """Create a template file in the temporary directory and return the path"""
         path = os.path.join(self.temp_dir, name)
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as f:
             f.write(content)
+
+        if url:
+            self.register_url(url, TemplateView.as_view(template_name=name))
+
         return path
 
     def make_view(self, template_name):

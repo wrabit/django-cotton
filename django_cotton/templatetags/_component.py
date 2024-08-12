@@ -40,7 +40,13 @@ def cotton_component(parser, token):
 
     kwargs = {}
     for bit in bits[3:]:
-        key, value = bit.split("=")
+        try:
+            key, value = bit.split("=")
+        except ValueError:
+            # No value provided, assume boolean attribute
+            key = bit
+            value = ""
+
         kwargs[key] = value
 
     nodelist = parser.parse(("end_cotton_component",))

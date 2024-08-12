@@ -14,10 +14,8 @@ class InlineTestCase(CottonInlineTestCase):
         self.create_template(
             "view.html",
             """<c-component>Hello, World!</c-component>""",
+            "view/",
         )
-
-        # Register Url
-        self.register_url("view/", self.make_view("view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -42,10 +40,8 @@ class InlineTestCase(CottonInlineTestCase):
                 }
             }" />
             """,
+            "view/",
         )
-
-        # Register Url
-        self.register_url("view/", self.make_view("preserved_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -75,10 +71,8 @@ class InlineTestCase(CottonInlineTestCase):
             """
             <c-preserve-quotes something="var ? 'this' : 'that'" />
             """,
+            "view/",
         )
-
-        # Register Url
-        self.register_url("view/", self.make_view("preserve_quotes_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -99,10 +93,8 @@ class InlineTestCase(CottonInlineTestCase):
             """
             <c-attribute-govern :something="False" />
             """,
+            "view/",
         )
-
-        # Register Url
-        self.register_url("view/", self.make_view("attribute_govern_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -125,10 +117,8 @@ class InlineTestCase(CottonInlineTestCase):
             """
             <c-hyphens x-data="{}" x-init="do_something()" />
             """,
+            "view/",
         )
-
-        # Register Url
-        self.register_url("view/", self.make_view("hyphens_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -153,10 +143,8 @@ class InlineTestCase(CottonInlineTestCase):
             """
             <c-cvar-hyphens />
             """,
+            "view/",
         )
-
-        # Register Url
-        self.register_url("view/", self.make_view("cvar_hyphens_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -172,13 +160,7 @@ class InlineTestCase(CottonInlineTestCase):
             """<div class="i-am-component">{{ slot }}</div>""",
         )
 
-        self.create_template(
-            "view.html",
-            """<c-component>Hello, World!</c-component>""",
-        )
-
-        # Register Url
-        self.register_url("view/", self.make_view("view.html"))
+        self.create_template("view.html", """<c-component>Hello, World!</c-component>""", "view/")
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf(), COTTON_DIR=custom_dir):
@@ -201,10 +183,8 @@ class InlineTestCase(CottonInlineTestCase):
               @click="this=test"
             />
             """,
+            "view/",
         )
-
-        # Register Url
-        self.register_url("view/", self.make_view("equals_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
@@ -218,10 +198,8 @@ class InlineTestCase(CottonInlineTestCase):
             """
             <div some_attribute_{{ id }}_something="true"></div>
             """,
+            "view/",
         )
-
-        # Register Url
-        self.register_url("view/", self.make_view("maintain_spaces_in_attributes_view.html"))
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):

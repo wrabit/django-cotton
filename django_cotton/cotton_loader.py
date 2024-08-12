@@ -204,7 +204,7 @@ class CottonCompiler:
         return content
 
     def _remove_duplicate_attribute_markers(self, content):
-        return re.sub(r"__COTTON_DUPE_ATTR__[0-9A-F]{5}", "", content)
+        return re.sub(r"__COTTON_DUPE_ATTR__[0-9A-F]{5}", "", content, flags=re.IGNORECASE)
 
     def _fix_bs4_attribute_empty_attribute_behaviour(self, contents):
         """Bs4 adds ="" to valueless attribute-like parts in HTML tags that causes issues when we want to manipulate

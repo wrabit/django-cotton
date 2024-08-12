@@ -19,6 +19,10 @@ from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
+# If an update changes the API that a cached version of a template will break, we increment the cache version in order to
+# force the re-rendering of the template
+cache_version = "1"
+
 
 class Loader(BaseLoader):
     is_usable = True
@@ -112,9 +116,9 @@ class CottonCompiler:
     def process(self, content, component_key):
         content = self._replace_syntax_with_placeholders(content)
         content = self._compile_cotton_to_django(content, component_key)
+        content = self._fix_bs4_attribute_empty_attribute_behaviour(content)
         content = self._replace_placeholders_with_syntax(content)
         content = self._remove_duplicate_attribute_markers(content)
-        content = self._revert_bs4_attribute_empty_attribute_fixing(content)
 
         return content
 
@@ -189,8 +193,8 @@ class CottonCompiler:
                 changes in the output that can lead to unintended tag type mutations,
                 i.e. <div{% expr %}></div> --> <div__placeholder></div__placeholder> --> <div{% expr %}></div{% expr %}>
                 """
-                left_group = r"(\s?)" if not placeholder["left_space"] else ""
-                right_group = r"(\s?)" if not placeholder["right_space"] else ""
+                left_group = r"(\s*)" if not placeholder["left_space"] else ""
+                right_group = r"(\s*)" if not placeholder["right_space"] else ""
                 placeholder_pattern = (
                     f"{left_group}{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__{right_group}"
                 )
@@ -202,11 +206,10 @@ class CottonCompiler:
     def _remove_duplicate_attribute_markers(self, content):
         return re.sub(r"__COTTON_DUPE_ATTR__[0-9A-F]{5}", "", content)
 
-    def _revert_bs4_attribute_empty_attribute_fixing(self, contents):
-        """Bs4 adds ="" to empty attribute-like parts in HTML-like nodes.
-        This method removes these additions for Django template tags."""
-        contents = contents.replace('}}=""', "}}")
-        contents = contents.replace('%}=""', "%}")
+    def _fix_bs4_attribute_empty_attribute_behaviour(self, contents):
+        """Bs4 adds ="" to valueless attribute-like parts in HTML tags that causes issues when we want to manipulate
+        django expressions."""
+        contents = contents.replace('=""', "")
 
         return contents
 
@@ -361,7 +364,7 @@ class CottonTemplateCacheHandler:
 
     def get_cache_key(self, template_name, mtime):
         template_hash = hashlib.sha256(template_name.encode()).hexdigest()
-        return f"cotton_cache_{template_hash}_{mtime}"
+        return f"cotton_cache_v{cache_version}_{template_hash}_{mtime}"
 
     def get_cached_template(self, cache_key):
         if not self.enabled:

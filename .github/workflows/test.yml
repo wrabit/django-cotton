@@ -21,10 +21,10 @@ jobs:
 
       - name: Start Container
         run: |
-          docker-compose -f dev/docker/docker-compose.yaml up -d
+          docker compose -f dev/docker/docker-compose.yaml up -d
 
       - name: Run Tests
         run: docker exec -t cotton-dev-app python manage.py test
 
       - name: Stop and Remove Services
-        run: docker-compose -f dev/docker/docker-compose.yaml down
+        run: docker compose -f dev/docker/docker-compose.yaml down

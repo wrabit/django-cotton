@@ -212,6 +212,23 @@ class InlineTestCase(CottonInlineTestCase):
 
             self.assertContains(response, '@click="this=test"')
 
+    def test_spaces_are_maintained_around_expression_inside_attributes(self):
+        self.create_template(
+            "maintain_spaces_in_attributes_view.html",
+            """
+            <div some_attribute_{{ id }}_something="true"></div>
+            """,
+        )
+
+        # Register Url
+        self.register_url("view/", self.make_view("maintain_spaces_in_attributes_view.html"))
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, "some_attribute__something")
+
 
 class CottonTestCase(TestCase):
     def test_parent_component_is_rendered(self):

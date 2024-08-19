@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_cotton",
     "heroicons",
-    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -55,7 +54,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "docs_project.urls"
@@ -131,13 +129,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    "0.0.0.0"
-    # ...
-]
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -168,7 +159,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-COTTON_TEMPLATE_CACHING_ENABLED = False
+COTTON_TEMPLATE_CACHING_ENABLED = True
 
 CACHES = {
     "default": {

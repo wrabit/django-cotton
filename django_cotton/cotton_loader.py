@@ -21,7 +21,7 @@ warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
 # If an update changes the API that a cached version of a template will break, we increment the cache version in order to
 # force the re-rendering of the template
-cache_version = "1"
+cache_version = "2"
 
 
 class Loader(BaseLoader):
@@ -49,13 +49,10 @@ class Loader(BaseLoader):
         template_string = self._get_template_string(origin.name)
 
         # Do we need to process the template?
-        # if "<c-" not in template_string and "{% cotton_verbatim" not in template_string:
-        #     raise TemplateDoesNotExist(origin)
+        if "<c-" not in template_string and "{% cotton_verbatim" not in template_string:
+            raise TemplateDoesNotExist(origin)
 
         compiled_template = self.cotton_compiler.process(template_string, origin.template_name)
-
-        if "panel_button" in origin.template_name:
-            print(compiled_template)
 
         self.cache_handler.cache_template(cache_key, compiled_template)
 
@@ -173,7 +170,7 @@ class CottonCompiler:
 
         return content
 
-    def _compile_cotton_to_django(self, html_content, component_key):
+    def _compile_cotton_to_django(self, html_content, template_name):
         """Convert cotton <c-* syntax to {%."""
         soup = BeautifulSoup(
             html_content,
@@ -185,7 +182,7 @@ class CottonCompiler:
         if cvars_el := soup.find("c-vars"):
             soup = self._wrap_with_cotton_vars_frame(soup, cvars_el)
 
-        self._transform_components(soup, component_key)
+        self._transform_components(soup, template_name)
 
         return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
 

@@ -47,7 +47,15 @@ class Loader(BaseLoader):
             return cached_content
 
         template_string = self._get_template_string(origin.name)
+
+        # Do we need to process the template?
+        # if "<c-" not in template_string and "{% cotton_verbatim" not in template_string:
+        #     raise TemplateDoesNotExist(origin)
+
         compiled_template = self.cotton_compiler.process(template_string, origin.template_name)
+
+        if "panel_button" in origin.template_name:
+            print(compiled_template)
 
         self.cache_handler.cache_template(cache_key, compiled_template)
 
@@ -113,9 +121,9 @@ class CottonCompiler:
     def __init__(self):
         self.django_syntax_placeholders = []
 
-    def process(self, content, component_key):
+    def process(self, content, template_name):
         content = self._replace_syntax_with_placeholders(content)
-        content = self._compile_cotton_to_django(content, component_key)
+        content = self._compile_cotton_to_django(content, template_name)
         content = self._fix_bs4_attribute_empty_attribute_behaviour(content)
         content = self._replace_placeholders_with_syntax(content)
         content = self._remove_duplicate_attribute_markers(content)

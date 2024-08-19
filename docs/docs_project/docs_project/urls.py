@@ -1,3 +1,5 @@
+from debug_toolbar.toolbar import debug_toolbar_urls
+
 from . import views
 from django.urls import path
 
@@ -21,4 +23,4 @@ urlpatterns = [
     path("docs/icons", views.build_view("icons"), name="icons"),
     # More
     path("docs/configuration", views.build_view("configuration"), name="configuration"),
-]
+] + debug_toolbar_urls()

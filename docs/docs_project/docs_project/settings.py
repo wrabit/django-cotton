@@ -159,6 +159,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+COTTON_TEMPLATE_CACHING_ENABLED = True
 
 CACHES = {
     "default": {

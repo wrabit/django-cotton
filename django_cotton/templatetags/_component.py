@@ -14,7 +14,7 @@ if settings.DEBUG:
     cotton_dev_cache_key = "".join(random.choice("0123456789ABCDEF") for i in range(5))
 
 
-@lru_cache(maxsize=200)
+@lru_cache(maxsize=1024)
 def get_cached_template(template_name, cotton_dev_cache_key=None):
     """App runtime cache for cotton templates. Turned on only when DEBUG=False."""
     return get_template(template_name)
@@ -62,7 +62,7 @@ class CottonComponentNode(Node):
     def __init__(self, nodelist, template_path, component_key, kwargs):
         self.nodelist = nodelist
         self.template_path = template_path
-        self.component_k.ey = component_key
+        self.component_key = component_key
         self.kwargs = kwargs
 
     def render(self, context):

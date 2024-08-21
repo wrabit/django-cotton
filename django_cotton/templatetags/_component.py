@@ -1,5 +1,4 @@
 import ast
-import random
 from functools import lru_cache
 
 from django import template
@@ -10,22 +9,16 @@ from django.utils.safestring import mark_safe
 
 from django_cotton.utils import ensure_quoted
 
-if settings.DEBUG:
-    cotton_dev_cache_key = "".join(random.choice("0123456789ABCDEF") for i in range(5))
-
 
 @lru_cache(maxsize=1024)
-def get_cached_template(template_name, cotton_dev_cache_key=None):
+def get_cached_template(template_name):
     """App runtime cache for cotton templates. Turned on only when DEBUG=False."""
     return get_template(template_name)
 
 
 def render_template(template_name, context):
     if settings.DEBUG:
-        """TODO: We're in dev, we want cached templates, cache key is regenerated with each file change (when on runserver).
-        This is quite crude and a better solution is needed for when running other servers in dev, i.e. uvicorn.
-        """
-        return get_cached_template(template_name, cotton_dev_cache_key).render(context)
+        return get_template(template_name).render(context)
     else:
         return get_cached_template(template_name).render(context)
 

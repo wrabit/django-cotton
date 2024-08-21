@@ -170,31 +170,3 @@ CACHES = {
         "TIMEOUT": 86400,
     }
 }
-
-# Logging when testing production locally
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "level": "DEBUG",
-        },
-    },
-    "root": {
-        "handlers": ["console"],
-        "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
-    },
-    "loggers": {
-        "django_cotton": {
-            "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
-            "propagate": True,
-        },
-        "django": {
-            "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
-            "propagate": True,
-        },
-    },
-}

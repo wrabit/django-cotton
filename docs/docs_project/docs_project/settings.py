@@ -27,6 +27,7 @@ SECRET_KEY = "django-insecure-%)7a&zw=le4uey^36*z*9^4#*iii65t)nyt$36mxq70@=(z6^n
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", False)
+# DEBUG = False
 
 ALLOWED_HOSTS = ["0.0.0.0", "django-cotton.com", "www.django-cotton.com"]
 
@@ -62,7 +63,8 @@ COTTON_AUTO_UPDATE_SETTINGS = False
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        # "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "BACKEND": "django_cotton.backend.CottonTemplates",
         "DIRS": ["docs_project/templates"],
         "APP_DIRS": False,
         "OPTIONS": {
@@ -72,16 +74,16 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            "loaders": [
-                (
-                    "django.template.loaders.cached.Loader",
-                    [
-                        "django_cotton.cotton_loader.Loader",
-                        "django.template.loaders.filesystem.Loader",
-                        "django.template.loaders.app_directories.Loader",
-                    ],
-                )
-            ],
+            # "loaders": [
+            #     (
+            #         "django.template.loaders.cached.Loader",
+            #         [
+            #             "django_cotton.cotton_loader.Loader",
+            #             "django.template.loaders.filesystem.Loader",
+            #             "django.template.loaders.app_directories.Loader",
+            #         ],
+            #     )
+            # ],
             "builtins": [
                 "django.templatetags.static",
                 "django_cotton.templatetags.cotton",
@@ -169,4 +171,32 @@ CACHES = {
         ),
         "TIMEOUT": 86400,
     }
+}
+
+# Logging when testing production locally
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "DEBUG",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+    },
+    "loggers": {
+        "django_cotton": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": True,
+        },
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": True,
+        },
+    },
 }

@@ -15,31 +15,46 @@
     <h2>Install cotton</h2>
     <p>Run the following command:</p>
     <c-snippet language="python">pip install django-cotton</c-snippet>
+
     <p>Then update your settings.py:</p>
+
+    <h3>Automatic configuration:</h3>
 
     <c-snippet language="python" label="settings.py">{% cotton_verbatim %}{% verbatim %}
 INSTALLED_APPS = [
-    ...
     'django_cotton',
+]
+    {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+    <p>This will automatically handle the settings.py adding the required loader and templatetags.</p>
+
+    <h3>Customised configuration</h3>
+
+    <p>If your project requires any non-default loaders or you do not wish Cotton to manage your settings, you should instead provide `django_cotton.apps.SimpleAppConfig` in your INSTALLED_APPS:</p>
+
+    <c-snippet language="python" label="settings.py">{% cotton_verbatim %}{% verbatim %}
+INSTALLED_APPS = [
+    'django_cotton.apps.SimpleAppConfig',
 ]
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['your_project/templates'], # Add your template directories here
-        'APP_DIRS': False,
-        'OPTIONS': {
-            'loaders': [
-                'django_cotton.cotton_loader.Loader', # First position
-                # continue with default loaders, typically:
-                # "django.template.loaders.filesystem.Loader",
-                # "django.template.loaders.app_directories.Loader",
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        ...
+        "OPTIONS": {
+            "loaders": [(
+                "django.template.loaders.cached.Loader",
+                [
+                    "django_cotton.cotton_loader.Loader",
+                    "django.template.loaders.filesystem.Loader",
+                    "django.template.loaders.app_directories.Loader",
+                ],
+            )],
+            "builtins": [
+                "django_cotton.templatetags.cotton"
             ],
-            'builtins': [
-                'django_cotton.templatetags.cotton',
-            ],
-        },
-    },
+        }
+    }
 ]
     {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 

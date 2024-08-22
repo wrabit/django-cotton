@@ -1,26 +1,11 @@
 import ast
-from functools import lru_cache
 
 from django import template
-from django.conf import settings
 from django.template import Node
-from django.template.loader import get_template
 from django.utils.safestring import mark_safe
+from django.template.loader import get_template
 
 from django_cotton.utils import ensure_quoted
-
-
-@lru_cache(maxsize=1024)
-def get_cached_template(template_name):
-    """App runtime cache for cotton templates. Turned on only when DEBUG=False."""
-    return get_template(template_name)
-
-
-def render_template(template_name, context):
-    if settings.DEBUG:
-        return get_template(template_name).render(context)
-    else:
-        return get_cached_template(template_name).render(context)
 
 
 def cotton_component(parser, token):
@@ -87,7 +72,7 @@ class CottonComponentNode(Node):
         # Reset the component's slots in context to prevent data leaking between components
         all_named_slots_ctx[self.component_key] = {}
 
-        return render_template(self.template_path, local_ctx)
+        return get_template(self.template_path).render(local_ctx)
 
     def _build_attrs(self, context):
         """

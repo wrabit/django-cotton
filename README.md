@@ -396,7 +396,7 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 
 ## Caching
 
-Cotton components are cached whilst in production (`DEBUG = False`). The cache's TTL is for the duration of your app's lifetime. So on deployment, when the app is normally restarted, caches are cleared. During development, changes are detected on every component render. This feature is a work in progress and some refinement is planned.
+Cotton is optimal when used with Django's cached.Loader. If you use auto-setup then the cached loader will be automatically applied. This feature is a work in progress and some refinement is planned.
 
 For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
 

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_cotton",
+    "django_cotton.apps.SimpleAppConfig",
+    # "django_cotton",
     "heroicons",
 ]
 
@@ -80,14 +81,14 @@ TEMPLATES = [
                         "django.template.loaders.filesystem.Loader",
                         "django.template.loaders.app_directories.Loader",
                     ],
-                )
+                ),
             ],
             "builtins": [
                 "django.templatetags.static",
-                "django_cotton.templatetags.cotton",
                 "docs_project.templatetags.force_escape",
                 "docs_project.templatetags.custom_tags",
                 "heroicons.templatetags.heroicons",
+                "django_cotton.templatetags.cotton",
             ],
         },
     },

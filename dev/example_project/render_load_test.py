@@ -27,26 +27,20 @@ settings.configure(
                     "django.contrib.auth.context_processors.auth",
                     "django.contrib.messages.context_processors.messages",
                 ],
-                "loaders": [
-                    "django_cotton.cotton_loader.Loader",
-                    "django.template.loaders.filesystem.Loader",
-                    "django.template.loaders.app_directories.Loader",
-                ],
                 "builtins": [
                     "django.templatetags.static",
-                    "django_cotton.templatetags.cotton",
                 ],
             },
         },
     ],
-    COTTON_TEMPLATE_CACHING_ENABLED=True,
+    COTTON_TEMPLATE_CACHING_ENABLED=False,
     DEBUG=False,
 )
 
 django.setup()
 
 
-def template_bench(template_name, iterations=10000):
+def template_bench(template_name, iterations=500):
     start_time = time.time()
     for _ in range(iterations):
         render_to_string(template_name)
@@ -54,7 +48,7 @@ def template_bench(template_name, iterations=10000):
     return end_time - start_time, render_to_string(template_name)
 
 
-def template_bench_alt(template_name, iterations=10000):
+def template_bench_alt(template_name, iterations=500):
     data = list(range(1, iterations))
     start_time = time.time()
     render_to_string(template_name, context={"data": data})

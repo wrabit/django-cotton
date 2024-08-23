@@ -365,3 +365,18 @@ class CottonTestCase(TestCase):
 
         self.assertFalse("</div{% if 1 = 1 %}>" in rendered, "Tag corrupted")
         self.assertTrue("</div>" in rendered, "</div> not found in rendered string")
+
+    def test_conditionals_evaluation_inside_elements(self):
+        html = """
+            <c-test-component>
+                <select>
+                    <option value="1" {% if my_obj.selection == 1 %}selected{% endif %}>Value 1</option>
+                    <option value="2" {% if my_obj.selection == 2 %}selected{% endif %}>Value 2</option>
+                </select>                         
+            </c-test-component>
+        """
+
+        rendered = get_rendered(html, {"my_obj": {"selection": 1}})
+
+        self.assertTrue('<option value="1" selected>Value 1</option>' in rendered)
+        self.assertTrue('<option value="2" selected>Value 2</option>' not in rendered)

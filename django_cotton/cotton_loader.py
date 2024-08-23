@@ -292,7 +292,7 @@ class CottonCompiler:
 
             if tag.contents:
                 tag_soup = BeautifulSoup(
-                    tag.decode_contents(),
+                    tag.decode_contents(formatter=UnsortedAttributes()),
                     "html.parser",
                     on_duplicate_attribute=self.handle_duplicate_attributes,
                 )

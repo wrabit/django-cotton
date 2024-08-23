@@ -407,6 +407,10 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 | Version | Date                                                               | Title and Description                                                                                                                                                        |
 |---------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v0.9.30 | 2024-08-23                                                         | Fixes an issue where by attribute order defined inside default slots were not being kept, causing template expression issues.
+| v0.9.29 | 2024-08-22                                                         | Added an auto setup script on boot that manage settings.py with fallback. Overhauled caching and adopted django's template caching with custom fallback.                  |
+| v0.9.28 | 2024-08-21                                                         | Reverted cache changes due to cache not recognising file updates.                  |
+| v0.9.27 | 2024-08-21                                                         | Resolved issues with component caching in dev environments.                  |
 | v0.9.26 | 2024-08-19                                                         | We now check if a template contains any cotton syntax before processing it.                  |
 | v0.9.25 | 2024-08-12                                                         | Fix case sensitive placeholder issue in connection with duplicate attribute handling mechanism.                  |
 | v0.9.24 | 2024-08-12                                                         | Fixes whitespace preservation around template expressions used in attribute names.                  |

@@ -230,6 +230,22 @@ class InlineTestCase(CottonInlineTestCase):
 
     def test_dynamic_components_via_expression_attribute(self):
         self.create_template(
+            "cotton/dynamic_component_expression.html",
+            """
+            <div>I am dynamic component from expression<div>
+            """,
+        )
+
+        html = """
+            <c-component is="dynamic-{{ is }}" />
+        """
+
+        rendered = get_rendered(html, {"is": "component-expression"})
+
+        self.assertTrue("I am dynamic component from expression" in rendered)
+
+    def test_dynamic_components_in_subfolders(self):
+        self.create_template(
             "cotton/subfolder/dynamic_component_expression.html",
             """
             <div>I am dynamic component from expression<div>

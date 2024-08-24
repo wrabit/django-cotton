@@ -293,6 +293,36 @@ Input will have all attributes provided apart from the `icon`:
 <input type="password" id="password" />
 ```
 
+### Dynamic Components
+
+Sometimes there is a need to include a component dynamically, for example, you are looping through some data and the type of component is defined within a variable.
+
+```html
+<!--
+form_fields = [
+  {'type': 'text'},
+  {'type': 'textarea'},
+  {'type': 'checkbox'}  
+]
+-->
+
+{% for field in form_fields %}
+    <c-component :is="field.type" />
+{% endfor %}
+```
+
+You can also provide a template expression, should the component be inside a subdirectory or have a prefix:
+
+```html
+{% for field in form_fields %}
+    <!-- subfolder -->
+    <c-component is="form-fields.{{ field.type }}" />
+
+    <!-- component prefix -->
+    <c-component is="field_{{ field.type }}" />
+{% endfor %}
+```
+
 ### An example with HTMX
 
 Cotton helps carve out re-usable components, here we show how to make a re-usable form, reducing code repetition and improving maintainability:

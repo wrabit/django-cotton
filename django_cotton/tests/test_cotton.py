@@ -7,13 +7,13 @@ from django_cotton.tests.utils import get_compiled, get_rendered
 class InlineTestCase(CottonInlineTestCase):
     def test_component_is_rendered(self):
         self.create_template(
-            "cotton/component.html",
+            "cotton/render.html",
             """<div class="i-am-component">{{ slot }}</div>""",
         )
 
         self.create_template(
             "view.html",
-            """<c-component>Hello, World!</c-component>""",
+            """<c-render>Hello, World!</c-render>""",
             "view/",
         )
 
@@ -156,11 +156,15 @@ class InlineTestCase(CottonInlineTestCase):
         custom_dir = "components"
 
         self.create_template(
-            f"{custom_dir}/component.html",
+            f"{custom_dir}/custom_directory.html",
             """<div class="i-am-component">{{ slot }}</div>""",
         )
 
-        self.create_template("view.html", """<c-component>Hello, World!</c-component>""", "view/")
+        self.create_template(
+            "custom_directory_view.html",
+            """<c-custom-directory>Hello, World!</c-custom-directory>""",
+            "view/",
+        )
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf(), COTTON_DIR=custom_dir):
@@ -191,6 +195,70 @@ class InlineTestCase(CottonInlineTestCase):
             response = self.client.get("/view/")
 
             self.assertContains(response, '@click="this=test"')
+
+    def test_dynamic_components_via_string(self):
+        self.create_template(
+            "cotton/dynamic_component.html",
+            """
+            <div>I am dynamic<div>
+            """,
+        )
+
+        html = """
+            <c-component is="dynamic-component" />
+        """
+
+        rendered = get_rendered(html, {"is": "dynamic-component"})
+
+        self.assertTrue("I am dynamic" in rendered)
+
+    def test_dynamic_components_via_variable(self):
+        self.create_template(
+            "cotton/dynamic_component.html",
+            """
+            <div>I am dynamic<div>
+            """,
+        )
+
+        html = """
+            <c-component :is="is" />
+        """
+
+        rendered = get_rendered(html, {"is": "dynamic-component"})
+
+        self.assertTrue("I am dynamic" in rendered)
+
+    def test_dynamic_components_via_expression_attribute(self):
+        self.create_template(
+            "cotton/dynamic_component_expression.html",
+            """
+            <div>I am dynamic component from expression<div>
+            """,
+        )
+
+        html = """
+            <c-component is="dynamic-{{ is }}" />
+        """
+
+        rendered = get_rendered(html, {"is": "component-expression"})
+
+        self.assertTrue("I am dynamic component from expression" in rendered)
+
+    def test_dynamic_components_in_subfolders(self):
+        self.create_template(
+            "cotton/subfolder/dynamic_component_expression.html",
+            """
+            <div>I am dynamic component from expression<div>
+            """,
+        )
+
+        html = """
+            <c-component is="subfolder.{{ is }}" />
+        """
+
+        rendered = get_rendered(html, {"is": "dynamic-component-expression"})
+
+        self.assertTrue("I am dynamic component from expression" in rendered)
 
     def test_spaces_are_maintained_around_expression_inside_attributes(self):
         self.create_template(

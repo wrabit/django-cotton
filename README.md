@@ -293,6 +293,36 @@ Input will have all attributes provided apart from the `icon`:
 <input type="password" id="password" />
 ```
 
+### Dynamic Components
+
+Sometimes there is a need to include a component dynamically, for example, you are looping through some data and the type of component is defined within a variable.
+
+```html
+<!--
+form_fields = [
+  {'type': 'text'},
+  {'type': 'textarea'},
+  {'type': 'checkbox'}  
+]
+-->
+
+{% for field in form_fields %}
+    <c-component :is="field.type" />
+{% endfor %}
+```
+
+You can also provide a template expression, should the component be inside a subdirectory or have a prefix:
+
+```html
+{% for field in form_fields %}
+    <!-- subfolder -->
+    <c-component is="form-fields.{{ field.type }}" />
+
+    <!-- component prefix -->
+    <c-component is="field_{{ field.type }}" />
+{% endfor %}
+```
+
 ### An example with HTMX
 
 Cotton helps carve out re-usable components, here we show how to make a re-usable form, reducing code repetition and improving maintainability:
@@ -444,9 +474,10 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 | **Intro**                                                                                           | UI-focused, expressive syntax       | Holistic solution with backend logic   | Enhances DTL for reusable components                       | Define and reuse inline HTML partials             |
 | **Definition of ‘component’**                                                                       | An HTML template           | A backend class with template          | An HTML template                                           | Inline specified partial                          |
 | **Syntax Style** <br> HTML-like                                                                     | HTML-like                  | Django Template Tags                   | Django Template Tags with custom tags                      | Django Template Tags                              |
-| **Create component in one step?**                                          | Yes <br> (place in folder) | No <br> (create additional class file) | No <br> (need to register in YAML file or with function)   | Yes <br> (declare inline or load via include tag) |
+| **Create component in one step?**                                                                   | Yes <br> (place in folder) | No <br> (create additional class file) | No <br> (need to register in YAML file or with function)   | Yes <br> (declare inline or load via include tag) |
 | **Slots (default)** <br> Pass HTML content between tags                                             | Yes                        | Yes                                    | Yes                                                        | No                                                |
 | **Named Slots** <br> Designate a slot in the component template                                     | Yes                        | Yes                                    | Yes, using ‘fragment’                                      | No                                                |
+| **Dynamic Components** <br> Dynamically render components based on a variable or expression         | Yes | No | No | No |
 | **Scoped Slots** <br> Reference component context in parent template                                | No                         | Yes                                    | No                                                         | No                                                |
 | **Dynamic Attributes** <br> Pass string literals of basic Python types                              | Yes                        | No                                     | No                                                         | No                                                |
 | **Boolean Attributes** <br> Pass valueless attributes as True                                       | Yes                        | Yes                                    | No                                                         | No                                                |

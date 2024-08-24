@@ -263,8 +263,8 @@ class CottonCompiler:
                 continue
 
             component_key = tag.name[2:]
-            component_path = component_key.replace(".", "/").replace("-", "_")
-            opening_tag = f"{{% cotton_component {'{}/{}.html'.format(settings.COTTON_DIR if hasattr(settings, 'COTTON_DIR') else 'cotton', component_path)} {component_key} "
+
+            opening_tag = f"{{% cotton_component {component_key} {component_key} "
 
             # Store attributes that contain template expressions, they are when we use '{{' or '{%' in the value of an attribute
             expression_attrs = []

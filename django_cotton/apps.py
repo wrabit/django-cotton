@@ -38,7 +38,8 @@ def wrap_loaders(name):
                 cached_loaders = [("django.template.loaders.cached.Loader", default_loaders)]
                 template_config["OPTIONS"]["loaders"] = cached_loaders
 
-            builtins = template_config.setdefault("OPTIONS", {}).get("builtins", [])
+            options = template_config.setdefault("OPTIONS", {})
+            builtins = options.setdefault("builtins", [])
             builtins_already_configured = (
                 builtins and "django_cotton.templatetags.cotton" in builtins
             )

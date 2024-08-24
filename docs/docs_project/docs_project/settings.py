@@ -64,7 +64,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": ["docs_project/templates"],
-        "APP_DIRS": False,
+        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
@@ -72,19 +72,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            "loaders": [
-                (
-                    "django.template.loaders.cached.Loader",
-                    [
-                        "django_cotton.cotton_loader.Loader",
-                        "django.template.loaders.filesystem.Loader",
-                        "django.template.loaders.app_directories.Loader",
-                    ],
-                )
-            ],
             "builtins": [
                 "django.templatetags.static",
-                "django_cotton.templatetags.cotton",
                 "docs_project.templatetags.force_escape",
                 "docs_project.templatetags.custom_tags",
                 "heroicons.templatetags.heroicons",
@@ -159,6 +148,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+COTTON_TEMPLATE_CACHING_ENABLED = True
 
 CACHES = {
     "default": {

@@ -1,5 +1,4 @@
 import ast
-from functools import lru_cache
 
 from django import template
 from django.conf import settings
@@ -12,19 +11,6 @@ from django_cotton.utils import ensure_quoted
 
 class CottonIncompleteDynamicComponentException(Exception):
     pass
-
-
-@lru_cache(maxsize=1024)
-def get_cached_template(template_name):
-    """App runtime cache for cotton templates. Turned on only when DEBUG=False."""
-    return get_template(template_name)
-
-
-def render_template(template_name, context):
-    if settings.DEBUG:
-        return get_template(template_name).render(context)
-    else:
-        return get_cached_template(template_name).render(context)
 
 
 def cotton_component(parser, token):
@@ -79,7 +65,6 @@ class CottonComponentNode(Node):
             for expression_attr in local_named_slots_ctx["ctn_template_expression_attrs"]:
                 attrs[expression_attr] = local_named_slots_ctx[expression_attr]
 
-        # Build attrs string before formatting any '-' to '_' in attr names
         attrs_string = " ".join(f"{key}={ensure_quoted(value)}" for key, value in attrs.items())
         local_ctx["attrs"] = mark_safe(attrs_string)
         local_ctx["attrs_dict"] = attrs
@@ -93,7 +78,7 @@ class CottonComponentNode(Node):
 
         template_path = self._generate_component_template_path(attrs)
 
-        return render_template(template_path, local_ctx)
+        return get_template(template_path).render(local_ctx)
 
     def _build_attrs(self, context):
         """

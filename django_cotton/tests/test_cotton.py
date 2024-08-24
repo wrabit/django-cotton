@@ -160,7 +160,11 @@ class InlineTestCase(CottonInlineTestCase):
             """<div class="i-am-component">{{ slot }}</div>""",
         )
 
-        self.create_template("custom_directory_view.html", """<c-custom-directory>Hello, World!</c-custom-directory>""", "view/")
+        self.create_template(
+            "custom_directory_view.html",
+            """<c-custom-directory>Hello, World!</c-custom-directory>""",
+            "view/",
+        )
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf(), COTTON_DIR=custom_dir):
@@ -192,7 +196,7 @@ class InlineTestCase(CottonInlineTestCase):
 
             self.assertContains(response, '@click="this=test"')
 
-    def test_dynamic_components(self):
+    def test_dynamic_components_via_string(self):
         self.create_template(
             "cotton/dynamic_component.html",
             """
@@ -202,6 +206,22 @@ class InlineTestCase(CottonInlineTestCase):
 
         html = """
             <c-component is="dynamic-component" />
+        """
+
+        rendered = get_rendered(html, {"is": "dynamic-component"})
+
+        self.assertTrue("I am dynamic" in rendered)
+
+    def test_dynamic_components_via_variable(self):
+        self.create_template(
+            "cotton/dynamic_component.html",
+            """
+            <div>I am dynamic<div>
+            """,
+        )
+
+        html = """
+            <c-component :is="is" />
         """
 
         rendered = get_rendered(html, {"is": "dynamic-component"})
@@ -397,3 +417,18 @@ class CottonTestCase(TestCase):
 
         self.assertFalse("</div{% if 1 = 1 %}>" in rendered, "Tag corrupted")
         self.assertTrue("</div>" in rendered, "</div> not found in rendered string")
+
+    def test_conditionals_evaluation_inside_elements(self):
+        html = """
+            <c-test-component>
+                <select>
+                    <option value="1" {% if my_obj.selection == 1 %}selected{% endif %}>Value 1</option>
+                    <option value="2" {% if my_obj.selection == 2 %}selected{% endif %}>Value 2</option>
+                </select>                         
+            </c-test-component>
+        """
+
+        rendered = get_rendered(html, {"my_obj": {"selection": 1}})
+
+        self.assertTrue('<option value="1" selected>Value 1</option>' in rendered)
+        self.assertTrue('<option value="2" selected>Value 2</option>' not in rendered)

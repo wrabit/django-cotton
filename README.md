@@ -396,7 +396,10 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 
 ## Caching
 
-Cotton components are cached whilst in production (`DEBUG = False`). The cache's TTL is for the duration of your app's lifetime. So on deployment, when the app is normally restarted, caches are cleared. During development, changes are detected on every component render. This feature is a work in progress and some refinement is planned.
+Cotton is optimal when used with Django's cached.Loader. If you use <a href="https://django-cotton.com/docs/quickstart">automatic configuration</a> then the cached loader will be automatically applied. This feature has room for improvement, some desirables are:
+
+- Integration with a cache backend to survive runtime restarts / deployments.
+- Cache warming
 
 For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
 
@@ -404,6 +407,11 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 | Version | Date                                                               | Title and Description                                                                                                                                                        |
 |---------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v0.9.30 | 2024-08-23                                                         | Fixes an issue where by attribute order defined inside default slots were not being kept, causing template expression issues.
+| v0.9.29 | 2024-08-22                                                         | Added an auto setup script on boot that manage settings.py with fallback. Overhauled caching and adopted django's template caching with custom fallback.                  |
+| v0.9.28 | 2024-08-21                                                         | Reverted cache changes due to cache not recognising file updates.                  |
+| v0.9.27 | 2024-08-21                                                         | Resolved issues with component caching in dev environments.                  |
+| v0.9.26 | 2024-08-19                                                         | We now check if a template contains any cotton syntax before processing it.                  |
 | v0.9.25 | 2024-08-12                                                         | Fix case sensitive placeholder issue in connection with duplicate attribute handling mechanism.                  |
 | v0.9.24 | 2024-08-12                                                         | Fixes whitespace preservation around template expressions used in attribute names.                  |
 | v0.9.23 | 2024-07-21                                                         | Fixed an issue causing closing tags to become mutated, resolved with better whitespace handling.                  |

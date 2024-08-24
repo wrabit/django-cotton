@@ -6,22 +6,16 @@ import re
 
 from django.template.loaders.base import Loader as BaseLoader
 from django.core.exceptions import SuspiciousFileOperation
-from django.template import TemplateDoesNotExist
-from bs4.formatter import HTMLFormatter
+from django.template import TemplateDoesNotExist, Origin
 from django.utils._os import safe_join
 from django.template import Template
-from django.core.cache import cache
-from django.template import Origin
 from django.conf import settings
 from django.apps import apps
 
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
+from bs4.formatter import HTMLFormatter
 
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
-
-# If an update changes the API that a cached version of a template will break, we increment the cache version in order to
-# force the re-rendering of the template
-cache_version = "1"
 
 
 class Loader(BaseLoader):
@@ -29,29 +23,27 @@ class Loader(BaseLoader):
 
     def __init__(self, engine, dirs=None):
         super().__init__(engine)
-        self.cache_handler = CottonTemplateCacheHandler()
         self.cotton_compiler = CottonCompiler()
+        self.cache_handler = CottonTemplateCacheHandler()
         self.dirs = dirs
 
     def get_contents(self, origin):
-        # check if file exists, whilst getting the mtime for cache key
-        try:
-            mtime = os.path.getmtime(origin.name)
-        except FileNotFoundError:
-            raise TemplateDoesNotExist(origin)
-
-        cache_key = self.cache_handler.get_cache_key(origin.template_name, mtime)
+        cache_key = self.cache_handler.get_cache_key(origin)
         cached_content = self.cache_handler.get_cached_template(cache_key)
 
         if cached_content is not None:
             return cached_content
 
         template_string = self._get_template_string(origin.name)
-        compiled_template = self.cotton_compiler.process(template_string, origin.template_name)
 
-        self.cache_handler.cache_template(cache_key, compiled_template)
+        if "<c-" not in template_string and "{% cotton_verbatim" not in template_string:
+            compiled = template_string
+        else:
+            compiled = self.cotton_compiler.process(template_string, origin.template_name)
 
-        return compiled_template
+        self.cache_handler.cache_template(cache_key, compiled)
+
+        return compiled
 
     def get_template_from_string(self, template_string):
         """Create and return a Template object from a string. Used primarily for testing."""
@@ -74,6 +66,10 @@ class Loader(BaseLoader):
                 dirs.append(template_dir)
 
         return dirs
+
+    def reset(self):
+        """Empty the template cache."""
+        self.cache_handler.reset()
 
     def get_template_sources(self, template_name):
         """Return an Origin object pointing to an absolute path in each directory
@@ -113,9 +109,9 @@ class CottonCompiler:
     def __init__(self):
         self.django_syntax_placeholders = []
 
-    def process(self, content, component_key):
+    def process(self, content, template_name):
         content = self._replace_syntax_with_placeholders(content)
-        content = self._compile_cotton_to_django(content, component_key)
+        content = self._compile_cotton_to_django(content, template_name)
         content = self._fix_bs4_attribute_empty_attribute_behaviour(content)
         content = self._replace_placeholders_with_syntax(content)
         content = self._remove_duplicate_attribute_markers(content)
@@ -165,7 +161,7 @@ class CottonCompiler:
 
         return content
 
-    def _compile_cotton_to_django(self, html_content, component_key):
+    def _compile_cotton_to_django(self, html_content, template_name):
         """Convert cotton <c-* syntax to {%."""
         soup = BeautifulSoup(
             html_content,
@@ -177,7 +173,7 @@ class CottonCompiler:
         if cvars_el := soup.find("c-vars"):
             soup = self._wrap_with_cotton_vars_frame(soup, cvars_el)
 
-        self._transform_components(soup, component_key)
+        self._transform_components(soup, template_name)
 
         return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
 
@@ -296,7 +292,7 @@ class CottonCompiler:
 
             if tag.contents:
                 tag_soup = BeautifulSoup(
-                    tag.decode_contents(),
+                    tag.decode_contents(formatter=UnsortedAttributes()),
                     "html.parser",
                     on_duplicate_attribute=self.handle_duplicate_attributes,
                 )
@@ -357,21 +353,32 @@ class CottonCompiler:
 
 
 class CottonTemplateCacheHandler:
-    """Handles caching of cotton templates so the html parsing is only done on first load of each view or component."""
+    """This mimics the simple template caching mechanism in Django's cached.Loader. Django's cached.Loader is a bit
+    more performant than this one but it acts a decent fallback when the loader is not defined in the Django cache loader.
+
+    TODO: implement integration to the cache backend instead of just memory. one which can also be controlled / warmed
+    by the user and lasts beyond runtime restart.
+    """
 
     def __init__(self):
-        self.enabled = getattr(settings, "COTTON_TEMPLATE_CACHING_ENABLED", True)
-
-    def get_cache_key(self, template_name, mtime):
-        template_hash = hashlib.sha256(template_name.encode()).hexdigest()
-        return f"cotton_cache_v{cache_version}_{template_hash}_{mtime}"
+        self.template_cache = {}
 
     def get_cached_template(self, cache_key):
-        if not self.enabled:
-            return None
+        return self.template_cache.get(cache_key)
 
-        return cache.get(cache_key)
+    def cache_template(self, cache_key, compiled_template):
+        self.template_cache[cache_key] = compiled_template
 
-    def cache_template(self, cache_key, content, timeout=None):
-        if self.enabled:
-            cache.set(cache_key, content, timeout=timeout)
+    def get_cache_key(self, origin):
+        try:
+            cache_key = self.generate_hash([origin.name, str(os.path.getmtime(origin.name))])
+        except FileNotFoundError:
+            raise TemplateDoesNotExist(origin)
+
+        return cache_key
+
+    def generate_hash(self, values):
+        return hashlib.sha1("|".join(values).encode()).hexdigest()
+
+    def reset(self):
+        self.template_cache.clear()

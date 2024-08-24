@@ -437,7 +437,8 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 | Version | Date                                                               | Title and Description                                                                                                                                                        |
 |---------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| v0.9.31 | 2024-08-24                                                         | Dyamic components `<c-component :is="component_name" />`, `<c-component is="icon_{{ icon_name }}" />`
+| v0.9.32 | 2024-08-24                                                         | Dynamic components `<c-component :is="component_name" />`, `<c-component is="icon_{{ icon_name }}" />`
+| v0.9.31 | 2024-08-23                                                         | Fixed bug in auto-setup
 | v0.9.30 | 2024-08-23                                                         | Fixes an issue where by attribute order defined inside default slots were not being kept, causing template expression issues.
 | v0.9.29 | 2024-08-22                                                         | Added an auto setup script on boot that manage settings.py with fallback. Overhauled caching and adopted django's template caching with custom fallback.                  |
 | v0.9.28 | 2024-08-21                                                         | Reverted cache changes due to cache not recognising file updates.                  |

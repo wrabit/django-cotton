@@ -14,6 +14,7 @@ Bringing component-based design to Django templates.
 ## Contents
 
 [Why?](#why-cotton)  
+[Usage Basics](#usage-basics)  
 [Your First component](#your-first-component)  
 [Attributes](#add-attributes)  
 [Named Slots](#named-slots)  
@@ -24,7 +25,6 @@ Bringing component-based design to Django templates.
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [HTMX Example](#an-example-with-htmx)  
-[Usage Basics](#usage-basics)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Caching](#caching)  
 [Changelog](#changelog)  
@@ -37,11 +37,17 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 
 ## Key Features
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
-- **Interoperable with Django:** Cotton enhances django's existing template system.
+- **Interoperable with Django:** Cotton only enhances django's existing template system (no Jinja needed).
 - **HTML-like Syntax:** Better code editor support and productivity as component tags are similar to html tags.
 - **Minimal Overhead:** Compiles to native Django components with dynamic caching.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
 - **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
+
+## Usage Basics
+- **Component Placement:** Components should be placed in the `templates/cotton` folder (or define a [custom folder](https://django-cotton.com/docs/configuration)).
+- **Naming Conventions:** 
+  - Component filenames use snake_case: `my_component.html`
+  - Components are called using kebab-case prefixed by 'c-': `<c-my-component />`
 
 ## Walkthrough
 
@@ -315,15 +321,6 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
 </c-form>
 ```
 
-## Usage Basics
-- **Component Placement:** Components should be placed in the `templates/cotton` folder.
-- **Naming Conventions:** 
-  - Component filenames use snake_case: `my_component.html`
-  - Components are called using kebab-case: `<c-my-component />`
- 
-For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
-
-
 ## Limitations in Django that Cotton overcomes
 
 Whilst you _can_ build frontends with Django’s native tags, there are a few things that hold us back when we want to apply modern practices:
@@ -401,10 +398,14 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 
 Cotton components are cached whilst in production (`DEBUG = False`). The cache's TTL is for the duration of your app's lifetime. So on deployment, when the app is normally restarted, caches are cleared. During development, changes are detected on every component render. This feature is a work in progress and some refinement is planned.
 
+For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
+
 ## Changelog
 
 | Version | Date                                                               | Title and Description                                                                                                                                                        |
 |---------|--------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| v0.9.25 | 2024-08-12                                                         | Fix case sensitive placeholder issue in connection with duplicate attribute handling mechanism.                  |
+| v0.9.24 | 2024-08-12                                                         | Fixes whitespace preservation around template expressions used in attribute names.                  |
 | v0.9.23 | 2024-07-21                                                         | Fixed an issue causing closing tags to become mutated, resolved with better whitespace handling.                  |
 | v0.9.22 | 2024-07-19                                                         | We now scan all app directories for templates, as if APP_DIRS = True.                                             |
 | v0.9.21 | 2024-07-19                                                         | Fixed issue where '=' was breaking the attribute parsing by _component.                                             |

@@ -8,4 +8,21 @@
 
     <p>Change the default path in your templates directory where cotton components can be placed, for example "components".</p>
 
+    <div class="mb-3">
+        <c-ui.input />
+    </div>
+
+    <div class="mb-3">
+        <c-ui.input>
+            <c-slot name="left_addon">
+                {% heroicon_outline 'lock-closed' class="text-gray-400" %}
+            </c-slot>
+        </c-ui.input>
+    </div>
+    <div class="mb-3">
+        <c-ui.textarea placeholder="Enter your text"></c-ui.textarea>
+    </div>
+
+
+
 </c-layouts.with-sidebar>

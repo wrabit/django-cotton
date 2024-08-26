@@ -1,0 +1,27 @@
+<c-vars left_addon="" right_addon="" type="text" class="" />
+
+<div
+    x-data="{ focused: false }"
+    :class="{ 'ring-2 ring-offset-2 ring-inset ring-blue-500': focused }"
+    class="flex flex-grow items-center border border-gray-300 rounded shadow bg-white"
+>
+    {% if left_addon %}
+        <div class="flex flex-shrink-0 px-3 self-stretch items-center bg-gray100 border- border-gray300 rounded-l">
+            {{ left_addon }}
+        </div>
+    {% endif %}
+
+    <input
+        type="{{ type }}"
+        @focus="focused = true"
+        @blur="focused = false"
+        class="flex-grow px-3 py-2 {% if not left_addon %}rounded-l{% endif %} {% if not right_addon %}rounded-r{% endif %} bg-transparent w-full border-0 focus:outline-none focus:ring-0 {{ class }}"
+        {{ attrs }}
+    >
+
+    {% if right_addon %}
+        <div class="flex-shrink-0 px-3 py-2 bg-gray-100 border-l border-gray-300 rounded-r">
+            {{ right_addon }}
+        </div>
+    {% endif %}
+</div>

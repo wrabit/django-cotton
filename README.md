@@ -14,6 +14,7 @@ Bringing component-based design to Django templates.
 ## Contents
 
 [Why?](#why-cotton)  
+[Quickstart](#quickstart)  
 [Usage Basics](#usage-basics)  
 [Your First component](#your-first-component)  
 [Attributes](#add-attributes)  
@@ -42,6 +43,22 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 - **Minimal Overhead:** Compiles to native Django components with dynamic caching.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
 - **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
+
+## Quickstart
+
+```bash
+pip install django-cotton
+```
+
+### settings.py
+
+```python
+INSTALLED_APPS = [
+    'django_cotton'
+]
+```
+
+If you have previously specified a custom loader, you should perform [manual setup](https://django-cotton.com/docs/quickstart#install).
 
 ## Usage Basics
 - **Component Placement:** Components should be placed in the `templates/cotton` folder (or define a [custom folder](https://django-cotton.com/docs/configuration)).

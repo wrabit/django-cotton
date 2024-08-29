@@ -14,7 +14,7 @@ Bringing component-based design to Django templates.
 ## Contents
 
 [Why?](#why-cotton)  
-[Quickstart](#quickstart)  
+[Install](#install)  
 [Usage Basics](#usage-basics)  
 [Your First component](#your-first-component)  
 [Attributes](#add-attributes)  
@@ -44,7 +44,7 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
 - **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
 
-## Quickstart
+## Install
 
 ```bash
 pip install django-cotton

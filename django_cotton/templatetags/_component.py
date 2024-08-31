@@ -2,7 +2,7 @@ import ast
 
 from django import template
 from django.conf import settings
-from django.template import Node
+from django.template import Node, Template, Context
 from django.utils.safestring import mark_safe
 from django.template.loader import get_template
 
@@ -17,8 +17,7 @@ def cotton_component(parser, token):
     """
     Template tag to render a cotton component with dynamic attributes.
 
-    Usage:
-        {% cotton_component 'component_path' 'component_key' key1="value1" :key2="dynamic_value" %}
+    Expected structure: {% cotton_component 'component_path' 'component_key' key1="value1" :key2="dynamic_value" %}
     """
     bits = token.split_contents()
     component_path = bits[1]
@@ -60,10 +59,15 @@ class CottonComponentNode(Node):
         local_named_slots_ctx = all_named_slots_ctx.get(self.component_key, {})
         local_ctx.update(local_named_slots_ctx)
 
-        # We need to check if any dynamic attributes are present in the component slots and move them over to attrs
+        # We need to check if any dynamic attributes are present in the component slots, process them and move them over to attrs
         if "ctn_template_expression_attrs" in local_named_slots_ctx:
             for expression_attr in local_named_slots_ctx["ctn_template_expression_attrs"]:
-                attrs[expression_attr] = local_named_slots_ctx[expression_attr]
+                # Process them like a non-extracted attribute
+                evaluated = self._process_dynamic_attribute(
+                    local_named_slots_ctx[expression_attr], local_ctx
+                )
+                expression_attr = expression_attr.lstrip(":")
+                attrs[expression_attr] = evaluated
 
         attrs_string = " ".join(f"{key}={ensure_quoted(value)}" for key, value in attrs.items())
         local_ctx["attrs"] = mark_safe(attrs_string)
@@ -105,17 +109,20 @@ class CottonComponentNode(Node):
         """
         Process a dynamic attribute (prefixed with ":")
         """
-        # Template variable
+        # We might be passing a variable by reference
         try:
             return template.Variable(value).resolve(context)
         except template.VariableDoesNotExist:
             pass
 
-        # Boolean attribute
+        # Boolean attribute?
         if value == "":
             return True
 
-        # String literal
+        # Could be a string literal but process any template strings first to handle intermingled expressions
+        value = self._parse_template_string(value, context)
+
+        # Finally, try to evaluate the value as a Python literal
         try:
             return ast.literal_eval(value)
         except (ValueError, SyntaxError):
@@ -125,7 +132,7 @@ class CottonComponentNode(Node):
         """Check if the component is dynamic else process the path as is"""
 
         if self.component_path == "component":
-            # 'is' at this point is already processed from kwargs to attrs, so it's already expression attribute,
+            # Dynamic component. 'is' at this point is already processed from kwargs to attrs, so it's already expression attribute,
             # dynamic + template var enabled. Therefore we can do either :is="variable" or is="some.path.{{ variable }}"
             if "is" in attrs:
                 component_path = attrs["is"]
@@ -142,3 +149,9 @@ class CottonComponentNode(Node):
         return "{}/{}.html".format(
             settings.COTTON_DIR if hasattr(settings, "COTTON_DIR") else "cotton", component_tpl_path
         )
+
+    def _parse_template_string(self, value, context):
+        try:
+            return Template(value).render(Context(context))
+        except (ValueError, SyntaxError):
+            return value

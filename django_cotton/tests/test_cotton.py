@@ -275,22 +275,30 @@ class InlineTestCase(CottonInlineTestCase):
 
             self.assertContains(response, "some_attribute__something")
 
-    def test_dynamic_attributes_are_parsed(self):
+    def test_dynamic_attributes_are_also_template_parsed(self):
         self.create_template(
-            "dynamic_attributes_parse_view.html",
+            "cotton/dynamic_attribute_template_parsing.html",
             """
-            <c-dynamic-attribute-template-parsing :test="[{{ img }}]" />
+            {% for image in images %}
+                {{ forloop.counter }}: {{ image }}
+            {% endfor %}
+            """,
+        )
+
+        self.create_template(
+            "dynamic_attributes_parsing_view.html",
+            """
+            <c-dynamic-attribute-template-parsing :images="['{{ image1 }}', '{{ image2 }}']" />
             """,
             "view/",
+            context={"image1": "1.jpg", "image2": "2.jpg"},
         )
-        
-        self.
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
             response = self.client.get("/view/")
-
-            self.assertContains(response, "some_attribute__something")
+            self.assertContains(response, "1: 1.jpg")
+            self.assertContains(response, "2: 2.jpg")
 
 
 class CottonTestCase(TestCase):

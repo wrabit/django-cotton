@@ -260,7 +260,7 @@ class InlineTestCase(CottonInlineTestCase):
 
         self.assertTrue("I am dynamic component from expression" in rendered)
 
-    def test_spaces_are_maintained_around_expression_inside_attributes(self):
+    def test_spaces_are_maintained_around_expressions_inside_attributes(self):
         self.create_template(
             "maintain_spaces_in_attributes_view.html",
             """
@@ -268,6 +268,23 @@ class InlineTestCase(CottonInlineTestCase):
             """,
             "view/",
         )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, "some_attribute__something")
+
+    def test_dynamic_attributes_are_parsed(self):
+        self.create_template(
+            "dynamic_attributes_parse_view.html",
+            """
+            <c-dynamic-attribute-template-parsing :test="[{{ img }}]" />
+            """,
+            "view/",
+        )
+        
+        self.
 
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):

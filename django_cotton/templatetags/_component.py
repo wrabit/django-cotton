@@ -112,7 +112,7 @@ class CottonComponentNode(Node):
         # We might be passing a variable by reference
         try:
             return template.Variable(value).resolve(context)
-        except template.VariableDoesNotExist:
+        except (template.VariableDoesNotExist, IndexError):
             pass
 
         # Boolean attribute?

@@ -300,6 +300,29 @@ class InlineTestCase(CottonInlineTestCase):
             self.assertContains(response, "1: 1.jpg")
             self.assertContains(response, "2: 2.jpg")
 
+    def test_boolean_attributes(self):
+        self.create_template(
+            "cotton/boolean_attribute.html",
+            """
+                {% if is_something is True %}
+                    It's True
+                {% endif %}
+            """,
+        )
+
+        self.create_template(
+            "boolean_attribute_view.html",
+            """
+                <c-boolean-attribute is_something />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "It's True")
+
 
 class CottonTestCase(TestCase):
     def test_parent_component_is_rendered(self):
@@ -401,11 +424,6 @@ class CottonTestCase(TestCase):
 
         self.assertTrue("attr1: 'variable'" in rendered)
         self.assertTrue("attr2: '1'" in rendered)
-
-    def test_valueless_attributes_are_process_as_true(self):
-        response = self.client.get("/test/valueless-attributes")
-
-        self.assertContains(response, "It's True")
 
     def test_component_attributes_can_converted_to_python_types(self):
         response = self.client.get("/test/eval-attributes")

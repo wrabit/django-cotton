@@ -9,7 +9,6 @@ from django.core.exceptions import SuspiciousFileOperation
 from django.template import TemplateDoesNotExist, Origin
 from django.utils._os import safe_join
 from django.template import Template
-from django.conf import settings
 from django.apps import apps
 
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning

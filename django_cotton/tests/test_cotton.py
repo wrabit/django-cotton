@@ -323,6 +323,34 @@ class InlineTestCase(CottonInlineTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, "It's True")
 
+    def test_attributes_without_colons_are_not_evaluated(self):
+        self.create_template(
+            "cotton/empty_variables.html",
+            """
+                {% if something == "1,234" %}
+                    All good
+                {% endif %}
+                
+                {% if something == "(1, 234)" %}
+                    "1,234" was evaluated as a tuple
+                {% endif %}
+            """,
+        )
+
+        self.create_template(
+            "empty_variables_view.html",
+            """
+                <c-empty-variables something="{{ something }}" />
+            """,
+            "view/",
+            context={"something": "1,234"},
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "All good")
+
 
 class CottonTestCase(TestCase):
     def test_parent_component_is_rendered(self):

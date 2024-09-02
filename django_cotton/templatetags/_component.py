@@ -63,17 +63,20 @@ class CottonComponentNode(Node):
         if "ctn_template_expression_attrs" in local_named_slots_ctx:
             for expression_attr in local_named_slots_ctx["ctn_template_expression_attrs"]:
                 # Process them like a non-extracted attribute
-                evaluated = self._process_dynamic_attribute(
-                    local_named_slots_ctx[expression_attr], local_ctx
-                )
-                expression_attr = expression_attr.lstrip(":")
-                attrs[expression_attr] = evaluated
+                if expression_attr[0] == ":":
+                    evaluated = self._process_dynamic_attribute(
+                        local_named_slots_ctx[expression_attr], local_ctx
+                    )
+                    expression_attr = expression_attr[1:]
+                    attrs[expression_attr] = evaluated
+                else:
+                    attrs[expression_attr] = local_named_slots_ctx[expression_attr]
 
         attrs_string = " ".join(f"{key}={ensure_quoted(value)}" for key, value in attrs.items())
         local_ctx["attrs"] = mark_safe(attrs_string)
         local_ctx["attrs_dict"] = attrs
 
-        # Store attr names in a callable format, i.e. 'x-init' will be accessible by {{ x_init }}
+        # Ensure attributes are accessible, eg. 'x-init' -> {{ x_init }}
         attrs = {key.replace("-", "_"): value for key, value in attrs.items()}
         local_ctx.update(attrs)
 

@@ -323,6 +323,34 @@ class InlineTestCase(CottonInlineTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, "It's True")
 
+    def test_empty_strings_are_not_considered_booleans(self):
+        self.create_template(
+            "cotton/empty_string_attrs.html",
+            """
+                {% if something1 == "" %}
+                    I am string
+                {% endif %}
+                
+                {% if something2 is True %}
+                    I am boolean
+                {% endif %}
+            """,
+        )
+
+        self.create_template(
+            "empty_string_attrs_view.html",
+            """
+                <c-empty-string-attrs something1="" something2 />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "I am string")
+            self.assertContains(response, "I am boolean")
+
 
 class CottonTestCase(TestCase):
     def test_parent_component_is_rendered(self):

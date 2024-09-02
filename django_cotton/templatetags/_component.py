@@ -30,7 +30,7 @@ def cotton_component(parser, token):
         except ValueError:
             # No value provided, assume boolean attribute
             key = bit
-            value = ""
+            value = True
 
         kwargs[key] = value
 
@@ -92,14 +92,12 @@ class CottonComponentNode(Node):
 
         for key, value in self.kwargs.items():
             # strip single or double quotes only if both sides have them
-            if value and value[0] == value[-1] and value[0] in ('"', "'"):
+            if isinstance(value, str) and value[0] == value[-1] and value[0] in ('"', "'"):
                 value = value[1:-1]
 
             if key.startswith(":"):
                 key = key[1:]
                 attrs[key] = self._process_dynamic_attribute(value, context)
-            elif value == "":
-                attrs[key] = True
             else:
                 attrs[key] = value
 
@@ -116,7 +114,7 @@ class CottonComponentNode(Node):
             pass
 
         # Boolean attribute?
-        if value == "":
+        if value is True:
             return True
 
         # Could be a string literal but process any template strings first to handle intermingled expressions

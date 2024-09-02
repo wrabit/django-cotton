@@ -9,11 +9,12 @@ from django.core.exceptions import SuspiciousFileOperation
 from django.template import TemplateDoesNotExist, Origin
 from django.utils._os import safe_join
 from django.template import Template
-from django.conf import settings
 from django.apps import apps
 
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 from bs4.formatter import HTMLFormatter
+
+from django_cotton.utils import CottonHTMLTreeBuilder
 
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
@@ -112,7 +113,6 @@ class CottonCompiler:
     def process(self, content, template_name):
         content = self._replace_syntax_with_placeholders(content)
         content = self._compile_cotton_to_django(content, template_name)
-        content = self._fix_bs4_attribute_empty_attribute_behaviour(content)
         content = self._replace_placeholders_with_syntax(content)
         content = self._remove_duplicate_attribute_markers(content)
 
@@ -163,11 +163,7 @@ class CottonCompiler:
 
     def _compile_cotton_to_django(self, html_content, template_name):
         """Convert cotton <c-* syntax to {%."""
-        soup = BeautifulSoup(
-            html_content,
-            "html.parser",
-            on_duplicate_attribute=self.handle_duplicate_attributes,
-        )
+        soup = get_bs4_instance(html_content)
 
         # check if soup contains a 'c-vars' tag
         if cvars_el := soup.find("c-vars"):
@@ -201,13 +197,6 @@ class CottonCompiler:
 
     def _remove_duplicate_attribute_markers(self, content):
         return re.sub(r"__COTTON_DUPE_ATTR__[0-9A-F]{5}", "", content, flags=re.IGNORECASE)
-
-    def _fix_bs4_attribute_empty_attribute_behaviour(self, contents):
-        """Bs4 adds ="" to valueless attribute-like parts in HTML tags that causes issues when we want to manipulate
-        django expressions."""
-        contents = contents.replace('=""', "")
-
-        return contents
 
     def _wrap_with_cotton_vars_frame(self, soup, cvars_el):
         """If the user has defined a <c-vars> tag, wrap content with {% cotton_vars_frame %} to be able to create and
@@ -246,11 +235,7 @@ class CottonCompiler:
         )
 
         # Since we can't replace the soup object itself, we create new soup instead
-        new_soup = BeautifulSoup(
-            wrapped_content,
-            "html.parser",
-            on_duplicate_attribute=self.handle_duplicate_attributes,
-        )
+        new_soup = get_bs4_instance(wrapped_content)
 
         return new_soup
 
@@ -271,6 +256,11 @@ class CottonCompiler:
 
             # Build the attributes
             for key, value in tag.attrs.items():
+                # value might be None
+                if value is None:
+                    opening_tag += f" {key}"
+                    continue
+
                 # BS4 stores class values as a list, so we need to join them back into a string
                 if key == "class":
                     value = " ".join(value)
@@ -291,10 +281,8 @@ class CottonCompiler:
                     component_tag += f"{{% cotton_slot {key} {component_key} expression_attr %}}{value}{{% end_cotton_slot %}}"
 
             if tag.contents:
-                tag_soup = BeautifulSoup(
+                tag_soup = get_bs4_instance(
                     tag.decode_contents(formatter=UnsortedAttributes()),
-                    "html.parser",
-                    on_duplicate_attribute=self.handle_duplicate_attributes,
                 )
                 self._transform_components(tag_soup, component_key)
                 component_tag += str(
@@ -304,11 +292,7 @@ class CottonCompiler:
             component_tag += "{% end_cotton_component %}"
 
             # Replace the original tag with the compiled django syntax
-            new_soup = BeautifulSoup(
-                component_tag,
-                "html.parser",
-                on_duplicate_attribute=self.handle_duplicate_attributes,
-            )
+            new_soup = get_bs4_instance(component_tag)
             tag.replace_with(new_soup)
 
         return soup
@@ -319,24 +303,15 @@ class CottonCompiler:
         inner_html = "".join(str(content) for content in slot_tag.contents)
 
         # Check and process any components in the slot content
-        slot_soup = BeautifulSoup(
-            inner_html,
-            "html.parser",
-            on_duplicate_attribute=self.handle_duplicate_attributes,
-        )
+        slot_soup = get_bs4_instance(inner_html)
         self._transform_components(slot_soup, component_key)
 
         cotton_slot_tag = f"{{% cotton_slot {slot_name} {component_key} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% end_cotton_slot %}}"
 
-        slot_tag.replace_with(
-            BeautifulSoup(
-                cotton_slot_tag,
-                "html.parser",
-                on_duplicate_attribute=self.handle_duplicate_attributes,
-            )
-        )
+        slot_tag.replace_with(get_bs4_instance(cotton_slot_tag))
 
-    @staticmethod
+
+def get_bs4_instance(content):
     def handle_duplicate_attributes(tag_attrs, key, value):
         """BS4 cleans html and removes duplicate attributes. This would be fine if our target was html, but actually
         we're targeting Django Template Language. This contains expressions to govern content including attributes of
@@ -346,10 +321,18 @@ class CottonCompiler:
 
         The solution here is to make duplicate attribute keys unique across that tag so BS4 will not attempt to merge or
         replace existing. Then in post processing we'll remove the unique mask.
+
+        Todo - This could be simplified with a custom formatter
         """
         key_id = "".join(random.choice("0123456789ABCDEF") for i in range(5))
         key = f"{key}__COTTON_DUPE_ATTR__{key_id}"
         tag_attrs[key] = value
+
+    return BeautifulSoup(
+        content,
+        "html.parser",
+        builder=CottonHTMLTreeBuilder(on_duplicate_attribute=handle_duplicate_attributes),
+    )
 
 
 class CottonTemplateCacheHandler:

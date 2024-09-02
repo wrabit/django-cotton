@@ -1,5 +1,8 @@
 import ast
 
+from bs4.builder._htmlparser import BeautifulSoupHTMLParser, HTMLParserTreeBuilder
+from html.parser import HTMLParser
+
 
 def eval_string(value):
     """
@@ -16,3 +19,67 @@ def ensure_quoted(value):
         return value
     else:
         return f'"{value}"'
+
+
+class CottonHTMLParser(BeautifulSoupHTMLParser):
+    def __init__(self, tree_builder, soup, on_duplicate_attribute):
+        # Initialize the parent class (HTMLParser) without additional arguments
+        HTMLParser.__init__(self)
+        self._first_processing_instruction = None
+        self.tree_builder = tree_builder
+        self.soup = soup
+        self._root_tag = None  # Initialize _root_tag
+        self.already_closed_empty_element = []  # Initialize this list
+        self.on_duplicate_attribute = (
+            on_duplicate_attribute  # You can set this according to your needs
+        )
+        self.IGNORE = "ignore"
+        self.REPLACE = "replace"
+
+    def handle_starttag(self, name, attrs, handle_empty_element=True):
+        """Handle an opening tag, e.g. '<tag>'"""
+        attr_dict = {}
+        for key, value in attrs:
+            # START COTTON EDIT
+            # In cotton we want to preserve the intended value of
+            # the attribute from the developer so that we can differentiate
+            # boolean attributes and simply empty ones:
+            # if value is None:
+            #     value = ''
+            # / END COTTON EDIT
+
+            if key in attr_dict:
+                on_dupe = self.on_duplicate_attribute
+                if on_dupe == self.IGNORE:
+                    pass
+                elif on_dupe in (None, self.REPLACE):
+                    attr_dict[key] = value
+                else:
+                    on_dupe(attr_dict, key, value)
+            else:
+                attr_dict[key] = value
+        sourceline, sourcepos = self.getpos()
+        tag = self.soup.handle_starttag(
+            name, None, None, attr_dict, sourceline=sourceline, sourcepos=sourcepos
+        )
+        if tag and tag.is_empty_element and handle_empty_element:
+            self.handle_endtag(name, check_already_closed=False)
+            self.already_closed_empty_element.append(name)
+
+        if self._root_tag is None:
+            self._root_tag_encountered(name)
+
+    def _root_tag_encountered(self, name):
+        pass
+
+
+class CottonHTMLTreeBuilder(HTMLParserTreeBuilder):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.handle_duplicate_attributes = kwargs.get("on_duplicate_attribute", None)
+        self.parser_class = CottonHTMLParser
+
+    def feed(self, markup):
+        parser = self.parser_class(self, self.soup, self.handle_duplicate_attributes)
+        parser.feed(markup)
+        parser.close()

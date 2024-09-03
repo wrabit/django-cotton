@@ -424,6 +424,8 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 ```html
 <c-my-component :default_options="['yes', 'no', 'maybe']" />
 <c-my-component :config="{'open': True}" />
+
+(provides a List and Dict to component)
 ```
 
 ### Multi-line definitions
@@ -439,6 +441,18 @@ In addition, Cotton enables you to navigate around some of the limitations with 
     x-data="{
         something: 1
     }" />
+```
+
+### Dynamic components
+❌ **Django native:** 
+```html
+{% {{ templatetag_name }} arg=1 %}
+```
+✅ **Cotton:**
+```html
+<c-component :is="component_name" />
+<c-component is="{{ component_name }}" />
+<c-component is="subfolder1.subfolder2.{{ component_name }}" />
 ```
 
 ## Caching

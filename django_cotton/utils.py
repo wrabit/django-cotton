@@ -22,6 +22,10 @@ def ensure_quoted(value):
 
 
 class CottonHTMLParser(BeautifulSoupHTMLParser):
+    """Extending the default HTML parser to override handle_starttag so we can preserve the intended value of the
+    attribute from the developer so that we can differentiate boolean attributes and simply empty ones.
+    """
+
     def __init__(self, tree_builder, soup, on_duplicate_attribute):
         # Initialize the parent class (HTMLParser) without additional arguments
         HTMLParser.__init__(self)
@@ -40,13 +44,9 @@ class CottonHTMLParser(BeautifulSoupHTMLParser):
         """Handle an opening tag, e.g. '<tag>'"""
         attr_dict = {}
         for key, value in attrs:
-            # START COTTON EDIT
-            # In cotton we want to preserve the intended value of
-            # the attribute from the developer so that we can differentiate
-            # boolean attributes and simply empty ones:
+            # Cotton: Permit valueless attributes
             # if value is None:
             #     value = ''
-            # / END COTTON EDIT
 
             if key in attr_dict:
                 on_dupe = self.on_duplicate_attribute
@@ -66,11 +66,9 @@ class CottonHTMLParser(BeautifulSoupHTMLParser):
             self.handle_endtag(name, check_already_closed=False)
             self.already_closed_empty_element.append(name)
 
-        if self._root_tag is None:
-            self._root_tag_encountered(name)
-
-    def _root_tag_encountered(self, name):
-        pass
+        # Cotton: We do not need to validate the root element
+        # if self._root_tag is None:
+        #     self._root_tag_encountered(name)
 
 
 class CottonHTMLTreeBuilder(HTMLParserTreeBuilder):

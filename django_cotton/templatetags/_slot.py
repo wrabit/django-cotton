@@ -38,19 +38,15 @@ class CottonSlotNode(template.Node):
         if self.component_key not in context["cotton_named_slots"]:
             context["cotton_named_slots"][self.component_key] = {}
 
-        context["cotton_named_slots"][self.component_key][self.slot_name] = mark_safe(
-            output
-        )
+        context["cotton_named_slots"][self.component_key][self.slot_name] = mark_safe(output)
 
-        # If the slot is being used as an expression attribute, we record it so it can be transferred to attrs in the component
+        # If the slot is being used to hold an expression attribute, we record it so it can be transferred to attrs in the component
         if self.is_expression_attr:
             key = "ctn_template_expression_attrs"
 
             if key not in context["cotton_named_slots"][self.component_key]:
                 context["cotton_named_slots"][self.component_key][key] = []
 
-            context["cotton_named_slots"][self.component_key][key].append(
-                self.slot_name
-            )
+            context["cotton_named_slots"][self.component_key][key].append(self.slot_name)
 
         return ""

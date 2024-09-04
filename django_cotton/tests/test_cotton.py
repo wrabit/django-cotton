@@ -260,7 +260,7 @@ class InlineTestCase(CottonInlineTestCase):
 
         self.assertTrue("I am dynamic component from expression" in rendered)
 
-    def test_spaces_are_maintained_around_expression_inside_attributes(self):
+    def test_spaces_are_maintained_around_expressions_inside_attributes(self):
         self.create_template(
             "maintain_spaces_in_attributes_view.html",
             """
@@ -274,6 +274,82 @@ class InlineTestCase(CottonInlineTestCase):
             response = self.client.get("/view/")
 
             self.assertContains(response, "some_attribute__something")
+
+    def test_dynamic_attributes_are_also_template_parsed(self):
+        self.create_template(
+            "cotton/dynamic_attribute_template_parsing.html",
+            """
+            {% for image in images %}
+                {{ forloop.counter }}: {{ image }}
+            {% endfor %}
+            """,
+        )
+
+        self.create_template(
+            "dynamic_attributes_parsing_view.html",
+            """
+            <c-dynamic-attribute-template-parsing :images="['{{ image1 }}', '{{ image2 }}']" />
+            """,
+            "view/",
+            context={"image1": "1.jpg", "image2": "2.jpg"},
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "1: 1.jpg")
+            self.assertContains(response, "2: 2.jpg")
+
+    def test_boolean_attributes(self):
+        self.create_template(
+            "cotton/boolean_attribute.html",
+            """
+                {% if is_something is True %}
+                    It's True
+                {% endif %}
+            """,
+        )
+
+        self.create_template(
+            "boolean_attribute_view.html",
+            """
+                <c-boolean-attribute is_something />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "It's True")
+
+    def test_attributes_without_colons_are_not_evaluated(self):
+        self.create_template(
+            "cotton/empty_variables.html",
+            """
+                {% if something == "1,234" %}
+                    All good
+                {% endif %}
+                
+                {% if something == "(1, 234)" %}
+                    "1,234" was evaluated as a tuple
+                {% endif %}
+            """,
+        )
+
+        self.create_template(
+            "empty_variables_view.html",
+            """
+                <c-empty-variables something="{{ something }}" />
+            """,
+            "view/",
+            context={"something": "1,234"},
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "All good")
 
 
 class CottonTestCase(TestCase):
@@ -376,11 +452,6 @@ class CottonTestCase(TestCase):
 
         self.assertTrue("attr1: 'variable'" in rendered)
         self.assertTrue("attr2: '1'" in rendered)
-
-    def test_valueless_attributes_are_process_as_true(self):
-        response = self.client.get("/test/valueless-attributes")
-
-        self.assertContains(response, "It's True")
 
     def test_component_attributes_can_converted_to_python_types(self):
         response = self.client.get("/test/eval-attributes")

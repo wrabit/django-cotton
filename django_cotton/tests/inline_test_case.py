@@ -50,7 +50,7 @@ class CottonInlineTestCase(TestCase):
         """Clear cache between tests so that we can use the same file names for simplicity"""
         cache.clear()
 
-    def create_template(self, name, content, url=None):
+    def create_template(self, name, content, url=None, context={}):
         """Create a template file in the temporary directory and return the path"""
         path = os.path.join(self.temp_dir, name)
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -58,7 +58,16 @@ class CottonInlineTestCase(TestCase):
             f.write(content)
 
         if url:
-            self.register_url(url, TemplateView.as_view(template_name=name))
+            # Create a dynamic class-based view
+            class DynamicTemplateView(TemplateView):
+                template_name = name
+
+                def get_context_data(self, **kwargs):
+                    dynamic_context = super().get_context_data(**kwargs)
+                    dynamic_context.update(context)
+                    return dynamic_context
+
+            self.register_path(url, DynamicTemplateView.as_view(template_name=name))
 
         return path
 
@@ -66,7 +75,7 @@ class CottonInlineTestCase(TestCase):
         """Make a view that renders the given template"""
         return TemplateView.as_view(template_name=template_name)
 
-    def register_url(self, url, view):
+    def register_path(self, url, view):
         """Register a URL pattern and returns path"""
         url_pattern = path(url, view)
         self.url_module.urlpatterns.append(url_pattern)

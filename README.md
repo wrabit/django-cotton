@@ -34,7 +34,7 @@ Bringing component-based design to Django templates.
 
 ## Why Cotton?
 
-Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton-overcomes) that exist in the django template system that hold us back when we want to apply modern practises to compose UIs in a modular and reusable way.
+Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton-overcomes) that exist in the django template system that hold us back when we want to apply modern practices to compose UIs in a modular and reusable way.
 
 ## Key Features
 - **Modern UI Composition:** Efficiently compose and reuse UI components.

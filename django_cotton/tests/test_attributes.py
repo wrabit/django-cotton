@@ -483,3 +483,22 @@ class AttributeHandlingTests(CottonTestCase):
             compiled,
             """<a href="#" class="test" class="test2">hello</a>""",
         )
+
+    def test_multiline_cvar_values(self):
+        self.create_template(
+            "multiline_cvar_values_view.html",
+            """<c-multiline-cvar-values />""",
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/multiline_cvar_values.html",
+            """
+                <c-vars multiline="line1
+                line2" />
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertTrue(response.status_code == 200)

@@ -1,27 +1,7 @@
-from django_cotton.tests.utils import CottonInlineTestCase
+from django_cotton.tests.utils import CottonTestCase
 
 
-class BasicComponentTests(CottonInlineTestCase):
-    def test_render_context(self):
-        self.create_template(
-            "cotton/render_me.html",
-            """<div>{{ attrs }}</div>""",
-        )
-
-        self.create_template(
-            "myview.html",
-            """
-                <c-render-me></c-render>
-                <c-render-me></c-render>
-            """,
-            "view/",
-        )
-
-        # Override URLconf
-        with self.settings(ROOT_URLCONF=self.url_conf()):
-            response = self.client.get("/view/")
-            print(response.content.decode())
-
+class BasicComponentTests(CottonTestCase):
     def test_component_is_rendered(self):
         self.create_template(
             "cotton/render.html",

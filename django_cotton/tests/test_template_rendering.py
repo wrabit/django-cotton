@@ -1,8 +1,8 @@
-from django_cotton.tests.utils import CottonInlineTestCase
+from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_compiled
 
 
-class TemplateRenderingTests(CottonInlineTestCase):
+class TemplateRenderingTests(CottonTestCase):
     def test_new_lines_in_attributes_are_preserved(self):
         self.create_template(
             "cotton/preserved.html",

@@ -25,7 +25,7 @@ class FileAlreadyExistsError(Exception):
     pass
 
 
-class CottonInlineTestCase(TestCase):
+class CottonTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

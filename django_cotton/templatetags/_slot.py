@@ -22,8 +22,8 @@ def cotton_slot(parser, token):
 
 class CottonSlotNode(template.Node):
     def __init__(self, slot_name, nodelist, component_key, is_expression_attr):
-        self.slot_name = slot_name
         self.nodelist = nodelist
+        self.slot_name = slot_name
         self.component_key = component_key
         self.is_expression_attr = is_expression_attr
 
@@ -33,9 +33,10 @@ class CottonSlotNode(template.Node):
         component_slots = cotton_named_slots.setdefault(self.component_key, {})
         component_slots[self.slot_name] = mark_safe(output)
 
-        # If the slot is being used to hold an expression attribute, we record it so it can be transferred to attrs in the component
+        # If the slot is being used to hold an expression attribute, we record it so it
+        # can be transferred to attrs in the component
         if self.is_expression_attr:
-            component_slots = context["cotton_named_slots"].setdefault(self.component_key, {})
+            component_slots = context["cotton_named_slots"][self.component_key]
             expression_attrs = component_slots.setdefault("ctn_template_expression_attrs", [])
             expression_attrs.append(self.slot_name)
 

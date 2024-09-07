@@ -1,8 +1,8 @@
-from django_cotton.tests.utils import CottonInlineTestCase
+from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_rendered
 
 
-class DynamicComponentTests(CottonInlineTestCase):
+class DynamicComponentTests(CottonTestCase):
     def test_dynamic_components_via_string(self):
         self.create_template(
             "cotton/dynamic_component_via_string.html",

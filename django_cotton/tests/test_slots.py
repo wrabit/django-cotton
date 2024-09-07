@@ -1,8 +1,8 @@
-from django_cotton.tests.utils import CottonInlineTestCase
+from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_compiled
 
 
-class SlotAndContentTests(CottonInlineTestCase):
+class SlotAndContentTests(CottonTestCase):
     def test_named_slots_correctly_display_in_loop(self):
         self.create_template(
             "named_slot_in_loop_view.html",

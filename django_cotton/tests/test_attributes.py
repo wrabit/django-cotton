@@ -1,8 +1,8 @@
-from django_cotton.tests.utils import CottonInlineTestCase
+from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_compiled
 
 
-class AttributeHandlingTests(CottonInlineTestCase):
+class AttributeHandlingTests(CottonTestCase):
     def test_dynamic_attributes_on_components(self):
         self.create_template(
             "eval_attributes_on_component_view.html",

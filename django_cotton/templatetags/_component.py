@@ -83,7 +83,19 @@ class CottonComponentNode(Node):
 
         template_path = self._generate_component_template_path(attrs)
 
-        return get_template(template_path).render(ctx)
+        # Use render_context for caching the template
+        cache = context.render_context.get(self)
+        if cache is None:
+            cache = context.render_context[self] = {}
+
+        tpl = cache.get(template_path)
+        if tpl is None:
+            tpl = get_template(template_path)
+            cache[template_path] = tpl
+
+        return tpl.render(ctx)
+
+        # return get_template(template_path).render(ctx)
 
     def _build_attrs(self, context):
         """

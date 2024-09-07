@@ -325,7 +325,7 @@ class InlineTestCase(CottonInlineTestCase):
 
     def test_attributes_without_colons_are_not_evaluated(self):
         self.create_template(
-            "cotton/empty_variables.html",
+            "cotton/static_attrs.html",
             """
                 {% if something == "1,234" %}
                     All good
@@ -338,9 +338,9 @@ class InlineTestCase(CottonInlineTestCase):
         )
 
         self.create_template(
-            "empty_variables_view.html",
+            "static_attrs_view.html",
             """
-                <c-empty-variables something="{{ something }}" />
+                <c-static-attrs something="{{ something }}" />
             """,
             "view/",
             context={"something": "1,234"},
@@ -350,6 +350,28 @@ class InlineTestCase(CottonInlineTestCase):
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, "All good")
+
+    def test_empty_variables_fallback_to_cvars_defaults(self):
+        self.create_template(
+            "cotton/unprocessable_attribute.html",
+            """
+                <c-vars color="gray" />
+                {{ color }}
+            """,
+        )
+
+        self.create_template(
+            "unprocessable_attribute_view.html",
+            """
+                <c-unprocessable-attribute :color="button.color" />
+            """,
+            "view/",
+            context={},
+        )
+
+        with self.settings(ROOT_URLCONF=self.get_url_conf()):
+            response = self.client.get("/view/")
+            self.assertTrue("gray" in response.content.decode())
 
 
 class CottonTestCase(TestCase):

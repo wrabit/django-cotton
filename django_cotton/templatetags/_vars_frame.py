@@ -34,12 +34,14 @@ class CottonVarsFrameNode(template.Node):
     def render(self, context):
         # Retrieve attrs_dict from parent _component
         provided_attrs = context.get("attrs_dict", {})
+        unprocessable_dynamic_attrs = context.get("unprocessable_dynamic_attrs", set())
 
         # Initialize vars based on the frame's kwargs and parent attrs
         c_vars = {}
         for key, value in self.kwargs.items():
-            # Check if the var exists in component attrs; if so, use it, otherwise use the resolved default
-            if key in provided_attrs:
+            # Check if the var exists in component attrs;
+            # We have an opinion here that if the provided attr value is empty, we should use the default value
+            if key in provided_attrs and key not in unprocessable_dynamic_attrs:
                 c_vars[key] = provided_attrs[key]
             else:
                 # Attempt to resolve each kwarg value (which may include template variables)

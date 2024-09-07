@@ -353,7 +353,7 @@ class InlineTestCase(CottonInlineTestCase):
 
     def test_empty_variables_fallback_to_cvars_defaults(self):
         self.create_template(
-            "cotton/empty_variables.html",
+            "cotton/unprocessable_attribute.html",
             """
                 <c-vars color="gray" />
                 {{ color }}
@@ -361,15 +361,14 @@ class InlineTestCase(CottonInlineTestCase):
         )
 
         self.create_template(
-            "empty_variables_view.html",
+            "unprocessable_attribute_view.html",
             """
-                <c-empty-variables :color="button.color" />
+                <c-unprocessable-attribute :color="button.color" />
             """,
             "view/",
             context={},
         )
 
-        # Override URLconf
         with self.settings(ROOT_URLCONF=self.get_url_conf()):
             response = self.client.get("/view/")
             self.assertTrue("gray" in response.content.decode())

@@ -1,4 +1,8 @@
-<c-vars left_addon="" right_addon="" type="text" class="" />
+<c-vars
+    type="text"
+    class=""
+    left_addon=""
+    right_addon="" />
 
 <div
     x-data="{ focused: false }"
@@ -6,7 +10,7 @@
     class="flex flex-grow items-center border border-gray-300 rounded shadow bg-white"
 >
     {% if left_addon %}
-        <div class="flex flex-shrink-0 px-3 self-stretch items-center bg-gray100 border- border-gray300 rounded-l">
+        <div class="flex flex-shrink-0 pl-3 self-stretch items-center bg-gray100 border- border-gray300 rounded-l">
             {{ left_addon }}
         </div>
     {% endif %}

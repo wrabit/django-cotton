@@ -34,7 +34,7 @@ Bringing component-based design to Django templates.
 
 ## Why Cotton?
 
-Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton-overcomes) that exist in the django template system that hold us back when we want to apply modern practises to compose UIs in a modular and reusable way.
+Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton-overcomes) that exist in the django template system that hold us back when we want to apply modern practices to compose UIs in a modular and reusable way.
 
 ## Key Features
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
@@ -424,6 +424,8 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 ```html
 <c-my-component :default_options="['yes', 'no', 'maybe']" />
 <c-my-component :config="{'open': True}" />
+
+(provides a List and Dict to component)
 ```
 
 ### Multi-line definitions
@@ -439,6 +441,18 @@ In addition, Cotton enables you to navigate around some of the limitations with 
     x-data="{
         something: 1
     }" />
+```
+
+### Dynamic components
+❌ **Django native:** 
+```html
+{% {{ templatetag_name }} arg=1 %}
+```
+✅ **Cotton:**
+```html
+<c-component :is="component_name" />
+<c-component is="{{ component_name }}" />
+<c-component is="subfolder1.subfolder2.{{ component_name }}" />
 ```
 
 ## Caching
@@ -484,25 +498,25 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 | v0.9.1  | 2024-06-08                                                         | **Open Source Release**<br>Open source release.                                                                                                                              |
 
 
-## Comparison with other packages
+## Comparison with other packages  
 
-**Note:** For mistakes or if I have missed something from other packages - please create an issue!
+**Note:** This comparison was created due to multiple requests, apologies for any mistakes or if I have missed something from other packages - please get in touch / create an issue!
 
 | **Feature**                                                                                         | **Cotton**                 | **django-components**                  | **Slippers**                                               | **Django Template Partials**                      |
 |-----------------------------------------------------------------------------------------------------|----------------------------|----------------------------------------|------------------------------------------------------------|---------------------------------------------------|
 | **Intro**                                                                                           | UI-focused, expressive syntax       | Holistic solution with backend logic   | Enhances DTL for reusable components                       | Define and reuse inline HTML partials             |
 | **Definition of ‘component’**                                                                       | An HTML template           | A backend class with template          | An HTML template                                           | Inline specified partial                          |
-| **Syntax Style** <br> HTML-like                                                                     | HTML-like                  | Django Template Tags                   | Django Template Tags with custom tags                      | Django Template Tags                              |
-| **Create component in one step?**                                                                   | Yes <br> (place in folder) | No <br> (create additional class file) | No <br> (need to register in YAML file or with function)   | Yes <br> (declare inline or load via include tag) |
-| **Slots (default)** <br> Pass HTML content between tags                                             | Yes                        | Yes                                    | Yes                                                        | No                                                |
-| **Named Slots** <br> Designate a slot in the component template                                     | Yes                        | Yes                                    | Yes, using ‘fragment’                                      | No                                                |
-| **Dynamic Components** <br> Dynamically render components based on a variable or expression         | Yes | No | No | No |
-| **Scoped Slots** <br> Reference component context in parent template                                | No                         | Yes                                    | No                                                         | No                                                |
-| **Dynamic Attributes** <br> Pass string literals of basic Python types                              | Yes                        | No                                     | No                                                         | No                                                |
-| **Boolean Attributes** <br> Pass valueless attributes as True                                       | Yes                        | Yes                                    | No                                                         | No                                                |
-| **Declare Variables in Component View** <br> Set defaults for UI states                             | Yes                        | No <br> (Use class properties)         | Yes                                                        | No                                                |
-| **Implicit Attribute Passing** <br> Pass all defined attributes to an element                       | Yes                        | No                                     | Yes                                                        | No                                                |
-| **Django Template Expressions in Attribute Values** <br> Use Django expressions in attribute values | Yes                        | No                                     | No                                                         | No                                                |
-| **Auto-Registering Components** <br> Start using components without manual registration             | Yes                        | No <br> (Create class with decorator)  | No <br> (Register in YAML file or with helper function)    | Yes                                               |
-| **Attribute Merging** <br> Replace existing attributes with component attributes                    | Yes                        | Yes                                    | No                                                         | No                                                |
-| **Multi-line Component Tags** <br> Write component tags over multiple lines                         | Yes                        | No                                     | No                                                         | No                                                |
+| **Syntax Style**                                                                     | HTML-like                  | Django Template Tags                   | Django Template Tags with custom tags                      | Django Template Tags                              |
+| **Create component in one step?**                                                                   | ✅ <br> (place in folder) | ❌ <br> (create additional class file) | ❌ <br> (need to register in YAML file or with function)   | ✅ <br> (declare inline or load via include tag) |
+| **Slots** <br> Pass HTML content between tags                                             | ✅                        | ✅                                    | ✅                                                        | ❌                                                |
+| **Named Slots** <br> Designate a slot in the component template                                     | ✅                        | ✅                                    | ✅ (using ‘fragments’)                                      | ❌                                                |
+| **Dynamic Components** <br> Dynamically render components based on a variable or expression         | ✅ | ❌ | ❌ | ❌ |
+| **Scoped Slots** <br> Reference component context in parent template                                | ❌                         | ✅                                    | ❌                                                         | ❌                                                |
+| **Dynamic Attributes** <br> Pass string literals of basic Python types                              | ✅                        | ❌                                     | ❌                                                         | ❌                                                |
+| **Boolean Attributes** <br> Pass valueless attributes as True                                       | ✅                        | ✅                                    | ❌                                                         | ❌                                                |
+| **Declare Variables in Component View** <br> Set defaults for UI states                             | ✅                        | ❌ <br> (Use class properties)         | ✅                                                        | ❌                                                |
+| **Implicit Attribute Passing** <br> Pass all defined attributes to an element                       | ✅                        | ❌                                     | ✅                                                        | ❌                                                |
+| **Django Template Expressions in Attribute Values** <br> Use Django expressions in attribute values | ✅                        | ❌                                     | ❌                                                         | ❌                                                |
+| **Auto-Registering Components** <br> Start using components without manual registration             | ✅                        | ❌ <br> (Create class with decorator)  | ❌ <br> (Register in YAML file or with helper function)    | ✅                                               |
+| **Attribute Merging** <br> Replace existing attributes with component attributes                    | ✅                        | ✅                                    | ❌                                                         | ❌                                                |
+| **Multi-line Component Tags** <br> Write component tags over multiple lines                         | ✅                        | ❌                                     | ❌                                                         | ❌                                                |

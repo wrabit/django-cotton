@@ -2,9 +2,9 @@ import ast
 
 from django import template
 from django.conf import settings
-from django.template import Node, Template, Context
 from django.utils.safestring import mark_safe
 from django.template.loader import get_template
+from django.template import Node, Template, Context
 
 from django_cotton.utils import ensure_quoted
 
@@ -48,41 +48,54 @@ class CottonComponentNode(Node):
         self.kwargs = kwargs
 
     def render(self, context):
-        attrs = self._build_attrs(context)
+        ctx = context.flatten()
+        ctx["slot"] = self.nodelist.render(context)
+        ctx["ctn_unprocessable_dynamic_attrs"] = set()
 
-        # Add the remainder as the default slot
-        local_ctx = context.flatten()
-        local_ctx["slot"] = self.nodelist.render(context)
+        attrs = self._build_attrs(ctx)
 
         # Merge slots and attributes into the local context
         all_named_slots_ctx = context.get("cotton_named_slots", {})
-        local_named_slots_ctx = all_named_slots_ctx.get(self.component_key, {})
-        local_ctx.update(local_named_slots_ctx)
+        named_slots_ctx = all_named_slots_ctx.get(self.component_key, {})
+        ctx.update(named_slots_ctx)
 
         # We need to check if any dynamic attributes are present in the component slots, process them and move them over to attrs
-        if "ctn_template_expression_attrs" in local_named_slots_ctx:
-            for expression_attr in local_named_slots_ctx["ctn_template_expression_attrs"]:
+        if "ctn_template_expression_attrs" in named_slots_ctx:
+            for key in named_slots_ctx["ctn_template_expression_attrs"]:
                 # Process them like a non-extracted attribute
-                evaluated = self._process_dynamic_attribute(
-                    local_named_slots_ctx[expression_attr], local_ctx
-                )
-                expression_attr = expression_attr.lstrip(":")
-                attrs[expression_attr] = evaluated
+                if key[0] == ":":
+                    evaluated = self._process_dynamic_attribute(key, named_slots_ctx[key], ctx)
+                    key = key[1:]
+                    attrs[key] = evaluated
+                else:
+                    attrs[key] = named_slots_ctx[key]
 
         attrs_string = " ".join(f"{key}={ensure_quoted(value)}" for key, value in attrs.items())
-        local_ctx["attrs"] = mark_safe(attrs_string)
-        local_ctx["attrs_dict"] = attrs
+        ctx["attrs"] = mark_safe(attrs_string)
+        ctx["attrs_dict"] = attrs
 
-        # Store attr names in a callable format, i.e. 'x-init' will be accessible by {{ x_init }}
+        # Ensure attributes are accessible, eg. 'x-init' -> {{ x_init }}
         attrs = {key.replace("-", "_"): value for key, value in attrs.items()}
-        local_ctx.update(attrs)
+        ctx.update(attrs)
 
         # Reset the component's slots in context to prevent data leaking between components.
         all_named_slots_ctx[self.component_key] = {}
 
         template_path = self._generate_component_template_path(attrs)
 
-        return get_template(template_path).render(local_ctx)
+        # Use render_context for caching the template
+        cache = context.render_context.get(self)
+        if cache is None:
+            cache = context.render_context[self] = {}
+
+        tpl = cache.get(template_path)
+        if tpl is None:
+            tpl = get_template(template_path)
+            cache[template_path] = tpl
+
+        return tpl.render(ctx)
+
+        # return get_template(template_path).render(ctx)
 
     def _build_attrs(self, context):
         """
@@ -97,16 +110,20 @@ class CottonComponentNode(Node):
 
             if key.startswith(":"):
                 key = key[1:]
-                attrs[key] = self._process_dynamic_attribute(value, context)
+
+                attrs[key] = self._process_dynamic_attribute(key, value, context)
+            elif value == "":
+                attrs[key] = True
             else:
                 attrs[key] = value
 
         return attrs
 
-    def _process_dynamic_attribute(self, value, context):
+    def _process_dynamic_attribute(self, key, value, context):
         """
         Process a dynamic attribute (prefixed with ":")
         """
+        orig_value = value
         # We might be passing a variable by reference
         try:
             return template.Variable(value).resolve(context)
@@ -122,9 +139,17 @@ class CottonComponentNode(Node):
 
         # Finally, try to evaluate the value as a Python literal
         try:
-            return ast.literal_eval(value)
+            value = ast.literal_eval(value)
         except (ValueError, SyntaxError):
-            return value
+            pass
+
+        # If we got this far and we were not able to process the dynamic variable, we'll note it so vars frame can show
+        # the default value, if one is set
+        if value == orig_value:
+            context["ctn_unprocessable_dynamic_attrs"].add(key)
+            return ""
+
+        return value
 
     def _generate_component_template_path(self, attrs):
         """Check if the component is dynamic else process the path as is"""

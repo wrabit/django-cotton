@@ -113,6 +113,7 @@ class CottonCompiler:
         content = self._compile_cotton_to_django(content, template_name)
         content = self._fix_bs4_attribute_empty_attribute_behaviour(content)
         content = self._replace_placeholders_with_syntax(content)
+        print(content)
         content = self._remove_duplicate_attribute_markers(content)
 
         return content

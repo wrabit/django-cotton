@@ -50,7 +50,7 @@ class CottonComponentNode(Node):
     def render(self, context):
         ctx = context.flatten()
         ctx["slot"] = self.nodelist.render(context)
-        ctx["unprocessable_dynamic_attrs"] = set()
+        ctx["ctn_unprocessable_dynamic_attrs"] = set()
 
         attrs = self._build_attrs(ctx)
 
@@ -83,7 +83,19 @@ class CottonComponentNode(Node):
 
         template_path = self._generate_component_template_path(attrs)
 
-        return get_template(template_path).render(ctx)
+        # Use render_context for caching the template
+        cache = context.render_context.get(self)
+        if cache is None:
+            cache = context.render_context[self] = {}
+
+        tpl = cache.get(template_path)
+        if tpl is None:
+            tpl = get_template(template_path)
+            cache[template_path] = tpl
+
+        return tpl.render(ctx)
+
+        # return get_template(template_path).render(ctx)
 
     def _build_attrs(self, context):
         """
@@ -133,7 +145,7 @@ class CottonComponentNode(Node):
         # If we got this far and we were not able to process the dynamic variable, we'll note it so vars frame can show
         # the default value, if one is set
         if value == orig_value:
-            context["unprocessable_dynamic_attrs"].add(key)
+            context["ctn_unprocessable_dynamic_attrs"].add(key)
             return ""
 
         return value

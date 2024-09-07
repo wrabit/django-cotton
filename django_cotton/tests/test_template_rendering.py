@@ -101,15 +101,6 @@ class TemplateRenderingTests(CottonTestCase):
             "view/",
         )
 
-        # compiled = get_compiled(
-        #     """
-        #         <c-vars var1="Hello" var2="World" />
-        #         <c-spaces var1="Hello" var2="World">{{ var1 }} {{ var2 }}</c-spaces>
-        #     """
-        # )
-        # print(compiled)
-
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            print(response.content.decode())
             self.assertContains(response, "<div>Hello World</div>")

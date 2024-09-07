@@ -113,7 +113,6 @@ class CottonCompiler:
         content = self._compile_cotton_to_django(content, template_name)
         content = self._fix_bs4_attribute_empty_attribute_behaviour(content)
         content = self._replace_placeholders_with_syntax(content)
-        print(content)
         content = self._remove_duplicate_attribute_markers(content)
 
         return content
@@ -189,8 +188,8 @@ class CottonCompiler:
                 changes in the output that can lead to unintended tag type mutations,
                 i.e. <div{% expr %}></div> --> <div__placeholder></div__placeholder> --> <div{% expr %}></div{% expr %}>
                 """
-                left_group = r"(\s*)" if not placeholder["left_space"] else ""
-                right_group = r"(\s*)" if not placeholder["right_space"] else ""
+                left_group = r"( ?)" if not placeholder["left_space"] else ""
+                right_group = r"( ?)" if not placeholder["right_space"] else ""
                 placeholder_pattern = (
                     f"{left_group}{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__{right_group}"
                 )

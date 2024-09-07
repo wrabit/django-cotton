@@ -235,6 +235,7 @@ class CottonCompiler:
 
         # Construct the {% with %} opening tag
         opening = "{% cotton_vars_frame " + " ".join(vars_with_defaults) + " %}"
+        opening = opening.replace("\n", "")
         closing = "{% endcotton_vars_frame %}"
 
         # Convert the remaining soup back to a string and wrap it within {% with %} block

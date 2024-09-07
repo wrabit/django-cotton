@@ -89,3 +89,18 @@ class TemplateRenderingTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, '<option value="1" selected>Value 1</option>')
             self.assertNotContains(response, '<option value="2" selected>Value 2</option>')
+
+    def test_spaces_preserved_between_variables(self):
+        self.create_template("cotton/spaces.html", """<div>{{ slot }}</div>""")
+        self.create_template(
+            "spaces_view.html",
+            """
+                <c-vars var1="Hello" var2="World" />
+                <c-spaces var1="Hello" var2="World">{{ var1 }} {{ var2 }}</c-spaces>
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "<div>Hello World</div>")

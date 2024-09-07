@@ -351,9 +351,9 @@ class InlineTestCase(CottonInlineTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, "All good")
 
-    def test_empty_variables_fallback_to_cvars_defaults(self):
+    def test_unprocessable_dynamic_attributes_fallback_to_cvars_defaults(self):
         self.create_template(
-            "cotton/unprocessable_attribute.html",
+            "cotton/unprocessable_dynamic_attribute.html",
             """
                 <c-vars color="gray" />
                 {{ color }}
@@ -361,9 +361,9 @@ class InlineTestCase(CottonInlineTestCase):
         )
 
         self.create_template(
-            "unprocessable_attribute_view.html",
+            "unprocessable_dynamic_attribute_view.html",
             """
-                <c-unprocessable-attribute :color="button.color" />
+                <c-unprocessable-dynamic-attribute :color="button.color" />
             """,
             "view/",
             context={},

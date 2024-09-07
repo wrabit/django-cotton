@@ -366,7 +366,7 @@ class InlineTestCase(CottonInlineTestCase):
                 <c-empty-variables :color="button.color" />
             """,
             "view/",
-            context={"button": {}},
+            context={},
         )
 
         # Override URLconf

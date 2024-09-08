@@ -1,4 +1,4 @@
-<div class="py-5 sticky top-0 md:top-auto bg-amber-50 dark:bg-gray-900 border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
+<div class="py-5 sticky top-0 bg-amber-50 dark:bg-gray-900 md:bg-transparent border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
      x-data="{isOpen: false}"
      x-init="
         window.addEventListener('resize', () => {
@@ -42,7 +42,7 @@
             <a href="/" class="flex item-center items-center space-x-2">
                 <div class="flex items-center">
                     <c-icons.logo class="w-8 h-8 text-teal-600" />
-                    <span class="font-bold text-2xl ml-1.5 dark:text-gray-100">cotton</span>
+                    <span class="font-bold text-2xl ml-1.5 text-[#1a384a] dark:text-gray-100">cotton</span>
                 </div>
                 <span class="text-white flex items-center space-x-2">
                     <siv class="text-gray-700 dark:text-white text-sm opacity-50 mt-0.5">for</siv>

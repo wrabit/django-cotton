@@ -1,0 +1,46 @@
+<!-- cotton/ui/button.html -->
+<c-vars
+  variant="primary"
+  size="md"
+  type="button"
+  :themes="{
+    'primary': 'bg-blue-500 hover:bg-blue-600 text-white',
+    'secondary': 'bg-gray-200 hover:bg-gray-300 text-gray-800',
+    'outline': 'bg-white hover:bg-gray-100 text-gray-800 border border-gray-300',
+    'ghost': 'bg-transparent hover:bg-gray-100 text-gray-800'
+  }"
+  :sizes="{
+    'sm': 'px-2 py-1 text-sm',
+    'md': 'px-4 py-2',
+    'lg': 'px-6 py-3 text-lg'
+  }"
+/>
+
+<button
+  type="{{ type }}"
+  {{ attrs }}
+  class="
+    inline-flex items-center justify-center rounded-md font-medium transition-colors
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2
+    disabled:opacity-50 disabled:pointer-events-none
+    {{ themes|get:variant }}
+    {{ sizes|get:size }}
+  "
+>
+  {{ slot }}
+</button>
+
+<!-- Usage example -->
+<!--
+<c-ui.button variant="primary" size="md">
+  Click me
+</c-ui.button>
+
+<c-ui.button variant="secondary" size="sm" type="submit">
+  Submit
+</c-ui.button>
+
+<c-ui.button variant="outline" size="lg" disabled>
+  Disabled
+</c-ui.button>
+-->

@@ -28,3 +28,8 @@ def merge(attrs, args):
 @register.filter
 def eval_default(value, arg):
     return value or eval_string(arg)
+
+
+@register.filter
+def get(dictionary, key):
+    return dictionary.get(key)

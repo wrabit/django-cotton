@@ -1,0 +1,28 @@
+<!-- cotton/ui/tabs.html -->
+<c-vars
+  :themes="{
+    'default': 'border-b border-gray-200',
+    'pills': 'space-x-2'
+  }"
+  theme="default"
+/>
+
+<div x-data="{ activeTab: 0, tabs: [] }" x-init="tabs = Array.from($refs.tabPanels.children).map(panel => panel.getAttribute('name'))" class="{{ themes|get:theme }}">
+  <div class="flex" role="tablist">
+    <template x-for="(tab, index) in tabs" :key="index">
+      <button
+        @click="activeTab = index"
+        :class="{ 'border-b-2 border-blue-500 -mb-px': activeTab === index }"
+        class="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 focus:border-blue-300"
+        :id="'tab-' + index"
+        role="tab"
+        :aria-selected="activeTab === index"
+        :aria-controls="'panel-' + index"
+        x-text="tab"
+      ></button>
+    </template>
+  </div>
+  <div x-ref="tabPanels" class="mt-4">
+    {{ slot }}
+  </div>
+</div>

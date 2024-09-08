@@ -22,31 +22,22 @@ def cotton_slot(parser, token):
 
 class CottonSlotNode(template.Node):
     def __init__(self, slot_name, nodelist, component_key, is_expression_attr):
-        self.slot_name = slot_name
         self.nodelist = nodelist
+        self.slot_name = slot_name
         self.component_key = component_key
         self.is_expression_attr = is_expression_attr
 
     def render(self, context):
-        # Add the rendered content to the context.
-        if "cotton_named_slots" not in context:
-            context.update({"cotton_named_slots": {}})
-
         output = self.nodelist.render(context)
+        cotton_named_slots = context.setdefault("cotton_named_slots", {})
+        component_slots = cotton_named_slots.setdefault(self.component_key, {})
+        component_slots[self.slot_name] = mark_safe(output)
 
-        # Store the slot data in a component-namespaced dictionary
-        if self.component_key not in context["cotton_named_slots"]:
-            context["cotton_named_slots"][self.component_key] = {}
-
-        context["cotton_named_slots"][self.component_key][self.slot_name] = mark_safe(output)
-
-        # If the slot is being used to hold an expression attribute, we record it so it can be transferred to attrs in the component
+        # If the slot is being used to hold an expression attribute, we record it so it
+        # can be transferred to attrs in the component
         if self.is_expression_attr:
-            key = "ctn_template_expression_attrs"
-
-            if key not in context["cotton_named_slots"][self.component_key]:
-                context["cotton_named_slots"][self.component_key][key] = []
-
-            context["cotton_named_slots"][self.component_key][key].append(self.slot_name)
+            component_slots = context["cotton_named_slots"][self.component_key]
+            expression_attrs = component_slots.setdefault("ctn_template_expression_attrs", [])
+            expression_attrs.append(self.slot_name)
 
         return ""

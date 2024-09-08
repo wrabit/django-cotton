@@ -188,8 +188,8 @@ class CottonCompiler:
                 changes in the output that can lead to unintended tag type mutations,
                 i.e. <div{% expr %}></div> --> <div__placeholder></div__placeholder> --> <div{% expr %}></div{% expr %}>
                 """
-                left_group = r"(\s*)" if not placeholder["left_space"] else ""
-                right_group = r"(\s*)" if not placeholder["right_space"] else ""
+                left_group = r"( ?)" if not placeholder["left_space"] else ""
+                right_group = r"( ?)" if not placeholder["right_space"] else ""
                 placeholder_pattern = (
                     f"{left_group}{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__{right_group}"
                 )
@@ -235,6 +235,7 @@ class CottonCompiler:
 
         # Construct the {% with %} opening tag
         opening = "{% cotton_vars_frame " + " ".join(vars_with_defaults) + " %}"
+        opening = opening.replace("\n", "")
         closing = "{% endcotton_vars_frame %}"
 
         # Convert the remaining soup back to a string and wrap it within {% with %} block

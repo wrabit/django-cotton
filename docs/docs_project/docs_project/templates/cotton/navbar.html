@@ -1,4 +1,4 @@
-<div class="py-5 sticky top-0 md:top-auto bg-amber-50 dark:bg-gray-900 border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
+<div class="py-5 sticky top-0 bg-amber-50 dark:bg-gray-900 md:bg-transparent dark:md:bg-transparent border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
      x-data="{isOpen: false}"
      x-init="
         window.addEventListener('resize', () => {
@@ -14,7 +14,7 @@
             <!-- Mobile menu button-->
             <button @click="isOpen = !isOpen"
                     type="button"
-                    class="block sm:hidden relative inline-flex items-center justify-center rounded-md pr-3 text-gray-400 focus:outline-none focus:ring-0"
+                    class="sm:hidden relative inline-flex items-center justify-center rounded-md pr-3 text-gray-400 focus:outline-none focus:ring-0"
                     aria-controls="mobile-menu" aria-expanded="false">
                 <span class="absolute -inset-0.5"></span>
                 <span class="sr-only">Open main menu</span>
@@ -39,13 +39,11 @@
                 </svg>
             </button>
 
-            <a href="/" class="flex item-center items-center space-x-2">
-                <div class="flex items-center">
+            <a href="/" class="flex item-center items-center space-x-1.5">
+                <div class="flex items-center space-x-1">
                     <c-icons.logo class="w-8 h-8 text-teal-600" />
-                    <span class="font-bold text-2xl ml-1.5 dark:text-gray-100">cotton</span>
-                </div>
-                <span class="text-white flex items-center space-x-2">
-                    <siv class="text-gray-700 dark:text-white text-sm opacity-50 mt-0.5">for</siv>
+                    <span class="font-bold text-2xl ml-1.5 text-[#1a384a] dark:text-gray-100">cotton</span>
+                    <div class="text-gray-700 dark:text-white text-sm opacity-50 mt-0.5">for</div>
                     <c-icons.django class="h-6 text-teal-600 mt-1.5" />
                 </span>
             </a>

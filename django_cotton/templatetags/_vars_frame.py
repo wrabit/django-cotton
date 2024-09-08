@@ -10,12 +10,8 @@ def cotton_vars_frame(parser, token):
     """The job of the vars frame is:
     1. to filter out attributes declared as vars inside {{ attrs }} string.
     2. to provide default values to attributes.
-    Because we're effecting variables inside the same component, which is not possible usually, we we wrap
-    the vars frame around the contents of the component so we can govern the attributes and vars that are available.
     """
     bits = token.split_contents()[1:]  # Skip the tag name
-
-    # We dont use token_kwargs because it doesn't allow for hyphens in key names, i.e. x-data=""
     tag_kwargs = {}
     for bit in bits:
         key, value = bit.split("=")
@@ -32,21 +28,21 @@ class CottonVarsFrameNode(template.Node):
         self.kwargs = kwargs
 
     def render(self, context):
-        # Retrieve attrs_dict from parent _component
         provided_attrs = context.get("attrs_dict", {})
+        unprocessable = context.get("ctn_unprocessable_dynamic_attrs", set())
 
         # Initialize vars based on the frame's kwargs and parent attrs
         c_vars = {}
         for key, value in self.kwargs.items():
-            # Check if the var exists in component attrs; if so, use it, otherwise use the resolved default
-            if key in provided_attrs:
+            # Check if the var exists in component attrs;
+            # We have an opinion here that if the provided attr value is empty, we should use the default value
+            if key in provided_attrs and key not in unprocessable:
                 c_vars[key] = provided_attrs[key]
             else:
                 # Attempt to resolve each kwarg value (which may include template variables)
-                resolved_value = value.resolve(context)
-                c_vars[key] = resolved_value
+                c_vars[key] = value.resolve(context)
 
-        # Overwrite 'attrs' in the local context by excluding keys that are identified as vars
+        # Excluding keys from {{ attrs }} that are identified as vars
         attrs_dict = {k: v for k, v in provided_attrs.items() if k not in c_vars}
 
         # Provide all of the attrs as a string to pass to the component before any '-' to '_' replacing

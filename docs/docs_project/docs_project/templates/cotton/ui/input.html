@@ -2,16 +2,20 @@
     type="text"
     class=""
     left_addon=""
-    right_addon="" />
-
+    right_addon=""
+    placeholder=""
+/>
 <div
     class="flex
         flex-grow
         items-center
         border-gray-300
         bg-white
+        dark:bg-transparent
+        dark:text-white
         shadow-sm
-        rounded-md ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600
+        rounded
+        ring-1 ring-gray-400 ring-opacity-40 focus-within:ring-2 focus-within:ring-tel-600
     "
 >
     {% if left_addon %}
@@ -22,7 +26,8 @@
 
     <input
         type="{{ type }}"
-        class="flex-grow px-3 py-2 {% if not left_addon %}rounded-l{% endif %} {% if not right_addon %}rounded-r{% endif %} bg-transparent w-full border-0 focus:outline-none focus:ring-0 {{ class }}"
+        placeholder="{{ placeholder }}"
+        class="flex-grow px-3.5 py-1.5 {% if not left_addon %}rounded-l{% endif %} {% if not right_addon %}rounded-r{% endif %} bg-transparent w-full border-0 focus:outline-none focus:ring-0 {{ class }}"
         {{ attrs }}
     >
 

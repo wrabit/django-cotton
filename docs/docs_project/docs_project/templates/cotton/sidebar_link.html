@@ -3,9 +3,10 @@
         <div class="absolute left-[-17px] w-[3px] h-full bg-teal-600"></div>
     {% endif %}
     <a href="{{ url }}"
-       class="dark:text-white text-[#1a384a]
+       class="dark:text-white dark:hover:opacity-100 text-[#1a384a]
         {% if request.path == url %}
-            dark:text-opacity-100 font-semibold
+            font-semibold
+            dark:opacity-100
         {% else %}
             dark:opacity-70
         {% endif %}">

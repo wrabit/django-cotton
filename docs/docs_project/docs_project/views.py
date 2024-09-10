@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 def build_view(template_name):
     def view(request):
-        return render(request, f"{template_name}.html")
+        return render(request, f"{template_name}.html", {"test": False})
 
     return view
 

@@ -31,19 +31,24 @@
             </c-slot>
         </c-ui.input>
     </div>
+
+    <h3>Textarea</h3>
+
     <div class="mb-3">
-        <c-ui.textarea placeholder="Enter your text"></c-ui.textarea>
+        <c-ui.textarea :valid="{{ test }}" placeholder="Enter your text"></c-ui.textarea>
     </div>
 
-
+    <h3>Tabs</h3>
     <c-ui.tabs>
       <c-ui.tab name="Tab 1">Content for Tab 1</c-ui.tab>
       <c-ui.tab name="Tab 2">Content for Tab 2</c-ui.tab>
       <c-ui.tab name="Tab 3">Content for Tab 3</c-ui.tab>
     </c-ui.tabs>
 
+    <h3>Tag Input</h3>
+    <c-ui.tag-input name="tags" placeholder="Place me some taaags" :selected="['tag1', 'tag2']" :options="['tag1', 'tag2', 'tag3']" max_tags="3" />
 
-    <!-- Tooltip -->
+    <h3>Tooltip</h3>
     <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="light">
       <button class="px-4 py-2 bg-blue-500 text-white rounded">Top</button>
     </c-ui.tooltip>

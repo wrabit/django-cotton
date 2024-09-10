@@ -21,4 +21,8 @@ urlpatterns = [
     path("docs/icons", views.build_view("icons"), name="icons"),
     # More
     path("docs/configuration", views.build_view("configuration"), name="configuration"),
+    # UI
+    path("ui", views.build_view("ui_docs/getting_started"), name="ui"),
+    path("ui/input", views.build_view("ui_docs/input"), name="ui-input"),
+    path("ui/textarea", views.build_view("ui_docs/textarea"), name="ui-textarea"),
 ]

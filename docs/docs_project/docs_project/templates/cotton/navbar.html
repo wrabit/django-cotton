@@ -1,4 +1,4 @@
-<div class="py-5 sticky top-0 bg-amber-50 dark:bg-gray-900 md:bg-transparent dark:md:bg-transparent border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
+<div class="py-7 mb-3 sticky top-0 bg-amber-50 dark:bg-gray-900 md:bg-transparent dark:md:bg-transparent border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
      x-data="{isOpen: false}"
      x-init="
         window.addEventListener('resize', () => {
@@ -43,10 +43,16 @@
                 <div class="flex items-center space-x-1">
                     <c-icons.logo class="w-8 h-8 text-teal-600" />
                     <span class="font-bold text-2xl ml-1.5 text-[#1a384a] dark:text-gray-100">cotton</span>
-                    <div class="text-gray-700 dark:text-white text-sm opacity-50 mt-0.5">for</div>
-                    <c-icons.django class="h-6 text-teal-600 mt-1.5" />
-                </span>
+                        <div class="text-gray-700 dark:text-white text-sm opacity-50 mt-0.5">for</div>
+                        <c-icons.django class="h-6 text-teal-600 mt-1.5" />
+                    </span>
+                </div>
             </a>
+
+            <div class="space-x-3 ml-5">
+                <a href="#" class="dark:text-gray-300 font-semibold text-[15px]">Docs</a>
+                <a href="#" class="dark:text-gray-300 font-semibold text-[15px]">UI Components <sup class="bg-red-500 rounded-lg px-1 py-0.5 text-white">NEW!</sup></a>
+            </div>
         </div>
 
         <div class="flex items-center space-x-3">

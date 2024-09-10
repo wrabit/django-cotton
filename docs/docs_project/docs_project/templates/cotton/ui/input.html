@@ -5,20 +5,23 @@
     right_addon="" />
 
 <div
-    x-data="{ focused: false }"
-    :class="{ 'ring-2 ring-offset-2 ring-inset ring-blue-500': focused }"
-    class="flex flex-grow items-center border border-gray-300 rounded shadow bg-white"
+    class="flex
+        flex-grow
+        items-center
+        border-gray-300
+        bg-white
+        shadow-sm
+        rounded-md ring-1 ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600
+    "
 >
     {% if left_addon %}
-        <div class="flex flex-shrink-0 pl-3 self-stretch items-center bg-gray100 border- border-gray300 rounded-l">
+        <div class="flex flex-shrink-0 pl-3 self-stretch items-center bg-gray100 border-gray300 rounded-l">
             {{ left_addon }}
         </div>
     {% endif %}
 
     <input
         type="{{ type }}"
-        @focus="focused = true"
-        @blur="focused = false"
         class="flex-grow px-3 py-2 {% if not left_addon %}rounded-l{% endif %} {% if not right_addon %}rounded-r{% endif %} bg-transparent w-full border-0 focus:outline-none focus:ring-0 {{ class }}"
         {{ attrs }}
     >

@@ -1,3 +1,5 @@
+import json
+
 from django import template
 from django.utils.html import format_html_join
 
@@ -33,3 +35,8 @@ def eval_default(value, arg):
 @register.filter
 def get(dictionary, key):
     return dictionary.get(key)
+
+
+@register.filter
+def json_dumps(value):
+    return json.dumps(value)

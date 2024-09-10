@@ -9,6 +9,10 @@
         {% else %}
             dark:opacity-70
         {% endif %}">
-        {{ slot }}
+        {% if title %}
+            {{ title }}
+        {% else %}
+            {{ slot }}
+        {% endif %}
     </a>
 </li>

@@ -1,9 +1,9 @@
 [project]
 name = "cotton-dev-app"
 version = "0.9"
-requires-python = ">=3.8, <4"
+requires-python = ">=3.10, <4"
 dependencies = [
-    "django~=4.2.6",
+    "django~=5.1",
     "beautifulsoup4~=4.12.2",
     "selenium~=4.13.0",
     "heroicons~=2.6.0",
@@ -23,8 +23,8 @@ description = "Docs site for django_cotton."
 authors = ["Will Abbott <willabb83@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-Django = "^4.2"
+python = "^3.10"
+Django = "^5.1"
 beautifulsoup4 = "~4.12.2"
 heroicons = "2.6.0"
 gunicorn = "20.1.0"

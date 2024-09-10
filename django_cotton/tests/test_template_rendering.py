@@ -104,3 +104,19 @@ class TemplateRenderingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, "<div>Hello World</div>")
+
+    def test_encoding_is_retained_through_compilation(self):
+        many_encoded_html_chars = "".join(
+            [
+                "&lt;",
+                "&gt;",
+                "&amp;",
+                "&quot;",
+                "&#39;",
+                "&#x27;",
+                "&#x2F;",
+                "&#x60;",
+            ]
+        )
+        compiled = get_compiled(many_encoded_html_chars)
+        self.assertTrue(many_encoded_html_chars in compiled)

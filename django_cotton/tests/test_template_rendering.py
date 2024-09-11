@@ -1,4 +1,4 @@
-from django_cotton.tests.utils import CottonTestCase, get_rendered
+from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_compiled
 
 
@@ -135,17 +135,36 @@ class TemplateRenderingTests(CottonTestCase):
             response = self.client.get("/view/", data={"foo": "bar"})
             self.assertContains(response, "?foo=bar")
 
-    def test_cvars_rendering(self):
-        html = """
-        <c-vars stroke_width="30" />
-        
-        <svg {{ attrs }} viewBox="0 0 512 512">
-          <g fill="none" stroke="currentColor" stroke-width="{{ stroke_width }}" stroke-linejoin="round">
-            <path d="M143.533 256 79.267 384.533v-192.8L497 127.467z"/>
-            <path d="M143.533 256 79.267 384.533l119.352-73.448zM15 127.467h482L79.267 191.733z"/>
-            <path d="M143.533 256 497 127.467l-241 241z"/>
-          </g>
-        </svg>        
-        """
+    def test_cvars_isnt_changing_global_context(self):
+        self.create_template(
+            "cotton/child.html",
+            """
+            <c-vars />
+            
+            name: child (class: {{ class }})
+            """,
+        )
+        self.create_template(
+            "cotton/parent.html",
+            """
+            name: parent (class: {{ class }}))
+            
+            {{ slot }}
+            """,
+        )
 
-        print(get_rendered(html))
+        self.create_template(
+            "slot_scope_view.html",
+            """
+            <c-parent>
+                <c-child class="testy" />
+            </c-parent>
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertTrue("name: child (class: testy)" in response.content.decode())
+            self.assertTrue("name: parent (class: )" in response.content.decode())

@@ -47,7 +47,7 @@ settings.configure(
 django.setup()
 
 
-def template_bench(template_name, iterations=1000):
+def template_bench(template_name, iterations=500):
     start_time = time.time()
     for _ in range(iterations):
         render_to_string(template_name)
@@ -57,7 +57,7 @@ def template_bench(template_name, iterations=1000):
     return duration, render_to_string(template_name)
 
 
-def template_bench_alt(template_name, iterations=1000):
+def template_bench_alt(template_name, iterations=500):
     data = list(range(1, iterations))
     start_time = time.time()
     render_to_string(template_name, context={"data": data})

@@ -43,15 +43,15 @@ class CottonVarsFrameNode(template.Node):
                 c_vars[key] = value.resolve(context)
 
         # Excluding keys from {{ attrs }} that are identified as vars
-        attrs_dict = {k: v for k, v in provided_attrs.items() if k not in c_vars}
+        remaining_attrs_dict = {k: v for k, v in provided_attrs.items() if k not in c_vars}
+        attrs_string = " ".join(f"{k}={ensure_quoted(v)}" for k, v in remaining_attrs_dict.items())
+        accessible_names = {key.replace("-", "_"): value for key, value in c_vars.items()}
 
-        # Provide all of the attrs as a string to pass to the component before any '-' to '_' replacing
-        attrs_string = " ".join(f"{k}={ensure_quoted(v)}" for k, v in attrs_dict.items())
-        context["attrs"] = mark_safe(attrs_string)
-        context["attrs_dict"] = attrs_dict
+        tmp_context = {
+            "attrs_dict": remaining_attrs_dict,
+            "attrs": mark_safe(attrs_string),
+            **accessible_names,
+        }
 
-        # Store attr names in a callable format, i.e. 'x-init' will be accessible by {{ x_init }} when called explicitly and not in {{ attrs }}
-        formatted_vars = {key.replace("-", "_"): value for key, value in c_vars.items()}
-        context.update(formatted_vars)
-
-        return self.nodelist.render(context)
+        with context.push(**tmp_context):
+            return self.nodelist.render(context)

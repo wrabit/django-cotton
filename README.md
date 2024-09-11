@@ -28,6 +28,7 @@ Bringing component-based design to Django templates.
 [HTMX Example](#an-example-with-htmx)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Caching](#caching)  
+[Version support](#support)
 [Changelog](#changelog)  
 [Comparison with other packages](#comparison-with-other-packages)  
 
@@ -464,44 +465,14 @@ Cotton is optimal when used with Django's cached.Loader. If you use <a href="htt
 
 For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
 
+## Version Support
+
+- Python >= 3.8
+- Django >4.2,<5.2
+
 ## Changelog
 
-| Version | Date                                                              | Title and Description                                                                                                                                                                          |
-|---------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| v0.9.37 | 2024-09-07                                                        | Cleanup tests, fixed multiline `cvar` values error, and improved handling of spaces between variables.                                                                                         |
-| v0.9.36 | 2024-09-07                                                        | Updates to README and use of `cvars` for unprocessable dynamic attributes.                                                                                                                     |
-| v0.9.35 | 2024-09-02                                                        | Fixed unintended literal evaluation of non-dynamic properties.                                                                                                                                 |
-| v0.9.34 | 2024-09-02                                                        | Fixed an unhandled exception reported in issue #111.                                                                                                                                           |
-| v0.9.33 | 2024-08-31                                                        | Cotton now parses Django template strings used in dynamic attributes, enabling complex component inputs like sliders, maps, and graphs.                                                        |
-| v0.9.32 | 2024-08-24                                                        | Dynamic components `<c-component :is="component_name" />`, `<c-component is="icon_{{ icon_name }}" />`                                                                                         |
-| v0.9.31 | 2024-08-23                                                        | Fixed bug in auto-setup                                                                                                                                                                        |
-| v0.9.30 | 2024-08-23                                                        | Fixes an issue where by attribute order defined inside default slots were not being kept, causing template expression issues.                                                                  |
-| v0.9.29 | 2024-08-22                                                        | Added an auto setup script on boot that manage settings.py with fallback. Overhauled caching and adopted django's template caching with custom fallback.                                       |
-| v0.9.28 | 2024-08-21                                                        | Reverted cache changes due to cache not recognising file updates.                                                                                                                              |
-| v0.9.27 | 2024-08-21                                                        | Resolved issues with component caching in dev environments.                                                                                                                                    |
-| v0.9.26 | 2024-08-19                                                        | We now check if a template contains any cotton syntax before processing it.                                                                                                                    |
-| v0.9.25 | 2024-08-12                                                        | Fix case sensitive placeholder issue in connection with duplicate attribute handling mechanism.                                                                                                |
-| v0.9.24 | 2024-08-12                                                        | Fixes whitespace preservation around template expressions used in attribute names.                                                                                                             |
-| v0.9.23 | 2024-07-21                                                        | Fixed an issue causing closing tags to become mutated, resolved with better whitespace handling.                                                                                               |
-| v0.9.22 | 2024-07-19                                                        | We now scan all app directories for templates, as if APP_DIRS = True.                                                                                                                          |
-| v0.9.21 | 2024-07-19                                                        | Fixed issue where '=' was breaking the attribute parsing by _component.                                                                                                                        |
-| v0.9.20 | 2024-07-17                                                        | **Set Charset from Engine**<br>Charset when processing template files should be utf-8 or as defined in the loader settings.                                                                    |
-| v0.9.19 | 2024-07-14                                                        | **Fix: Cotton Loader Permits Duplicate Attributes in HTML Tags**<br>Fixed issue where the loader was not allowing Django template expressions to govern whole attributes inside HTML elements. |
-| v0.9.18 | 2024-07-13                                                        | **Fix: Allow Trailing/Leading Quotes in Attributes**                                                                                                                                           |
-| v0.9.17 | 2024-07-11                                                        | **Minor Cleanup**                                                                                                                                                                              |
-| v0.9.16 | 2024-07-10                                                        | **Cotton Component Caching**<br>Cotton components are now cached whilst in production / `DEBUG = False`. LRU cache type with a record count of 1024, cleared on app restart.                   |
-| v0.9.15 | 2024-07-06 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | **Hyphen to Underscore Conversion**<br>Converts variable names with hyphens to underscores for attribute access. i.e. `<c-component x-data="{}" />` -> `{{ x_data }}`                          |
-| v0.9.14 | 2024-07-05                                                        | **c-vars Optimization**<br>Optimizes `c-vars` processing for performance, yielding a 15% speed improvement in component rendering.                                                             |
-| v0.9.13 | 2024-07-05                                                        | **Multi-line Attribute Support**<br>Enables multi-line values in attributes, allowing more support for js-expression style attributes like in alpine.js                                        |
-| v0.9.12 | 2024-07-03                                                        | **Dropped ".cotton.html" Requirement**<br>Cotton no longer requires the `.cotton.html` suffix on component or view templates. A simple `.html` will do.                                        |
-| v0.9.11 | 2024-06-24                                                        | **Attribute Ordering Fix**<br>Attribute ordering was not being kept during compilation which was breaking situations when using template expressions inside tags.                              |
-| v0.9.10 | 2024-06-22                                                        | **Template Expression Attributes**<br>Ensures that the new template expression attributes are also provided in `{{ attrs }}` alongside all normal attributes.                                  |
-| v0.9.9  | 2024-06-22                                                        | **Native Tags in Attributes**<br>Cotton now allows you to include template variables inside attributes. Added expression attributes to `{{ attrs }}`.                                          |
-| v0.9.7  | 2024-06-21                                                        | **Dynamic Type Attributes**<br>Using the `:` to prefix an attribute tells Cotton we're passing a dynamic type down. You can also send basic Python types.                                      |
-| v0.9.6  | 2024-06-17                                                        | **Rename c-props to c-vars**<br>Rename c props, all `<c-props />` are now `<c-vars />`.                                                                                                        |
-| v0.9.4  | 2024-06-11                                                        | **Boolean Attributes**<br>Support for Boolean attributes added with docs update.                                                                                                               |
-| v0.9.1  | 2024-06-08                                                        | **Open Source Release**<br>Open source release.                                                                                                                                                |
-
+[See releases](https://github.com/wrabit/django-cotton/releases)
 
 
 ## Comparison with other packages  

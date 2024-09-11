@@ -120,3 +120,17 @@ class TemplateRenderingTests(CottonTestCase):
         )
         compiled = get_compiled(many_encoded_html_chars)
         self.assertTrue(many_encoded_html_chars in compiled)
+
+    def test_querystring_can_be_rendered(self):
+        self.create_template("cotton/querystring.html", """{% querystring %}""")
+        self.create_template(
+            "querystring_view.html",
+            """
+                <c-querystring />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/", data={"foo": "bar"})
+            self.assertContains(response, "?foo=bar")

@@ -1,0 +1,19 @@
+<h1>Welcome to our simplified Cotton demo</h1>
+
+{% comp button class="btn-primary" %}
+    Click me!
+{% endcomp %}
+
+{% comp card title="My Card" %}
+    This is the content of my card.
+    {% comp button class="btn-secondary" %}
+        Card button
+    {% endcomp %}
+    {% slot name="footer" %}
+        This is the footer of my card.
+    {% endslot %}
+{% endcomp %}
+
+<p>Current time: {{ current_time }}</p>
+
+{% include 'test.html' %}

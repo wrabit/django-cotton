@@ -49,6 +49,8 @@ class Loader(BaseLoader):
         return Template(template_string, engine=self.engine)
 
     def _get_template_string(self, template_name):
+        print("template_name")
+        print(template_name)
         try:
             with open(template_name, "r", encoding=self.engine.file_charset) as f:
                 return f.read()

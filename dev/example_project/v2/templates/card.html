@@ -1,0 +1,15 @@
+<div class="card">
+
+{#    {% cvars test="ssdds" %}{{ test }}{% endcvars %}#}
+{#{{ test }}#}
+    {% querystring %}
+    <h2>{{ title }}</h2>
+    <div class="card-content">
+        {{ slot }}
+    </div>
+    {% if footer %}
+        <div class="card-footer">
+            {{ footer }}
+        </div>
+    {% endif %}
+</div>

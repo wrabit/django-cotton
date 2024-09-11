@@ -1,11 +1,10 @@
 import ast
 
 
-from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.template.loader import get_template
-from django.template import Node, Template, Context
+from django.template import Node, Template, Variable, VariableDoesNotExist
 
 from django_cotton.utils import ensure_quoted
 
@@ -49,11 +48,11 @@ class CottonComponentNode(Node):
         self.kwargs = kwargs
 
     def render(self, context):
-        ctx = context.flatten()
-        ctx["slot"] = self.nodelist.render(context)
-        ctx["ctn_unprocessable_dynamic_attrs"] = set()
+        context["ctn_unprocessable_dynamic_attrs"] = set()
 
-        attrs = self._build_attrs(ctx)
+        ctx = {}
+        ctx["slot"] = self.nodelist.render(context)
+        attrs = self._build_attrs(context)
 
         # Merge slots and attributes into the local context
         all_named_slots_ctx = context.get("cotton_named_slots", {})
@@ -65,7 +64,7 @@ class CottonComponentNode(Node):
             for key in named_slots_ctx["ctn_template_expression_attrs"]:
                 # Process them like a non-extracted attribute
                 if key[0] == ":":
-                    evaluated = self._process_dynamic_attribute(key, named_slots_ctx[key], ctx)
+                    evaluated = self._process_dynamic_attribute(key, named_slots_ctx[key], context)
                     key = key[1:]
                     attrs[key] = evaluated
                 else:
@@ -89,12 +88,15 @@ class CottonComponentNode(Node):
         if cache is None:
             cache = context.render_context[self] = {}
 
-        tpl = cache.get(template_path)
-        if tpl is None:
-            tpl = get_template(template_path)
-            cache[template_path] = tpl
+        template = cache.get(template_path)
+        if template is None:
+            template = get_template(template_path)
+            if hasattr(template, "template"):
+                template = template.template
+            cache[template_path] = template
 
-        return tpl.render(ctx)
+        with context.push(**ctx):
+            return template.render(context)
 
         # return get_template(template_path).render(ctx)
 
@@ -126,8 +128,8 @@ class CottonComponentNode(Node):
         orig_value = value
         # We might be passing a variable by reference
         try:
-            return template.Variable(value).resolve(context)
-        except (template.VariableDoesNotExist, IndexError):
+            return Variable(value).resolve(context)
+        except (VariableDoesNotExist, IndexError):
             pass
 
         # Boolean attribute?
@@ -146,7 +148,7 @@ class CottonComponentNode(Node):
         # If we got this far and we were not able to process the dynamic variable, we'll note it so vars frame can show
         # the default value, if one is set
         if value == orig_value:
-            context["ctn_unprocessable_dynamic_attrs"].add(key)
+            context.setdefault("ctn_unprocessable_dynamic_attrs", set()).add(key)
             return ""
 
         return value
@@ -175,6 +177,6 @@ class CottonComponentNode(Node):
 
     def _parse_template_string(self, value, context):
         try:
-            return Template(value).render(Context(context))
+            return Template(value).render(context)
         except (ValueError, SyntaxError):
             return value

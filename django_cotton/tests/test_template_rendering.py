@@ -134,3 +134,37 @@ class TemplateRenderingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/", data={"foo": "bar"})
             self.assertContains(response, "?foo=bar")
+
+    def test_cvars_isnt_changing_global_context(self):
+        self.create_template(
+            "cotton/child.html",
+            """
+            <c-vars />
+            
+            name: child (class: {{ class }})
+            """,
+        )
+        self.create_template(
+            "cotton/parent.html",
+            """
+            name: parent (class: {{ class }}))
+            
+            {{ slot }}
+            """,
+        )
+
+        self.create_template(
+            "slot_scope_view.html",
+            """
+            <c-parent>
+                <c-child class="testy" />
+            </c-parent>
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertTrue("name: child (class: testy)" in response.content.decode())
+            self.assertTrue("name: parent (class: )" in response.content.decode())

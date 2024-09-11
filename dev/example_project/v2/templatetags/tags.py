@@ -63,12 +63,7 @@ class CottonComponentNode(Node):
             **cotton_data["vars"],
         }
 
-        # Create a new Context based on the original one
-        new_context = context.dicts + [cotton_specific]
-
         template_name = f"{self.component_name.replace('-', '_')}.html"
-
-        # template = context.template.engine.select_template(template_name)
 
         # Use the base.Template of a backends.django.Template.
         template = get_template(template_name)

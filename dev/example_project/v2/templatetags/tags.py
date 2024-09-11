@@ -1,14 +1,19 @@
 from typing import Iterable
 
-from django import template
-from django.template import Variable, VariableDoesNotExist
+from django.template import (
+    Variable,
+    VariableDoesNotExist,
+    Library,
+    Node,
+    TemplateSyntaxError,
+)
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
-register = template.Library()
+register = Library()
 
 
-class CottonComponentNode(template.Node):
+class CottonComponentNode(Node):
     def __init__(self, component_name, nodelist, attrs):
         self.component_name = component_name
         self.nodelist = nodelist
@@ -116,14 +121,14 @@ def cotton_slot(parser, token):
             attrs[bit] = True
 
     if "name" not in attrs:
-        raise template.TemplateSyntaxError("slot tag must include a 'name' attribute")
+        raise TemplateSyntaxError("slot tag must include a 'name' attribute")
 
     nodelist = parser.parse(("endslot",))
     parser.delete_first_token()
     return CottonSlotNode(attrs["name"], nodelist)
 
 
-class CottonSlotNode(template.Node):
+class CottonSlotNode(Node):
     def __init__(self, slot_name, nodelist):
         self.slot_name = slot_name
         self.nodelist = nodelist
@@ -136,7 +141,33 @@ class CottonSlotNode(template.Node):
         return ""
 
 
-@register.tag("vars")
+class CottonVarsNode(Node):
+    def __init__(self, var_dict):
+        self.var_dict = var_dict
+
+    def render(self, context):
+        cotton_data = get_cotton_data(context)
+        if len(cotton_data["stack"]) > 1:  # Ensure we're inside a component
+            parent_vars = cotton_data["stack"][-2].setdefault("vars", {})
+            for key, value in self.var_dict.items():
+                try:
+                    resolved_value = Variable(value).resolve(context)
+                except VariableDoesNotExist:
+                    resolved_value = value
+                parent_vars[key] = resolved_value
+        else:
+            # We're not inside a nested component, so we'll add to the current level
+            current_vars = cotton_data["stack"][-1].setdefault("vars", {})
+            for key, value in self.var_dict.items():
+                try:
+                    resolved_value = Variable(value).resolve(context)
+                except VariableDoesNotExist:
+                    resolved_value = value
+                current_vars[key] = resolved_value
+        return ""
+
+
+@register.tag("cvars")
 def cotton_vars(parser, token):
     bits = token.split_contents()[1:]
     var_dict = {}
@@ -147,25 +178,7 @@ def cotton_vars(parser, token):
         except ValueError:
             var_dict[bit] = "True"
 
-    nodelist = parser.parse(("endvars",))
-    parser.delete_first_token()
-    return CottonVarsNode(nodelist, var_dict)
-
-
-class CottonVarsNode(template.Node):
-    def __init__(self, nodelist, var_dict):
-        self.nodelist = nodelist
-        self.var_dict = var_dict
-
-    def render(self, context):
-        cotton_data = get_cotton_data(context)
-        for key, value in self.var_dict.items():
-            try:
-                resolved_value = Variable(value).resolve(context)
-            except template.VariableDoesNotExist:
-                resolved_value = value
-            cotton_data["vars"][key] = resolved_value
-        return self.nodelist.render(context)
+    return CottonVarsNode(var_dict)
 
 
 @register.simple_tag(name="qstring", takes_context=True)

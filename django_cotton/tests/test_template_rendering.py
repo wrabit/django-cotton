@@ -1,4 +1,4 @@
-from django_cotton.tests.utils import CottonTestCase
+from django_cotton.tests.utils import CottonTestCase, get_rendered
 from django_cotton.tests.utils import get_compiled
 
 
@@ -134,3 +134,18 @@ class TemplateRenderingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/", data={"foo": "bar"})
             self.assertContains(response, "?foo=bar")
+
+    def test_cvars_rendering(self):
+        html = """
+        <c-vars stroke_width="30" />
+        
+        <svg {{ attrs }} viewBox="0 0 512 512">
+          <g fill="none" stroke="currentColor" stroke-width="{{ stroke_width }}" stroke-linejoin="round">
+            <path d="M143.533 256 79.267 384.533v-192.8L497 127.467z"/>
+            <path d="M143.533 256 79.267 384.533l119.352-73.448zM15 127.467h482L79.267 191.733z"/>
+            <path d="M143.533 256 497 127.467l-241 241z"/>
+          </g>
+        </svg>        
+        """
+
+        print(get_rendered(html))

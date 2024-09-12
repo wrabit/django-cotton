@@ -1,14 +1,14 @@
 <div style="margin: 5px 20px; border: 1px solid #ccc; border-radius: 5px">
 
-    {% cvars test="ssdds" %}
-{{ test }}
-    {% querystring %}
+{#    {% cvars test="ssdds" %}#}
+{#{{ test }}#}
+{#    {% querystring %}#}
     <h2>{{ title }}</h2>
     <div class="card-content">
         {{ slot }}
     </div>
     {% if footer %}
-        <div class="card-footer">
+        <div style="font-weight: bold">
             {{ footer }}
         </div>
     {% endif %}

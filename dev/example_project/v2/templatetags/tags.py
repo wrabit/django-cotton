@@ -1,4 +1,4 @@
-from typing import Iterable
+import ast
 
 from django.template import (
     Variable,
@@ -6,11 +6,17 @@ from django.template import (
     Library,
     Node,
     TemplateSyntaxError,
+    Template,
 )
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
 register = Library()
+
+
+class UnprocessableValue:
+    def __init__(self, original_value):
+        self.original_value = original_value
 
 
 class CottonComponentNode(Node):
@@ -34,12 +40,51 @@ class CottonComponentNode(Node):
         # Resolve and add attributes
         resolved_attrs = {}
         for key, value in self.attrs.items():
-            try:
-                resolved_attrs[key] = Variable(value).resolve(context)
-            except VariableDoesNotExist:
+            if key.startswith(":"):
+                original_value = value
+                key = key[1:]  # Remove the ':' prefix
+                try:
+                    # Try to resolve as a variable
+                    resolved_value = Variable(value).resolve(context)
+                except VariableDoesNotExist:
+                    try:
+                        # Try to parse as a template string
+                        template = Template(
+                            f"{{% with True as True and False as False and None as None %}}{value}{{% endwith %}}"
+                        )
+                        rendered_value = template.render(context)
+
+                        # Check if the rendered value is different from the original
+                        if rendered_value != original_value:
+                            resolved_value = rendered_value
+                        else:
+                            # If it's the same, move on to the next step
+                            raise ValueError(
+                                "Template rendering did not change the value"
+                            )
+                    except (TemplateSyntaxError, ValueError):
+                        try:
+                            # Try to parse as an AST literal
+                            resolved_value = ast.literal_eval(value)
+                        except (ValueError, SyntaxError):
+                            # Flag as unprocessable if none of the above worked
+                            resolved_value = UnprocessableValue(original_value)
+
+                resolved_attrs[key] = resolved_value
+            else:
                 resolved_attrs[key] = value
 
         cotton_data["stack"][-1]["attrs"] = resolved_attrs
+
+        # Resolve and add attributes
+        # resolved_attrs = {}
+        # for key, value in self.attrs.items():
+        #     try:
+        #         resolved_attrs[key] = Variable(value).resolve(context)
+        #     except VariableDoesNotExist:
+        #         resolved_attrs[key] = value
+
+        # cotton_data["stack"][-1]["attrs"] = resolved_attrs
 
         # Render the nodelist to process any slot tags and vars
         slot_content = self.nodelist.render(context)
@@ -174,43 +219,3 @@ def cotton_vars(parser, token):
             var_dict[bit] = "True"
 
     return CottonVarsNode(var_dict)
-
-
-@register.simple_tag(name="qstring", takes_context=True)
-def qstring(context, query_dict=None, **kwargs):
-    """
-    Add, remove, and change parameters of a ``QueryDict`` and return the result
-    as a query string. If the ``query_dict`` argument is not provided, default
-    to ``request.GET``.
-
-    For example::
-
-        {% querystring foo=3 %}
-
-    To remove a key::
-
-        {% querystring foo=None %}
-
-    To use with pagination::
-
-        {% querystring page=page_obj.next_page_number %}
-
-    A custom ``QueryDict`` can also be used::
-
-        {% querystring my_query_dict foo=3 %}
-    """
-    if query_dict is None:
-        query_dict = context["request"].GET
-    query_dict = query_dict.copy()
-    for key, value in kwargs.items():
-        if value is None:
-            if key in query_dict:
-                del query_dict[key]
-        elif isinstance(value, Iterable) and not isinstance(value, str):
-            query_dict.setlist(key, value)
-        else:
-            query_dict[key] = value
-    if not query_dict:
-        return ""
-    query_string = query_dict.urlencode()
-    return f"?{query_string}"

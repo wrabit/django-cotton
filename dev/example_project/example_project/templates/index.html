@@ -4,7 +4,11 @@
     Click me!
 {% endcomp %}
 
-{% comp card title="hell" %}{% endcomp %}
+{% comp card %}
+    {% slot name=":title" %}
+        {% if 1 == 2 %}no{% endif %}
+    {% endslot %}
+{% endcomp %}
 
 {% comp card title="My Card" %}
 
@@ -16,7 +20,7 @@
             Card button
         {% endcomp %}
         {% slot name="footer" %}
-            This is the footer of my card.
+            This is the footer of my card. {{ data }}
         {% endslot %}
     {% endcomp %}
 

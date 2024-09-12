@@ -267,15 +267,14 @@ class CottonCompiler:
 
         return new_soup
 
-    promote_cvars() (stack[-2], throws CvarsMustBeInComponentError)
-        soup[stack[-2]].add_attrs(v)
-
-    <c-comp>
-        <c-vars sds dsd s s />
-        <c-slot name="header"></c-slot>
-    </c-comp>
-        
-
+    # promote_cvars() (stack[-2], throws CvarsMustBeInComponentError)
+    #     soup[stack[-2]].add_attrs(v)
+    #
+    # <c-comp>
+    #     <c-vars sds dsd s s />
+    #     <c-slot name="header"></c-slot>
+    # </c-comp>
+    #
 
     def _transform_components(self, soup, parent_key):
         """Replace <c-[component path]> tags with the {% cotton_component %} template tag"""

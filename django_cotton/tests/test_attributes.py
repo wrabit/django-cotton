@@ -502,3 +502,51 @@ class AttributeHandlingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertTrue(response.status_code == 200)
+
+    def test_htmx_attribute_values_single_quote(self):
+        # tests for json-like values
+        self.create_template(
+            "cotton/htmx.html",
+            """
+            <div {{ attrs }}><div>
+            """,
+        )
+
+        self.create_template(
+            "htmx_view.html",
+            """
+            <c-htmx
+              hx-vals='{"id": "1"}'
+            />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, """'{"id": "1"}'""")
+
+    def test_htmx_attribute_values_double_quote(self):
+        # tests for json-like values
+        self.create_template(
+            "cotton/htmx2.html",
+            """
+            <div {{ attrs }}><div>
+            """,
+        )
+
+        self.create_template(
+            "htmx_view2.html",
+            """
+            <c-htmx2
+              hx-vals="{'id': '1'}"
+            />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "\"{'id': '1'}\"")

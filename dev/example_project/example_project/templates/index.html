@@ -5,9 +5,7 @@
 {% endcomp %}
 
 {% comp card %}
-    {% slot name=":title" %}
-        {% if 1 == 2 %}no{% endif %}
-    {% endslot %}
+    {% slot name=":title" %}{'test': 1}{% endslot %}
 {% endcomp %}
 
 {% comp card title="My Card" %}

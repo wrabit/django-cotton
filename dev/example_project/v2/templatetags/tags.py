@@ -37,65 +37,34 @@ class CottonComponentNode(Node):
             }
         )
 
-        # Resolve and add attributes
+        # Process simple attributes and boolean attributes
         resolved_attrs = {}
         for key, value in self.attrs.items():
-            if key.startswith(":"):
-                original_value = value
-                key = key[1:]  # Remove the ':' prefix
-                try:
-                    # Try to resolve as a variable
-                    resolved_value = Variable(value).resolve(context)
-                except VariableDoesNotExist:
-                    try:
-                        # Try to parse as a template string
-                        template = Template(
-                            f"{{% with True as True and False as False and None as None %}}{value}{{% endwith %}}"
-                        )
-                        rendered_value = template.render(context)
-
-                        # Check if the rendered value is different from the original
-                        if rendered_value != original_value:
-                            resolved_value = rendered_value
-                        else:
-                            # If it's the same, move on to the next step
-                            raise ValueError(
-                                "Template rendering did not change the value"
-                            )
-                    except (TemplateSyntaxError, ValueError):
-                        try:
-                            # Try to parse as an AST literal
-                            resolved_value = ast.literal_eval(value)
-                        except (ValueError, SyntaxError):
-                            # Flag as unprocessable if none of the above worked
-                            resolved_value = UnprocessableValue(original_value)
-
-                resolved_attrs[key] = resolved_value
+            if value is True:  # Boolean attribute
+                resolved_attrs[key] = True
             else:
-                resolved_attrs[key] = value
+                try:
+                    resolved_attrs[key] = Variable(value).resolve(context)
+                except VariableDoesNotExist:
+                    resolved_attrs[key] = value
 
         cotton_data["stack"][-1]["attrs"] = resolved_attrs
 
-        # Resolve and add attributes
-        # resolved_attrs = {}
-        # for key, value in self.attrs.items():
-        #     try:
-        #         resolved_attrs[key] = Variable(value).resolve(context)
-        #     except VariableDoesNotExist:
-        #         resolved_attrs[key] = value
-
-        # cotton_data["stack"][-1]["attrs"] = resolved_attrs
-
         # Render the nodelist to process any slot tags and vars
-        slot_content = self.nodelist.render(context)
+        default_slot = self.nodelist.render(context)
 
-        # If there's no explicit default slot, use the entire rendered content
-        if "default" not in cotton_data["stack"][-1]["slots"]:
-            cotton_data["stack"][-1]["slots"]["default"] = slot_content
+        # Process dynamic attributes from named slots
+        for slot_name, slot_content in cotton_data["stack"][-1]["slots"].items():
+            if slot_name.startswith(":"):
+                attr_name = slot_name[1:]  # Remove the ':' prefix
+                resolved_value = self.process_dynamic_value(slot_content, context)
+                cotton_data["stack"][-1]["attrs"][attr_name] = resolved_value
 
         # Prepare attrs string, excluding vars
         attrs_dict = {
-            k: v for k, v in resolved_attrs.items() if k not in cotton_data["vars"]
+            k: v
+            for k, v in cotton_data["stack"][-1]["attrs"].items()
+            if k not in cotton_data["vars"]
         }
         attrs_string = " ".join(f'{k}="{v}"' for k, v in attrs_dict.items())
 
@@ -103,9 +72,10 @@ class CottonComponentNode(Node):
         cotton_specific = {
             "attrs": mark_safe(attrs_string),
             "attrs_dict": attrs_dict,
-            "slot": cotton_data["stack"][-1]["slots"].get("default", ""),
+            "slot": default_slot,
             **cotton_data["stack"][-1]["slots"],
             **cotton_data["vars"],
+            **cotton_data["stack"][-1]["attrs"],
         }
 
         template_name = f"{self.component_name.replace('-', '_')}.html"
@@ -123,6 +93,32 @@ class CottonComponentNode(Node):
         cotton_data["stack"].pop()
 
         return output
+
+    def process_dynamic_value(self, value, context):
+        try:
+            # Try to resolve as a variable
+            return Variable(value).resolve(context)
+        except VariableDoesNotExist:
+            try:
+                # Try to parse as a template string
+                template = Template(
+                    f"{{% with True as True and False as False and None as None %}}{value}{{% endwith %}}"
+                )
+                rendered_value = template.render(context)
+
+                # Check if the rendered value is different from the original
+                if rendered_value != value:
+                    return rendered_value
+                else:
+                    # If it's the same, move on to the next step
+                    raise ValueError("Template rendering did not change the value")
+            except (TemplateSyntaxError, ValueError):
+                try:
+                    # Try to parse as an AST literal
+                    return ast.literal_eval(value)
+                except (ValueError, SyntaxError):
+                    # Flag as unprocessable if none of the above worked
+                    return UnprocessableValue(value)
 
 
 def get_cotton_data(context):
@@ -177,33 +173,52 @@ class CottonSlotNode(Node):
         cotton_data = get_cotton_data(context)
         if cotton_data["stack"]:
             content = self.nodelist.render(context)
-            cotton_data["stack"][-1]["slots"][self.slot_name] = content
+            cotton_data["stack"][-1]["slots"][self.slot_name] = mark_safe(content)
         return ""
 
 
 class CottonVarsNode(Node):
-    def __init__(self, var_dict):
+    def __init__(self, var_dict, nodelist):
         self.var_dict = var_dict
+        self.nodelist = nodelist
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
-        if len(cotton_data["stack"]) > 1:  # Ensure we're inside a component
-            parent_vars = cotton_data["stack"][-2].setdefault("vars", {})
-            for key, value in self.var_dict.items():
+        if cotton_data["stack"]:
+            current_component = cotton_data["stack"][-1]
+
+            # Merge vars from parent (comp) attributes and cvars
+            merged_vars = {}
+            merged_vars.update(current_component["attrs"])
+            merged_vars.update(self.var_dict)
+
+            # Process and resolve the merged vars
+            resolved_vars = {}
+            for key, value in merged_vars.items():
                 try:
                     resolved_value = Variable(value).resolve(context)
                 except VariableDoesNotExist:
                     resolved_value = value
-                parent_vars[key] = resolved_value
-        else:
-            # We're not inside a nested component, so we'll add to the current level
-            current_vars = cotton_data["stack"][-1].setdefault("vars", {})
-            for key, value in self.var_dict.items():
-                try:
-                    resolved_value = Variable(value).resolve(context)
-                except VariableDoesNotExist:
-                    resolved_value = value
-                current_vars[key] = resolved_value
+                resolved_vars[key] = resolved_value
+
+            # Update the component's vars
+            current_component["vars"] = resolved_vars
+
+            # Remove vars from attrs and attrs_dict
+            for key in resolved_vars:
+                current_component["attrs"].pop(key, None)
+                current_component.get("attrs_dict", {}).pop(key, None)
+
+            # Update attrs string
+            attrs_string = " ".join(
+                f'{k}="{v}"' for k, v in current_component["attrs"].items()
+            )
+            current_component["attrs_string"] = mark_safe(attrs_string)
+
+            # Render the wrapped content with the new context
+            with context.push(**resolved_vars):
+                return self.nodelist.render(context)
+
         return ""
 
 
@@ -218,4 +233,7 @@ def cotton_vars(parser, token):
         except ValueError:
             var_dict[bit] = "True"
 
-    return CottonVarsNode(var_dict)
+    nodelist = parser.parse(("endcvars",))
+    parser.delete_first_token()
+
+    return CottonVarsNode(var_dict, nodelist)

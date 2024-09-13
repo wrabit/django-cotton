@@ -75,6 +75,7 @@ class CottonComponentNode(Node):
 
     @staticmethod
     def _strip_quotes(value: str) -> str:
+        """This strips quotes, but only when we have 2 matching quotes at either end. (it won't strip a single quote)"""
         if value and value[0] == value[-1] and value[0] in ('"', "'"):
             return value[1:-1]
         return value

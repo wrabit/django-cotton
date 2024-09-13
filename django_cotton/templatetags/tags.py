@@ -73,10 +73,10 @@ class Attrs(Mapping):
         self._exclude_from_str: Set[str] = set()
 
     def __str__(self):
-        return " ".join(
-            f'{k}="{v}"'
-            for k, v in self._attrs.items()
-            if k not in self._exclude_from_str
+        return mark_safe(
+            " ".join(
+                f'{k}="{v}"' for k, v in self._attrs.items() if k not in self._exclude_from_str
+            )
         )
 
     def __getitem__(self, key):
@@ -166,9 +166,7 @@ class CottonComponentNode(Node):
                 # resolved_value = self._process_dynamic_value(slot_content, context)
                 # component_data["attrs"][attr_name] = resolved_value
                 if isinstance(slot_content, DynamicAttr):
-                    component_data["attrs"][slot_name[1:]] = slot_content.resolve(
-                        context
-                    )
+                    component_data["attrs"][slot_name[1:]] = slot_content.resolve(context)
                 else:
                     component_data["attrs"][slot_name[1:]] = slot_content
 
@@ -226,9 +224,7 @@ class CottonComponentNode(Node):
                     # Flag as unprocessable if none of the above worked
                     return UnprocessableValue(value)
 
-    def _generate_component_template_path(
-        self, component_name: str, is_: Union[str, None]
-    ) -> str:
+    def _generate_component_template_path(self, component_name: str, is_: Union[str, None]) -> str:
         """Generate the path to the template for the given component name."""
         if component_name == "component":
             if is_ is None:
@@ -317,7 +313,7 @@ class CottonVarsNode(Node):
             for key, value in self.var_dict.items():
                 if key not in attrs:
                     try:
-                        resolved_value = Variable(value).resolve(context)
+                        resolved_value = value.resolve(context)
                     except VariableDoesNotExist:
                         resolved_value = value
                     attrs[key] = resolved_value
@@ -337,9 +333,10 @@ def cotton_vars(parser, token):
     for bit in bits:
         try:
             key, value = bit.split("=")
-            var_dict[key] = value.strip("\"'")
+            var_dict[key] = parser.compile_filter(value)
         except ValueError:
             var_dict[bit] = "True"
+            # will evaluate as true in resolve
 
     nodelist = parser.parse(("endcvars",))
     parser.delete_first_token()

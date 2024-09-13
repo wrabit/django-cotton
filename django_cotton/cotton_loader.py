@@ -49,8 +49,6 @@ class Loader(BaseLoader):
         return Template(template_string, engine=self.engine)
 
     def _get_template_string(self, template_name):
-        print("template_name")
-        print(template_name)
         try:
             with open(template_name, "r", encoding=self.engine.file_charset) as f:
                 return f.read()
@@ -189,7 +187,7 @@ class CottonCompiler:
         if cvars_el := soup.find("c-vars"):
             soup = self._wrap_with_cotton_vars_frame(soup, cvars_el)
 
-        self._transform_components(soup, template_name)
+        self._transform_components(soup)
 
         return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
 
@@ -251,9 +249,9 @@ class CottonCompiler:
         cvars_el.decompose()
 
         # Construct the {% with %} opening tag
-        opening = "{% cotton_vars_frame " + " ".join(vars_with_defaults) + " %}"
+        opening = "{% cvars " + " ".join(vars_with_defaults) + " %}"
         opening = opening.replace("\n", "")
-        closing = "{% endcotton_vars_frame %}"
+        closing = "{% endcvars %}"
 
         # Convert the remaining soup back to a string and wrap it within {% with %} block
         wrapped_content = (
@@ -276,16 +274,16 @@ class CottonCompiler:
     # </c-comp>
     #
 
-    def _transform_components(self, soup, parent_key):
+    def _transform_components(self, soup):
         """Replace <c-[component path]> tags with the {% cotton_component %} template tag"""
         for tag in soup.find_all(re.compile("^c-"), recursive=True):
             if tag.name == "c-slot":
-                self._transform_named_slot(tag, parent_key)
+                self._transform_named_slot(tag)
 
                 continue
 
             component_key = tag.name[2:]
-            opening_tag = f"{{% cotton_component {component_key} {component_key} "
+            opening_tag = f"{{% comp {component_key} "
 
             # Store attributes that contain template expressions, they are when we use '{{' or '{%' in the value of an attribute
             expression_attrs = []
@@ -309,16 +307,16 @@ class CottonCompiler:
 
             if expression_attrs:
                 for key, value in expression_attrs:
-                    component_tag += f"{{% cotton_slot {key} {component_key} expression_attr %}}{value}{{% end_cotton_slot %}}"
+                    component_tag += f"{{% slot {key} expression %}}{value}{{% endslot %}}"
 
             if tag.contents:
                 tag_soup = self._make_soup(tag.decode_contents(formatter=UnsortedAttributes()))
-                self._transform_components(tag_soup, component_key)
+                self._transform_components(tag_soup)
                 component_tag += str(
                     tag_soup.encode(formatter=UnsortedAttributes()).decode("utf-8")
                 )
 
-            component_tag += "{% end_cotton_component %}"
+            component_tag += "{% endcomp %}"
 
             # Replace the original tag with the compiled django syntax
             new_soup = self._make_soup(component_tag)
@@ -326,16 +324,16 @@ class CottonCompiler:
 
         return soup
 
-    def _transform_named_slot(self, slot_tag, component_key):
+    def _transform_named_slot(self, slot_tag):
         """Compile <c-slot> to {% cotton_slot %}"""
         slot_name = slot_tag.get("name", "").strip()
         inner_html = "".join(str(content) for content in slot_tag.contents)
 
         # Check and process any components in the slot content
         slot_soup = self._make_soup(inner_html)
-        self._transform_components(slot_soup, component_key)
+        self._transform_components(slot_soup)
 
-        cotton_slot_tag = f"{{% cotton_slot {slot_name} {component_key} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% end_cotton_slot %}}"
+        cotton_slot_tag = f"{{% slot {slot_name} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% endslot %}}"
         slot_tag.replace_with(self._make_soup(cotton_slot_tag))
 
     def _make_soup(self, html):

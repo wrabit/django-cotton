@@ -9,7 +9,7 @@ def index_view(request):
         request,
         "index.html",
         {
-            "data": "Example Project",
+            "view_context": "I'm from view context",
         },
     )
 

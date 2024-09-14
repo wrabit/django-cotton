@@ -1,7 +1,6 @@
 import ast
 import functools
-from collections.abc import Mapping
-from typing import Union, Set
+from typing import Union, List
 
 from django.conf import settings
 from django.template import Library
@@ -15,111 +14,13 @@ from django.template.base import (
 from django.template.loader import get_template
 from django.utils.safestring import mark_safe
 
+from django_cotton.templatetags._context_models import Attrs, DynamicAttr, UnprocessableDynamicAttr
+
 register = Library()
 
 
 class CottonIncompleteDynamicComponentErrorV2(Exception):
-    """Raised when a dynamic component is missing required attributes."""
-
-
-class DynamicAttr:
-    def __init__(self, value: str):
-        self.value = value
-        self._resolved_value = None
-        self._unprocessable = False
-
-    @property
-    def is_unprocessable(self):
-        return self._unprocessable
-
-    def resolve(self, context):
-        if self._resolved_value is not None:
-            return self._resolved_value
-
-        try:
-            self._resolved_value = Variable(self.value).resolve(context)
-            return self._resolved_value
-        except VariableDoesNotExist:
-            pass
-
-        if self.value == "":
-            self._resolved_value = True
-            return self._resolved_value
-
-        try:
-            template = Template(
-                f"{{% with True as True and False as False and None as None %}}{self.value}{{% endwith %}}"
-            )
-            rendered_value = template.render(context)
-            if rendered_value != self.value:
-                self._resolved_value = rendered_value
-                return self._resolved_value
-        except TemplateSyntaxError:
-            pass
-
-        try:
-            self._resolved_value = ast.literal_eval(self.value)
-            return self._resolved_value
-        except (ValueError, SyntaxError):
-            pass
-
-        self._unprocessable = True
-        self._resolved_value = self.value
-        return self._resolved_value
-
-
-class Attrs(Mapping):
-    def __init__(self, attrs):
-        self._attrs = attrs
-        self._exclude_from_str: Set[str] = set()
-
-    def __str__(self):
-        return mark_safe(
-            " ".join(
-                f'{k}="{v}"' for k, v in self._attrs.items() if k not in self._exclude_from_str
-            )
-        )
-
-    def __getitem__(self, key):
-        return self._attrs[key]
-
-    def __iter__(self):
-        return iter(self._attrs)
-
-    def __len__(self):
-        return len(self._attrs)
-
-    def __contains__(self, key):
-        return key in self._attrs
-
-    def get(self, key, default=None):
-        return self._attrs.get(key, default)
-
-    def items(self):
-        return self._attrs.items()
-
-    def keys(self):
-        return self._attrs.keys()
-
-    def values(self):
-        return self._attrs.values()
-
-    @property
-    def dict(self):
-        return self._attrs
-
-    # Custom methods to allow modifications
-    def update(self, other):
-        self._attrs.update(other)
-
-    def __setitem__(self, key, value):
-        self._attrs[key] = value
-
-    def pop(self, key, default=None):
-        return self._attrs.pop(key, default)
-
-    def exclude(self, key):
-        self._exclude_from_str.add(key)
+    pass
 
 
 class UnprocessableValue:
@@ -151,7 +52,11 @@ class CottonComponentNode(Node):
             if value is True:  # Boolean attribute
                 component_data["attrs"][key] = True
             elif key.startswith(":"):
-                component_data["attrs"][key[1:]] = DynamicAttr(value).resolve(context)
+                key = key[1:]
+                try:
+                    component_data["attrs"][key] = DynamicAttr(value).resolve(context)
+                except UnprocessableDynamicAttr:
+                    component_data["attrs"].unprocessable(key)
             else:
                 try:
                     component_data["attrs"][key] = Variable(value).resolve(context)
@@ -161,26 +66,18 @@ class CottonComponentNode(Node):
         # Render the nodelist to process any slot tags and vars
         default_slot = self.nodelist.render(context)
 
-        # Process dynamic attributes from named slots
-        for slot_name, slot_content in component_data["slots"].items():
-            if slot_name.startswith(":"):
-                if isinstance(slot_content, DynamicAttr):
-                    component_data["attrs"][slot_name[1:]] = slot_content.resolve(context)
-                else:
-                    component_data["attrs"][slot_name[1:]] = slot_content
-
         # Prepare the cotton-specific data
-        cotton_specific = {
+        component_state = {
             "attrs": component_data["attrs"],
             "slot": default_slot,
             **component_data["slots"],
-            **component_data["attrs"],
+            **component_data["attrs"].make_attrs_accessible(),
         }
 
-        template = self._get_cached_template(context)
+        template = self._get_cached_template(context, component_data["attrs"])
 
         # Render the template with the new context
-        with context.push(**cotton_specific):
+        with context.push(**component_state):
             output = template.render(context)
 
         # Pop the component from the stack
@@ -215,14 +112,12 @@ class CottonComponentNode(Node):
                     # Flag as unprocessable if none of the above worked
                     return UnprocessableValue(value)
 
-    def _get_cached_template(self, context):
+    def _get_cached_template(self, context, attrs):
         cache = context.render_context.get(self)
         if cache is None:
             cache = context.render_context[self] = {}
 
-        template_path = self._generate_component_template_path(
-            self.component_name, self.attrs.get("is")
-        )
+        template_path = self._generate_component_template_path(self.component_name, attrs.get("is"))
 
         if template_path not in cache:
             template = get_template(template_path)
@@ -283,74 +178,116 @@ def cotton_slot(parser, token):
     bits = token.split_contents()[1:]
     if len(bits) < 1:
         raise TemplateSyntaxError("cotton slot tag must include a 'name'")
-    slot_name = bits[0]
-    is_expression = "expression" in bits[1:] if len(bits) > 1 else False
 
     nodelist = parser.parse(("endslot",))
     parser.delete_first_token()
-    return CottonSlotNode(slot_name, nodelist, is_expression)
+    return CottonSlotNode(bits[0], nodelist)
 
 
 class CottonSlotNode(Node):
-    def __init__(self, slot_name, nodelist, is_expression):
+    def __init__(self, slot_name, nodelist):
         self.slot_name = slot_name
         self.nodelist = nodelist
-        self.is_expression = is_expression
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
         if cotton_data["stack"]:
             content = self.nodelist.render(context)
-            if self.is_expression:
-                cotton_data["stack"][-1]["slots"][self.slot_name] = DynamicAttr(content).resolve(
-                    context
-                )
-            else:
-                cotton_data["stack"][-1]["slots"][self.slot_name] = mark_safe(content)
+            cotton_data["stack"][-1]["slots"][self.slot_name] = mark_safe(content)
+        else:
+            raise TemplateSyntaxError("<slot /> tag must be used inside a component")
         return ""
 
 
-class CottonVarsNode(Node):
-    def __init__(self, var_dict, nodelist):
-        self.var_dict = var_dict
+@register.tag("complexattr")
+def cotton_slot(parser, token):
+    bits = token.split_contents()[1:]
+    if len(bits) < 1:
+        raise TemplateSyntaxError("cotton complex-attr must include a 'name'")
+
+    nodelist = parser.parse(("endcomplexattr",))
+    parser.delete_first_token()
+    return ComplexAttrNode(bits[0], nodelist)
+
+
+class ComplexAttrNode(Node):
+    def __init__(self, attr_name, nodelist):
+        self.attr_name = attr_name
         self.nodelist = nodelist
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
+        if cotton_data["stack"]:
+            content = self.nodelist.render(context)
+            if self.attr_name.startswith(":"):
+                key = self.attr_name[1:]
+                try:
+                    cotton_data["stack"][-1]["attrs"][key] = DynamicAttr(content).resolve(context)
+                except UnprocessableDynamicAttr:
+                    cotton_data["stack"][-1]["attrs"].unprocessable(key)
+            else:
+                # just template partial
+                cotton_data["stack"][-1]["attrs"][self.attr_name] = mark_safe(content)
+        return ""
+
+
+class CottonVarsNode(Node):
+    def __init__(self, var_dict, empty_vars: List, nodelist):
+        self.var_dict = var_dict
+        self.empty_vars = empty_vars
+        self.nodelist = nodelist
+
+    def render(self, context):
+        cotton_data = get_cotton_data(context)
+
         if cotton_data["stack"]:
             current_component = cotton_data["stack"][-1]
             attrs = current_component["attrs"]
 
             # Process and resolve the merged vars
             for key, value in self.var_dict.items():
-                if key not in attrs:
-                    try:
-                        resolved_value = value.resolve(context)
-                    except VariableDoesNotExist:
-                        resolved_value = value
-                    attrs[key] = resolved_value
-                attrs.exclude(key)
+                attrs.exclude_from_string_output(key)
+                if key not in attrs.exclude_unprocessable():
+                    if key.startswith(":"):
+                        try:
+                            attrs[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
+                        except UnprocessableDynamicAttr:
+                            pass
+                    else:
+                        try:
+                            resolved_value = Variable(value).resolve(context)
+                        except VariableDoesNotExist:
+                            resolved_value = value
+                        attrs[key] = resolved_value
 
-            # Render the wrapped content with the new context
-            with context.push({**attrs, "attrs": attrs}):
-                return self.nodelist.render(context)
+            # print(attrs.dict)
 
-        return ""
+            # Process cvars without values
+            for empty_var in self.empty_vars:
+                attrs.exclude_from_string_output(empty_var)
+
+            with context.push({**attrs.make_attrs_accessible(), "attrs": attrs}):
+                output = self.nodelist.render(context)
+
+            return output
+
+        else:
+            raise TemplateSyntaxError("<c-vars /> tag must be used inside a component")
 
 
 @register.tag("cvars")
 def cotton_vars(parser, token):
     bits = token.split_contents()[1:]
     var_dict = {}
+    empty_vars = []
     for bit in bits:
         try:
             key, value = bit.split("=")
-            var_dict[key] = parser.compile_filter(value)
+            var_dict[key] = value.strip("\"'")
         except ValueError:
-            var_dict[bit] = "True"
-            # will evaluate as true in resolve
+            empty_vars.append(bit)
 
     nodelist = parser.parse(("endcvars",))
     parser.delete_first_token()
 
-    return CottonVarsNode(var_dict, nodelist)
+    return CottonVarsNode(var_dict, empty_vars, nodelist)

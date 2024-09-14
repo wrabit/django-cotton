@@ -229,27 +229,37 @@ class CottonCompiler:
         same component's context, we wrap the entire contents in another component: cotton_vars_frame. Only when <c-vars>
         is present."""
 
-        vars_with_defaults = []
-        for var, value in cvars_el.attrs.items():
-            # Attributes in context at this point will already have been formatted in _component to be accessible, so in order to cascade match the style.
-            accessible_var = var.replace("-", "_")
+        # create an attribute string from the cvars_el attrs. i.e. attr1 attr2="value" etc
+        # - this will be used to create the cvars tag
+        cvars_attrs_string = " ".join(f'{k}="{v}"' for k, v in cvars_el.attrs.items())
 
-            if value is None:
-                vars_with_defaults.append(f"{var}={accessible_var}")
-            elif var.startswith(":"):
-                # If ':' is present, the user wants to parse a literal string as the default value,
-                # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
-                var = var[1:]  # Remove the ':' prefix
-                accessible_var = accessible_var[1:]  # Remove the ':' prefix
-                vars_with_defaults.append(f'{var}={accessible_var}|eval_default:"{value}"')
-            else:
-                # Assuming value is already a string that represents the default value
-                vars_with_defaults.append(f'{var}={accessible_var}|default:"{value}"')
+        # cvars = []
+        # for var, value in cvars_el.attrs.items():
+        # Attributes in context at this point will already have been formatted in _component to be accessible, so in order to cascade match the style.
+        # accessible_var = var.replace("-", "_")
+
+        # using default filter is limiting our ability to override when the subject value is present but nor processable.
+        # - carry this functionality to the cvars tag
+        # - then we can choose to display the cvar value if one from parent is not processable (as well as not present etc)
+
+        # cvars.append()
+
+        # if value is None:
+        #     vars_with_defaults.append(f"{var}={accessible_var}")
+        # elif var.startswith(":"):
+        #     # If ':' is present, the user wants to parse a literal string as the default value,
+        #     # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
+        #     var = var[1:]  # Remove the ':' prefix
+        #     accessible_var = accessible_var[1:]  # Remove the ':' prefix
+        #     vars_with_defaults.append(f'{var}={accessible_var}|eval_default:"{value}"')
+        # else:
+        #     # Assuming value is already a string that represents the default value
+        #     vars_with_defaults.append(f'{var}={accessible_var}|default:"{value}"')
 
         cvars_el.decompose()
 
         # Construct the {% with %} opening tag
-        opening = "{% cvars " + " ".join(vars_with_defaults) + " %}"
+        opening = f"{{% cvars {cvars_attrs_string} %}}"
         opening = opening.replace("\n", "")
         closing = "{% endcvars %}"
 
@@ -286,7 +296,7 @@ class CottonCompiler:
             opening_tag = f"{{% comp {component_key} "
 
             # Store attributes that contain template expressions, they are when we use '{{' or '{%' in the value of an attribute
-            expression_attrs = []
+            complex_attrs = []
 
             # Build the attributes
             for key, value in tag.attrs.items():
@@ -297,7 +307,7 @@ class CottonCompiler:
                 # Django templates tags cannot have {{ or {% expressions in their attribute values
                 # Neither can they have new lines, let's treat them both as "expression attrs"
                 if self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX in value or "\n" in value or "=" in value:
-                    expression_attrs.append((key, value))
+                    complex_attrs.append((key, value))
                     continue
 
                 opening_tag += ' {}="{}"'.format(key, value)
@@ -305,9 +315,9 @@ class CottonCompiler:
 
             component_tag = opening_tag
 
-            if expression_attrs:
-                for key, value in expression_attrs:
-                    component_tag += f"{{% slot {key} expression %}}{value}{{% endslot %}}"
+            if complex_attrs:
+                for key, value in complex_attrs:
+                    component_tag += f"{{% complexattr {key} %}}{value}{{% endcomplexattr %}}"
 
             if tag.contents:
                 tag_soup = self._make_soup(tag.decode_contents(formatter=UnsortedAttributes()))

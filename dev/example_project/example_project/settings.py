@@ -69,7 +69,6 @@ TEMPLATES = [
             ],
             "builtins": [
                 "django_cotton.templatetags.tags",
-                "django_cotton.templatetags.cotton",
             ],
         },
     },

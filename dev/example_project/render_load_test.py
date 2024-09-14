@@ -56,7 +56,7 @@ def configure_django():
 def main():
     configure_django()
 
-    def template_bench(template_name, iterations=500):
+    def template_bench(template_name, iterations=5000):
         start_time = time.time()
         for _ in range(iterations):
             render_to_string(template_name)
@@ -65,7 +65,7 @@ def main():
 
         return duration, render_to_string(template_name)
 
-    def template_bench_data_loop(template_name, iterations=500):
+    def template_bench_data_loop(template_name, iterations=5000):
         data = list(range(1, iterations))
         start_time = time.time()
         render_to_string(template_name, context={"data": data})

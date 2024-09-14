@@ -1,4 +1,5 @@
 import ast
+import functools
 from collections.abc import Mapping
 from typing import Union, Set
 
@@ -131,6 +132,7 @@ class CottonComponentNode(Node):
         self.component_name = component_name
         self.nodelist = nodelist
         self.attrs = attrs
+        self.template_cache = {}
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
@@ -162,9 +164,6 @@ class CottonComponentNode(Node):
         # Process dynamic attributes from named slots
         for slot_name, slot_content in component_data["slots"].items():
             if slot_name.startswith(":"):
-                # attr_name = slot_name[1:]  # Remove the ':' prefix
-                # resolved_value = self._process_dynamic_value(slot_content, context)
-                # component_data["attrs"][attr_name] = resolved_value
                 if isinstance(slot_content, DynamicAttr):
                     component_data["attrs"][slot_name[1:]] = slot_content.resolve(context)
                 else:
@@ -178,15 +177,7 @@ class CottonComponentNode(Node):
             **component_data["attrs"],
         }
 
-        # template_name = f"{self.component_name.replace('-', '_')}.html"
-        template_name = self._generate_component_template_path(
-            self.component_name, component_data["attrs"].get("is")
-        )
-
-        # Use the base.Template of a backends.django.Template.
-        template = get_template(template_name)
-        if hasattr(template, "template"):
-            template = template.template
+        template = self._get_cached_template(context)
 
         # Render the template with the new context
         with context.push(**cotton_specific):
@@ -224,7 +215,26 @@ class CottonComponentNode(Node):
                     # Flag as unprocessable if none of the above worked
                     return UnprocessableValue(value)
 
-    def _generate_component_template_path(self, component_name: str, is_: Union[str, None]) -> str:
+    def _get_cached_template(self, context):
+        cache = context.render_context.get(self)
+        if cache is None:
+            cache = context.render_context[self] = {}
+
+        template_path = self._generate_component_template_path(
+            self.component_name, self.attrs.get("is")
+        )
+
+        if template_path not in cache:
+            template = get_template(template_path)
+            if hasattr(template, "template"):
+                template = template.template
+            cache[template_path] = template
+
+        return cache[template_path]
+
+    @staticmethod
+    @functools.lru_cache(maxsize=400)
+    def _generate_component_template_path(component_name: str, is_: Union[str, None]) -> str:
         """Generate the path to the template for the given component name."""
         if component_name == "component":
             if is_ is None:
@@ -292,7 +302,9 @@ class CottonSlotNode(Node):
         if cotton_data["stack"]:
             content = self.nodelist.render(context)
             if self.is_expression:
-                cotton_data["stack"][-1]["slots"][self.slot_name] = DynamicAttr(content)
+                cotton_data["stack"][-1]["slots"][self.slot_name] = DynamicAttr(content).resolve(
+                    context
+                )
             else:
                 cotton_data["stack"][-1]["slots"][self.slot_name] = mark_safe(content)
         return ""

@@ -1,4 +1,4 @@
-name: "Publish to PyPI"
+name: "Publish to PyPI (manual bump)"
 run-name: "Publish to PyPI (@${{ github.actor }})"
 
 on:

@@ -36,7 +36,7 @@ class CottonVarsNode(Node):
                     else:
                         try:
                             resolved_value = Variable(value).resolve(context)
-                        except VariableDoesNotExist:
+                        except (VariableDoesNotExist, IndexError):
                             resolved_value = value
                         attrs[key] = resolved_value
 

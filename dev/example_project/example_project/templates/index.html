@@ -1,45 +1,45 @@
 <h1>Welcome to our simplified Cotton demo</h1>
 
 
-{% comp button class="btn-primary" %}
+{% c button class="btn-primary" %}
     Click me!
-{% endcomp %}
+{% endc %}
 
-{% comp card title="hello" :id="2" class="green" some_prop :testy="view_context" %}
+{% c card title="hello" :id="2" class="green" some_prop :testy="view_context" %}
     {% slot name=":some_prop" %}None{% endslot %}
-{% endcomp %}
+{% endc %}
 
-{% comp card title="My Card" %}
+{% c card title="My Card" %}
 
     Default content here
 
-    {% comp card var_override="sssasasasasa" title="My Override" some_attr="1+1" %}
+    {% c card var_override="sssasasasasa" title="My Override" some_attr="1+1" %}
         This is the content of my card.
-        {% comp button class="btn-secondary" %}
+        {% c button class="btn-secondary" %}
             Card button
-        {% endcomp %}
+        {% endc %}
         {% slot name="footer" %}
             This is the footer of my card. {{ view_context }}
         {% endslot %}
-    {% endcomp %}
+    {% endc %}
 
-    {% comp card title="My Override" %}
+    {% c card title="My Override" %}
         This is the content of my card.
-        {% comp button class="btn-secondary" %}
+        {% c button class="btn-secondary" %}
             Card button
-        {% endcomp %}
+        {% endc %}
         {% slot name="footer" %}
             This is the footer of my card. {{ view_context }}
         {% endslot %}
-    {% endcomp %}
+    {% endc %}
 
-    {% comp button class="btn-secondary" %}
+    {% c button class="btn-secondary" %}
         Card button
-    {% endcomp %}
+    {% endc %}
     {% slot name="footer" %}
         This is the footer of my card.
     {% endslot %}
-{% endcomp %}
+{% endc %}
 
 <p>Current time: {{ current_time }}</p>
 

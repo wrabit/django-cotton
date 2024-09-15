@@ -73,5 +73,5 @@ class SlotAndContentTests(CottonTestCase):
 
         self.assertEquals(
             compiled,
-            """{% cvars var1="string with space" %}content{% endcvars %}""",
+            """{% vars var1="string with space" %}content{% endvars %}""",
         )

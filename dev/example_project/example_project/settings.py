@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_cotton",
     "unspecified_app_directory",
-    "v2",
 ]
 
 MIDDLEWARE = [
@@ -68,7 +67,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
             "builtins": [
-                "django_cotton.templatetags.tags",
+                "django_cotton.templatetags.cotton",
             ],
         },
     },

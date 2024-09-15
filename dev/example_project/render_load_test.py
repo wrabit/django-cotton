@@ -33,7 +33,6 @@ def configure_django():
                     ],
                     "builtins": [
                         "django_cotton.templatetags.cotton",
-                        "django_cotton.templatetags.tags",
                     ],
                     "context_processors": [
                         "django.template.context_processors.debug",

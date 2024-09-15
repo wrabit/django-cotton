@@ -2,14 +2,15 @@ from django import template
 from django.utils.html import format_html_join
 
 from django_cotton.templatetags._component import cotton_component
+from django_cotton.templatetags._vars import cotton_cvars
 from django_cotton.templatetags._slot import cotton_slot
-from django_cotton.templatetags._vars_frame import cotton_vars_frame
-from django_cotton.utils import eval_string
+from django_cotton.templatetags._attr import cotton_attr
 
 register = template.Library()
-register.tag("cotton_component", cotton_component)
-register.tag("cotton_slot", cotton_slot)
-register.tag("cotton_vars_frame", cotton_vars_frame)
+register.tag("c", cotton_component)
+register.tag("slot", cotton_slot)
+register.tag("vars", cotton_cvars)
+register.tag("attr", cotton_attr)
 
 
 @register.filter
@@ -26,5 +27,5 @@ def merge(attrs, args):
 
 
 @register.filter
-def eval_default(value, arg):
-    return value or eval_string(arg)
+def get_item(dictionary, key):
+    return dictionary.get(key)

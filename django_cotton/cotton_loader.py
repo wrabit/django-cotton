@@ -228,9 +228,9 @@ class CottonCompiler:
         is present."""
         cvars_attrs_string = " ".join(f'{k}="{v}"' for k, v in cvars_el.attrs.items())
         cvars_el.decompose()
-        opening = f"{{% cvars {cvars_attrs_string} %}}"
+        opening = f"{{% vars {cvars_attrs_string} %}}"
         opening = opening.replace("\n", "")
-        closing = "{% endcvars %}"
+        closing = "{% endvars %}"
 
         # Convert the remaining soup back to a string and wrap it within {% with %} block
         wrapped_content = (
@@ -250,7 +250,7 @@ class CottonCompiler:
                 continue
 
             component_key = tag.name[2:]
-            opening_tag = f"{{% comp {component_key} "
+            opening_tag = f"{{% c {component_key} "
 
             # Store attributes that contain template expressions, they are when we use '{{' or '{%' in the value of an attribute
             complex_attrs = []
@@ -279,7 +279,7 @@ class CottonCompiler:
 
             if complex_attrs:
                 for key, value in complex_attrs:
-                    component_tag += f"{{% complexattr {key} %}}{value}{{% endcomplexattr %}}"
+                    component_tag += f"{{% attr {key} %}}{value}{{% endattr %}}"
 
             if tag.contents:
                 tag_soup = self._make_soup(tag.decode_contents(formatter=UnsortedAttributes()))
@@ -288,7 +288,7 @@ class CottonCompiler:
                     tag_soup.encode(formatter=UnsortedAttributes()).decode("utf-8")
                 )
 
-            component_tag += "{% endcomp %}"
+            component_tag += "{% endc %}"
 
             # Replace the original tag with the compiled django syntax
             new_soup = self._make_soup(component_tag)
@@ -297,7 +297,7 @@ class CottonCompiler:
         return soup
 
     def _transform_named_slot(self, slot_tag):
-        """Compile <c-slot> to {% cotton_slot %}"""
+        """Compile <c-slot> to {% slot %}"""
         slot_name = slot_tag.get("name", "").strip()
         inner_html = "".join(str(content) for content in slot_tag.contents)
 

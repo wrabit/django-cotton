@@ -52,7 +52,7 @@ class CottonHTMLParser(BeautifulSoupHTMLParser):
         """Handle an opening tag, e.g. '<tag>'"""
         attr_dict = {}
         for key, value in attrs:
-            # Cotton: Permit valueless attributes
+            # Cotton edit: We want to permit valueless / "boolean" attributes
             # if value is None:
             #     value = ''
 
@@ -74,7 +74,7 @@ class CottonHTMLParser(BeautifulSoupHTMLParser):
             self.handle_endtag(name, check_already_closed=False)
             self.already_closed_empty_element.append(name)
 
-        # Cotton: We do not need to validate the root element
+        # Cotton edit: We do not need to validate the root element
         # if self._root_tag is None:
         #     self._root_tag_encountered(name)
 

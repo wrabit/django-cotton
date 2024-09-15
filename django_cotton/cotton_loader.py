@@ -226,6 +226,9 @@ class CottonCompiler:
         govern vars and attributes. To be able to defined new vars within a component and also have them available in the
         same component's context, we wrap the entire contents in another component: cotton_vars_frame. Only when <c-vars>
         is present."""
+
+        print(cvars_el.attrs.items())
+
         cvars_attrs_string = " ".join(f'{k}="{v}"' for k, v in cvars_el.attrs.items())
         cvars_el.decompose()
         opening = f"{{% vars {cvars_attrs_string} %}}"

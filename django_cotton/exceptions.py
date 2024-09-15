@@ -1,0 +1,2 @@
+class CottonIncompleteDynamicComponentError(Exception):
+    pass

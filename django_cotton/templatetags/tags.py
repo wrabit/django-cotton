@@ -1,4 +1,3 @@
-import ast
 import functools
 from typing import Union, List
 
@@ -9,23 +8,18 @@ from django.template.base import (
     VariableDoesNotExist,
     Node,
     TemplateSyntaxError,
-    Template,
 )
 from django.template.loader import get_template
+from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 
+from django_cotton.exceptions import CottonIncompleteDynamicComponentError
 from django_cotton.templatetags._context_models import Attrs, DynamicAttr, UnprocessableDynamicAttr
+from django_cotton.utils import get_cotton_data
 
 register = Library()
 
 
-class CottonIncompleteDynamicComponentErrorV2(Exception):
-    pass
-
-
-class UnprocessableValue:
-    def __init__(self, original_value):
-        self.original_value = original_value
 
 
 class CottonComponentNode(Node):
@@ -85,33 +79,6 @@ class CottonComponentNode(Node):
 
         return output
 
-    def _process_dynamic_value(self, value, context):
-        """Process a dynamic value, attempting to resolve it as a variable, template string, or literal."""
-        try:
-            # Try to resolve as a variable
-            return Variable(value).resolve(context)
-        except VariableDoesNotExist:
-            try:
-                # Try to parse as a template string
-                template = Template(
-                    f"{{% with True as True and False as False and None as None %}}{value}{{% endwith %}}"
-                )
-                rendered_value = template.render(context)
-
-                # Check if the rendered value is different from the original
-                if rendered_value != value:
-                    return rendered_value
-                else:
-                    # If it's the same, move on to the next step
-                    raise ValueError("Template rendering did not change the value")
-            except (TemplateSyntaxError, ValueError):
-                try:
-                    # Try to parse as an AST literal
-                    return ast.literal_eval(value)
-                except (ValueError, SyntaxError):
-                    # Flag as unprocessable if none of the above worked
-                    return UnprocessableValue(value)
-
     def _get_cached_template(self, context, attrs):
         cache = context.render_context.get(self)
         if cache is None:
@@ -133,7 +100,7 @@ class CottonComponentNode(Node):
         """Generate the path to the template for the given component name."""
         if component_name == "component":
             if is_ is None:
-                raise CottonIncompleteDynamicComponentErrorV2(
+                raise CottonIncompleteDynamicComponentError(
                     'Cotton error: "<c-component>" should be accompanied by an "is" attribute.'
                 )
             component_name = is_
@@ -147,13 +114,6 @@ class CottonComponentNode(Node):
         if type(value) is str and value.startswith('"') and value.endswith('"'):
             return value[1:-1]
         return value
-
-
-def get_cotton_data(context):
-    if "cotton_data" not in context:
-        context["cotton_data"] = {"stack": [], "vars": {}}
-    return context["cotton_data"]
-
 
 @register.tag("comp")
 def cotton_component(parser, token):
@@ -291,3 +251,21 @@ def cotton_vars(parser, token):
     parser.delete_first_token()
 
     return CottonVarsNode(var_dict, empty_vars, nodelist)
+
+
+@register.filter
+def merge(attrs, args):
+    # attrs is expected to be a dictionary of existing attributes
+    # args is a string of additional attributes to merge, e.g., "class:extra-class"
+    for arg in args.split(","):
+        key, value = arg.split(":", 1)
+        if key in attrs:
+            attrs[key] = value + " " + attrs[key]
+        else:
+            attrs[key] = value
+    return format_html_join(" ", '{0}="{1}"', attrs.items())
+
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)

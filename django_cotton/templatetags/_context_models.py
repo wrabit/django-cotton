@@ -6,6 +6,8 @@ from django.template import Variable, TemplateSyntaxError, Context
 from django.template.base import VariableDoesNotExist, Template
 from django.utils.safestring import mark_safe
 
+from django_cotton.utils import ensure_quoted
+
 
 class UnprocessableDynamicAttr(Exception):
     pass
@@ -70,7 +72,9 @@ class Attrs(Mapping):
     def __str__(self):
         return mark_safe(
             " ".join(
-                f'{k}="{v}"' for k, v in self._attrs.items() if k not in self._exclude_from_str
+                f"{k}={ensure_quoted(v)}"
+                for k, v in self._attrs.items()
+                if k not in self._exclude_from_str
             )
         )
 

@@ -10,9 +10,9 @@ from django.template.base import (
 )
 from django.template.loader import get_template
 
+from django_cotton.utils import get_cotton_data
 from django_cotton.exceptions import CottonIncompleteDynamicComponentError
 from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr
-from django_cotton.utils import get_cotton_data
 
 register = Library()
 
@@ -111,7 +111,6 @@ class CottonComponentNode(Node):
         return value
 
 
-@register.tag("comp")
 def cotton_component(parser, token):
     bits = token.split_contents()[1:]
     component_name = bits[0]

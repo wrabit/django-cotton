@@ -24,9 +24,9 @@ class CottonVarsNode(Node):
             current_component = cotton_data["stack"][-1]
             attrs = current_component["attrs"]
 
-            # Process and resolve the merged vars
+            print(self.var_dict.items())
+
             for key, value in self.var_dict.items():
-                attrs.exclude_from_string_output(key)
                 if key not in attrs.exclude_unprocessable():
                     if key.startswith(":"):
                         try:
@@ -39,9 +39,12 @@ class CottonVarsNode(Node):
                         except (VariableDoesNotExist, IndexError):
                             resolved_value = value
                         attrs[key] = resolved_value
+                attrs.exclude_from_string_output(key)
 
             # Process cvars without values
             for empty_var in self.empty_vars:
+                # if empty_var in attrs.exclude_unprocessable():
+
                 attrs.exclude_from_string_output(empty_var)
 
             with context.push({**attrs.make_attrs_accessible(), "attrs": attrs}):

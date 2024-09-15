@@ -106,16 +106,35 @@ class CottonCompiler:
     )
     DJANGO_TAG_PATTERN = re.compile(r"(\s?)(\{%.*?%\})(\s?)")
     DJANGO_VAR_PATTERN = re.compile(r"(\s?)(\{\{.*?\}\})(\s?)")
+    HTML_ENTITY_PATTERN = re.compile(r"&[a-zA-Z]+;|&#[0-9]+;|&#x[a-fA-F0-9]+;")
 
     def __init__(self):
         self.django_syntax_placeholders = []
+        self.html_entity_placeholders = []
 
     def process(self, content, template_name):
         content = self._replace_syntax_with_placeholders(content)
+        content = self._replace_html_entities_with_placeholders(content)
         content = self._compile_cotton_to_django(content, template_name)
         content = self._replace_placeholders_with_syntax(content)
+        content = self._replace_placeholders_with_html_entities(content)
         content = self._remove_duplicate_attribute_markers(content)
 
+        return content
+
+    def _replace_html_entities_with_placeholders(self, content):
+        """Replace HTML entities with placeholders so they dont get touched by BS4"""
+
+        def replace_entity(match):
+            entity = match.group(0)
+            self.html_entity_placeholders.append(entity)
+            return f"__HTML_ENTITY_{len(self.html_entity_placeholders) - 1}__"
+
+        return self.HTML_ENTITY_PATTERN.sub(replace_entity, content)
+
+    def _replace_placeholders_with_html_entities(self, content):
+        for i, entity in enumerate(self.html_entity_placeholders):
+            content = content.replace(f"__HTML_ENTITY_{i}__", entity)
         return content
 
     def _replace_syntax_with_placeholders(self, content):
@@ -163,7 +182,7 @@ class CottonCompiler:
 
     def _compile_cotton_to_django(self, html_content, template_name):
         """Convert cotton <c-* syntax to {%."""
-        soup = get_bs4_instance(html_content)
+        soup = self._make_soup(html_content)
 
         # check if soup contains a 'c-vars' tag
         if cvars_el := soup.find("c-vars"):
@@ -185,8 +204,8 @@ class CottonCompiler:
                 changes in the output that can lead to unintended tag type mutations,
                 i.e. <div{% expr %}></div> --> <div__placeholder></div__placeholder> --> <div{% expr %}></div{% expr %}>
                 """
-                left_group = r"(\s*)" if not placeholder["left_space"] else ""
-                right_group = r"(\s*)" if not placeholder["right_space"] else ""
+                left_group = r"( ?)" if not placeholder["left_space"] else ""
+                right_group = r"( ?)" if not placeholder["right_space"] else ""
                 placeholder_pattern = (
                     f"{left_group}{self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX}{i}__{right_group}"
                 )
@@ -236,7 +255,7 @@ class CottonCompiler:
         )
 
         # Since we can't replace the soup object itself, we create new soup instead
-        new_soup = get_bs4_instance(wrapped_content)
+        new_soup = self._make_soup(wrapped_content)
 
         return new_soup
 
@@ -282,9 +301,7 @@ class CottonCompiler:
                     component_tag += f"{{% cotton_slot {key} {component_key} expression_attr %}}{value}{{% end_cotton_slot %}}"
 
             if tag.contents:
-                tag_soup = get_bs4_instance(
-                    tag.decode_contents(formatter=UnsortedAttributes()),
-                )
+                tag_soup = self._make_soup(tag.decode_contents(formatter=UnsortedAttributes()))
                 self._transform_components(tag_soup, component_key)
                 component_tag += str(
                     tag_soup.encode(formatter=UnsortedAttributes()).decode("utf-8")
@@ -293,7 +310,7 @@ class CottonCompiler:
             component_tag += "{% end_cotton_component %}"
 
             # Replace the original tag with the compiled django syntax
-            new_soup = get_bs4_instance(component_tag)
+            new_soup = self._make_soup(component_tag)
             tag.replace_with(new_soup)
 
         return soup
@@ -304,36 +321,18 @@ class CottonCompiler:
         inner_html = "".join(str(content) for content in slot_tag.contents)
 
         # Check and process any components in the slot content
-        slot_soup = get_bs4_instance(inner_html)
+        slot_soup = self._make_soup(inner_html)
         self._transform_components(slot_soup, component_key)
 
         cotton_slot_tag = f"{{% cotton_slot {slot_name} {component_key} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% end_cotton_slot %}}"
+        slot_tag.replace_with(self._make_soup(cotton_slot_tag))
 
-        slot_tag.replace_with(get_bs4_instance(cotton_slot_tag))
-
-
-def get_bs4_instance(content):
-    def handle_duplicate_attributes(tag_attrs, key, value):
-        """BS4 cleans html and removes duplicate attributes. This would be fine if our target was html, but actually
-        we're targeting Django Template Language. This contains expressions to govern content including attributes of
-        any XML-like tag. It's perfectly fine to expect duplicate attributes per tag in DTL:
-
-        <a href="#" {% if something %} class="this" {% else %} class="that" {% endif %}>Hello</a>
-
-        The solution here is to make duplicate attribute keys unique across that tag so BS4 will not attempt to merge or
-        replace existing. Then in post processing we'll remove the unique mask.
-
-        Todo - This could be simplified with a custom formatter
-        """
-        key_id = "".join(random.choice("0123456789ABCDEF") for i in range(5))
-        key = f"{key}__COTTON_DUPE_ATTR__{key_id}"
-        tag_attrs[key] = value
-
-    return BeautifulSoup(
-        content,
-        "html.parser",
-        builder=CottonHTMLTreeBuilder(on_duplicate_attribute=handle_duplicate_attributes),
-    )
+    def _make_soup(self, content):
+        return BeautifulSoup(
+            content,
+            "html.parser",
+            builder=CottonHTMLTreeBuilder(on_duplicate_attribute=handle_duplicate_attributes),
+        )
 
 
 class CottonTemplateCacheHandler:
@@ -366,3 +365,20 @@ class CottonTemplateCacheHandler:
 
     def reset(self):
         self.template_cache.clear()
+
+
+def handle_duplicate_attributes(tag_attrs, key, value):
+    """BS4 cleans html and removes duplicate attributes. This would be fine if our target was html, but actually
+    we're targeting Django Template Language. This contains expressions to govern content including attributes of
+    any XML-like tag. It's perfectly fine to expect duplicate attributes per tag in DTL:
+
+    <a href="#" {% if something %} class="this" {% else %} class="that" {% endif %}>Hello</a>
+
+    The solution here is to make duplicate attribute keys unique across that tag so BS4 will not attempt to merge or
+    replace existing. Then in post processing we'll remove the unique mask.
+
+    Todo - This could be simplified with a custom formatter
+    """
+    key_id = "".join(random.choice("0123456789ABCDEF") for i in range(5))
+    key = f"{key}__COTTON_DUPE_ATTR__{key_id}"
+    tag_attrs[key] = value

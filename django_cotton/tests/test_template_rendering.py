@@ -89,3 +89,82 @@ class TemplateRenderingTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, '<option value="1" selected>Value 1</option>')
             self.assertNotContains(response, '<option value="2" selected>Value 2</option>')
+
+    def test_spaces_preserved_between_variables(self):
+        self.create_template("cotton/spaces.html", """<div>{{ slot }}</div>""")
+        self.create_template(
+            "spaces_view.html",
+            """
+                <c-vars var1="Hello" var2="World" />
+                <c-spaces var1="Hello" var2="World">{{ var1 }} {{ var2 }}</c-spaces>
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "<div>Hello World</div>")
+
+    def test_encoding_is_retained_through_compilation(self):
+        many_encoded_html_chars = "".join(
+            [
+                "&lt;",
+                "&gt;",
+                "&amp;",
+                "&quot;",
+                "&#39;",
+                "&#x27;",
+                "&#x2F;",
+                "&#x60;",
+            ]
+        )
+        compiled = get_compiled(many_encoded_html_chars)
+        self.assertTrue(many_encoded_html_chars in compiled)
+
+    def test_querystring_can_be_rendered(self):
+        self.create_template("cotton/querystring.html", """{% querystring %}""")
+        self.create_template(
+            "querystring_view.html",
+            """
+                <c-querystring />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/", data={"foo": "bar"})
+            self.assertContains(response, "?foo=bar")
+
+    def test_cvars_isnt_changing_global_context(self):
+        self.create_template(
+            "cotton/child.html",
+            """
+            <c-vars />
+            
+            name: child (class: {{ class }})
+            """,
+        )
+        self.create_template(
+            "cotton/parent.html",
+            """
+            name: parent (class: {{ class }}))
+            
+            {{ slot }}
+            """,
+        )
+
+        self.create_template(
+            "slot_scope_view.html",
+            """
+            <c-parent>
+                <c-child class="testy" />
+            </c-parent>
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertTrue("name: child (class: testy)" in response.content.decode())
+            self.assertTrue("name: parent (class: )" in response.content.decode())

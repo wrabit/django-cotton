@@ -1,9 +1,9 @@
-{% cotton_component benchmarks.partials.main test_key %}
+{% c benchmarks.partials.main %}
     I'm default
-    {% cotton_slot top test_key %}
+    {% slot top %}
         I'm top
-    {% end_cotton_slot %}
-    {% cotton_slot bottom test_key %}
+    {% endslot %}
+    {% slot bottom  %}
         I'm bottom
-    {% end_cotton_slot %}
-{% end_cotton_component %}
+    {% endslot %}
+{% endc %}

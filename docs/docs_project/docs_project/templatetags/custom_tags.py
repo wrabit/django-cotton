@@ -1,3 +1,4 @@
+import json
 import os
 from django import template
 from django.utils.html import escape
@@ -25,3 +26,13 @@ class EscapeNode(template.Node):
 @register.filter
 def env(key):
     return mark_safe(os.environ.get(key, ""))
+
+
+@register.filter
+def json_dumps(value):
+    return json.dumps(value)
+
+
+@register.filter
+def get(dictionary, key):
+    return dictionary.get(key)

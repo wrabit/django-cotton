@@ -77,6 +77,7 @@ TEMPLATES = [
                 "docs_project.templatetags.force_escape",
                 "docs_project.templatetags.custom_tags",
                 "heroicons.templatetags.heroicons",
+                "django_cotton.templatetags.cotton",
             ],
         },
     },

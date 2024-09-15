@@ -1,6 +1,6 @@
 import ast
 from collections.abc import Mapping
-from typing import Set, Any
+from typing import Set, Any, Dict, List
 
 from django.template import Variable, TemplateSyntaxError, Context
 from django.template.base import VariableDoesNotExist, Template
@@ -39,9 +39,7 @@ class DynamicAttr:
         raise UnprocessableDynamicAttr
 
     def _resolve_as_variable(self, context):
-        if not self._is_cvar:
-            return Variable(self.value).resolve(context)
-        raise VariableDoesNotExist(self.value)
+        return Variable(self.value).resolve(context)
 
     def _resolve_as_boolean(self, _):
         if self.value == "":
@@ -64,18 +62,17 @@ class DynamicAttr:
 
 
 class Attrs(Mapping):
-    def __init__(self, attrs):
+    def __init__(self, attrs: Dict[str, Any]):
         self._attrs = attrs
         self._exclude_from_str: Set[str] = set()
-        self._unprocessable = []
+        self._unprocessable: List[str] = []
 
     def __str__(self):
-        output = mark_safe(
+        return mark_safe(
             " ".join(
                 f'{k}="{v}"' for k, v in self._attrs.items() if k not in self._exclude_from_str
             )
         )
-        return output
 
     def __getitem__(self, key):
         return self._attrs[key]
@@ -88,12 +85,6 @@ class Attrs(Mapping):
 
     def __len__(self):
         return len(self._attrs)
-
-    def __contains__(self, key):
-        return key in self._attrs
-
-    def get(self, key, default=None):
-        return self._attrs.get(key, default)
 
     def items(self):
         return self._attrs.items()
@@ -119,5 +110,4 @@ class Attrs(Mapping):
         self._exclude_from_str.add(key)
 
     def make_attrs_accessible(self):
-        """Converts hyphens in attr names to underscores"""
         return {k.replace("-", "_"): v for k, v in self._attrs.items()}

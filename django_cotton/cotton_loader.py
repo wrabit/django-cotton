@@ -38,7 +38,7 @@ class Loader(BaseLoader):
         if "<c-" not in template_string and "{% cotton_verbatim" not in template_string:
             compiled = template_string
         else:
-            compiled = self.cotton_compiler.process(template_string, origin.template_name)
+            compiled = self.cotton_compiler.process(template_string)
 
         self.cache_handler.cache_template(cache_key, compiled)
 
@@ -110,14 +110,19 @@ class CottonCompiler:
         self.django_syntax_placeholders = []
         self.html_entity_placeholders = []
 
-    def process(self, content, template_name):
-        content = self._replace_syntax_with_placeholders(content)
-        content = self._replace_html_entities_with_placeholders(content)
-        content = self._compile_cotton_to_django(content, template_name)
-        content = self._fix_bs4_attribute_empty_attribute_behaviour(content)
-        content = self._replace_placeholders_with_syntax(content)
-        content = self._replace_placeholders_with_html_entities(content)
-        content = self._remove_duplicate_attribute_markers(content)
+    def process(self, content: str):
+        processors = [
+            self._replace_syntax_with_placeholders,
+            self._replace_html_entities_with_placeholders,
+            self._compile_cotton_to_django,
+            self._fix_bs4_attribute_empty_attribute_behaviour,
+            self._replace_placeholders_with_syntax,
+            self._replace_placeholders_with_html_entities,
+            self._remove_duplicate_attribute_markers,
+        ]
+
+        for processor in processors:
+            content = processor(content)
 
         return content
 
@@ -131,12 +136,12 @@ class CottonCompiler:
 
         return self.HTML_ENTITY_PATTERN.sub(replace_entity, content)
 
-    def _replace_placeholders_with_html_entities(self, content):
+    def _replace_placeholders_with_html_entities(self, content: str):
         for i, entity in enumerate(self.html_entity_placeholders):
             content = content.replace(f"__HTML_ENTITY_{i}__", entity)
         return content
 
-    def _replace_syntax_with_placeholders(self, content):
+    def _replace_syntax_with_placeholders(self, content: str):
         """Replace {% ... %} and {{ ... }} with placeholders so they dont get touched
         or encoded by bs4. We will replace them back after bs4 has done its job."""
         self.django_syntax_placeholders = []
@@ -179,11 +184,10 @@ class CottonCompiler:
 
         return content
 
-    def _compile_cotton_to_django(self, html_content, template_name):
+    def _compile_cotton_to_django(self, content: str):
         """Convert cotton <c-* syntax to {%."""
-        soup = self._make_soup(html_content)
+        soup = self._make_soup(content)
 
-        # check if soup contains a 'c-vars' tag
         if cvars_el := soup.find("c-vars"):
             soup = self._wrap_with_cotton_vars_frame(soup, cvars_el)
 
@@ -191,7 +195,7 @@ class CottonCompiler:
 
         return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
 
-    def _replace_placeholders_with_syntax(self, content):
+    def _replace_placeholders_with_syntax(self, content: str):
         """Replace placeholders with original syntax."""
         for i, placeholder in enumerate(self.django_syntax_placeholders, 1):
             if placeholder["type"] == "verbatim":
@@ -213,52 +217,21 @@ class CottonCompiler:
 
         return content
 
-    def _remove_duplicate_attribute_markers(self, content):
+    def _remove_duplicate_attribute_markers(self, content: str):
         return re.sub(r"__COTTON_DUPE_ATTR__[0-9A-F]{5}", "", content, flags=re.IGNORECASE)
 
-    def _fix_bs4_attribute_empty_attribute_behaviour(self, contents):
+    def _fix_bs4_attribute_empty_attribute_behaviour(self, content: str):
         """Bs4 adds ="" to valueless attribute-like parts in HTML tags that causes issues when we want to manipulate
         django expressions."""
-        contents = contents.replace('=""', "")
-
-        return contents
+        return content.replace('=""', "")
 
     def _wrap_with_cotton_vars_frame(self, soup, cvars_el):
         """If the user has defined a <c-vars> tag, wrap content with {% cotton_vars_frame %} to be able to create and
         govern vars and attributes. To be able to defined new vars within a component and also have them available in the
         same component's context, we wrap the entire contents in another component: cotton_vars_frame. Only when <c-vars>
         is present."""
-
-        # create an attribute string from the cvars_el attrs. i.e. attr1 attr2="value" etc
-        # - this will be used to create the cvars tag
         cvars_attrs_string = " ".join(f'{k}="{v}"' for k, v in cvars_el.attrs.items())
-
-        # cvars = []
-        # for var, value in cvars_el.attrs.items():
-        # Attributes in context at this point will already have been formatted in _component to be accessible, so in order to cascade match the style.
-        # accessible_var = var.replace("-", "_")
-
-        # using default filter is limiting our ability to override when the subject value is present but nor processable.
-        # - carry this functionality to the cvars tag
-        # - then we can choose to display the cvar value if one from parent is not processable (as well as not present etc)
-
-        # cvars.append()
-
-        # if value is None:
-        #     vars_with_defaults.append(f"{var}={accessible_var}")
-        # elif var.startswith(":"):
-        #     # If ':' is present, the user wants to parse a literal string as the default value,
-        #     # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
-        #     var = var[1:]  # Remove the ':' prefix
-        #     accessible_var = accessible_var[1:]  # Remove the ':' prefix
-        #     vars_with_defaults.append(f'{var}={accessible_var}|eval_default:"{value}"')
-        # else:
-        #     # Assuming value is already a string that represents the default value
-        #     vars_with_defaults.append(f'{var}={accessible_var}|default:"{value}"')
-
         cvars_el.decompose()
-
-        # Construct the {% with %} opening tag
         opening = f"{{% cvars {cvars_attrs_string} %}}"
         opening = opening.replace("\n", "")
         closing = "{% endcvars %}"
@@ -269,20 +242,8 @@ class CottonCompiler:
             + str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8")).strip()
             + closing
         )
-
-        # Since we can't replace the soup object itself, we create new soup instead
         new_soup = self._make_soup(wrapped_content)
-
         return new_soup
-
-    # promote_cvars() (stack[-2], throws CvarsMustBeInComponentError)
-    #     soup[stack[-2]].add_attrs(v)
-    #
-    # <c-comp>
-    #     <c-vars sds dsd s s />
-    #     <c-slot name="header"></c-slot>
-    # </c-comp>
-    #
 
     def _transform_components(self, soup):
         """Replace <c-[component path]> tags with the {% cotton_component %} template tag"""

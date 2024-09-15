@@ -1,183 +1,128 @@
-from typing import Dict, Any
+import functools
+from typing import Union
+
 from django.conf import settings
-from django.utils.safestring import mark_safe
+from django.template import Library
+from django.template.base import (
+    Variable,
+    VariableDoesNotExist,
+    Node,
+)
 from django.template.loader import get_template
-from django.template import Node, Template, Variable, VariableDoesNotExist
-from django.template.base import Token, Parser
-import ast
 
-from django_cotton.utils import ensure_quoted
+from django_cotton.utils import get_cotton_data
+from django_cotton.exceptions import CottonIncompleteDynamicComponentError
+from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr
 
-
-class CottonIncompleteDynamicComponentError(Exception):
-    """Raised when a dynamic component is missing required attributes."""
-
-
-def cotton_component(parser: Parser, token: Token) -> "CottonComponentNode":
-    """
-    Template tag to render a cotton component with dynamic attributes.
-    """
-    bits = token.split_contents()
-    if len(bits) < 3:
-        raise ValueError("cotton_component tag requires at least a component path and key.")
-
-    component_path = bits[1]
-    component_key = bits[2]
-
-    kwargs = {}
-    for bit in bits[3:]:
-        try:
-            key, value = bit.split("=")
-        except ValueError:
-            # No value provided, assume boolean attribute
-            key = bit
-            value = True
-
-        kwargs[key] = value
-
-    nodelist = parser.parse(("end_cotton_component",))
-    parser.delete_first_token()
-
-    return CottonComponentNode(nodelist, component_path, component_key, kwargs)
+register = Library()
 
 
 class CottonComponentNode(Node):
-    def __init__(self, nodelist, component_path: str, component_key: str, kwargs: Dict[str, str]):
+    def __init__(self, component_name, nodelist, attrs):
+        self.component_name = component_name
         self.nodelist = nodelist
-        self.component_path = component_path
-        self.component_key = component_key
-        self.kwargs = kwargs
+        self.attrs = attrs
+        self.template_cache = {}
 
-    def render(self, context) -> str:
-        slot = self.nodelist.render(context)
-        attrs = self._build_attrs(context)
+    def render(self, context):
+        cotton_data = get_cotton_data(context)
 
-        named_slots_ctx = self._process_named_slots(context)
-        self._evaluate_expression_attributes(attrs, named_slots_ctx, context)
+        # Push a new component onto the stack
+        component_data = {
+            "key": self.component_name,
+            "attrs": Attrs({}),
+            "slots": {},
+        }
+        cotton_data["stack"].append(component_data)
 
-        template = self._get_template(context, attrs)
-        attrs_string = self._build_attrs_string(attrs)
-        accessible_attrs = {key.replace("-", "_"): value for key, value in attrs.items()}
-
-        return self._render_template(
-            template, context, slot, attrs, attrs_string, accessible_attrs, named_slots_ctx
-        )
-
-    def _build_attrs(self, context) -> Dict[str, Any]:
-        attrs = {}
-        for key, value in self.kwargs.items():
-            if isinstance(value, str) and value[0] == value[-1] and value[0] in ('"', "'"):
-                value = value[1:-1]
-            if value is True:
-                attrs[key] = True
-            if key.startswith(":"):
+        # Process simple attributes and boolean attributes
+        for key, value in self.attrs.items():
+            value = self._strip_quotes_safely(value)
+            if value is True:  # Boolean attribute
+                component_data["attrs"][key] = True
+            elif key.startswith(":"):
                 key = key[1:]
-                attrs[key] = self._process_dynamic_attribute(key, value, context)
+                try:
+                    component_data["attrs"][key] = DynamicAttr(value).resolve(context)
+                except UnprocessableDynamicAttr:
+                    component_data["attrs"].unprocessable(key)
             else:
-                attrs[key] = value
-        return attrs
+                try:
+                    component_data["attrs"][key] = Variable(value).resolve(context)
+                except (VariableDoesNotExist, IndexError):
+                    component_data["attrs"][key] = value
 
-    @staticmethod
-    def _strip_quotes(value: str) -> str:
-        if value and value[0] == value[-1] and value[0] in ('"', "'"):
-            return value[1:-1]
-        return value
+        # Render the nodelist to process any slot tags and vars
+        default_slot = self.nodelist.render(context)
 
-    def _process_dynamic_attribute(self, key: str, value: str, context) -> Any:
-        try:
-            return Variable(value).resolve(context)
-        except VariableDoesNotExist:
-            pass
+        # Prepare the cotton-specific data
+        component_state = {
+            "attrs": component_data["attrs"],
+            "slot": default_slot,
+            **component_data["slots"],
+            **component_data["attrs"].make_attrs_accessible(),
+        }
 
-        # Boolean attribute?
-        if value is True:
-            return True
+        template = self._get_cached_template(context, component_data["attrs"])
 
-        value = self._parse_template_string(value, context)
+        # Render the template with the new context
+        with context.push(**component_state):
+            output = template.render(context)
 
-        try:
-            return ast.literal_eval(value)
-        except (ValueError, SyntaxError):
-            pass
+        # Pop the component from the stack
+        cotton_data["stack"].pop()
 
-        context.setdefault("ctn_unprocessable_dynamic_attrs", set()).add(key)
-        return ""
+        return output
 
-    def _process_named_slots(self, context) -> Dict[str, Any]:
-        all_named_slots_ctx = context.get("cotton_named_slots", {})
-        named_slots_ctx = all_named_slots_ctx.get(self.component_key, {})
-        all_named_slots_ctx[self.component_key] = {}
-        return named_slots_ctx
-
-    def _evaluate_expression_attributes(
-        self, attrs: Dict[str, Any], named_slots_ctx: Dict[str, Any], context
-    ) -> None:
-        if "ctn_template_expression_attrs" in named_slots_ctx:
-            for key in named_slots_ctx["ctn_template_expression_attrs"]:
-                if key.startswith(":"):
-                    evaluated = self._process_dynamic_attribute(key, named_slots_ctx[key], context)
-                    key = key[1:]
-                    attrs[key] = evaluated
-                else:
-                    attrs[key] = named_slots_ctx[key]
-
-    def _get_template(self, context, attrs: Dict[str, Any]) -> Template:
-        template_path = self._generate_component_template_path(attrs)
+    def _get_cached_template(self, context, attrs):
         cache = context.render_context.get(self)
         if cache is None:
             cache = context.render_context[self] = {}
 
-        template = cache.get(template_path)
-        if template is None:
+        template_path = self._generate_component_template_path(self.component_name, attrs.get("is"))
+
+        if template_path not in cache:
             template = get_template(template_path)
             if hasattr(template, "template"):
                 template = template.template
             cache[template_path] = template
 
-        return template
+        return cache[template_path]
 
-    def _generate_component_template_path(self, attrs: Dict[str, Any]) -> str:
-        if self.component_path == "component":
-            if "is" not in attrs:
+    @staticmethod
+    @functools.lru_cache(maxsize=400)
+    def _generate_component_template_path(component_name: str, is_: Union[str, None]) -> str:
+        """Generate the path to the template for the given component name."""
+        if component_name == "component":
+            if is_ is None:
                 raise CottonIncompleteDynamicComponentError(
                     'Cotton error: "<c-component>" should be accompanied by an "is" attribute.'
                 )
-            component_path = attrs["is"]
-        else:
-            component_path = self.component_path
+            component_name = is_
 
-        component_tpl_path = component_path.replace(".", "/").replace("-", "_")
+        component_tpl_path = component_name.replace(".", "/").replace("-", "_")
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 
     @staticmethod
-    def _build_attrs_string(attrs: Dict[str, Any]) -> str:
-        return " ".join(f"{key}={ensure_quoted(value)}" for key, value in attrs.items())
+    def _strip_quotes_safely(value):
+        if type(value) is str and value.startswith('"') and value.endswith('"'):
+            return value[1:-1]
+        return value
 
-    def _render_template(
-        self,
-        template: Template,
-        context,
-        slot: str,
-        attrs: Dict[str, Any],
-        attrs_string: str,
-        accessible_attrs: Dict[str, Any],
-        named_slots_ctx: Dict[str, Any],
-    ) -> str:
-        with context.push(
-            {
-                "slot": slot,
-                "attrs_dict": attrs,
-                "attrs": mark_safe(attrs_string),
-                **accessible_attrs,
-                **named_slots_ctx,
-            }
-        ):
-            return template.render(context)
 
-    @staticmethod
-    def _parse_template_string(value: str, context) -> str:
+def cotton_component(parser, token):
+    bits = token.split_contents()[1:]
+    component_name = bits[0]
+    attrs = {}
+    for bit in bits[1:]:
         try:
-            return Template(value).render(context)
-        except (ValueError, SyntaxError):
-            return value
+            key, value = bit.split("=")
+            attrs[key] = value
+        except ValueError:
+            attrs[bit] = True
+
+    nodelist = parser.parse(("endc",))
+    parser.delete_first_token()
+
+    return CottonComponentNode(component_name, nodelist, attrs)

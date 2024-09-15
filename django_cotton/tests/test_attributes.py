@@ -58,6 +58,8 @@ class AttributeHandlingTests(CottonTestCase):
                     <p>variable is 111</p>
                 {% endif %}   
                 
+                HHH{{ template_string_lit }}HHH
+                
                 {% if template_string_lit.dummy == 222 %}
                     <p>template_string_lit.dummy is 222</p>
                 {% endif %}            
@@ -308,11 +310,12 @@ class AttributeHandlingTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, "All good")
 
-    def test_unprocessable_dynamic_attributes_fallback_to_cvars_defaults(self):
+    def test_unprocessable_dynamic_attributes_fallback_to_cvar_defaults(self):
         self.create_template(
             "cotton/unprocessable_dynamic_attribute.html",
             """
                 <c-vars color="gray" />
+                
                 {{ color }}
             """,
         )
@@ -334,7 +337,7 @@ class AttributeHandlingTests(CottonTestCase):
         self.create_template(
             "cotton/merges_attributes.html",
             """
-            <div {{ attrs_dict|merge:'class:form-group another-class-with:colon' }}></div>
+            <div {{ attrs|merge:'class:form-group another-class-with:colon' }}></div>
             """,
         )
 
@@ -392,7 +395,7 @@ class AttributeHandlingTests(CottonTestCase):
         self.create_template(
             "string_with_spaces_view.html",
             """
-                <c-string-test var1="string with space" attr1="I have spaces">
+                <c-string-test var="string with space" attr="I have spaces">
                     <c-slot name="named_slot">
                         named_slot with spaces
                     </c-slot>
@@ -404,32 +407,48 @@ class AttributeHandlingTests(CottonTestCase):
         self.create_template(
             "cotton/string_test.html",
             """
-                <c-vars var1 default_var="default var" />
+                <c-vars var default_var="default var" />
                 
                 slot: '{{ slot }}'
-                attr1: '{{ attr1 }}'
-                attr2: '{{ attr2 }}'
-                var1: '{{ var1 }}'
+                attr: '{{ attr }}'
+                var: '{{ var }}'
                 default_var: '{{ default_var }}'
                 named_slot: '{{ named_slot }}'
                 attrs: '{{ attrs }}'
             """,
         )
 
+    def test_empty_cvar_is_removed_from_attrs_string(self):
+        self.create_template(
+            "empty_cvar_view.html",
+            """
+                <c-empty-cvar var="im a cvar" attr="im a fallthrough" />
+            """,
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/empty_cvar.html",
+            """
+                <c-vars var />
+                
+                attr: '{{ attr }}'
+                var: '{{ var }}'
+                attrs: '{{ attrs }}'
+            """,
+        )
+
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            self.assertContains(response, "attr1: 'I have spaces'")
-            self.assertContains(response, "var1: 'string with space'")
-            self.assertContains(response, "default_var: 'default var'")
-            self.assertContains(response, "named_slot: '")
-            self.assertContains(response, "named_slot with spaces")
-            self.assertContains(response, """attrs: 'attr1="I have spaces"'""")
+            self.assertContains(response, "attr: 'im a fallthrough'")
+            self.assertContains(response, "var: 'im a cvar'")
+            self.assertContains(response, """attrs: 'attr="im a fallthrough"'""")
 
     def test_attrs_do_not_contain_cvars(self):
         self.create_template(
             "cvars_test_view.html",
             """
-                <c-cvars-test-component var1="im a var" attr1="im an attr">
+                <c-cvars-test-component var="im a var" attr="im an attr">
                     default slot
                 </c-cvars-test-component>        
             """,
@@ -439,12 +458,12 @@ class AttributeHandlingTests(CottonTestCase):
         self.create_template(
             "cotton/cvars_test_component.html",
             """
-                <c-vars var1="sds" prop_with_default="1" />
+                <c-vars var="sds" prop_with_default="1" />
                 
                 <div>
                     {{ testy }}
-                    <p>var1: '{{ var1 }}'</p>
-                    <p>attr1: '{{ attr1 }}'</p>
+                    <p>var: '{{ var }}'</p>
+                    <p>attr: '{{ attr }}'</p>
                     <p>empty_var: '{{ empty_var }}'</p>
                     <p>var_with_default: '{{ var_with_default }}'</p>
                     <p>slot: '{{ slot }}'</p>
@@ -456,9 +475,9 @@ class AttributeHandlingTests(CottonTestCase):
 
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            self.assertContains(response, "attr1: 'im an attr'")
-            self.assertContains(response, "var1: 'im a var'")
-            self.assertContains(response, """attrs: 'attr1="im an attr"'""")
+            self.assertContains(response, "attr: 'im an attr'")
+            self.assertContains(response, "var: 'im a var'")
+            self.assertContains(response, """attrs: 'attr="im an attr"'""")
 
     def test_attribute_passing(self):
         self.create_template(

@@ -40,7 +40,7 @@ class Loader(BaseLoader):
         if "<c-" not in template_string and "{% cotton_verbatim" not in template_string:
             compiled = template_string
         else:
-            compiled = self.cotton_compiler.process(template_string, origin.template_name)
+            compiled = self.cotton_compiler.process(template_string)
 
         self.cache_handler.cache_template(cache_key, compiled)
 
@@ -112,13 +112,18 @@ class CottonCompiler:
         self.django_syntax_placeholders = []
         self.html_entity_placeholders = []
 
-    def process(self, content, template_name):
-        content = self._replace_syntax_with_placeholders(content)
-        content = self._replace_html_entities_with_placeholders(content)
-        content = self._compile_cotton_to_django(content, template_name)
-        content = self._replace_placeholders_with_syntax(content)
-        content = self._replace_placeholders_with_html_entities(content)
-        content = self._remove_duplicate_attribute_markers(content)
+    def process(self, content: str):
+        processors = [
+            self._replace_syntax_with_placeholders,
+            self._replace_html_entities_with_placeholders,
+            self._compile_cotton_to_django,
+            self._replace_placeholders_with_syntax,
+            self._replace_placeholders_with_html_entities,
+            self._remove_duplicate_attribute_markers,
+        ]
+
+        for processor in processors:
+            content = processor(content)
 
         return content
 
@@ -132,12 +137,12 @@ class CottonCompiler:
 
         return self.HTML_ENTITY_PATTERN.sub(replace_entity, content)
 
-    def _replace_placeholders_with_html_entities(self, content):
+    def _replace_placeholders_with_html_entities(self, content: str):
         for i, entity in enumerate(self.html_entity_placeholders):
             content = content.replace(f"__HTML_ENTITY_{i}__", entity)
         return content
 
-    def _replace_syntax_with_placeholders(self, content):
+    def _replace_syntax_with_placeholders(self, content: str):
         """Replace {% ... %} and {{ ... }} with placeholders so they dont get touched
         or encoded by bs4. We will replace them back after bs4 has done its job."""
         self.django_syntax_placeholders = []
@@ -180,19 +185,18 @@ class CottonCompiler:
 
         return content
 
-    def _compile_cotton_to_django(self, html_content, template_name):
+    def _compile_cotton_to_django(self, content: str):
         """Convert cotton <c-* syntax to {%."""
-        soup = self._make_soup(html_content)
+        soup = self._make_soup(content)
 
-        # check if soup contains a 'c-vars' tag
         if cvars_el := soup.find("c-vars"):
             soup = self._wrap_with_cotton_vars_frame(soup, cvars_el)
 
-        self._transform_components(soup, template_name)
+        self._transform_components(soup)
 
         return str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8"))
 
-    def _replace_placeholders_with_syntax(self, content):
+    def _replace_placeholders_with_syntax(self, content: str):
         """Replace placeholders with original syntax."""
         for i, placeholder in enumerate(self.django_syntax_placeholders, 1):
             if placeholder["type"] == "verbatim":
@@ -214,7 +218,7 @@ class CottonCompiler:
 
         return content
 
-    def _remove_duplicate_attribute_markers(self, content):
+    def _remove_duplicate_attribute_markers(self, content: str):
         return re.sub(r"__COTTON_DUPE_ATTR__[0-9A-F]{5}", "", content, flags=re.IGNORECASE)
 
     def _wrap_with_cotton_vars_frame(self, soup, cvars_el):
@@ -222,30 +226,11 @@ class CottonCompiler:
         govern vars and attributes. To be able to defined new vars within a component and also have them available in the
         same component's context, we wrap the entire contents in another component: cotton_vars_frame. Only when <c-vars>
         is present."""
-
-        vars_with_defaults = []
-        for var, value in cvars_el.attrs.items():
-            # Attributes in context at this point will already have been formatted in _component to be accessible, so in order to cascade match the style.
-            accessible_var = var.replace("-", "_")
-
-            if value is None:
-                vars_with_defaults.append(f"{var}={accessible_var}")
-            elif var.startswith(":"):
-                # If ':' is present, the user wants to parse a literal string as the default value,
-                # i.e. "['a', 'b']", "{'a': 'b'}", "True", "False", "None" or "1".
-                var = var[1:]  # Remove the ':' prefix
-                accessible_var = accessible_var[1:]  # Remove the ':' prefix
-                vars_with_defaults.append(f'{var}={accessible_var}|eval_default:"{value}"')
-            else:
-                # Assuming value is already a string that represents the default value
-                vars_with_defaults.append(f'{var}={accessible_var}|default:"{value}"')
-
+        cvars_attrs_string = " ".join(f'{k}="{v}"' for k, v in cvars_el.attrs.items())
         cvars_el.decompose()
-
-        # Construct the {% with %} opening tag
-        opening = "{% cotton_vars_frame " + " ".join(vars_with_defaults) + " %}"
+        opening = f"{{% vars {cvars_attrs_string} %}}"
         opening = opening.replace("\n", "")
-        closing = "{% endcotton_vars_frame %}"
+        closing = "{% endvars %}"
 
         # Convert the remaining soup back to a string and wrap it within {% with %} block
         wrapped_content = (
@@ -253,26 +238,22 @@ class CottonCompiler:
             + str(soup.encode(formatter=UnsortedAttributes()).decode("utf-8")).strip()
             + closing
         )
-
-        # Since we can't replace the soup object itself, we create new soup instead
         new_soup = self._make_soup(wrapped_content)
-
         return new_soup
 
-    def _transform_components(self, soup, parent_key):
+    def _transform_components(self, soup):
         """Replace <c-[component path]> tags with the {% cotton_component %} template tag"""
         for tag in soup.find_all(re.compile("^c-"), recursive=True):
             if tag.name == "c-slot":
-                self._transform_named_slot(tag, parent_key)
+                self._transform_named_slot(tag)
 
                 continue
 
             component_key = tag.name[2:]
-
-            opening_tag = f"{{% cotton_component {component_key} {component_key} "
+            opening_tag = f"{{% c {component_key} "
 
             # Store attributes that contain template expressions, they are when we use '{{' or '{%' in the value of an attribute
-            expression_attrs = []
+            complex_attrs = []
 
             # Build the attributes
             for key, value in tag.attrs.items():
@@ -288,7 +269,7 @@ class CottonCompiler:
                 # Django templates tags cannot have {{ or {% expressions in their attribute values
                 # Neither can they have new lines, let's treat them both as "expression attrs"
                 if self.DJANGO_SYNTAX_PLACEHOLDER_PREFIX in value or "\n" in value or "=" in value:
-                    expression_attrs.append((key, value))
+                    complex_attrs.append((key, value))
                     continue
 
                 opening_tag += ' {}="{}"'.format(key, value)
@@ -296,18 +277,18 @@ class CottonCompiler:
 
             component_tag = opening_tag
 
-            if expression_attrs:
-                for key, value in expression_attrs:
-                    component_tag += f"{{% cotton_slot {key} {component_key} expression_attr %}}{value}{{% end_cotton_slot %}}"
+            if complex_attrs:
+                for key, value in complex_attrs:
+                    component_tag += f"{{% attr {key} %}}{value}{{% endattr %}}"
 
             if tag.contents:
                 tag_soup = self._make_soup(tag.decode_contents(formatter=UnsortedAttributes()))
-                self._transform_components(tag_soup, component_key)
+                self._transform_components(tag_soup)
                 component_tag += str(
                     tag_soup.encode(formatter=UnsortedAttributes()).decode("utf-8")
                 )
 
-            component_tag += "{% end_cotton_component %}"
+            component_tag += "{% endc %}"
 
             # Replace the original tag with the compiled django syntax
             new_soup = self._make_soup(component_tag)
@@ -315,16 +296,16 @@ class CottonCompiler:
 
         return soup
 
-    def _transform_named_slot(self, slot_tag, component_key):
-        """Compile <c-slot> to {% cotton_slot %}"""
+    def _transform_named_slot(self, slot_tag):
+        """Compile <c-slot> to {% slot %}"""
         slot_name = slot_tag.get("name", "").strip()
         inner_html = "".join(str(content) for content in slot_tag.contents)
 
         # Check and process any components in the slot content
         slot_soup = self._make_soup(inner_html)
-        self._transform_components(slot_soup, component_key)
+        self._transform_components(slot_soup)
 
-        cotton_slot_tag = f"{{% cotton_slot {slot_name} {component_key} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% end_cotton_slot %}}"
+        cotton_slot_tag = f"{{% slot {slot_name} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% endslot %}}"
         slot_tag.replace_with(self._make_soup(cotton_slot_tag))
 
     def _make_soup(self, content):

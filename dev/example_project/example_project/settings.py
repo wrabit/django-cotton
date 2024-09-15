@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "django_cotton.urls"
+ROOT_URLCONF = "example_project.urls"
 
 TEMPLATES = [
     {
@@ -66,11 +66,14 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "builtins": [
+                "django_cotton.templatetags.cotton",
+            ],
         },
     },
 ]
 
-WSGI_APPLICATION = "django_cotton.wsgi.application"
+WSGI_APPLICATION = "example_project.wsgi.application"
 
 
 # Database

@@ -49,7 +49,6 @@ def configure_django():
     import django
 
     django.setup()
-    print(f"DEBUG: {settings.DEBUG}")
 
 
 def template_bench(template_name, iterations=5000):

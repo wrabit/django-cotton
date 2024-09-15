@@ -1,0 +1,46 @@
+<h1>Welcome to our simplified Cotton demo</h1>
+
+
+{% c button class="btn-primary" %}
+    Click me!
+{% endc %}
+
+{% c card title="hello" :id="2" class="green" some_prop :testy="view_context" %}
+    {% slot name=":some_prop" %}None{% endslot %}
+{% endc %}
+
+{% c card title="My Card" %}
+
+    Default content here
+
+    {% c card var_override="sssasasasasa" title="My Override" some_attr="1+1" %}
+        This is the content of my card.
+        {% c button class="btn-secondary" %}
+            Card button
+        {% endc %}
+        {% slot name="footer" %}
+            This is the footer of my card. {{ view_context }}
+        {% endslot %}
+    {% endc %}
+
+    {% c card title="My Override" %}
+        This is the content of my card.
+        {% c button class="btn-secondary" %}
+            Card button
+        {% endc %}
+        {% slot name="footer" %}
+            This is the footer of my card. {{ view_context }}
+        {% endslot %}
+    {% endc %}
+
+    {% c button class="btn-secondary" %}
+        Card button
+    {% endc %}
+    {% slot name="footer" %}
+        This is the footer of my card.
+    {% endslot %}
+{% endc %}
+
+<p>Current time: {{ current_time }}</p>
+
+{% include 'test.html' %}

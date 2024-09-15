@@ -51,7 +51,7 @@ def configure_django():
     django.setup()
 
 
-def template_bench(template_name, iterations=5000):
+def template_bench(template_name, iterations=500):
     start_time = time.time()
     for _ in range(iterations):
         render_to_string(template_name)
@@ -60,7 +60,7 @@ def template_bench(template_name, iterations=5000):
     return duration
 
 
-def template_bench_data_loop(template_name, iterations=5000):
+def template_bench_data_loop(template_name, iterations=500):
     data = list(range(1, iterations))
     start_time = time.time()
     render_to_string(template_name, context={"data": data})
@@ -69,7 +69,7 @@ def template_bench_data_loop(template_name, iterations=5000):
     return duration
 
 
-def run_benchmark(bench_func, template_name, iterations=5000, runs=5):
+def run_benchmark(bench_func, template_name, iterations=500, runs=5):
     # Warm up
     bench_func(template_name, iterations=1)
 
@@ -85,7 +85,7 @@ def main():
     configure_django()
 
     runs = 5
-    iterations = 5000
+    iterations = 500
 
     print(f"Running benchmarks with {runs} runs, {iterations} iterations each")
 

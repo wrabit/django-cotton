@@ -2,7 +2,7 @@ from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_compiled
 
 
-class SlotAndContentTests(CottonTestCase):
+class SlotTests(CottonTestCase):
     def test_named_slots_correctly_display_in_loop(self):
         self.create_template(
             "named_slot_in_loop_view.html",
@@ -75,3 +75,31 @@ class SlotAndContentTests(CottonTestCase):
             compiled,
             """{% vars var1="string with space" %}content{% endvars %}""",
         )
+
+    def test_named_slot_missing(self):
+        self.create_template(
+            "test_empty_cvars_view.html",
+            """
+                <c-empty-cvars />  
+            """,
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/empty_cvars.html",
+            """,
+            <c-vars test1="None" test2="" test3 test4=None />
+            
+            test1: '{{ test1 }}'
+            test2: '{{ test2 }}'
+            test3: '{{ test3 }}'
+            test4: '{{ test4 }}'     
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "test1: 'None'")
+            self.assertContains(response, "test2: ''")
+            self.assertContains(response, "test3: ''")
+            self.assertContains(response, "test4: 'None'")

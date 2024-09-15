@@ -14,6 +14,8 @@ from django.apps import apps
 from bs4 import BeautifulSoup, MarkupResemblesLocatorWarning
 from bs4.formatter import HTMLFormatter
 
+from django_cotton.utils import CottonHTMLTreeBuilder
+
 warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
 
@@ -115,7 +117,6 @@ class CottonCompiler:
             self._replace_syntax_with_placeholders,
             self._replace_html_entities_with_placeholders,
             self._compile_cotton_to_django,
-            self._fix_bs4_attribute_empty_attribute_behaviour,
             self._replace_placeholders_with_syntax,
             self._replace_placeholders_with_html_entities,
             self._remove_duplicate_attribute_markers,
@@ -220,11 +221,6 @@ class CottonCompiler:
     def _remove_duplicate_attribute_markers(self, content: str):
         return re.sub(r"__COTTON_DUPE_ATTR__[0-9A-F]{5}", "", content, flags=re.IGNORECASE)
 
-    def _fix_bs4_attribute_empty_attribute_behaviour(self, content: str):
-        """Bs4 adds ="" to valueless attribute-like parts in HTML tags that causes issues when we want to manipulate
-        django expressions."""
-        return content.replace('=""', "")
-
     def _wrap_with_cotton_vars_frame(self, soup, cvars_el):
         """If the user has defined a <c-vars> tag, wrap content with {% cotton_vars_frame %} to be able to create and
         govern vars and attributes. To be able to defined new vars within a component and also have them available in the
@@ -261,6 +257,11 @@ class CottonCompiler:
 
             # Build the attributes
             for key, value in tag.attrs.items():
+                # value might be None
+                if value is None:
+                    opening_tag += f" {key}"
+                    continue
+
                 # BS4 stores class values as a list, so we need to join them back into a string
                 if key == "class":
                     value = " ".join(value)
@@ -307,27 +308,12 @@ class CottonCompiler:
         cotton_slot_tag = f"{{% slot {slot_name} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% endslot %}}"
         slot_tag.replace_with(self._make_soup(cotton_slot_tag))
 
-    def _make_soup(self, html):
+    def _make_soup(self, content):
         return BeautifulSoup(
-            html,
+            content,
             "html.parser",
-            on_duplicate_attribute=self.handle_duplicate_attributes,
+            builder=CottonHTMLTreeBuilder(on_duplicate_attribute=handle_duplicate_attributes),
         )
-
-    @staticmethod
-    def handle_duplicate_attributes(tag_attrs, key, value):
-        """BS4 cleans html and removes duplicate attributes. This would be fine if our target was html, but actually
-        we're targeting Django Template Language. This contains expressions to govern content including attributes of
-        any XML-like tag. It's perfectly fine to expect duplicate attributes per tag in DTL:
-
-        <a href="#" {% if something %} class="this" {% else %} class="that" {% endif %}>Hello</a>
-
-        The solution here is to make duplicate attribute keys unique across that tag so BS4 will not attempt to merge or
-        replace existing. Then in post processing we'll remove the unique mask.
-        """
-        key_id = "".join(random.choice("0123456789ABCDEF") for i in range(5))
-        key = f"{key}__COTTON_DUPE_ATTR__{key_id}"
-        tag_attrs[key] = value
 
 
 class CottonTemplateCacheHandler:
@@ -360,3 +346,20 @@ class CottonTemplateCacheHandler:
 
     def reset(self):
         self.template_cache.clear()
+
+
+def handle_duplicate_attributes(tag_attrs, key, value):
+    """BS4 cleans html and removes duplicate attributes. This would be fine if our target was html, but actually
+    we're targeting Django Template Language. This contains expressions to govern content including attributes of
+    any XML-like tag. It's perfectly fine to expect duplicate attributes per tag in DTL:
+
+    <a href="#" {% if something %} class="this" {% else %} class="that" {% endif %}>Hello</a>
+
+    The solution here is to make duplicate attribute keys unique across that tag so BS4 will not attempt to merge or
+    replace existing. Then in post processing we'll remove the unique mask.
+
+    Todo - This could be simplified with a custom formatter
+    """
+    key_id = "".join(random.choice("0123456789ABCDEF") for i in range(5))
+    key = f"{key}__COTTON_DUPE_ATTR__{key_id}"
+    tag_attrs[key] = value

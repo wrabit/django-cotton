@@ -20,8 +20,6 @@ from django_cotton.utils import get_cotton_data
 register = Library()
 
 
-
-
 class CottonComponentNode(Node):
     def __init__(self, component_name, nodelist, attrs):
         self.component_name = component_name
@@ -54,7 +52,7 @@ class CottonComponentNode(Node):
             else:
                 try:
                     component_data["attrs"][key] = Variable(value).resolve(context)
-                except VariableDoesNotExist:
+                except (VariableDoesNotExist, IndexError):
                     component_data["attrs"][key] = value
 
         # Render the nodelist to process any slot tags and vars
@@ -114,6 +112,7 @@ class CottonComponentNode(Node):
         if type(value) is str and value.startswith('"') and value.endswith('"'):
             return value[1:-1]
         return value
+
 
 @register.tag("comp")
 def cotton_component(parser, token):

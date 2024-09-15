@@ -503,12 +503,87 @@ class AttributeHandlingTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertTrue(response.status_code == 200)
 
+    def test_boolean_attributes(self):
+        self.create_template(
+            "cotton/boolean_attribute.html",
+            """
+                {% if is_something is True %}
+                    It's True
+                {% endif %}   
+            """,
+        )
+
+        self.create_template(
+            "boolean_attribute_view.html",
+            """
+                <c-boolean-attribute is_something />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "It's True")
+
+    def test_empty_strings_are_not_considered_booleans(self):
+        self.create_template(
+            "cotton/empty_string_attrs.html",
+            """
+                {% if something1 == "" %}
+                    I am string
+                {% endif %}
+                
+                {% if something2 is True %}
+                    I am boolean
+                {% endif %}
+            """,
+        )
+
+        self.create_template(
+            "empty_string_attrs_view.html",
+            """
+                <c-empty-string-attrs something1="" something2 />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "I am string")
+            self.assertContains(response, "I am boolean")
+
+    def test_htmx_attribute_values_double_quote(self):
+        # tests for json-like values
+        self.create_template(
+            "cotton/htmx2.html",
+            """
+            <div {{ attrs }}><div>
+            """,
+        )
+
+        self.create_template(
+            "htmx_view2.html",
+            """
+                <c-htmx2
+                  hx-vals="{'id': '1'}"
+                />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "\"{'id': '1'}\"")
+
     def test_htmx_attribute_values_single_quote(self):
         # tests for json-like values
         self.create_template(
             "cotton/htmx.html",
             """
-            <div {{ attrs }}><div>
+            <div {{ attrs }}><div>            
             """,
         )
 
@@ -526,27 +601,3 @@ class AttributeHandlingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, """'{"id": "1"}'""")
-
-    def test_htmx_attribute_values_double_quote(self):
-        # tests for json-like values
-        self.create_template(
-            "cotton/htmx2.html",
-            """
-            <div {{ attrs }}><div>
-            """,
-        )
-
-        self.create_template(
-            "htmx_view2.html",
-            """
-            <c-htmx2
-              hx-vals="{'id': '1'}"
-            />
-            """,
-            "view/",
-        )
-
-        # Override URLconf
-        with self.settings(ROOT_URLCONF=self.url_conf()):
-            response = self.client.get("/view/")
-            self.assertContains(response, "\"{'id': '1'}\"")

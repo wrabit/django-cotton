@@ -26,10 +26,13 @@ def cotton_component(parser: Parser, token: Token) -> "CottonComponentNode":
 
     kwargs = {}
     for bit in bits[3:]:
-        if "=" in bit:
-            key, value = bit.split("=", 1)
-        else:
-            key, value = bit, ""
+        try:
+            key, value = bit.split("=")
+        except ValueError:
+            # No value provided, assume boolean attribute
+            key = bit
+            value = True
+
         kwargs[key] = value
 
     nodelist = parser.parse(("end_cotton_component",))
@@ -63,12 +66,13 @@ class CottonComponentNode(Node):
     def _build_attrs(self, context) -> Dict[str, Any]:
         attrs = {}
         for key, value in self.kwargs.items():
-            value = self._strip_quotes(value)
+            if isinstance(value, str) and value[0] == value[-1] and value[0] in ('"', "'"):
+                value = value[1:-1]
+            if value is True:
+                attrs[key] = True
             if key.startswith(":"):
                 key = key[1:]
                 attrs[key] = self._process_dynamic_attribute(key, value, context)
-            elif value == "":
-                attrs[key] = True
             else:
                 attrs[key] = value
         return attrs
@@ -85,7 +89,8 @@ class CottonComponentNode(Node):
         except VariableDoesNotExist:
             pass
 
-        if value == "":
+        # Boolean attribute?
+        if value is True:
             return True
 
         value = self._parse_template_string(value, context)

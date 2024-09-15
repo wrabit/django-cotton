@@ -232,15 +232,11 @@ class CvarTests(CottonTestCase):
             "cotton/empty_class_attrs.html",
             """
                 <c-vars class="" />
-                {{ class }}
                 
+                {% if class == "" %}got it{% endif %}
             """,
         )
 
-        ## {% if class == "" %}got it{% endif %}
-
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            print(response.content.decode())
-            self.assertTrue(response.status_code == 200)
             self.assertContains(response, "got it")

@@ -227,9 +227,10 @@ class CottonCompiler:
         same component's context, we wrap the entire contents in another component: cotton_vars_frame. Only when <c-vars>
         is present."""
 
-        print(cvars_el.attrs.items())
+        cvars_attrs_string = " ".join(
+            f'{k}="{" ".join(v) if k == "class" else v}"' for k, v in cvars_el.attrs.items()
+        )
 
-        cvars_attrs_string = " ".join(f'{k}="{v}"' for k, v in cvars_el.attrs.items())
         cvars_el.decompose()
         opening = f"{{% vars {cvars_attrs_string} %}}"
         opening = opening.replace("\n", "")

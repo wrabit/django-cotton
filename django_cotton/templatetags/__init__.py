@@ -16,8 +16,8 @@ class UnprocessableDynamicAttr(Exception):
 class DynamicAttr:
     def __init__(self, value: str, is_cvar=False):
         self.value = value
-        self._resolved_value = None
         self._is_cvar = is_cvar
+        self._resolved_value = None
 
     def resolve(self, context: Context) -> Any:
         if self._resolved_value is not None:
@@ -32,12 +32,12 @@ class DynamicAttr:
 
         for resolver in resolvers:
             try:
+                # noinspection PyArgumentList
                 self._resolved_value = resolver(context)
                 return self._resolved_value
             except (VariableDoesNotExist, TemplateSyntaxError, ValueError, SyntaxError):
                 continue
 
-        self._unprocessable = True
         raise UnprocessableDynamicAttr
 
     def _resolve_as_variable(self, context):

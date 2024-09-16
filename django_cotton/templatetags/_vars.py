@@ -24,8 +24,6 @@ class CottonVarsNode(Node):
             current_component = cotton_data["stack"][-1]
             attrs = current_component["attrs"]
 
-            print(self.var_dict.items())
-
             for key, value in self.var_dict.items():
                 if key not in attrs.exclude_unprocessable():
                     if key.startswith(":"):

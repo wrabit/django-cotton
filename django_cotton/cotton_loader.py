@@ -123,6 +123,7 @@ class CottonCompiler:
         ]
 
         for processor in processors:
+            # noinspection PyArgumentList
             content = processor(content)
 
         return content

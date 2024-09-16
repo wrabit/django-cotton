@@ -399,3 +399,31 @@ class AttributeHandlingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, """'{"id": "1"}'""")
+
+    def test_string_attributes_are_not_parsed_as_variables(self):
+        self.create_template(
+            "cotton/string_attrs.html",
+            """
+                {% if string_attr == "world" %}
+                    This should not occur
+                {% endif %}
+            
+                {% if string_attr == "hello" %}
+                    It's hello
+                {% endif %}
+            """,
+        )
+
+        self.create_template(
+            "string_attrs_view.html",
+            """
+                <c-string-attrs string_attr="hello" />
+            """,
+            "view/",
+            context={"hello": "world"},
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "It's hello")

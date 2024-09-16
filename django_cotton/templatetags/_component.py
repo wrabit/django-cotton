@@ -47,10 +47,7 @@ class CottonComponentNode(Node):
                 except UnprocessableDynamicAttr:
                     component_data["attrs"].unprocessable(key)
             else:
-                try:
-                    component_data["attrs"][key] = Variable(value).resolve(context)
-                except (VariableDoesNotExist, IndexError):
-                    component_data["attrs"][key] = value
+                component_data["attrs"][key] = value
 
         # Render the nodelist to process any slot tags and vars
         default_slot = self.nodelist.render(context)

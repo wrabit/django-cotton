@@ -305,16 +305,22 @@ class AttributeHandlingTests(CottonTestCase):
         self.create_template(
             "cotton/boolean_attribute.html",
             """
-                {% if is_something is True %}
-                    It's True
+                {% if is_hyphenated is True %}
+                    is_hyphenated is True
+                {% endif %}  
+
+                {% if is_underscored is True %}
+                    is_underscored is True
                 {% endif %}   
+                
+                attrs: {{ attrs }}
             """,
         )
 
         self.create_template(
             "boolean_attribute_view.html",
             """
-                <c-boolean-attribute is_something />
+                <c-boolean-attribute is-hyphenated is_underscored  />
             """,
             "view/",
         )
@@ -322,7 +328,9 @@ class AttributeHandlingTests(CottonTestCase):
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            self.assertContains(response, "It's True")
+            self.assertContains(response, "is_hyphenated is True")
+            self.assertContains(response, "is_underscored is True")
+            self.assertContains(response, "attrs: is-hyphenated is_underscored")
 
     def test_empty_strings_are_not_considered_booleans(self):
         self.create_template(

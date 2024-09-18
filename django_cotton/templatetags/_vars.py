@@ -23,12 +23,13 @@ class CottonVarsNode(Node):
         if cotton_data["stack"]:
             current_component = cotton_data["stack"][-1]
             attrs = current_component["attrs"]
+            vars = {}
 
             for key, value in self.var_dict.items():
                 if key not in attrs.exclude_unprocessable():
                     if key.startswith(":"):
                         try:
-                            attrs[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
+                            vars[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
                         except UnprocessableDynamicAttr:
                             pass
                     else:
@@ -41,11 +42,9 @@ class CottonVarsNode(Node):
 
             # Process cvars without values
             for empty_var in self.empty_vars:
-                # if empty_var in attrs.exclude_unprocessable():
-
                 attrs.exclude_from_string_output(empty_var)
 
-            with context.push({**attrs.make_attrs_accessible(), "attrs": attrs}):
+            with context.push({**attrs.make_attrs_accessible(), "attrs": attrs, **vars}):
                 output = self.nodelist.render(context)
 
             return output

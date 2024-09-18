@@ -240,3 +240,105 @@ class CvarTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, "got it")
+
+    def test_cvars_with_hyphens_and_underscores(self):
+        self.create_template(
+            "cvars_hyphens_underscores_view.html",
+            """<c-cvars-hyphens-underscores 
+                overwrite-hyphenated="overwrite-hyphenated"  
+                overwrite_underscored="overwrite_underscored"  
+            />""",
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/cvars_hyphens_underscores.html",
+            """
+                <c-vars 
+                    default-hyphenated="default-hyphenated"
+                    default_underscored="default_underscored"
+                    overwrite-hyphenated=".."
+                    overwrite_underscored=".."
+                />
+                
+                default-hyphenated: {{ default_hyphenated }}
+                default_underscored: {{ default_underscored }}
+                overwrite-hyphenated: {{ overwrite_hyphenated }}
+                overwrite_underscored: {{ overwrite_underscored }}
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "default-hyphenated: default-hyphenated")
+            self.assertContains(response, "default_underscored: default_underscored")
+            self.assertContains(response, "overwrite-hyphenated: overwrite-hyphenated")
+            self.assertContains(response, "overwrite_underscored: overwrite_underscored")
+
+    def test_cvars_basics(self):
+        self.create_template(
+            "dynamic_cvars_basics_view.html",
+            """<c-cvars-basics overwrite="overwrite" real-attribute="real" />""",
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/cvars_basics.html",
+            """
+                <c-vars :unprovided="False" overwrite="default" />
+                
+                attrs: {{ attrs }}
+                overwrite: {{ overwrite }}
+                real: {{ real_attribute }} 
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, 'attrs: real-attribute="real"')
+            self.assertContains(response, "overwrite: overwrite")
+            self.assertContains(response, "real: real")
+
+    def test_cvars_dynamic_defaults(self):
+        self.create_template(
+            "dynamic_cvars_dynamic_defaults_view.html",
+            """<c-dynamic-default-cvars />""",
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/dynamic_default_cvars.html",
+            """
+                <c-vars :dynamic_default="False" />
+                
+                {% if dynamic_default is True %}not{% endif %}
+                {% if dynamic_default is False %}expected{% endif %}
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertNotContains(response, "not")
+            self.assertContains(response, "expected")
+
+    def test_overwriting_cvars_dynamic_defaults(self):
+        self.create_template(
+            "overwriting_cvars_dynamic_defaults_view.html",
+            """<c-dynamic-default-overwrite-cvars :dynamic-default="True" />""",
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/dynamic_default_overwrite_cvars.html",
+            """
+                <c-vars :dynamic-default="False" />
+                
+                {% if dynamic_default is True %}expected{% endif %}
+                {% if dynamic_default is False %}not{% endif %}
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "expected")
+            self.assertNotContains(response, "not")

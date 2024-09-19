@@ -40,9 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_cotton.apps.SimpleAppConfig",
+    "django_cotton",
     "heroicons",
-    "template_partials.apps.SimpleAppConfig",
 ]
 
 MIDDLEWARE = [
@@ -65,22 +64,8 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": ["docs_project/templates"],
+        "APP_DIRS": True,
         "OPTIONS": {
-            "loaders": [
-                (
-                    "template_partials.loader.Loader",
-                    [
-                        (
-                            "django.template.loaders.cached.Loader",
-                            [
-                                "django_cotton.cotton_loader.Loader",
-                                "django.template.loaders.filesystem.Loader",
-                                "django.template.loaders.app_directories.Loader",
-                            ],
-                        )
-                    ],
-                )
-            ],
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
@@ -92,8 +77,6 @@ TEMPLATES = [
                 "docs_project.templatetags.force_escape",
                 "docs_project.templatetags.custom_tags",
                 "heroicons.templatetags.heroicons",
-                "django_cotton.templatetags.cotton",
-                "template_partials.templatetags.partials",
             ],
         },
     },
@@ -165,8 +148,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-COTTON_TEMPLATE_CACHING_ENABLED = True
-
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
@@ -176,6 +157,3 @@ CACHES = {
         "TIMEOUT": 86400,
     }
 }
-
-
-COTTON_TEMPLATE_CACHING_ENABLED = True

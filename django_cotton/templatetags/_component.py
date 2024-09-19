@@ -4,8 +4,6 @@ from typing import Union
 from django.conf import settings
 from django.template import Library
 from django.template.base import (
-    Variable,
-    VariableDoesNotExist,
     Node,
 )
 from django.template.loader import get_template
@@ -58,16 +56,16 @@ class CottonComponentNode(Node):
             "slot": default_slot,
             **component_data["slots"],
             **component_data["attrs"].make_attrs_accessible(),
+            "cotton_data": cotton_data,
         }
 
         template = self._get_cached_template(context, component_data["attrs"])
-
-        # Render the template with the new context
-        with context.push(**component_state):
-            output = template.render(context)
-
-        # Pop the component from the stack
+        output = template.render(context.new(component_state))
         cotton_data["stack"].pop()
+
+        # if not isolated, future 'only' support?:
+        # with context.push(component_state):
+        #     output = template.render(context)
 
         return output
 

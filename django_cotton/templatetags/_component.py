@@ -4,8 +4,11 @@ from typing import Union
 from django.conf import settings
 from django.template import Library
 from django.template.base import (
+    Variable,
+    VariableDoesNotExist,
     Node,
 )
+from django.template.context import ContextDict, Context
 from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
@@ -52,10 +55,10 @@ class CottonComponentNode(Node):
 
         # Prepare the cotton-specific data
         component_state = {
-            "attrs": component_data["attrs"],
-            "slot": default_slot,
             **component_data["slots"],
             **component_data["attrs"].make_attrs_accessible(),
+            "attrs": component_data["attrs"],
+            "slot": default_slot,
             "cotton_data": cotton_data,
         }
 

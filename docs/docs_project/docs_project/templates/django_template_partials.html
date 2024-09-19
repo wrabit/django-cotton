@@ -1,0 +1,58 @@
+<c-layouts.with-sidebar>
+    <h1>Setting up Cotton with Django Template Partials</h1>
+
+    <p>Both packages come with an auto-setup feature, but to get the packages working together we need to opt instead
+        for the corresponding 'SimpleAppConfig' from each package:</p>
+
+    <c-snippet language="python">{% cotton_verbatim %}{% verbatim %}
+INSTALLED_APPS = [
+    "django_cotton.apps.SimpleAppConfig",
+    "template_partials.apps.SimpleAppConfig",
+]
+{% endverbatim %}{% endcotton_verbatim %}
+    </c-snippet>
+
+    <p>This means we need to modify the TEMPLATES block ourselves to add the loaders and tags we need for each package. The loaders
+        should be applied in a specific way so the packaged work together, whilst still benefiting from Django's cached loader system.</p>
+
+    <c-snippet language="python">{% cotton_verbatim %}{% verbatim %}
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "OPTIONS": {
+            "loaders": [
+                (
+                    "template_partials.loader.Loader",
+                    [
+                        (
+                            "django.template.loaders.cached.Loader",
+                            [
+                                "django_cotton.cotton_loader.Loader",
+                                "django.template.loaders.filesystem.Loader",
+                                "django.template.loaders.app_directories.Loader",
+                            ],
+                        )
+                    ],
+                )
+            ],
+            "context_processors": [
+                # no changes
+            ],
+            "builtins": [
+                "django_cotton.templatetags.cotton",
+                "template_partials.templatetags.partials",
+            ],
+        },
+    },
+]
+{% endverbatim %}{% endcotton_verbatim %}
+    </c-snippet>
+
+<c-note>
+    Because we're specifying loaders manually, Django prevents us from using the APPS_DIRS setting. This means we need to specify the path to the templates directory(s) manually.
+</c-note>
+
+
+
+</c-layouts.with-sidebar>

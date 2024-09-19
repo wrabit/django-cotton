@@ -77,7 +77,6 @@ TEMPLATES = [
                 "docs_project.templatetags.force_escape",
                 "docs_project.templatetags.custom_tags",
                 "heroicons.templatetags.heroicons",
-                "django_cotton.templatetags.cotton",
             ],
         },
     },
@@ -149,8 +148,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-COTTON_TEMPLATE_CACHING_ENABLED = True
-
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
@@ -160,6 +157,3 @@ CACHES = {
         "TIMEOUT": 86400,
     }
 }
-
-
-COTTON_TEMPLATE_CACHING_ENABLED = True

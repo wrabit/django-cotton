@@ -58,10 +58,6 @@ class DynamicAttr:
     def _resolve_as_literal(self, _):
         return ast.literal_eval(self.value)
 
-    @property
-    def is_unprocessable(self):
-        return self._unprocessable
-
 
 class Attrs(Mapping):
     def __init__(self, attrs: Dict[str, Any]):
@@ -72,7 +68,7 @@ class Attrs(Mapping):
     def __str__(self):
         return mark_safe(
             " ".join(
-                f"{k}={ensure_quoted(v)}"
+                f"{k}" if v is True else f"{k}={ensure_quoted(v)}"
                 for k, v in self._attrs.items()
                 if k not in self._exclude_from_str
             )

@@ -8,6 +8,7 @@ from django.template.base import (
     VariableDoesNotExist,
     Node,
 )
+from django.template.context import ContextDict, Context
 from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
@@ -54,20 +55,20 @@ class CottonComponentNode(Node):
 
         # Prepare the cotton-specific data
         component_state = {
-            "attrs": component_data["attrs"],
-            "slot": default_slot,
             **component_data["slots"],
             **component_data["attrs"].make_attrs_accessible(),
+            "attrs": component_data["attrs"],
+            "slot": default_slot,
+            "cotton_data": cotton_data,
         }
 
         template = self._get_cached_template(context, component_data["attrs"])
-
-        # Render the template with the new context
-        with context.push(**component_state):
-            output = template.render(context)
-
-        # Pop the component from the stack
+        output = template.render(context.new(component_state))
         cotton_data["stack"].pop()
+
+        # if not isolated, future 'only' support?:
+        # with context.push(component_state):
+        #     output = template.render(context)
 
         return output
 

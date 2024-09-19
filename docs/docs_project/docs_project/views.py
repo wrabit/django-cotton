@@ -10,7 +10,7 @@ def build_view(template_name, title=None):
     title = title or f"{snake_to_title(template_name)} - Django Cotton"
 
     def view(request):
-        return render(request, f"{template_name}.html", {"title": title})
+        return render(request, f"{template_name}.html", {"meta_title": title})
 
     return view
 

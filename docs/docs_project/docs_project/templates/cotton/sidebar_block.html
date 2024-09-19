@@ -1,4 +1,7 @@
 <div class="py-4 {{ class }} border-b border-yellow-900 border-opacity-15 dark:border-gray-700 dark:border-opacity-100 last:border-0 first:pt-0 leading-7">
-    <c-sidebar-heading>{{ title }}</c-sidebar-heading>
+    {% if title %}
+        <c-sidebar-heading>{{ title }}</c-sidebar-heading>
+    {% endif %}
+
     {{ slot }}
 </div>

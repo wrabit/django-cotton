@@ -63,12 +63,14 @@ class CottonComponentNode(Node):
         }
 
         template = self._get_cached_template(context, component_data["attrs"])
-        output = template.render(context.new(component_state))
-        cotton_data["stack"].pop()
+        # excludes builtin + custom context processors
+        # output = template.render(context.new(component_state))
 
-        # if not isolated, future 'only' support?:
-        # with context.push(component_state):
-        #     output = template.render(context)
+        # provides global
+        with context.push(component_state):
+            output = template.render(context)
+
+        cotton_data["stack"].pop()
 
         return output
 

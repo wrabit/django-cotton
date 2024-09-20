@@ -110,8 +110,7 @@ class BasicComponentTests(CottonTestCase):
         self.create_template(
             "cotton/isolated_context.html",
             """{{ outer }}""",
-        )git
-
+        )
         self.create_template(
             "isolated_context_view.html",
             """

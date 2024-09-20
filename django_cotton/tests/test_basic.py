@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django_cotton.tests.utils import CottonTestCase
 
 
@@ -102,3 +104,22 @@ class BasicComponentTests(CottonTestCase):
                 response,
                 """My template path was not specified in settings!""",
             )
+
+    @skip("Not implemented")
+    def test_components_have_isolated_context(self):
+        self.create_template(
+            "cotton/isolated_context.html",
+            """{{ outer }}""",
+        )
+        self.create_template(
+            "isolated_context_view.html",
+            """
+            <c-isolated-context />
+            """,
+            "view/",
+            context={"outer": "Outer content"},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertNotContains(response, "Outer content")

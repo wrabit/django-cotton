@@ -1,4 +1,21 @@
 <c-layouts.with-sidebar>
+{#
+    <div class="py-40 not-prose space-y-5">
+        <c-examples.tutorial title="Information">This is an informational message.</c-examples.tutorial>
+
+        <c-examples.tutorial type="success">
+          <c-slot name="title">
+            <h3 class="text-lg font-semibold text-xl mb-3">Great job!</h3>
+          </c-slot>
+
+            <p class="mb-3">You've successfully completed the task.</p>
+            <a href="#" class="underline">View results</a>
+        </c-examples.tutorial>
+
+        <c-examples.tutorial type="error" title="Oops!">
+            <p>Something's gone amiss, but we're working on it!</p>
+        </c-examples.tutorial>
+    </div>#}
 
     <div class="max-w-5xl mx-auto px-0">
         <div class="text-center mx-auto max-w-4xl leading-normal mb-6">

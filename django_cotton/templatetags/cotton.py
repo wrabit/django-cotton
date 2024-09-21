@@ -26,5 +26,6 @@ def merge(attrs, args):
     return format_html_join(" ", '{0}="{1}"', attrs.items())
 
 
+@register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)

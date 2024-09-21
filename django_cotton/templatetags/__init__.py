@@ -35,7 +35,7 @@ class DynamicAttr:
                 # noinspection PyArgumentList
                 self._resolved_value = resolver(context)
                 return self._resolved_value
-            except (VariableDoesNotExist, TemplateSyntaxError, ValueError, SyntaxError):
+            except (VariableDoesNotExist, TemplateSyntaxError, ValueError, SyntaxError, IndexError):
                 continue
 
         raise UnprocessableDynamicAttr

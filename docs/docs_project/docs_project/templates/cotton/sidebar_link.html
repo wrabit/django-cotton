@@ -1,7 +1,9 @@
-<li class="relative my-1">
-    {% if request.path == url %}
-        <div class="absolute left-[-17px] w-[3px] h-full bg-teal-600"></div>
-    {% endif %}
+<c-vars
+    default_class="border-transparent"
+    selected_class="border-teal-600"
+/>
+
+<li class="relative my-1 pl-3 border-l-[3px] {% if request.path == url %}{{ selected_class }}{% else %}{{ default_class }}{% endif %}">
     <a href="{{ url }}"
        class="dark:text-white dark:hover:opacity-100 text-[#1a384a]
         {% if request.path == url %}

@@ -1,6 +1,6 @@
 <c-vars
-  type="info"
-  :types="{
+  variant="info"
+  :variants="{
     'info': 'bg-blue-100 border-blue-500 text-blue-700',
     'success': 'bg-green-100 border-green-500 text-green-700',
     'warning': 'bg-yellow-100 border-yellow-500 text-yellow-700',
@@ -14,9 +14,9 @@
   }"
 />
 
-<div class="{{ types|get_item:type }} border-l-4 p-4 flex items-center space-x-4">
+<div class="{{ variants|get_item:variant }} border-l-4 p-4 flex items-center space-x-4">
     <div class="flex-shrink-0">
-        {% heroicon_outline icons|get_item:type class="size-10" %}
+        {% heroicon_outline icons|get_item:variant class="size-10" %}
     </div>
     <div>
         <div class="font-bold">{{ title }}</div>

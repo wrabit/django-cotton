@@ -44,7 +44,7 @@ class CottonVarsNode(Node):
             for empty_var in self.empty_vars:
                 attrs.exclude_from_string_output(empty_var)
 
-            with context.push({**attrs.make_attrs_accessible(), "attrs": attrs, **vars}):
+            with context.push({**vars, **attrs.make_attrs_accessible(), "attrs": attrs}):
                 output = self.nodelist.render(context)
 
             return output

@@ -342,3 +342,25 @@ class CvarTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, "expected")
             self.assertNotContains(response, "not")
+
+    def test_incoming_dynamic_attributes_overwrite_cvars_dynamic_attributes(self):
+        self.create_template(
+            "attribute_priority_view.html",
+            """<c-attr-priority :dynamic="True" />""",
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/attr_priority.html",
+            """
+                <c-vars :dynamic="False" />
+                
+                {% if dynamic is True %}expected{% endif %}
+                {% if dynamic is False %}not{% endif %}
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "expected")
+            self.assertNotContains(response, "not")

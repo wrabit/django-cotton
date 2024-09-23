@@ -1,0 +1,51 @@
+<!-- cotton/ui/tooltip.html -->
+<c-vars
+  content=""
+  position="right"
+  :themes="{
+    'light': 'bg-white text-gray-900 border border-gray-200',
+    'dark': 'bg-gray-900 text-white'
+  }"
+  theme="light"
+/>
+
+<div
+  x-data="{
+    show: false,
+    position: '{{ position }}',
+    content: '{{ content }}',
+    theme: '{{ theme }}'
+  }"
+  @mouseenter="show = true"
+  @mouseleave="show = false"
+  class="relative inline-block"
+>
+  {{ slot }}
+
+  <div
+    x-show="show"
+    x-cloak
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 scale-95"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-95"
+    :class="{
+      'bottom-full mb-2': position === 'top',
+      'top-full mt-2': position === 'bottom',
+      'right-full mr-2': position === 'left',
+      'left-full ml-2': position === 'right'
+    }"
+    class="absolute z-10 px-3 py-2 text-sm font-medium rounded-md shadow-lg {{ themes|get_item:theme }}"
+    x-text="content"
+  >
+  </div>
+</div>
+
+<!-- Usage example -->
+<!--
+<c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
+  <button class="px-4 py-2 bg-blue-500 text-white rounded">Hover me</button>
+</c-ui.tooltip>
+-->

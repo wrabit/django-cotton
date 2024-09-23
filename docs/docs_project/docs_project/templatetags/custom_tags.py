@@ -33,6 +33,8 @@ def json_dumps(value):
     return json.dumps(value)
 
 
-@register.filter
-def get(dictionary, key):
-    return dictionary.get(key)
+@register.filter("startswith")
+def startswith(text, starts):
+    if isinstance(text, str):
+        return text.startswith(starts)
+    return False

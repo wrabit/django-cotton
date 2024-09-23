@@ -7,7 +7,7 @@
   theme="default"
 />
 
-<div x-data="{ activeTab: 0, tabs: [] }" x-init="tabs = Array.from($refs.tabPanels.children).map(panel => panel.getAttribute('name'))" class="{{ themes|get:theme }}">
+<div x-data="{ activeTab: 0, tabs: [] }" x-init="tabs = Array.from($refs.tabPanels.children).map(panel => panel.getAttribute('name'))" class="{{ themes|get_item:theme }}">
   <div class="flex" role="tablist">
     <template x-for="(tab, index) in tabs" :key="index">
       <button

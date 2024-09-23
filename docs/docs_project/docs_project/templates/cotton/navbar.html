@@ -40,20 +40,21 @@
             </button>
 
             <a href="/" class="flex items-center space-x-2">
-                <c-icons.logo class="w-8 h-8 text-teal-600" />
+                <c-icons.logo class="w-8 h-8 text-teal-600" stroke-width="40" />
                 <span class="font-bold text-[25px] ml-1.5 text-[#1a384a] dark:text-gray-100">cotton</span>
                 <div class="hidden sm:inline text-gray-700 dark:text-white text-sm opacity-60 mt-0.5">for</div>
                 <c-icons.django class="hidden sm:inline h-5 text-teal-600 mt-1.5" />
             </a>
 
-            <div class="space-x-6 ml-5 sm:ml-14">
-                <a href="{% url 'home' %}" class="dark:text-teal-400 font-semibold px-4 py-1.5 rounded-full dark:bg-teal-600/40 bg-transparent text-teal-600 border-teal-600 border-2">Docs</a>
-                <a href="{% url 'ui' %}" class="dark:text-gray-300/60 font-semibold">UI <span class="hidden md:inline">Components</span> <sup class="bg-red-500 text-xs rounded-lg px-1 py-0.5 text-white">NEW!</sup></a>
+            <div class="ml-5 sm:ml-14">
+                <c-navbar.nav-item url="{% url 'home' %}" active-exact>Docs</c-navbar.nav-item>
+                <c-navbar.nav-item url="{% url 'ui' %}" active-startswith>UI <span class="hidden m:inline">Components</span> <sup class="bg-red-500 text-xs rounded-lg px-1 py-0.5 text-white">NEW!</sup></c-navbar.nav-item>
 
-                <a href="{% url 'ui' %}" class="font-semibold px-4 py-1.5 rounded-full dark:bg-teal-600 text-white border-teal-600 border-2">primary</a>
+
+{% comment %}               <a href="{% url 'ui' %}" class="font-semibold px-4 py-1.5 rounded-full dark:bg-teal-600 text-white border-teal-600 border-2">primary</a>
                 <a href="{% url 'ui' %}" class="dark:text-teal-400 font-semibold px-4 py-1.5 rounded-full dark:bg-teal-600/40 bg-transparent text-teal-600 border-teal-600 border-2">secondary</a>
                 <a href="{% url 'ui' %}" class="dark:text-gray-400 font-semibold px-4 py-1.5 rounded-full bg-transparent text-teal-600 border-gray-600 border-2">slate</a>
-                <a href="{% url 'ui' %}" class="font-semibold px-0 py-1.5 rounded-full dark:bg-transparent dark:text-white border-transparent border-2">ghost</a>
+                <a href="{% url 'ui' %}" class="font-semibold px-0 py-1.5 rounded-full dark:bg-transparent dark:text-white border-transparent border-2">ghost</a>{% endcomment %}
             </div>
         </div>
 

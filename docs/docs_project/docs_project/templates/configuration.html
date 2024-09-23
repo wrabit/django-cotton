@@ -49,28 +49,36 @@
     <c-ui.tag-input name="tags" placeholder="Place me some taaags" :selected="['tag1', 'tag2']" :options="['tag1', 'tag2', 'tag3']" max_tags="3" />
 
     <h3>Tooltip</h3>
-    <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="light">
-      <button class="px-4 py-2 bg-blue-500 text-white rounded">Top</button>
-    </c-ui.tooltip>
 
-    <c-ui.tooltip content="This is a helpful tooltip" position="right" theme="light">
-      <button class="px-4 py-2 bg-blue-500 text-white rounded">Right</button>
-    </c-ui.tooltip>
+    <div class="flex flex-col space-y-4">
+        <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="light">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded">Top</button>
+        </c-ui.tooltip>
 
-    <c-ui.tooltip content="This is a helpful tooltip" position="bottom" theme="light">
-      <button class="px-4 py-2 bg-blue-500 text-white rounded">Bottom</button>
-    </c-ui.tooltip>
+        <c-ui.tooltip content="This is a helpful tooltip" position="right" theme="light">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded">Right</button>
+        </c-ui.tooltip>
 
-    <c-ui.tooltip content="This is a helpful tooltip" position="left" theme="light">
-      <button class="px-4 py-2 bg-blue-500 text-white rounded">Left</button>
-    </c-ui.tooltip>
+        <c-ui.tooltip content="This is a helpful tooltip" position="bottom" theme="light">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded">Bottom</button>
+        </c-ui.tooltip>
 
-    <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
-      <button class="px-4 py-2 bg-blue-500 text-white rounded">Dark</button>
-    </c-ui.tooltip>
+        <c-ui.tooltip content="This is a helpful tooltip" position="left" theme="light">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded">Left</button>
+        </c-ui.tooltip>
 
-    <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
-        Text
-    </c-ui.tooltip>
+        <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
+            <button class="px-4 py-2 bg-blue-500 text-white rounded">Dark</button>
+        </c-ui.tooltip>
+
+        <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
+            Text
+        </c-ui.tooltip>
+
+        <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
+            Text
+        </c-ui.tooltip>
+    </div>
+
 
 </c-layouts.with-sidebar>

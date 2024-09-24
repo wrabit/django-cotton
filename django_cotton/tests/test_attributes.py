@@ -435,3 +435,23 @@ class AttributeHandlingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, "It's hello")
+
+    def test_attributes_remain_unordered(self):
+        compiled = get_compiled(
+            """
+                <c-dummy>
+                    <c-slot name="left">
+                        in named slot: <strong {% if 1 == 2 %}hidden{% endif %}></strong>
+                    </c-slot>
+    
+                    in default slot: <strong {% if 1 == 2 %}hidden{% endif %}></strong>
+                </c-dummy>  
+            """
+        )
+
+        self.assertTrue(
+            "in named slot: <strong {% if 1 == 2 %}hidden{% endif %}></strong>" in compiled
+        )
+        self.assertTrue(
+            "in default slot: <strong {% if 1 == 2 %}hidden{% endif %}></strong>" in compiled
+        )

@@ -296,6 +296,7 @@ class CottonCompiler:
                 self._transform_components(tag_soup)
                 component_tag += str(
                     tag_soup.encode(formatter=UnsortedAttributes()).decode("utf-8")
+                    # tag_soup.decode_contents(formatter=UnsortedAttributes())
                 )
 
             component_tag += "{% endc %}"
@@ -309,13 +310,14 @@ class CottonCompiler:
     def _transform_named_slot(self, slot_tag):
         """Compile <c-slot> to {% slot %}"""
         slot_name = slot_tag.get("name", "").strip()
-        inner_html = "".join(str(content) for content in slot_tag.contents)
+        inner_html = slot_tag.decode_contents(formatter=UnsortedAttributes())
 
         # Check and process any components in the slot content
         slot_soup = self._make_soup(inner_html)
         self._transform_components(slot_soup)
 
         cotton_slot_tag = f"{{% slot {slot_name} %}}{str(slot_soup.encode(formatter=UnsortedAttributes()).decode('utf-8'))}{{% endslot %}}"
+
         slot_tag.replace_with(self._make_soup(cotton_slot_tag))
 
     def _make_soup(self, content):

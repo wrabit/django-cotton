@@ -34,6 +34,9 @@ urlpatterns = [
     ),
     # UI
     path("ui", views.build_view("ui_docs/getting_started"), name="ui"),
+    path("ui/datepicker", views.build_view("ui_docs/datepicker"), name="ui-datepicker"),
+    path("ui/dropdown", views.build_view("ui_docs/dropdown"), name="ui-dropdown"),
+    path("ui/field", views.build_view("ui_docs/field"), name="ui-field"),
     path("ui/input", views.build_view("ui_docs/input"), name="ui-input"),
     path("ui/textarea", views.build_view("ui_docs/textarea"), name="ui-textarea"),
 ]

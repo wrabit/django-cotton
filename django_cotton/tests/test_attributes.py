@@ -218,7 +218,6 @@ class AttributeHandlingTests(CottonTestCase):
             """                                
                 <c-native-tags-in-attributes
                     attr1="Hello {{ name }}"
-                    attr2="{{ test|default:"none" }}"
                     attr3="{% if 1 == 1 %}cowabonga!{% endif %}"
                 >
                     <c-slot name="named">test</c-slot>
@@ -226,6 +225,20 @@ class AttributeHandlingTests(CottonTestCase):
             """,
             "view/",
             context={"name": "Will", "test": "world"},
+        )
+
+        print(
+            get_compiled(
+                """
+                <c-native-tags-in-attributes
+                    attr1="Hello {{ name }}"
+                    attr2="{{ test|default:"none" }}"
+                    attr3="{% if 1 == 1 %}cowabonga!{% endif %}"
+                >
+                    <c-slot name="named">test</c-slot>
+                </c-native-tags-in-attributes>        
+        """
+            )
         )
 
         self.create_template(

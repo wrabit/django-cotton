@@ -91,6 +91,108 @@ class Loader(BaseLoader):
             )
 
 
+from typing import List, Tuple
+
+
+class Tag:
+    def __init__(
+        self, html: str, tag_name: str, attrs: str, is_closing: bool, is_self_closing: bool
+    ):
+        self.html = html
+        self.tag_name = tag_name
+        self.attrs = attrs
+        self.is_closing = is_closing
+        self.is_self_closing = is_self_closing
+
+    def get_template_tag(self) -> str:
+        if self.tag_name == "c-vars":
+            return f"{{% cvars{self.attrs} %}}{{% endcvars %}}"
+        elif self.tag_name == "c-slot":
+            if self.is_closing:
+                return "{% endslot %}"
+            else:
+                # Extract the name attribute
+                name_match = re.search(r'name\s*=\s*["\'](.*?)["\']', self.attrs)
+                if not name_match:
+                    raise ValueError(f"c-slot tag must have a name attribute: {self.html}")
+                slot_name = name_match.group(1)
+                return f"{{% slot {slot_name} %}}"
+        elif self.tag_name.startswith("c-"):
+            component_name = self.tag_name[2:]
+            if self.is_closing:
+                return "{% endc %}"
+            elif self.is_self_closing:
+                return f"{{% c {component_name}{self.attrs} %}}{{% endc %}}"
+            else:
+                return f"{{% c {component_name}{self.attrs} %}}"
+        else:
+            return self.html  # This case should never be reached with the current regex
+
+
+class CottonCompiler:
+    def __init__(self):
+        self.tag_pattern = re.compile(r"<(/?)c-([^\s>]+)(\s[^>]*?)?(/?)>")
+        self.comment_pattern = re.compile(
+            r"({%\s*comment\s*%}.*?{%\s*endcomment\s*%}|{#.*?#})", re.DOTALL
+        )
+
+    def exclude_comments(self, html: str) -> Tuple[str, List[Tuple[str, str]]]:
+        comments = []
+
+        def replace_comment(match):
+            placeholder = f"__COMMENT_{len(comments)}__"
+            comments.append((placeholder, match.group(0)))
+            return placeholder
+
+        processed_html = self.comment_pattern.sub(replace_comment, html)
+        return processed_html, comments
+
+    def restore_comments(self, html: str, comments: List[Tuple[str, str]]) -> str:
+        for placeholder, comment in comments:
+            html = html.replace(placeholder, comment)
+        return html
+
+    def get_replacements(self, html: str) -> List[Tuple[str, str]]:
+        replacements = []
+        for match in self.tag_pattern.finditer(html):
+            is_closing, tag_name, attrs, self_closing = match.groups()
+            is_self_closing = bool(self_closing)
+
+            tag = Tag(
+                html=html[match.start() : match.end()],
+                tag_name=f"c-{tag_name}",
+                attrs=attrs or "",
+                is_closing=bool(is_closing),
+                is_self_closing=is_self_closing,
+            )
+
+            try:
+                template_tag = tag.get_template_tag()
+                if template_tag != tag.html:
+                    replacements.append((tag.html, template_tag))
+            except ValueError as e:
+                # Add context about the position of the error in the template
+                position = match.start()
+                line_number = html[:position].count("\n") + 1
+                raise ValueError(f"Error in template at line {line_number}: {str(e)}") from e
+
+        return replacements
+
+    def process(self, html: str) -> str:
+        # Exclude comments
+        processed_html, comments = self.exclude_comments(html)
+
+        # Perform replacements
+        replacements = self.get_replacements(processed_html)
+        for original, replacement in replacements:
+            processed_html = processed_html.replace(original, replacement)
+
+        # Restore comments
+        final_html = self.restore_comments(processed_html, comments)
+
+        return final_html
+
+
 class UnsortedAttributes(HTMLFormatter):
     """This keeps BS4 from re-ordering attributes"""
 
@@ -99,7 +201,7 @@ class UnsortedAttributes(HTMLFormatter):
             yield k, v
 
 
-class CottonCompiler:
+class CottonBs4Compiler:
     DJANGO_SYNTAX_PLACEHOLDER_PREFIX = "__django_syntax__"
     COTTON_VERBATIM_PATTERN = re.compile(
         r"\{% cotton_verbatim %\}(.*?)\{% endcotton_verbatim %\}", re.DOTALL

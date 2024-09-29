@@ -13,8 +13,6 @@ from django_cotton.compiler_regex import CottonCompiler
 
 
 class Loader(BaseLoader):
-    is_usable = True
-
     def __init__(self, engine, dirs=None):
         super().__init__(engine)
         self.cotton_compiler = CottonCompiler()

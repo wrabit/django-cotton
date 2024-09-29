@@ -3,7 +3,7 @@ django-cotton
 
 App configuration to set up the cotton loader and builtins automatically.
 """
-
+import re
 from contextlib import suppress
 
 import django.contrib.admin
@@ -65,6 +65,11 @@ class LoaderAppConfig(AppConfig):
     default = True
 
     def ready(self):
+        from django.template import base
+
+        # Support for multiline tags
+        base.tag_re = re.compile(base.tag_re.pattern, re.DOTALL)
+
         wrap_loaders("django")
 
 
@@ -75,3 +80,10 @@ class SimpleAppConfig(AppConfig):
     """
 
     name = "django_cotton"
+
+    def ready(self):
+        pass
+        from django.template import base
+
+        # Support for multiline tags
+        base.tag_re = re.compile(base.tag_re.pattern, re.DOTALL)

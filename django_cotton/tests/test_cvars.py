@@ -332,7 +332,7 @@ class CvarTests(CottonTestCase):
             "cotton/dynamic_default_overwrite_cvars.html",
             """
                 <c-vars :dynamic-default="False" />
-                
+
                 {% if dynamic_default is True %}expected{% endif %}
                 {% if dynamic_default is False %}not{% endif %}
             """,

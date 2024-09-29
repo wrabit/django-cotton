@@ -64,16 +64,16 @@ class SlotTests(CottonTestCase):
 
     def test_vars_are_converted_to_vars_frame_tags(self):
         compiled = get_compiled(
-            """
-                <c-vars var1="string with space" />
-                
-                content
+            """<c-vars var1="string with space" />
+            content
             """
         )
 
         self.assertEquals(
             compiled,
-            """{% vars var1="string with space" %}content{% endvars %}""",
+            """{% vars var1="string with space" %}
+            content
+            {% endvars %}""",
         )
 
     def test_named_slot_missing(self):

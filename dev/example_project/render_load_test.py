@@ -22,14 +22,14 @@ def configure_django():
                 "DIRS": ["example_project/templates"],
                 "OPTIONS": {
                     "loaders": [
-                        (
-                            "django.template.loaders.cached.Loader",
-                            [
-                                "django_cotton.cotton_loader.Loader",
-                                "django.template.loaders.filesystem.Loader",
-                                "django.template.loaders.app_directories.Loader",
-                            ],
-                        ),
+                        # (
+                        # "django.template.loaders.cached.Loader",
+                        # [
+                        "django_cotton.cotton_loader.Loader",
+                        "django.template.loaders.filesystem.Loader",
+                        "django.template.loaders.app_directories.Loader",
+                        # ],
+                        # ),
                     ],
                     "builtins": [
                         "django_cotton.templatetags.cotton",
@@ -85,7 +85,7 @@ def main():
     configure_django()
 
     runs = 5
-    iterations = 500
+    iterations = 5000
 
     print(f"Running benchmarks with {runs} runs, {iterations} iterations each")
 

@@ -3,6 +3,7 @@ import hashlib
 import random
 import os
 import re
+from functools import lru_cache
 
 from django.template.loaders.base import Loader as BaseLoader
 from django.core.exceptions import SuspiciousFileOperation
@@ -57,6 +58,7 @@ class Loader(BaseLoader):
         except FileNotFoundError:
             raise TemplateDoesNotExist(template_name)
 
+    @lru_cache(maxsize=None)
     def get_dirs(self):
         """This works like the file loader with APP_DIRS = True."""
         dirs = self.dirs if self.dirs is not None else self.engine.dirs

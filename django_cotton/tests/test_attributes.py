@@ -218,7 +218,7 @@ class AttributeHandlingTests(CottonTestCase):
             """                                
                 <c-native-tags-in-attributes
                     attr1="Hello {{ name }}"
-                    attr2="{{ test|default:"none" }}"
+                    attr2="{{ test|default:'none' }}"
                     attr3="{% if 1 == 1 %}cowabonga!{% endif %}"
                 >
                     <c-slot name="named">test</c-slot>
@@ -290,7 +290,7 @@ class AttributeHandlingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(
-                response, '<div attribute_1="hello" and-another="woo1" thirdforluck="yes">'
+                response, '<div attribute_1="hello" and-another="woo1" thirdForLuck="yes">'
             )
 
     def test_loader_preserves_duplicate_attributes(self):

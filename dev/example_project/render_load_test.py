@@ -85,7 +85,7 @@ def main():
     configure_django()
 
     runs = 5
-    iterations = 500
+    iterations = 5000
 
     print(f"Running benchmarks with {runs} runs, {iterations} iterations each")
 

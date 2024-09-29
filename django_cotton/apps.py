@@ -82,7 +82,6 @@ class SimpleAppConfig(AppConfig):
     name = "django_cotton"
 
     def ready(self):
-        pass
         from django.template import base
 
         # Support for multiline tags

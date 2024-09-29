@@ -4,8 +4,8 @@
 
 # Django Cotton
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
+![PyPI](https://img.shields.io/pypi/v/django-cotton?color=blue&style=flat-square)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/django-cotton?color=blue&style=flat-square)
 
 Bringing component-based design to Django templates.
 

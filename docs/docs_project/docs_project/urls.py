@@ -2,7 +2,6 @@ from . import views
 from django.urls import path
 
 urlpatterns = [
-    path("compiler", views.build_view("compiler"), name="compiler"),
     path(
         "",
         views.build_view(

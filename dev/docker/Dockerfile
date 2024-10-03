@@ -11,8 +11,7 @@ WORKDIR /app
 
 # Install Poetry
 RUN pip install --upgrade pip \
-    && pip install poetry
-
+    && pip install poetry=="1.8.3"
 
 # Copy only dependencies definition to the docker image
 COPY . /app/

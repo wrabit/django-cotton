@@ -69,7 +69,7 @@ class SlotTests(CottonTestCase):
             """
         )
 
-        self.assertEquals(
+        self.assertEqual(
             compiled,
             """{% vars var1="string with space" %}
             content

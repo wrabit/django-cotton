@@ -10,7 +10,7 @@ authors = [ "Will Abbott <willabb83@gmail.com>",]
 license = "MIT"
 readme = "README.md"
 classifiers = [ "Development Status :: 3 - Alpha", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Programming Language :: Python :: 3.10", "Framework :: Django",]
-keywords = [ "django", "cotton", "reusable", "app",]
+keywords = [ "django", "components", "ui",]
 exclude = [ "dev", "docs", "django_cotton/tests", "django_cotton/templates",]
 
 [tool.black]
@@ -22,5 +22,4 @@ profile = "black"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4"
-beautifulsoup4 = "~4.12.2"
 django = ">=4.2,<5.2"

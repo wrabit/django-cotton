@@ -13,7 +13,7 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
 WORKDIR /app
 
 # Install Poetry
-RUN pip install poetry=="1.8.3"
+RUN pip install "poetry==1.8.3"
 
 # Copy only dependencies definition to the docker image
 COPY . /app/

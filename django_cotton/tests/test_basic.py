@@ -123,3 +123,60 @@ class BasicComponentTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertNotContains(response, "Outer content")
+
+    def test_only_gives_isolated_context(self):
+        self.create_template(
+            "cotton/only.html",
+            """
+                <a class="{{ class|default:"donttouch" }}">test</a>
+            """,
+        )
+        self.create_template(
+            "no_only_view.html",
+            """
+            <c-only />
+            """,
+            "no_only_view/",
+            context={"class": "herebedragons"},  # this should pass to `class` successfully
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/no_only_view/")
+            self.assertNotContains(response, "donttouch")
+            self.assertNotContains(response, "only")
+            self.assertContains(response, "herebedragons")
+
+        self.create_template(
+            "only_view.html",
+            """
+            <c-only only />
+            """,
+            "only_view/",
+            context={
+                "class": "herebedragons"
+            },  # this should not pass to `class` due to `only` being present
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/only_view/")
+            self.assertNotContains(response, "herebedragons")
+            self.assertNotContains(response, "only")
+            self.assertContains(response, "donttouch")
+
+        self.create_template(
+            "only_view2.html",
+            """
+            <c-only class="october" only />
+            """,
+            "only_view2/",
+            context={
+                "class": "herebedragons"
+            },  # this should not pass to `class` due to `only` being present
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/only_view2/")
+            self.assertNotContains(response, "herebedragons")
+            self.assertNotContains(response, "donttouch")
+            self.assertNotContains(response, "only")
+            self.assertContains(response, "october")

@@ -296,7 +296,7 @@ class AttributeHandlingTests(CottonTestCase):
     def test_loader_preserves_duplicate_attributes(self):
         compiled = get_compiled("""<a href="#" class="test" class="test2">hello</a>""")
 
-        self.assertEquals(
+        self.assertEqual(
             compiled,
             """<a href="#" class="test" class="test2">hello</a>""",
         )

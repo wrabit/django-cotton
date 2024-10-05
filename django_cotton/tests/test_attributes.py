@@ -436,6 +436,36 @@ class AttributeHandlingTests(CottonTestCase):
             self.assertNotContains(response, 'hx-vals="')
             self.assertNotContains(response, "hx-vals=`")
 
+    def test_htmx_vals_killianarts(self):
+        """test case on issue #176 from killianarts on github"""
+        self.create_template(
+            "cotton/htmx_vals_killianarts.html",
+            """
+<c-vars method="post" hx-swap="outerHTML" block class hx-vals />
+<form
+    action="."
+    method="{{ method }}"
+    hx-{{ method }}="."
+    class="{{ class }}"
+    hx-swap={{ hx_swap }}
+    hx-vals='{"use_block": "{{ block }}" {% if hx_vals %}, {{ hx_vals }}{% endif %}}'
+    {{ attrs }} >
+    {{ slot }}
+</form> """,
+        )
+
+        self.create_template(
+            "htmx_vals_killianarts_view.html",
+            """<c-htmx-vals-killianarts hx-target="#dashboard-content" block="content" class="space-y-5" hx-vals='"test": "test_value"' />""",
+            "htmx-killianarts-view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/htmx-killianarts-view/")
+            self.assertContains(response, """hx-vals='{"use_block": """)
+            self.assertNotContains(response, 'hx-vals="')
+            self.assertNotContains(response, "hx-vals=`")
+
     def test_string_attributes_are_not_parsed_as_variables(self):
         self.create_template(
             "cotton/string_attrs.html",

@@ -10,6 +10,7 @@
             <c-index-sublink><a href="#vars" class="no-underline">Local state with {{ '<c-vars>'|force_escape }}</a></c-index-sublink>
             <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
             <c-index-sublink><a href="#dynamic-components" class="no-underline">Dynamic Components</a></c-index-sublink>
+            <c-index-sublink><a href="#context-isolation" class="no-underline">Context Isolation</a></c-index-sublink>
             <c-index-sublink><a href="#summary" class="no-underline">Summary of concepts</a></c-index-sublink>
     </c-slot>
 
@@ -318,6 +319,12 @@ context = { 'today': Weather.objects.get(...) }
 <!-- as an expression -->
 <c-component is="icon_{{ icon_name }}" />
 {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+
+    <c-hr />
+
+    <h2 id="context-isolation">9. Extras</h2>
+
+    <p>Similar to Django's <c-highlight>{% verbatim %}{% include %}{% endverbatim %}</c-highlight> tag you can add an "<c-highlight>only</c-highlight>" attribute which will prevent the component from inheriting the parent's context.</p>
 
     <c-hr />
 

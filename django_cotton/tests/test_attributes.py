@@ -483,3 +483,35 @@ class AttributeHandlingTests(CottonTestCase):
         self.assertTrue(
             "in default slot: <strong {% if 1 == 2 %}hidden{% endif %}></strong>" in compiled
         )
+
+    def test_colon_escaping(self):
+        self.create_template(
+            "cotton/colon_escaping.html",
+            """
+            attrs: "{{ attrs }}"
+            
+            string: "{{ string }}"
+            dynamic: "{{ dynamic }}"
+            complex-string: "{{ complex_string }}"
+            complex-dynamic: "{{ complex_dynamic }}"
+        """,
+        )
+
+        self.create_template(
+            "colon_escaping_view.html",
+            """
+            <c-colon-escaping 
+                ::string="variable" 
+                :dynamic="variable" 
+                ::complex-string="{'something': 1}"
+                :complex-dynamic="{'something': 1}"/>
+        """,
+            "view/",
+            context={"variable": "Ive been resolved!"},
+        )
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            print(response.content.decode())
+            self.assertContains(response, 'attrs: ":static="variable" dynamic="Ive been resolved!"')
+            self.assertContains(response, ':static: "variable"')
+            self.assertContains(response, 'dynamic: "Ive been resolved!"')

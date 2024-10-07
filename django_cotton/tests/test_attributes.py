@@ -218,7 +218,7 @@ class AttributeHandlingTests(CottonTestCase):
             """                                
                 <c-native-tags-in-attributes
                     attr1="Hello {{ name }}"
-                    attr2="{{ test|default:"none" }}"
+                    attr2="{{ test|default:'none' }}"
                     attr3="{% if 1 == 1 %}cowabonga!{% endif %}"
                 >
                     <c-slot name="named">test</c-slot>
@@ -290,13 +290,13 @@ class AttributeHandlingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(
-                response, '<div attribute_1="hello" and-another="woo1" thirdforluck="yes">'
+                response, '<div attribute_1="hello" and-another="woo1" thirdForLuck="yes">'
             )
 
     def test_loader_preserves_duplicate_attributes(self):
         compiled = get_compiled("""<a href="#" class="test" class="test2">hello</a>""")
 
-        self.assertEquals(
+        self.assertEqual(
             compiled,
             """<a href="#" class="test" class="test2">hello</a>""",
         )
@@ -407,6 +407,34 @@ class AttributeHandlingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, """'{"id": "1"}'""")
+
+    def test_htmx_vals_again(self):
+        self.create_template(
+            "cotton/htmx_vals.html",
+            """
+            <div {{ attrs }}><div>
+            """,
+        )
+
+        self.create_template(
+            "htmx_vals_view.html",
+            """
+            <c-htmx-vals
+                hx-post="/root"
+                hx-trigger="click"
+                hx-vals='{"use_block": "page-and-paging-controls"}'
+            />
+            """,
+            "htmx-vals-view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/htmx-vals-view/")
+            self.assertContains(response, """hx-vals='{"use_block": "page-and-paging-controls"}'""")
+            self.assertContains(response, 'hx-post="/root"')
+            self.assertContains(response, 'hx-trigger="click"')
+            self.assertNotContains(response, 'hx-vals="')
+            self.assertNotContains(response, "hx-vals=`")
 
     def test_string_attributes_are_not_parsed_as_variables(self):
         self.create_template(

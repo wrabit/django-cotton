@@ -475,9 +475,7 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 [See releases](https://github.com/wrabit/django-cotton/releases)
 
 
-## Comparison with other packages  
-
-**Note:** This comparison was created due to multiple requests, apologies for any mistakes or if I have missed something from other packages - please get in touch / create an issue!
+## Comparison with other packages
 
 | **Feature**                                                                                         | **Cotton**                 | **django-components**                  | **Slippers**                                               |
 |-----------------------------------------------------------------------------------------------------|----------------------------|----------------------------------------|------------------------------------------------------------|
@@ -493,6 +491,11 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 | **Dynamic Attributes** <br> Pass string literals of basic Python types                              | ✅                        | ❌                                    | ❌                                                         |
 | **Boolean Attributes** <br> Pass valueless attributes as True                                       | ✅                        | ✅                                    | ❌                                                         |
 | **Implicit Attribute Passing** <br> Pass all defined attributes to an element                       | ✅                        | ❌                                     | ✅                                                        |
-| **Django Template Expressions in Attribute Values** <br> Use Django expressions in attribute values | ✅                        | ❌                                    | ❌                                                         |
+| **Django Template Expressions in Attribute Values** <br> Use template expressions in attribute values | ✅                        | ❌                                    | ❌                                                         |
 | **Attribute Merging** <br> Replace existing attributes with component attributes                    | ✅                        | ✅                                    | ❌                                                         |
 | **Multi-line Component Tags** <br> Write component tags over multiple lines                         | ✅                        | ✅                                     | ❌                                                         |
+
+**Notes:** 
+
+- Some features here can be resolved with 3rd party plugins, for example for expressions, you can use something like `django-expr` package. So the list focus on comparison of core feature of that library.
+- This comparison was created due to multiple requests

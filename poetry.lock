@@ -46,27 +46,6 @@ files = [
 tzdata = ["tzdata"]
 
 [[package]]
-name = "beautifulsoup4"
-version = "4.12.3"
-description = "Screen-scraping library"
-optional = false
-python-versions = ">=3.6.0"
-files = [
-    {file = "beautifulsoup4-4.12.3-py3-none-any.whl", hash = "sha256:b80878c9f40111313e55da8ba20bdba06d8fa3969fc68304167741bbf9e082ed"},
-    {file = "beautifulsoup4-4.12.3.tar.gz", hash = "sha256:74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051"},
-]
-
-[package.dependencies]
-soupsieve = ">1.2"
-
-[package.extras]
-cchardet = ["cchardet"]
-chardet = ["chardet"]
-charset-normalizer = ["charset-normalizer"]
-html5lib = ["html5lib"]
-lxml = ["lxml"]
-
-[[package]]
 name = "django"
 version = "4.2.16"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
@@ -86,17 +65,6 @@ tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 [package.extras]
 argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
-
-[[package]]
-name = "soupsieve"
-version = "2.5"
-description = "A modern CSS selector implementation for Beautiful Soup."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "soupsieve-2.5-py3-none-any.whl", hash = "sha256:eaa337ff55a1579b6549dc679565eac1e3d000563bcb1c8ab0d0fefbc0c2cdc7"},
-    {file = "soupsieve-2.5.tar.gz", hash = "sha256:5663d5a7b3bfaeee0bc4372e7fc48f9cff4940b3eec54a6451cc5299f1097690"},
-]
 
 [[package]]
 name = "sqlparse"
@@ -138,4 +106,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "b9a548f4d72374e4ff45169264c16916e1be93de9fdb4a0eb7d6547acba8c3df"
+content-hash = "412d27424bee9618bceac4874a9fc9baa76cc71a6d1f7099799b66caa0c3f28a"

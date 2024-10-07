@@ -4,11 +4,9 @@ from typing import Union
 from django.conf import settings
 from django.template import Library
 from django.template.base import (
-    Variable,
-    VariableDoesNotExist,
     Node,
 )
-from django.template.context import ContextDict, Context
+from django.template.context import Context
 from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
@@ -111,11 +109,24 @@ class CottonComponentNode(Node):
         return value
 
 
+class IsolatedCottonComponentNode(CottonComponentNode):
+    def render(self, context):
+        isolated_context = Context({})
+        return super().render(isolated_context)
+
+
 def cotton_component(parser, token):
     bits = token.split_contents()[1:]
     component_name = bits[0]
     attrs = {}
+
+    node_class = CottonComponentNode
+
     for bit in bits[1:]:
+        if bit == "only":
+            # if we see `only` we use IsolatedCottonComponentNode
+            node_class = IsolatedCottonComponentNode
+            continue
         try:
             key, value = bit.split("=")
             attrs[key] = value
@@ -125,4 +136,4 @@ def cotton_component(parser, token):
     nodelist = parser.parse(("endc",))
     parser.delete_first_token()
 
-    return CottonComponentNode(component_name, nodelist, attrs)
+    return node_class(component_name, nodelist, attrs)

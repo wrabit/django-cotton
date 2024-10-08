@@ -51,7 +51,7 @@ class Loader(BaseLoader):
     @lru_cache(maxsize=None)
     def get_dirs(self):
         """This works like the file loader with APP_DIRS = True."""
-        dirs = self.dirs if self.dirs is not None else self.engine.dirs
+        dirs = list(self.dirs or self.engine.dirs)
 
         for app_config in apps.get_app_configs():
             template_dir = os.path.join(app_config.path, "templates")

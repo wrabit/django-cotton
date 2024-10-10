@@ -483,3 +483,39 @@ class AttributeHandlingTests(CottonTestCase):
         self.assertTrue(
             "in default slot: <strong {% if 1 == 2 %}hidden{% endif %}></strong>" in compiled
         )
+
+    def test_dicts(self):
+        self.create_template(
+            "cotton/dicts.html",
+            """
+                <c-vars name_name="placeholder">
+                <select name="{{ name_name }}" id="{{ id }}" {{ attrs }}>
+                    {% for robot_name, friendly_name in options.items %}
+                        <option value="{{ robot_name }}">{{ friendly_name }}</option>
+                    {% endfor %}
+                </select>
+            """,
+        )
+
+        self.create_template(
+            "dicts_view.html",
+            """
+                <c-dicts :options="options" />
+            """,
+            "view/",
+            context={
+                "options": {"this": "This", "is": "is", "a": "a", "placeholder": "Placeholder"}
+            },
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            for option in [
+                '<option value="this">This</option>',
+                '<option value="is">is</option>',
+                '<option value="a">a</option>',
+                '<option value="placeholder">Placeholder</option>',
+            ]:
+                self.assertTrue(option in response.content.decode())

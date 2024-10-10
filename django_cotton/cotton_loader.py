@@ -1,6 +1,6 @@
 import hashlib
 import os
-from functools import lru_cache
+from functools import cache
 
 from django.template.loaders.base import Loader as BaseLoader
 from django.core.exceptions import SuspiciousFileOperation
@@ -48,7 +48,7 @@ class Loader(BaseLoader):
         except FileNotFoundError:
             raise TemplateDoesNotExist(template_name)
 
-    @lru_cache(maxsize=None)
+    @cache
     def get_dirs(self):
         """This works like the file loader with APP_DIRS = True."""
         dirs = list(self.dirs or self.engine.dirs)

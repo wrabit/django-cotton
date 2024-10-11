@@ -68,7 +68,6 @@ class CottonTestCase(TestCase):
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as f:
             f.write(content)
-            self.tmp_files.append(path)
 
         if url:
             # Create a dynamic class-based view

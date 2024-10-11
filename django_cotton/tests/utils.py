@@ -53,7 +53,7 @@ class CottonTestCase(TestCase):
         super().tearDownClass()
 
     def tearDown(self):
-        """Clear cache between tests so that we can use the same file names for simplicity"""
+        """Clear state between tests so that we can use the same file names"""
         cache.clear()
 
     def create_template(self, name, content, url=None, context={}):

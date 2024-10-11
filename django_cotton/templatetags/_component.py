@@ -65,8 +65,7 @@ class CottonComponentNode(Node):
 
         # Isolate context if needed
         if self.only:
-            component_context = Context(component_state)
-            output = template.render(component_context)
+            output = template.render(Context(component_state))
         else:
             with context.push(component_state):
                 output = template.render(context)

@@ -26,6 +26,9 @@ class FileAlreadyExistsError(Exception):
 
 
 class CottonTestCase(TestCase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -53,7 +56,7 @@ class CottonTestCase(TestCase):
         super().tearDownClass()
 
     def tearDown(self):
-        """Clear cache between tests so that we can use the same file names for simplicity"""
+        """Clear state between tests so that we can use the same file names"""
         cache.clear()
 
     def create_template(self, name, content, url=None, context={}):
@@ -68,6 +71,7 @@ class CottonTestCase(TestCase):
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "w") as f:
             f.write(content)
+            self.tmp_files.append(path)
 
         if url:
             # Create a dynamic class-based view

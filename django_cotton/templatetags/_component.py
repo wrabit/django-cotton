@@ -17,11 +17,12 @@ register = Library()
 
 
 class CottonComponentNode(Node):
-    def __init__(self, component_name, nodelist, attrs):
+    def __init__(self, component_name, nodelist, attrs, only):
         self.component_name = component_name
         self.nodelist = nodelist
         self.attrs = attrs
         self.template_cache = {}
+        self.only = only
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
@@ -61,12 +62,14 @@ class CottonComponentNode(Node):
         }
 
         template = self._get_cached_template(context, component_data["attrs"])
-        # excludes builtin + custom context processors
-        # output = template.render(context.new(component_state))
 
-        # provides global
-        with context.push(component_state):
-            output = template.render(context)
+        # Isolate context if needed
+        if self.only:
+            component_context = Context(component_state)
+            output = template.render(component_context)
+        else:
+            with context.push(component_state):
+                output = template.render(context)
 
         cotton_data["stack"].pop()
 
@@ -109,23 +112,18 @@ class CottonComponentNode(Node):
         return value
 
 
-class IsolatedCottonComponentNode(CottonComponentNode):
-    def render(self, context):
-        isolated_context = Context({})
-        return super().render(isolated_context)
-
-
 def cotton_component(parser, token):
     bits = token.split_contents()[1:]
     component_name = bits[0]
     attrs = {}
+    only = False
 
     node_class = CottonComponentNode
 
     for bit in bits[1:]:
         if bit == "only":
-            # if we see `only` we use IsolatedCottonComponentNode
-            node_class = IsolatedCottonComponentNode
+            # if we see `only` we isolate context
+            only = True
             continue
         try:
             key, value = bit.split("=")
@@ -136,4 +134,4 @@ def cotton_component(parser, token):
     nodelist = parser.parse(("endc",))
     parser.delete_first_token()
 
-    return node_class(component_name, nodelist, attrs)
+    return node_class(component_name, nodelist, attrs, only)

@@ -26,9 +26,6 @@ class FileAlreadyExistsError(Exception):
 
 
 class CottonTestCase(TestCase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

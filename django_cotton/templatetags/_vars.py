@@ -4,10 +4,9 @@ from django.template.base import (
     Variable,
     VariableDoesNotExist,
     Node,
-    TemplateSyntaxError,
 )
 
-from django_cotton.templatetags import DynamicAttr, UnprocessableDynamicAttr
+from django_cotton.templatetags import DynamicAttr, UnprocessableDynamicAttr, Attrs
 from django_cotton.utils import get_cotton_data
 
 
@@ -23,34 +22,34 @@ class CottonVarsNode(Node):
         if cotton_data["stack"]:
             current_component = cotton_data["stack"][-1]
             attrs = current_component["attrs"]
-            vars = {}
-
-            for key, value in self.var_dict.items():
-                if key not in attrs.exclude_unprocessable():
-                    if key.startswith(":"):
-                        try:
-                            vars[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
-                        except UnprocessableDynamicAttr:
-                            pass
-                    else:
-                        try:
-                            resolved_value = Variable(value).resolve(context)
-                        except (VariableDoesNotExist, IndexError):
-                            resolved_value = value
-                        attrs[key] = resolved_value
-                attrs.exclude_from_string_output(key)
-
-            # Process cvars without values
-            for empty_var in self.empty_vars:
-                attrs.exclude_from_string_output(empty_var)
-
-            with context.push({**vars, **attrs.make_attrs_accessible(), "attrs": attrs}):
-                output = self.nodelist.render(context)
-
-            return output
-
         else:
-            raise TemplateSyntaxError("<c-vars /> tag must be used inside a component")
+            attrs = Attrs({})
+
+        vars = {}
+
+        for key, value in self.var_dict.items():
+            if key not in attrs.exclude_unprocessable():
+                if key.startswith(":"):
+                    try:
+                        vars[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
+                    except UnprocessableDynamicAttr:
+                        pass
+                else:
+                    try:
+                        resolved_value = Variable(value).resolve(context)
+                    except (VariableDoesNotExist, IndexError):
+                        resolved_value = value
+                    attrs[key] = resolved_value
+            attrs.exclude_from_string_output(key)
+
+        # Process cvars without values
+        for empty_var in self.empty_vars:
+            attrs.exclude_from_string_output(empty_var)
+
+        with context.push({**vars, **attrs.make_attrs_accessible(), "attrs": attrs}):
+            output = self.nodelist.render(context)
+
+        return output
 
 
 def cotton_cvars(parser, token):

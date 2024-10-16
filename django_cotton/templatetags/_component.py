@@ -6,7 +6,7 @@ from django.template import Library
 from django.template.base import (
     Node,
 )
-from django.template.context import Context
+from django.template.context import Context, RequestContext
 from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
@@ -67,8 +67,13 @@ class CottonComponentNode(Node):
         if self.only:
             output = template.render(Context(component_state))
         else:
-            with context.push(component_state):
-                output = template.render(context)
+            new_context = self._create_isolated_context(context, component_state)
+
+            output = template.render(new_context)
+
+            # with context.push(component_state):
+            #     print(context.flatten())
+            #     output = template.render(context)
 
         cotton_data["stack"].pop()
 
@@ -88,6 +93,32 @@ class CottonComponentNode(Node):
             cache[template_path] = template
 
         return cache[template_path]
+
+    def _create_isolated_context(self, original_context, component_state):
+        # Get the request object from the original context
+        request = original_context.get("request")
+
+        if request:
+            # Create a new RequestContext with only the default processors
+            new_context = RequestContext(request)
+
+            # Update the new context with any custom context processors
+            # for processor in original_context.get("_processors", []):
+            #     new_context.update(processor(request))
+
+            # Add the component_state to the new context
+            new_context.update(component_state)
+        else:
+            # If there's no request object, create a simple Context
+            new_context = Context(component_state)
+
+        # If not using 'only', include all variables from the original context
+        # if not self.only:
+        #     for key, value in original_context.flatten().items():
+        #         if key not in new_context:
+        #             new_context[key] = value
+
+        return new_context
 
     @staticmethod
     @functools.lru_cache(maxsize=400)

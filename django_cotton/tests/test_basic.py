@@ -186,3 +186,40 @@ class BasicComponentTests(CottonTestCase):
             self.assertContains(response, "From parent comp scope: ''")
             self.assertContains(response, "From view context scope: ''")
             self.assertContains(response, "Direct attribute: 'yes'")
+
+    def test_context_isolated_by_default(self):
+        self.create_template(
+            "cotton/receiver.html",
+            """
+            {{ global }} 
+            {{ direct }} 
+            {{ from_context_processor }}
+            
+            Some context from django builtins:
+            csrf: "{{ csrf_token }}" 
+            request: "{{ request }}"
+            messages: "{{ messages }}"
+            user: "{{ user }}"
+            perms: "{{ perms }}"
+            debug: "{{ debug }}"
+            """,
+        )
+
+        self.create_template(
+            "context_isolation_view.html",
+            """<c-receiver direct="hello" />""",
+            "view/",
+            context={"global": "shouldnotbeseen"},
+        )
+
+        # with example_processor added and 'logo' in the context
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            print(response.content.decode())
+            self.assertNotContains(response, "shouldnotbeseen")
+            self.assertContains(response, "hello")
+            self.assertContains(response, "logo.png")
+            self.assertNotContains(response, 'csrf: ""')
+            self.assertContains(response, 'user: "AnonymousUser"')
+            self.assertNotContains(response, 'perms: ""')

@@ -1,3 +1,5 @@
+from django.template.loader import render_to_string
+
 from django_cotton.tests.utils import CottonTestCase
 
 
@@ -384,3 +386,17 @@ class CvarTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, "First: 1, Second: 1, Third: 2")
+
+    def test_cvars_are_processed_when_component_rendered_using_render_to_string(self):
+        self.create_template(
+            "cotton/direct_render.html",
+            """
+            <c-vars cvar="I'm all set" />
+            
+            {{ cvar|safe }}
+            """,
+        )
+
+        rendered = render_to_string("cotton/direct_render.html")
+
+        self.assertTrue("I'm all set" in rendered)

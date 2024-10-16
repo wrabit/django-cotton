@@ -369,7 +369,7 @@ class CvarTests(CottonTestCase):
 
     def test_cvars_referening_other_cvars(self):
         self.create_template(
-            "attribute_priority_view.html",
+            "vars_refs.html",
             """<c-var-refs />""",
             "view/",
         )

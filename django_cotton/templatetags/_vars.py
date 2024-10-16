@@ -29,7 +29,8 @@ class CottonVarsNode(Node):
                 if key not in attrs.exclude_unprocessable():
                     if key.startswith(":"):
                         try:
-                            vars[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
+                            with context.push({**vars, **attrs.make_attrs_accessible()}):
+                                vars[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
                         except UnprocessableDynamicAttr:
                             pass
                     else:

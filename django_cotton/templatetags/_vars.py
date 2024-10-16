@@ -50,31 +50,6 @@ class CottonVarsNode(Node):
         with context.push({**vars, **attrs.make_attrs_accessible(), "attrs": attrs}):
             output = self.nodelist.render(context)
 
-            return output
-        
-
-        for key, value in self.var_dict.items():
-            if key not in attrs.exclude_unprocessable():
-                if key.startswith(":"):
-                    try:
-                        vars[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
-                    except UnprocessableDynamicAttr:
-                        pass
-                else:
-                    try:
-                        resolved_value = Variable(value).resolve(context)
-                    except (VariableDoesNotExist, IndexError):
-                        resolved_value = value
-                    attrs[key] = resolved_value
-            attrs.exclude_from_string_output(key)
-
-        # Process cvars without values
-        for empty_var in self.empty_vars:
-            attrs.exclude_from_string_output(empty_var)
-
-        with context.push({**vars, **attrs.make_attrs_accessible(), "attrs": attrs}):
-            output = self.nodelist.render(context)
-
         return output
 
 

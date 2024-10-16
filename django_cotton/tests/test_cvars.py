@@ -367,6 +367,26 @@ class CvarTests(CottonTestCase):
             self.assertContains(response, "expected")
             self.assertNotContains(response, "not")
 
+    def test_cvars_referening_other_cvars(self):
+        self.create_template(
+            "vars_refs.html",
+            """<c-var-refs />""",
+            "view/",
+        )
+
+        self.create_template(
+            "cotton/var_refs.html",
+            """
+                <c-vars first="1" :second=first :third={{second|add:first}} />
+                
+                First: {{ first }}, Second: {{ second }}, Third: {{ third }}
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "First: 1, Second: 1, Third: 2")
+
     def test_cvars_are_processed_when_component_rendered_using_render_to_string(self):
         self.create_template(
             "cotton/direct_render.html",

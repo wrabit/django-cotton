@@ -204,7 +204,6 @@ context = { 'today': Weather.objects.get(...) }
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-
     <c-hr />
 
     <h2 id="vars">6. <c-highlight>{{ '<c-vars />'|force_escape }}</c-highlight>: Defining Local Variables</h2>
@@ -322,9 +321,27 @@ context = { 'today': Weather.objects.get(...) }
 
     <c-hr />
 
-    <h2 id="context-isolation">9. Extras</h2>
+    <h2 id="context-isolation">9. Context Isolation</h2>
 
-    <p>Similar to Django's <c-highlight>{% verbatim %}{% include %}{% endverbatim %}</c-highlight> tag you can add an "<c-highlight>only</c-highlight>" attribute which will prevent the component from inheriting the parent's context.</p>
+    <p>Cotton is inspired by patterns found in frontend frameworks like React, Vue and Svelte. When working with these
+        patterns, state is not typically shared between components. This ensures data from other components do not 'leak' into
+    others which can cause side effects that are difficult to trace.</p>
+
+    <p>Therefore, each component's context only contains, by default:</p>
+
+    <c-ul>
+        <li>Attributes directly declared on the component</li>
+        <li>Any data set using `cvars`</li>
+        <li>All data from enabled context processors (from custom or built-in processors which typically provide: `user`, `request`, `messages`, `perms` etc.)</li>
+    </c-ul>
+
+    <h3>Further isolation using 'only'</h3>
+
+    <p>You can pass the <c-highlight>only</c-highlight> attribute to the component, which will prevent it from adopting any context (incl. context processors) other than it's direct attributes.</p>
+
+    <h3>Retain legacy behaviour</h3>
+
+    <p>Since context isolation is enabled by default since v2.0.0, there may be cases you wish to keep the legacy behaviour, for that reason, you can pass a `COTTON_CONTEXT_ISOLATION_ENABLED = False` in your settings.py. This is not recommend due to the aforementioned reason so allowing context isolation by default is encouraged.</p>
 
     <c-hr />
 

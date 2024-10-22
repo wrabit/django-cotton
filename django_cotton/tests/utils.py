@@ -6,7 +6,6 @@ import tempfile
 from django.urls import path
 from django.conf import settings
 from django.test import TestCase
-from django.core.cache import cache
 from django.test import override_settings
 from django.template import Context, Template
 from django.views.generic import TemplateView
@@ -54,7 +53,20 @@ class CottonTestCase(TestCase):
 
     def tearDown(self):
         """Clear state between tests so that we can use the same file names"""
-        cache.clear()
+        self.clean_temp_dir()
+        super().tearDown()
+
+    def clean_temp_dir(self):
+        """Remove all files in the temporary directory"""
+        for filename in os.listdir(self.temp_dir):
+            file_path = os.path.join(self.temp_dir, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(f"Failed to delete {file_path}. Reason: {e}")
 
     def create_template(self, name, content, url=None, context={}):
         """Create a template file in the temporary directory and return the path"""

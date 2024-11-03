@@ -1,3 +1,4 @@
+
 from django_cotton.tests.utils import CottonTestCase, get_compiled
 
 

@@ -100,7 +100,13 @@ class CottonComponentNode(Node):
                 )
             component_name = is_
 
-        component_tpl_path = component_name.replace(".", "/").replace("-", "_")
+        component_tpl_path = component_name.replace(".", "/")
+
+        # Cotton by default will look for snake_case version of comp names. This can be configured to allow hyphenated names.
+        snaked_cased_named = getattr(settings, "COTTON_SNAKE_CASED_NAMES", True)
+        if snaked_cased_named:
+            component_tpl_path = component_tpl_path.replace("-", "_")
+
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 

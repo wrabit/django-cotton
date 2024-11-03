@@ -1,4 +1,6 @@
-from django_cotton.tests.utils import CottonTestCase
+from django.test import override_settings
+
+from django_cotton.tests.utils import CottonTestCase, get_rendered
 
 
 class BasicComponentTests(CottonTestCase):
@@ -186,3 +188,18 @@ class BasicComponentTests(CottonTestCase):
             self.assertContains(response, "From parent comp scope: ''")
             self.assertContains(response, "From view context scope: ''")
             self.assertContains(response, "Direct attribute: 'yes'")
+
+    @override_settings(COTTON_SNAKE_CASED_NAMES=False)
+    def test_hyphen_naming_convention(self):
+        self.create_template(
+            "cotton/some-subfolder/hyphen-naming-convention.html",
+            "I have a hyphenated component name",
+        )
+
+        html = """
+            <c-some-subfolder.hyphen-naming-convention />
+        """
+
+        rendered = get_rendered(html)
+
+        self.assertTrue("I have a hyphenated component name" in rendered)

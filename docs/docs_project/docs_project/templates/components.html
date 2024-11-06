@@ -241,7 +241,7 @@ context = { 'today': Weather.objects.get(...) }
 
     <h3 id="excluded"><code>{{ '<c-vars />'|force_escape }}</code> are excluded from <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code></h3>
 
-    <p>Keys in {{ '<c-vars />'|force_escape }} are omitted from {{ attrs }}, making them ideal for configuration attributes that shouldn't appear in HTML attributes.</p>
+    <p>Keys in {{ '<c-vars />'|force_escape }} are omitted from {% verbatim %}{{ attrs }}{% endverbatim %}, making them ideal for configuration attributes that shouldn't appear in HTML attributes.</p>
 
 <c-snippet label="cotton/input_group.html">{% cotton_verbatim %}{% verbatim %}
 <c-vars label errors />

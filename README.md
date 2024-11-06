@@ -26,12 +26,14 @@ Bringing component-based design to Django templates.
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [HTMX Example](#an-example-with-htmx)  
-[Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
+[Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)
+[Configuration](#configuration)
 [Caching](#caching)  
 [Version support](#support)
 [Changelog](#changelog)  
 [Comparison with other packages](#comparison-with-other-packages)  
 
+<hr>
 
 ## Why Cotton?
 
@@ -44,6 +46,8 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 - **Minimal Overhead:** Compiles to native Django components with dynamic caching.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
 - **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
+
+<hr>
 
 ## Install
 
@@ -67,9 +71,11 @@ If you have previously specified a custom loader, you should perform [manual set
   - Component filenames use snake_case: `my_component.html`
   - Components are called using kebab-case prefixed by 'c-': `<c-my-component />`
 
+<hr>
+
 ## Walkthrough
 
-### Your first component
+### 1. Your first component
 
 ```html
 <!-- cotton/button.html -->
@@ -86,7 +92,7 @@ If you have previously specified a custom loader, you should perform [manual set
 
 Everything provided between the opening and closing tag is provided to the component as `{{ slot }}`. It can contain any content, HTML or Django template expression.
 
-### Add attributes
+### 2. Adding attributes
 
 ```html
 <!-- cotton/button.html -->
@@ -105,7 +111,7 @@ Everything provided between the opening and closing tag is provided to the compo
 </a>
 ```
 
-### Named slots
+### 3. Named slots
 
 Named slots are a powerful concept. They allow us to provide HTML to appear in one or more areas in the component. Here we allow the button to optionally display an svg icon: 
 
@@ -144,7 +150,7 @@ Named slots can also contain any django native template logic:
 </c-button>
 ```
 
-### Pass template variable as an attribute
+### 4. Pass template variable as an attribute
 
 To pass a template variable you prepend the attribute name with a colon `:`. Consider a bio card component:
 
@@ -164,7 +170,7 @@ That has a component definition like:
 ```
 
 
-### Template expressions inside attributes
+### 5. Template expressions inside attributes
 
 You can use template expression statements inside attributes.
 
@@ -175,7 +181,7 @@ You can use template expression statements inside attributes.
 />
 ```
 
-### Boolean attributes
+### 6. Boolean attributes
 
 Boolean attributes reduce boilerplate when we just want to indicate a certain attribute should be `True` or not.
 
@@ -192,7 +198,7 @@ By passing just the attribute name without a value, it will automatically be pro
 </a>
 ```
 
-### Passing Python data types
+### 7. Passing Python data types
 
 Using the ':' to prefix an attribute tells Cotton we're passing a dynamic type down. We already know we can use this to send a variable, but you can also send basic python types, namely:
 
@@ -225,7 +231,7 @@ This benefits a number of use-cases, for example if you have a select component 
 </select>
 ```
 
-### Increase Re-usability with `{{ attrs }}`
+### 8. Increase Re-usability with `{{ attrs }}`
 
 `{{ attrs }}` is a special variable that contains all the attributes passed to the component in an key="value" format. This is useful when you want to pass all attributes to a child element without having to explicitly define them in the component template. For example, you have inputs that can have any number of attributes defined:
 
@@ -246,11 +252,11 @@ This benefits a number of use-cases, for example if you have a select component 
 <input type="text" class="..." name="country" id="country" value="Japan" required />
 ```
 
-### In-component Variables with `<c-vars>`
+### 9. In-component Variables with `<c-vars>`
 
 Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in views. Fair enough, but what if we want to handle data for the purpose of UI state only? Having presentation related variables defined in the back is overkill and can quickly lead to higher maintenance cost and loses encapsulation of the component. Cotton allows you define in-component variables for the following reasons:
 
-#### 1. Using `<c-vars>` for default attributes
+#### 9. i) Using `<c-vars>` for default attributes
 
 In this example we have a button component with a default "theme" but it can be overridden.
 
@@ -286,7 +292,7 @@ Now we have a default theme for our button, but it is overridable:
 </a>
 ```
 
-#### 2. Using `<c-vars>` to govern `{{ attrs }}`
+#### 9. ii) Using `<c-vars>` to govern `{{ attrs }}`
 
 Using `{{ attrs }}` to pass all attributes from parent scope onto an element in the component, you'll sometimes want to provide additional properties to the component which are not intended to be an attributes. In this case you can declare them in `<c-vars />` and it will prevent it from being in `{{ attrs }}`
 
@@ -311,7 +317,7 @@ Input will have all attributes provided apart from the `icon`:
 <input type="password" id="password" />
 ```
 
-### Dynamic Components
+### 10. Dynamic Components
 
 Sometimes there is a need to include a component dynamically, for example, you are looping through some data and the type of component is defined within a variable.
 
@@ -341,6 +347,8 @@ You can also provide a template expression, should the component be inside a sub
 {% endfor %}
 ```
 
+<hr>
+
 ### An example with HTMX
 
 Cotton helps carve out re-usable components, here we show how to make a re-usable form, reducing code repetition and improving maintainability:
@@ -368,6 +376,8 @@ Cotton helps carve out re-usable components, here we show how to make a re-usabl
     <input type="text" name="quantity" />
 </c-form>
 ```
+
+<hr>
 
 ## Limitations in Django that Cotton overcomes
 
@@ -456,6 +466,20 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 <c-component is="subfolder1.subfolder2.{{ component_name }}" />
 ```
 
+<hr>
+
+## Configuration
+
+`COTTON_DIR` (default: "cotton")  
+
+The directory where your components are stored.
+
+`COTTON_SNAKE_CASED_NAMES` (default: True)  
+
+Whether to search for component filenames in snake_case. If set to False, you can use kebab-cased / hyphenated filenames.
+
+<hr>
+
 ## Caching
 
 Cotton is optimal when used with Django's cached.Loader. If you use <a href="https://django-cotton.com/docs/quickstart">automatic configuration</a> then the cached loader will be automatically applied. This feature has room for improvement, some desirables are:
@@ -465,15 +489,20 @@ Cotton is optimal when used with Django's cached.Loader. If you use <a href="htt
 
 For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
 
+<hr>
+
 ## Version Support
 
 - Python >= 3.8
 - Django >4.2,<5.2
 
+<hr>
+
 ## Changelog
 
 [See releases](https://github.com/wrabit/django-cotton/releases)
 
+<hr>
 
 ## Comparison with other packages
 
@@ -498,4 +527,3 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 **Notes:** 
 
 - Some features here can be resolved with 3rd party plugins, for example for expressions, you can use something like `django-expr` package. So the list focus on comparison of core feature of that library.
-- This comparison was created due to multiple requests

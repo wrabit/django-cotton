@@ -34,4 +34,7 @@ RUN poetry config virtualenvs.create false \
 
 RUN SECRET_KEY=dummy STATIC_URL='/staticfiles/' python manage.py collectstatic --noinput --verbosity 2
 
+# Now uninstall with poetry the container version of django-cotton, leaving the local version when we're developing
+RUN poetry remove django-cotton
+
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

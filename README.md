@@ -26,7 +26,7 @@ Bringing component-based design to Django templates.
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [HTMX Example](#an-example-with-htmx)  
-[Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)
+[Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Configuration](#configuration)
 [Caching](#caching)  
 [Version support](#support)
@@ -75,7 +75,7 @@ If you have previously specified a custom loader, you should perform [manual set
 
 ## Walkthrough
 
-### 1. Your first component
+### Your first component
 
 ```html
 <!-- cotton/button.html -->
@@ -92,7 +92,7 @@ If you have previously specified a custom loader, you should perform [manual set
 
 Everything provided between the opening and closing tag is provided to the component as `{{ slot }}`. It can contain any content, HTML or Django template expression.
 
-### 2. Adding attributes
+### Adding attributes
 
 ```html
 <!-- cotton/button.html -->
@@ -111,7 +111,7 @@ Everything provided between the opening and closing tag is provided to the compo
 </a>
 ```
 
-### 3. Named slots
+### Named slots
 
 Named slots are a powerful concept. They allow us to provide HTML to appear in one or more areas in the component. Here we allow the button to optionally display an svg icon: 
 
@@ -150,7 +150,7 @@ Named slots can also contain any django native template logic:
 </c-button>
 ```
 
-### 4. Pass template variable as an attribute
+### Pass template variable as an attribute
 
 To pass a template variable you prepend the attribute name with a colon `:`. Consider a bio card component:
 
@@ -170,7 +170,7 @@ That has a component definition like:
 ```
 
 
-### 5. Template expressions inside attributes
+### Template expressions inside attributes
 
 You can use template expression statements inside attributes.
 
@@ -181,7 +181,7 @@ You can use template expression statements inside attributes.
 />
 ```
 
-### 6. Boolean attributes
+### Boolean attributes
 
 Boolean attributes reduce boilerplate when we just want to indicate a certain attribute should be `True` or not.
 
@@ -198,7 +198,7 @@ By passing just the attribute name without a value, it will automatically be pro
 </a>
 ```
 
-### 7. Passing Python data types
+### Passing Python data types
 
 Using the ':' to prefix an attribute tells Cotton we're passing a dynamic type down. We already know we can use this to send a variable, but you can also send basic python types, namely:
 
@@ -231,7 +231,7 @@ This benefits a number of use-cases, for example if you have a select component 
 </select>
 ```
 
-### 8. Increase Re-usability with `{{ attrs }}`
+### Increase Re-usability with `{{ attrs }}`
 
 `{{ attrs }}` is a special variable that contains all the attributes passed to the component in an key="value" format. This is useful when you want to pass all attributes to a child element without having to explicitly define them in the component template. For example, you have inputs that can have any number of attributes defined:
 
@@ -252,11 +252,11 @@ This benefits a number of use-cases, for example if you have a select component 
 <input type="text" class="..." name="country" id="country" value="Japan" required />
 ```
 
-### 9. In-component Variables with `<c-vars>`
+### In-component Variables with `<c-vars>`
 
 Django templates adhere quite strictly to the MVC model and does not permit a lot of data manipulation in views. Fair enough, but what if we want to handle data for the purpose of UI state only? Having presentation related variables defined in the back is overkill and can quickly lead to higher maintenance cost and loses encapsulation of the component. Cotton allows you define in-component variables for the following reasons:
 
-#### 9. i) Using `<c-vars>` for default attributes
+#### Using `<c-vars>` for default attributes
 
 In this example we have a button component with a default "theme" but it can be overridden.
 
@@ -292,7 +292,7 @@ Now we have a default theme for our button, but it is overridable:
 </a>
 ```
 
-#### 9. ii) Using `<c-vars>` to govern `{{ attrs }}`
+#### Using `<c-vars>` to govern `{{ attrs }}`
 
 Using `{{ attrs }}` to pass all attributes from parent scope onto an element in the component, you'll sometimes want to provide additional properties to the component which are not intended to be an attributes. In this case you can declare them in `<c-vars />` and it will prevent it from being in `{{ attrs }}`
 
@@ -317,7 +317,7 @@ Input will have all attributes provided apart from the `icon`:
 <input type="password" id="password" />
 ```
 
-### 10. Dynamic Components
+### Dynamic Components
 
 Sometimes there is a need to include a component dynamically, for example, you are looping through some data and the type of component is defined within a variable.
 

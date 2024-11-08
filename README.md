@@ -27,7 +27,7 @@ Bringing component-based design to Django templates.
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [HTMX Example](#an-example-with-htmx)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
-[Configuration](#configuration)
+[Configuration](#configuration)  
 [Caching](#caching)  
 [Version support](#version-support)  
 [Changelog](#changelog)  

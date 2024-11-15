@@ -53,10 +53,21 @@ class Loader(BaseLoader):
         """This works like the file loader with APP_DIRS = True."""
         dirs = list(self.dirs or self.engine.dirs)
 
+        # Check for any app directories located inside provided dirs. This will allow support for a top level
+        for directory in dirs:
+            for app_config in apps.get_app_configs():
+                app_template_dir = os.path.join(directory, app_config.label)
+                if os.path.isdir(app_template_dir):
+                    dirs.append(app_template_dir)
+
         for app_config in apps.get_app_configs():
             template_dir = os.path.join(app_config.path, "templates")
             if os.path.isdir(template_dir):
                 dirs.append(template_dir)
+
+        # Now check for any app directories
+
+        # Check for any app directories
 
         return dirs
 

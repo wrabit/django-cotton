@@ -118,19 +118,19 @@ def dashboard_view(request):
     <p>Cotton uses the following naming conventions:</p>
     <c-ul>
         <li>Component file names are in snake_case: <c-highlight>my_component.html</c-highlight></li>
-        <li>but are called using kebab-case: <c-highlight>{{ "<c-my-component />"|force_escape }}</c-highlight></li>
+        <li>but are called using kebab-case: <code>{{ "<c-my-component />"|force_escape }}</code></li>
     </c-ul>
 
     <h3 id="subfolders">Subfolders</h3>
 
     <c-ul>
         <li>Components in subfolders can be defined using dot notation</li>
-        <li>A component in <c-highlight>sidebar/menu/link.html</c-highlight> would be included as <c-highlight>{{ "<c-sidebar.menu.link />"|force_escape }}</c-highlight></li>
+        <li>A component in <c-highlight>sidebar/menu/link.html</c-highlight> would be included as <code>{{ "<c-sidebar.menu.link />"|force_escape }}</code></li>
     </c-ul>
 
     <h3 id="tag-style">Tag Style</h3>
     <c-ul>
-        <li>Components can either be self-closing <c-highlight>{{ "<c-my-component />"|force_escape }}</c-highlight> or have a closing tag <c-highlight>{{ "<c-my-component></c-my-component>"|force_escape }}</c-highlight></li>
+        <li>Components can either be self-closing <code>{{ "<c-my-component />"|force_escape }}</code> or have a closing tag <code>{{ "<c-my-component></c-my-component>"|force_escape }}</code></li>
     </c-ul>
 
     <c-navigation>

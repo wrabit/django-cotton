@@ -1,3 +1,4 @@
+
 from django_cotton.tests.utils import CottonTestCase, get_compiled
 
 
@@ -69,4 +70,30 @@ class CompileTests(CottonTestCase):
         self.assertTrue(
             "{% cotton_verbatim %}" not in compiled,
             "Compilation should not leave {% cotton_verbatim %} tags in the output",
+        )
+
+    def test_raises_error_on_duplicate_cvars(self):
+        with self.assertRaises(ValueError) as cm:
+            get_compiled(
+                """
+                <c-vars />
+                <c-vars />
+            """
+            )
+
+        self.assertEqual(
+            str(cm.exception),
+            "Multiple c-vars tags found in component template. Only one c-vars tag is allowed per template.",
+        )
+
+    def test_raises_on_slots_without_name(self):
+        with self.assertRaises(ValueError) as cm:
+            get_compiled(
+                """
+                <c-slot />
+            """
+            )
+
+        self.assertTrue(
+            "c-slot tag must have a name attribute:" in str(cm.exception),
         )

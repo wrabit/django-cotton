@@ -121,13 +121,26 @@ class CottonCompiler:
         return replacements
 
     def process_c_vars(self, html: str) -> Tuple[str, str]:
-        """Extract c-vars content and remove c-vars tags from the html"""
-        match = self.c_vars_pattern.search(html)
+        """
+        Extract c-vars content and remove c-vars tags from the html.
+        Raises ValueError if more than one c-vars tag is found.
+        """
+        # Find all matches of c-vars tags
+        matches = list(self.c_vars_pattern.finditer(html))
+
+        if len(matches) > 1:
+            raise ValueError(
+                f"Multiple c-vars tags found in component template. Only one c-vars tag is allowed per template."
+            )
+
+        # Process single c-vars tag if present
+        match = matches[0] if matches else None
         if match:
             attrs = match.group(1)
             vars_content = f"{{% vars {attrs.strip()} %}}"
             html = self.c_vars_pattern.sub("", html)  # Remove all c-vars tags
             return vars_content, html
+
         return "", html
 
     def process(self, html: str) -> str:

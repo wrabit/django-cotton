@@ -41,7 +41,7 @@
 
     <h2 id="type">Change the input type</h2>
 
-    <p>You will probably need more than just a text input in your project. So let's declare an attribute `text` in <c-highlight>{{ '<c-vars />'|force_escape }}</c-highlight>. Adding it as a var will allow us to set "text" as the default. Additionally, it will be excluded from <c-highlight>{% verbatim %}{{ attrs }}{% endverbatim %}</c-highlight>:</p>
+    <p>You will probably need more than just a text input in your project. So let's declare an attribute `text` in <code>{{ '<c-vars />'|force_escape }}</code>. Adding it as a var will allow us to set "text" as the default. Additionally, it will be excluded from <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>:</p>
 
 <c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
 <c-vars type="text" />

@@ -9,7 +9,7 @@ COPY . .
 RUN ["npx", "tailwindcss", "-o", "./docs_project/static/app.css"]
 
 # Use an official Python runtime as a base image
-FROM python:3.12-slim-bookworm as base
+FROM python:3.12-slim-bookworm AS base
 
 # Setup env
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
@@ -33,5 +33,8 @@ RUN poetry config virtualenvs.create false \
     && poetry install
 
 RUN SECRET_KEY=dummy STATIC_URL='/staticfiles/' python manage.py collectstatic --noinput --verbosity 2
+
+# Now uninstall with poetry the container version of django-cotton, leaving the local version when we're developing
+RUN poetry remove django-cotton
 
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

@@ -213,9 +213,11 @@ class BasicComponentTests(CottonTestCase):
         html = """
             <c-app-dir />
             <c-project-root />
+            <c-app2.sub />
         """
 
         rendered = get_rendered(html)
 
         self.assertTrue("I'm from app templates!" in rendered)
         self.assertTrue("I'm from project roo templates!" in rendered)
+        self.assertTrue("i'm sub in project root" in rendered)

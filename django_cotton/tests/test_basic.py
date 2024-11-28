@@ -206,26 +206,16 @@ class BasicComponentTests(CottonTestCase):
 
     def test_multiple_app_subdirectory_access(self):
         self.create_template(
-            "app1/cotton/button.html",
-            "I'm a button",
-        )
-        self.create_template(
-            "app2/cotton/card.html",
-            "I'm a card",
-        )
-        self.create_template(
-            "app3/cotton/tree.html",
-            "I'm a tree",
+            "cotton/app_dir.html",
+            "I'm from app templates!",
         )
 
         html = """
-            <c-app1.button />
-            <c-app2.card />
-            <c-app3.tree />
+            <c-app-dir />
+            <c-project-root />
         """
 
         rendered = get_rendered(html)
 
-        print(html)
-
-        # self.assertTrue("I am a component in a subdirectory" in rendered)
+        self.assertTrue("I'm from app templates!" in rendered)
+        self.assertTrue("I'm from project roo templates!" in rendered)

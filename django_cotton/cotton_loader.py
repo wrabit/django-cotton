@@ -2,6 +2,7 @@ import hashlib
 import os
 from functools import lru_cache
 
+from django.conf import settings
 from django.template.loaders.base import Loader as BaseLoader
 from django.core.exceptions import SuspiciousFileOperation
 from django.template import TemplateDoesNotExist, Origin
@@ -50,24 +51,19 @@ class Loader(BaseLoader):
 
     @lru_cache(maxsize=None)
     def get_dirs(self):
-        """This works like the file loader with APP_DIRS = True."""
+        """Retrieves possible locations of cotton directory"""
         dirs = list(self.dirs or self.engine.dirs)
 
-        # Check for any app directories located inside provided dirs. This will allow support for a top level
-        for directory in dirs:
-            for app_config in apps.get_app_configs():
-                app_template_dir = os.path.join(directory, app_config.label)
-                if os.path.isdir(app_template_dir):
-                    dirs.append(app_template_dir)
-
+        # Include any included installed app directories, e.g. project/app1/templates
         for app_config in apps.get_app_configs():
             template_dir = os.path.join(app_config.path, "templates")
             if os.path.isdir(template_dir):
                 dirs.append(template_dir)
 
-        # Now check for any app directories
-
-        # Check for any app directories
+        # Check project root templates, e.g. project/templates
+        root_template_dir = os.path.join(settings.BASE_DIR, "templates")
+        if os.path.isdir(root_template_dir):
+            dirs.append(root_template_dir)
 
         return dirs
 

@@ -2,6 +2,7 @@
     <c-slot name="page_index">
         <c-index-link><a href="#install" class="no-underline">Install Cotton</a></c-index-link>
         <c-index-link><a href="#create-a-component" class="no-underline">Create a component</a></c-index-link>
+        <c-index-link><a href="#templates-location" class="no-underline">Templates location</a></c-index-link>
         <c-index-link><a href="#include-a-component" class="no-underline">Include a component</a></c-index-link>
         <c-index-link><a href="#usage" class="no-underline">Usage</a></c-index-link>
         <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
@@ -18,7 +19,7 @@
 
     <p>Then update your settings.py:</p>
 
-    <h3>Automatic configuration:</h3>
+    <h3>For automatic configuration:</h3>
 
     <c-snippet language="python" label="settings.py">{% cotton_verbatim %}{% verbatim %}
 INSTALLED_APPS = [
@@ -26,9 +27,9 @@ INSTALLED_APPS = [
 ]
     {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
-    <p>This will automatically handle the settings.py adding the required loader and templatetags.</p>
+    <p>This will attempt to automatically handle the settings.py by adding the required loader and templatetags.</p>
 
-    <h3>Customised configuration</h3>
+    <h3>For custom configuration</h3>
 
     <p>If your project requires any non-default loaders or you do not wish Cotton to manage your settings, you should instead provide `django_cotton.apps.SimpleAppConfig` in your INSTALLED_APPS:</p>
 
@@ -72,6 +73,18 @@ TEMPLATES = [
 </div>
     {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
+    <c-hr id="templates-location" />
+
+    <h2>Templates location</h2>
+
+    <p>Cotton supports 2 common approaches regarding the location of the <code>templates</code> directory:</p>
+
+    <c-ul>
+        <li><strong>App level</strong> - You can place your cotton folder in any of your installed app folders, like: <div><code>[project]/[app]/templates/cotton/row.html</code></div></li>
+        <li><strong>Project root</strong> - You can place your cotton folder in a project level templates directory, like: <div><code>[project]/templates/cotton/row.html</code></div></li>
+    </c-ul>
+
+    <p>Any style will allow you to include your component the same way: <code>{{ '<c-row />'|force_escape }}</code></p>
 
     <c-hr id="include-a-component" />
 
@@ -111,7 +124,8 @@ def dashboard_view(request):
 
     <h3 id="basics">Basics</h3>
     <c-ul>
-        <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder (unless you have set COTTON_DIR).</li>
+        <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder ('cotton' directory is <a href="{% url 'configuration' %}">configurable</a> using COTTON_DIR).</li>
+        <li>The <code>templates</code> folder can be located in either an app-level or top-level project root folder.</li>
     </c-ul>
 
     <h3 id="naming">Naming</h3>

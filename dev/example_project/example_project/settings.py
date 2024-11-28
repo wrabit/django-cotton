@@ -40,9 +40,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_cotton",
     "unspecified_app_directory",
-    "app1",
-    "app2",
-    "app3",
 ]
 
 MIDDLEWARE = [

@@ -203,3 +203,21 @@ class BasicComponentTests(CottonTestCase):
         rendered = get_rendered(html)
 
         self.assertTrue("I have a hyphenated component name" in rendered)
+
+    def test_multiple_app_subdirectory_access(self):
+        self.create_template(
+            "cotton/app_dir.html",
+            "I'm from app templates!",
+        )
+
+        html = """
+            <c-app-dir />
+            <c-project-root />
+            <c-app2.sub />
+        """
+
+        rendered = get_rendered(html)
+
+        self.assertTrue("I'm from app templates!" in rendered)
+        self.assertTrue("I'm from project roo templates!" in rendered)
+        self.assertTrue("i'm sub in project root" in rendered)

@@ -1,10 +1,13 @@
 <c-vars
     type="text"
     class=""
-    left_addon=""
+    left_addon
     right_addon
     placeholder
-
+    size
+    :sizes="{
+        'sm': 'py-1.5'
+    }"
 />
 <div
     class="flex
@@ -12,9 +15,9 @@
         items-center
         border-gray-300
         bg-white
-        dark:bg-transparent
         dark:text-white
-        shadow-sm
+        dark:bg-white/10
+        shadow
         rounded
         ring-1 ring-gray-400 ring-opacity-40 focus-within:ring-2 focus-within:ring-tel-600
     "

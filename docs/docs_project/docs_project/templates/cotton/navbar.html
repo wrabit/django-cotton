@@ -1,4 +1,4 @@
-<div class="py-5 mb-3 border-b dark:border-gray-300/10 border-gray-800/5 sticky top-0 bg-amber-50/60 md:backdrop-blur-lg dark:bg-gray-900/60 mdbg-transparent darkmd:bg-transparent z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
+<div class="py-4 mb-3 dark:border-gray-300/10 border-gray-800/5 sticky top-0 bg-amber-50/50 md:backdrop-blur-lg dark:bg-gray-900/60 mdbg-transparent darkmd:bg-transparent z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
      x-data="{isOpen: false}"
      x-init="
         window.addEventListener('resize', () => {
@@ -41,17 +41,14 @@
 
             <a href="/" class="flex items-center">
                 <c-icons.logo class="size-8 text-teal-600 mr-1" />
-                <span class="font-semibold text-[22px] text-[#1a384a] dark:text-gray-100">cotton</span>
-                <span class="font-semibold text-[22px] leading-8 px-1 ml-1 text-[#1a384a] dark:text-gray-100 border-2 rounded">ui</span>
+                <span class="font-semibold text-[26px] text-[#1a384a] dark:text-gray-100">cotton</span>
                 <div class="hidden sm:inline text-gray-700 dark:text-white text-sm opacity-60 mt-0.5 mx-2">for</div>
                 <c-icons.django class="hidden sm:inline h-5 text-teal-600 mt-1.5" />
             </a>
 
             <div class="ml-5 sm:ml-14">
                 <c-navbar.nav-item url="{% url 'home' %}" active-exact>Docs</c-navbar.nav-item>
-                <c-navbar.nav-item url="{% url 'ui' %}" active-startswith>UI <span class="hiddn m:inline">Components</span> <sup class="bg-red-500 text-[10px] rounded-lg px-1 ml-1 py-0.5 text-white">NEW!</sup></c-navbar.nav-item>
-
-
+                <c-navbar.nav-item url="{% url 'ui' %}" active-startswith>Cotton UI</c-navbar.nav-item>
 {% comment %}               <a href="{% url 'ui' %}" class="font-semibold px-4 py-1.5 rounded-full dark:bg-teal-600 text-white border-teal-600 border-2">primary</a>
                 <a href="{% url 'ui' %}" class="dark:text-teal-400 font-semibold px-4 py-1.5 rounded-full dark:bg-teal-600/40 bg-transparent text-teal-600 border-teal-600 border-2">secondary</a>
                 <a href="{% url 'ui' %}" class="dark:text-gray-400 font-semibold px-4 py-1.5 rounded-full bg-transparent text-teal-600 border-gray-600 border-2">slate</a>

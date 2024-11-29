@@ -3,9 +3,43 @@
 
     <p>The following configuration can be provided in your `settings.py`:</p>
 
-    <h4>COTTON_DIR</h4>
-    <p>str (default: 'cotton')</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+            <code>COTTON_DIR</code>
+            <div>str (default: 'cotton')</div>
+        </div>
+        <div>
+            Change the default path in your templates directory where cotton components can be placed, for example "components".
+        </div>
+    </div>
 
-    <p>Change the default path in your templates directory where cotton components can be placed, for example "components".</p>
+    <c-hr />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+            <code>COTTON_SNAKE_CASED_NAMES</code>
+            <div>bool (default: True)</div>
+        </div>
+        <div>
+            <div class="mb-4">By default cotton will look for snake case versions of your component names. To turn this behaviour off (useful if you want to permit hyphenated filenames) then set this key to <code>False</code>.</div>
+
+            <div class="mb-4">
+                <h6 class="mb-1">Example:</h6>
+                <code>{{ '<c-my-button />'|force_escape }}</code>
+            </div>
+
+            <div class="mb-4">
+                <h6>As <code>True</code> (default)</h6>
+                Filepath: `cotton/my_button.html`
+            </div>
+
+            <div>
+                <h6>As <code>False</code></h6>
+                Filepath: `cotton/my-button.html`
+            </div>
+
+        </div>
+    </div>
+
 
 </c-layouts.with-sidebar>

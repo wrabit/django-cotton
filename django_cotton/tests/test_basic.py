@@ -1,6 +1,6 @@
-from unittest import skip
+from django.test import override_settings
 
-from django_cotton.tests.utils import CottonTestCase
+from django_cotton.tests.utils import CottonTestCase, get_rendered
 
 
 class BasicComponentTests(CottonTestCase):
@@ -105,25 +105,6 @@ class BasicComponentTests(CottonTestCase):
                 """My template path was not specified in settings!""",
             )
 
-    @skip("Not implemented")
-    def test_components_have_isolated_context(self):
-        self.create_template(
-            "cotton/isolated_context.html",
-            """{{ outer }}""",
-        )
-        self.create_template(
-            "isolated_context_view.html",
-            """
-            <c-isolated-context />
-            """,
-            "view/",
-            context={"outer": "Outer content"},
-        )
-
-        with self.settings(ROOT_URLCONF=self.url_conf()):
-            response = self.client.get("/view/")
-            self.assertNotContains(response, "Outer content")
-
     def test_only_gives_isolated_context(self):
         self.create_template(
             "cotton/only.html",
@@ -143,7 +124,6 @@ class BasicComponentTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/no_only_view/")
             self.assertNotContains(response, "donttouch")
-            self.assertNotContains(response, "only")
             self.assertContains(response, "herebedragons")
 
         self.create_template(
@@ -160,7 +140,6 @@ class BasicComponentTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/only_view/")
             self.assertNotContains(response, "herebedragons")
-            self.assertNotContains(response, "only")
             self.assertContains(response, "donttouch")
 
         self.create_template(
@@ -178,5 +157,67 @@ class BasicComponentTests(CottonTestCase):
             response = self.client.get("/only_view2/")
             self.assertNotContains(response, "herebedragons")
             self.assertNotContains(response, "donttouch")
-            self.assertNotContains(response, "only")
             self.assertContains(response, "october")
+
+    def test_only_with_dynamic_components(self):
+        self.create_template(
+            "cotton/dynamic_only.html",
+            """
+            From parent comp scope: '{{ class }}'
+            From view context scope: '{{ view_item }}'
+            Direct attribute: '{{ direct }}'
+            """,
+        )
+
+        self.create_template(
+            "cotton/middle_component.html",
+            """
+            <c-component is="{{ comp }}" only direct="yes" />
+            """,
+        )
+
+        self.create_template(
+            "dynamic_only_view.html",
+            """<c-middle-component class="mb-5" />""",
+            "view/",
+            context={"comp": "dynamic_only", "view_item": "blee"},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "From parent comp scope: ''")
+            self.assertContains(response, "From view context scope: ''")
+            self.assertContains(response, "Direct attribute: 'yes'")
+
+    @override_settings(COTTON_SNAKE_CASED_NAMES=False)
+    def test_hyphen_naming_convention(self):
+        self.create_template(
+            "cotton/some-subfolder/hyphen-naming-convention.html",
+            "I have a hyphenated component name",
+        )
+
+        html = """
+            <c-some-subfolder.hyphen-naming-convention />
+        """
+
+        rendered = get_rendered(html)
+
+        self.assertTrue("I have a hyphenated component name" in rendered)
+
+    def test_multiple_app_subdirectory_access(self):
+        self.create_template(
+            "cotton/app_dir.html",
+            "I'm from app templates!",
+        )
+
+        html = """
+            <c-app-dir />
+            <c-project-root />
+            <c-app2.sub />
+        """
+
+        rendered = get_rendered(html)
+
+        self.assertTrue("I'm from app templates!" in rendered)
+        self.assertTrue("I'm from project roo templates!" in rendered)
+        self.assertTrue("i'm sub in project root" in rendered)

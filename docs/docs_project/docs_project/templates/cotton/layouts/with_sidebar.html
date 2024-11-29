@@ -4,15 +4,46 @@
             <c-sidebar />
         </div>
         <div class="overflow-auto flex-1 pb-10">
-            <div class="max-w-[760px] mx-auto px-0 pt-3 md:pt-0 md:px-5 py-0 prose !text-[16.5px] prose-a:text-teal-600 prose-h2:text-3xl prose-h3:text-2xl prose-headings:text-[#1a384a] text-[#1a384a] dark:text-white dark:text-opacity-70 prose-headings:font-semibold dark:prose-headings:text-white">
+            <div class="
+                max-w-[760px]
+                mx-auto
+                px-0
+                pt-3
+                md:pt-0
+                md:px-5
+                py-0
+                !text-[16.5px]
+                text-[#1a384a]
+
+                prose
+                prose-a:text-teal-600
+                prose-h2:text-3xl
+                prose-h3:text-2xl
+                prose-headings:text-[#1a384a]
+                prose-headings:font-semibold
+                prose-code:before:content-none
+                prose-code:after:content-none
+                prose-code:bg-yellow-900/10
+                prose-code:rounded
+                prose-code:px-1
+                prose-code:inline-block
+                prose-code:my-0
+
+                dark:text-white
+                dark:text-opacity-70
+                dark:prose-headings:text-white
+                dark:prose-code:bg-gray-800
+                dark:prose-code:text-gray-300/80
+                dark:prose-strong:text-[#fff]
+">
                 {{ slot }}
             </div>
         </div>
-        <div class="relative h-full pl-10 border-opacity-10 hidden lg:block">
+        <div class="relative h-full pl-10 border-opacity-10 hidden lg:block text-[15px]">
             {% if page_index %}
                 <div class="sticky top-[68px] pt-0 pb-10">
                     <c-sidebar-heading>On this page</c-sidebar-heading>
-                    <ul class="ml-0 pl-0 mt-4">
+                    <ul class="ml-0 pl-0 mt-4 ">
                         {{ page_index }}
                     </ul>
                 </div>

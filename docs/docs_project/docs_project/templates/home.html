@@ -20,7 +20,7 @@
                 <div class="w-full shrink-0"></div>
                 <span class="pt-0 md:pt-5 clear-both flex-wrap inline-flex justify-center items-center space-x-2">
                     <span class="">Hello</span>
-                    <span class="shrink-0 px-3 py-1 bg-teal-600 font-mono text-xl sm:text-2xl md:text-4xl rounded-lg text-white inline-block font-normal leading-normal">{{ '&lt;c-component />' }}</span>
+                    <span class="shrink-0 px-3 py-1 bg-teal-500/10 border-[3px] border-teal-600 font-mono text-xl sm:text-2xl md:text-4xl rounded-3xl text-teal-600 dark:text-white inline-block font-normal leading-normal">{{ '<c-comp />'|force_escape }}</span>
                 </span>
             </h1>
 
@@ -32,7 +32,7 @@
 
         <div class="grid md:grid-cols-2 gap-4">
             <div class="col-span-1 flex flex-col overflow-x-auto">
-                <h2 class="!font-normal !text-xl mb-3 mt-0 text-center"><span class="font-semibold">Before:</span> Strongly Coupled, Verbose</h2>
+                <h2 class="!font-normal !text-lg mb-3 mt-0 text-center"><span class="font-semibold">Before:</span> Strongly Coupled, Verbose</h2>
                 <div class="flex h-full rounded-xl overflow-hidden">
                     <c-demo.snippet-tabs labels="view.html|product_layout.html" tabs_id="compare">
                         <div class="flex flex-col h-full" x-show="active === 0">
@@ -88,7 +88,7 @@ Item Title
                 </div>
             </div>
             <div class="col-span-1 rounded-lg overflow-hidden  flex flex-col">
-                <h2 class="!font-normal !text-xl mb-3 mt-0 text-center"><span class="font-semibold">After:</span> Decoupled, Clean &amp; Re-usable</h2>
+                <h2 class="!font-normal !text-lg mb-3 mt-0 text-center"><span class="font-semibold">After:</span> Decoupled, Clean &amp; Re-usable</h2>
                 <div class="flex h-full rounded-xl overflow-hidden">
                     <c-demo.snippet-tabs labels="view.html|product.html" tabs_id="compare">
                         <div class="flex flex-col h-full" x-show="active === 0">

@@ -339,7 +339,7 @@ context = { 'today': Weather.objects.get(...) }
         <li>
             <code>x-data</code> is accessible as <code>{% verbatim %}{{ x_data }}{% endverbatim %}</code> inside the component as cotton makes available snake_case versions of all kebab-cased attributes. (If you use <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> then the output will already be in the correct case).
         </li>
-        <li><a href="https://alpinejs.dev/directives/bind" target="_blank">Shorthand x-bind</a> support (<code>:example</code>). As single <code>:</code> attribute prefixing is reserved for cotton's <a href="{% url 'components' %}#dynamic-attributes">dynamic attributes</a>,
+        <li><a href="https://alpinejs.dev/directives/bind" target="_blank">Shorthand x-bind</a> support (<code>:example</code>). Because single <code>:</code> attribute prefixing is reserved for cotton's <a href="{% url 'components' %}#dynamic-attributes">dynamic attributes</a>,
             we can escape the first colon using <code>::</code>. This will ensure the attribute maintains a single <code>:</code> inside <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>
         </li>
     </c-ul>

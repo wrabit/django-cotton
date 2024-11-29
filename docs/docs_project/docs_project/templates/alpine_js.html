@@ -14,6 +14,10 @@
 
     <h1 id="tabs">Re-usable tabs with alpine.js</h1>
 
+    <c-note>
+        Be sure to checkout the notes on alpine.js support <a href="{% url 'components' %}#alpine-js-support">here</a>.
+    </c-note>
+
     <p>Let's tackle together a common UI requirement - tabs.</p>
 
     <h3 class="mt-0 pt-2 mb-5" id="goals">We'll start by defining some goals:</h3>
@@ -69,7 +73,7 @@
 
     <p>Now we have the design right, let's chop it up into components.</p>
 
-    <h4>Tabs component</h4>
+    <h3>{{ '<c-tabs />'|force_escape }} component</h3>
 
     <c-snippet label="cotton/tabs.html">{% cotton_verbatim %}{% verbatim %}
 <div class="bg-white rounded-lg overflow-hidden border shadow">
@@ -85,7 +89,7 @@
     {% endcotton_verbatim %}{% endverbatim %}
     </c-snippet>
 
-    <h4>Tab component</h4>
+    <h3>{{ '<c-tab />'|force_escape }} component</h3>
 
     <c-snippet label="cotton/tab.html">{% cotton_verbatim %}{% verbatim %}
 <div>
@@ -194,13 +198,13 @@
 
 </c-snippet>
 
-<c-navigation>
-    <c-slot name="prev">
-        <a href="{% url 'form-fields' %}">Form Inputs</a>
-    </c-slot>
-    <c-slot name="next">
-        <a href="{% url 'layouts' %}">Layouts</a>
-    </c-slot>
-</c-navigation>
+    <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'form-fields' %}">Form Inputs</a>
+        </c-slot>
+        <c-slot name="next">
+            <a href="{% url 'layouts' %}">Layouts</a>
+        </c-slot>
+    </c-navigation>
 
 </c-layouts.with-sidebar>

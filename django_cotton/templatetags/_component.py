@@ -42,7 +42,8 @@ class CottonComponentNode(Node):
                 component_data["attrs"][key] = True
             elif key.startswith("::"):  # Escaping 1 colon e.g for shorthand alpine
                 key = key[1:]
-                component_data["slots"][key] = value
+                # component_data["slots"][key] = value
+                component_data["attrs"][key] = value
             elif key.startswith(":"):
                 key = key[1:]
                 try:

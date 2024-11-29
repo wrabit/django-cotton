@@ -488,12 +488,7 @@ class AttributeHandlingTests(CottonTestCase):
         self.create_template(
             "cotton/colon_escaping.html",
             """
-            attrs: "{{ attrs }}"
-            
-            string: "{{ string }}"
-            dynamic: "{{ dynamic }}"
-            complex-string: "{{ complex_string }}"
-            complex-dynamic: "{{ complex_dynamic }}"
+            attrs: '{{ attrs }}'
         """,
         )
 
@@ -511,7 +506,8 @@ class AttributeHandlingTests(CottonTestCase):
         )
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            print(response.content.decode())
-            self.assertContains(response, 'attrs: ":static="variable" dynamic="Ive been resolved!"')
-            self.assertContains(response, ':static: "variable"')
-            self.assertContains(response, 'dynamic: "Ive been resolved!"')
+
+            self.assertContains(
+                response,
+                """attrs: ':string="variable" dynamic="Ive been resolved!" :complex-string="{'something': 1}" complex-dynamic="{'something': 1}"'""",
+            )

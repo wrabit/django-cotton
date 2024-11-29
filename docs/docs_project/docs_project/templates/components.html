@@ -11,6 +11,7 @@
             <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
             <c-index-sublink><a href="#dynamic-components" class="no-underline">Dynamic Components</a></c-index-sublink>
             <c-index-sublink><a href="#context-isolation" class="no-underline">Context Isolation</a></c-index-sublink>
+            <c-index-sublink><a href="#alpine-js-support" class="no-underline">Alpine.js Support</a></c-index-sublink>
             <c-index-sublink><a href="#summary" class="no-underline">Summary of concepts</a></c-index-sublink>
     </c-slot>
 
@@ -327,6 +328,21 @@ context = { 'today': Weather.objects.get(...) }
     <h2 id="context-isolation">9. Context Isolation with `only`</h2>
 
     <p>Similar to Django's <code>{% verbatim %}{% include %}{% endverbatim %}</code> tag you can add an "<code>only</code>" attribute which will prevent the component from inheriting the parent's context.</p>
+
+    <c-hr />
+
+    <h2 id="alpine-js-support">10. Alpine.js support</h2>
+
+    <p>The following key features allow you to build re-usable components with alpine.js:</p>
+
+    <c-ul>
+        <li>
+            <code>x-data</code> is accessible as <code>{% verbatim %}{{ x_data }}{% endverbatim %}</code> inside the component as cotton makes available snake_case versions of all kebab-cased attributes. (If you use <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> then the output will already be in the correct case).
+        </li>
+        <li><a href="https://alpinejs.dev/directives/bind" target="_blank">Shorthand x-bind</a> support (<code>:example</code>). As single <code>:</code> attribute prefixing is reserved for cotton's <a href="{% url 'components' %}#dynamic-attributes">dynamic attributes</a>,
+            we can escape the first colon using <code>::</code>. This will ensure the attribute maintains a single <code>:</code> inside <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>
+        </li>
+    </c-ul>
 
     <c-hr />
 

@@ -40,9 +40,9 @@
 </c-slot>
 </c-snippet>
 
-    <c-hr />
+    <c-hr id="attributes" />
 
-    <h2 id="attributes">2. Adding Component Attributes</h2>
+    <h2>2. Adding Component Attributes</h2>
 
     <p>We can further customize components with attribute, which allow you to pass specific data into the component as key-value pairs.</p>
 
@@ -59,9 +59,9 @@
 </c-slot>
 </c-snippet>
 
-    <c-hr />
+    <c-hr id="named-slots" />
 
-    <h2 id="named-slots">3. Using Named Slots</h2>
+    <h2>3. Using Named Slots</h2>
 
     <p>If we want to pass HTML instead of just a string (or another data type) into a component, we can pass them as <c-highlight>named slots</c-highlight> with the <code>{{ '<c-slot name="...">...</c-slot>'|force_escape }}</code> syntax.</p>
 
@@ -98,9 +98,9 @@
         Component filenames should be <c-highlight>snake_cased</c-highlight> by default. To use <c-highlight>kebab-cased</c-highlight> / hyphenated filenames instead, set <code>COTTON_SNAKE_CASED_NAMES</code> to <code>False</code> in your settings.py, <a href="{% url 'configuration' %}">more</a>.
     </c-note>
 
-    <c-hr />
+    <c-hr id="dynamic-attributes" />
 
-    <h2 id="dynamic-attributes">4. Dynamic Attributes with ":"</h2>
+    <h2>4. Dynamic Attributes with ":"</h2>
 
     <p>We saw how by default, all attributes that we pass to a component are treated as strings. If we want to pass HTML, we can use named slots. But what if we want to pass another data type like a template variable, boolean, integer, float, dictionary, list, dictionary?</p>
 
@@ -181,9 +181,9 @@ context = { 'today': Weather.objects.get(...) }
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-    <c-hr />
+    <c-hr id="attrs" />
 
-    <h2 id="attrs">5. Pass all attributes with {% verbatim %}{{ attrs }}{% endverbatim %}</h2>
+    <h2>5. Pass all attributes with {% verbatim %}{{ attrs }}{% endverbatim %}</h2>
 
     <p>Sometimes it's useful to be able to reflect all attributes provided in the parent on to an HTML element in the component. This is particularly powerful when you are building <a href="{% url 'form-fields' %}">form inputs</a>.</p>
 
@@ -209,15 +209,15 @@ context = { 'today': Weather.objects.get(...) }
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
-    <c-hr />
+    <c-hr id="vars" />
 
-    <h2 id="vars">6. Defining Local Variables with <code>{{ '<c-vars />'|force_escape }}</code></h2>
+    <h2>6. Defining Local Variables with <code>{{ '<c-vars />'|force_escape }}</code></h2>
 
     <p>The <code>{{ '<c-vars />'|force_escape }}</code> tag simplifies component design by allowing local variable definition, reducing the need for repetitive attribute declarations and maintaining backend state.</p>
 
     <p>Place a single <code>{{ '<c-vars />'|force_escape }}</code> at the top of a component to set key-value pairs that provide a default configuration.</p>
 
-    <h3 id="default-attributes">Example: Setting Default Attributes</h3>
+    <h3>Example: Setting Default Attributes</h3>
 
     <p>In components with common defaults, <code>{{ '<c-vars />'|force_escape }}</code> can pre-define attributes that rarely need overriding.</p>
 
@@ -240,7 +240,7 @@ context = { 'today': Weather.objects.get(...) }
 </c-slot>
 </c-snippet>
 
-    <h3 id="excluded">{{ '<c-vars />'|force_escape }} are excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
+    <h3>{{ '<c-vars />'|force_escape }} are excluded from {% verbatim %}{{ attrs }}{% endverbatim %}</h3>
 
     <p>Keys in <code>{{ '<c-vars />'|force_escape }}</code> are omitted from <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>, making them ideal for configuration attributes that shouldn't appear in HTML attributes.</p>
 
@@ -278,9 +278,9 @@ context = { 'today': Weather.objects.get(...) }
 
     <p>By specifying <code>label</code> and <code>errors</code> keys in <code>{{ '<c-vars />'|force_escape }}</code>, these attributes won’t be included in <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>, allowing you to control attributes that are designed for component configuration and those intended as attributes.</p>
 
-    <c-hr />
+    <c-hr id="boolean-attributes" />
 
-    <h2 id="boolean-attributes">7. Boolean attributes</h2>
+    <h2>7. Boolean attributes</h2>
 
     <p>Sometimes you just want to pass a simple boolean to a component. Cotton supports providing the attribute name without a value which will provide a boolean True to the component.</p>
 
@@ -301,9 +301,9 @@ context = { 'today': Weather.objects.get(...) }
 </c-slot>
 </c-snippet>
 
-    <c-hr />
+    <c-hr id="dynamic-components" />
 
-    <h2 id="dynamic-components">8. Dynamic Components</h2>
+    <h2>8. Dynamic Components</h2>
 
     <p>There can be times where components need to be included dynamically. For these cases we can reach for a special <code>{{ '<c-component>'|force_escape }}</code> tag with an <code>is</code> attribute:</p>
 
@@ -323,15 +323,15 @@ context = { 'today': Weather.objects.get(...) }
 <c-component is="icon_{{ icon_name }}" />
 {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
 
-    <c-hr />
+    <c-hr id="context-isolation" />
 
-    <h2 id="context-isolation">9. Context Isolation with `only`</h2>
+    <h2>9. Context Isolation with `only`</h2>
 
     <p>Similar to Django's <code>{% verbatim %}{% include %}{% endverbatim %}</code> tag you can add an "<code>only</code>" attribute which will prevent the component from inheriting the parent's context.</p>
 
-    <c-hr />
+    <c-hr id="alpine-js-support" />
 
-    <h2 id="alpine-js-support">10. Alpine.js support</h2>
+    <h2>10. Alpine.js support</h2>
 
     <p>The following key features allow you to build re-usable components with alpine.js:</p>
 
@@ -344,9 +344,9 @@ context = { 'today': Weather.objects.get(...) }
         </li>
     </c-ul>
 
-    <c-hr />
+    <c-hr id="summary" />
 
-    <h2 id="summary">Summary of Concepts</h2>
+    <h2>Summary of Concepts</h2>
     <ul>
         <li><code>{% verbatim %}{{ slot }}{% endverbatim %}</code> - Default content injection.</li>
         <li><c-highlight>Attributes</c-highlight> - Simple, straightforward customization.</li>

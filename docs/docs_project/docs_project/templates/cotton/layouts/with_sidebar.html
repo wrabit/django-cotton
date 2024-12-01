@@ -17,8 +17,9 @@
 
                 prose
                 prose-a:text-teal-600
-                prose-h2:text-3xl
-                prose-h3:text-2xl
+                prose-h1:text-3xl
+                prose-h2:text-2xl
+                prose-h3:text-xl
                 prose-headings:text-[#1a384a]
                 prose-headings:font-semibold
                 prose-code:before:content-none
@@ -36,6 +37,35 @@
                 dark:prose-code:text-gray-300/80
                 dark:prose-strong:text-[#fff]
 ">
+                {% if page_index %}
+                    <div class="lg:hidden not-prose mb-6">
+
+                        <c-ui.collapse>
+                            <c-slot name="trigger">
+
+                                <c-ui.button theme="subtle" class="w-full">
+                                    <span class="flex w-full justify-between items-center">
+                                        <span>On this page</span>
+                                        <template x-if="!expanded">
+                                            <c-icons.chevron-down class="size-5" />
+                                        </template>
+                                        <template x-if="expanded">
+                                            <c-icons.chevron-up class="size-5" />
+                                        </template>
+                                    </span>
+                                </c-ui.button>
+                            </c-slot>
+
+                            <div class="mt-5">
+                                {{ page_index }}
+                            </div>
+
+                            <c-hr />
+                        </c-ui.collapse>
+
+                    </div>
+                {% endif %}
+
                 {{ slot }}
             </div>
         </div>

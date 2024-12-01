@@ -1,13 +1,13 @@
 <c-vars trigger_text trigger />
 
-<div x-data="{ expanded: false }" x-cloak>
+<div x-data="{ expanded: false }">
     {% if trigger %}
         <span @click="expanded = ! expanded" class="cursor-pointer">{{ trigger }}</span>
     {% else %}
         <button @click="expanded = ! expanded">{% firstof trigger_text "Toggle" %}</button>
     {% endif %}
 
-    <div x-show="expanded" x-collapse>
+    <div x-show="expanded" x-collapse x-cloak>
         {{ slot }}
     </div>
 </div>

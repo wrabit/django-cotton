@@ -13,7 +13,7 @@
 
     <h1 id="install">Quickstart</h1>
 
-    <h2>Install cotton</h2>
+    <h2 class="mt-0">Install cotton</h2>
     <p>Run the following command:</p>
     <c-snippet language="python">pip install django-cotton</c-snippet>
 
@@ -124,15 +124,15 @@ def dashboard_view(request):
 
     <h3 id="basics">Basics</h3>
     <c-ul>
-        <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder ('cotton' directory is <a href="{% url 'configuration' %}">configurable</a> using COTTON_DIR).</li>
+        <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder ('cotton' path is <a href="{% url 'configuration' %}">configurable</a> using <code>COTTON_DIR</code>).</li>
         <li>The <code>templates</code> folder can be located in either an app-level or top-level project root folder.</li>
     </c-ul>
 
     <h3 id="naming">Naming</h3>
     <p>Cotton uses the following naming conventions:</p>
     <c-ul>
-        <li>Component file names are in snake_case: <c-highlight>my_component.html</c-highlight></li>
-        <li>but are called using kebab-case: <code>{{ "<c-my-component />"|force_escape }}</code></li>
+        <li>Component file names by default are in snake_case: <c-highlight>my_component.html</c-highlight> (kebab-case filenames can be enabled, see <a href="{% url 'configuration' %}">configuration</a>)</li>
+        <li>and are included using kebab-case: <code>{{ "<c-my-component />"|force_escape }}</code></li>
     </c-ul>
 
     <h3 id="subfolders">Subfolders</h3>

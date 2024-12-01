@@ -1,6 +1,6 @@
 <c-vars trigger_text trigger />
 
-<div x-data="{ expanded: false }">
+<div x-data="{ expanded: false }" x-cloak>
     {% if trigger %}
         <span @click="expanded = ! expanded" class="cursor-pointer">{{ trigger }}</span>
     {% else %}

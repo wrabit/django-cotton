@@ -526,4 +526,4 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 
 **Notes:** 
 
-- Some features here can be resolved with 3rd party plugins, for example for expressions, you can use something like `django-expr` package. So the list focus on comparison of core feature of that library.
+- Some features here can be resolved with 3rd party plugins, for example for expressions, you can use something like `django-expr` package. So the list focuses on a comparison of core feature of that library.

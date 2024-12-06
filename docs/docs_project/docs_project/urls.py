@@ -39,4 +39,5 @@ urlpatterns = [
     path("ui/field", views.build_view("ui_docs/field"), name="ui-field"),
     path("ui/input", views.build_view("ui_docs/input"), name="ui-input"),
     path("ui/textarea", views.build_view("ui_docs/textarea"), name="ui-textarea"),
+    path("ui/button", views.build_view("ui_docs/button"), name="ui-button"),
 ]

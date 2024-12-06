@@ -1,18 +1,19 @@
 <c-vars
-    :themes="{
-        'primary': 'bg-sky-500',
-        'subtle': 'bg-neutral-50 text-gray-800 dark:bg-gray-300/10 dark:text-neutral-300',
-        'danger': 'bg-red-500',
-        'warning': 'bg-yellow-500',
-        'info': 'bg-blue-500',
+    variant="default"
+    :variants="{
+        'default': 'bg-neutral-50 text-gray-800 border dark:bg-gray-300/30 dark:text-neutral-300 dark:border-gray-300/20',
+        'primary': 'bg-teal-600 text-white',
+        'subtle': 'bg-neutral-50 text-gray-600 dark:bg-gray-300/10 dark:text-neutral-300',
+        'danger': 'bg-red-500 text-white',
+        'ghost': 'bg-transparent text-gray-800 dark:text-white',
     }"
-    theme="primary"
-    :outlined-themes="{
+    :outlined-variants="{
+        'default': 'border border-neutral-50 text-gray-800',
         'primary': 'border border-sky-500 text-sky-500',
         'subtle': 'border border-neutral-50 text-gray-800',
         'danger': 'border border-red-500 text-red-500',
-        'warning': 'border border-yellow-500 text-yellow-500',
-        'info': 'border border-blue-500 text-blue-500',
+        'ghost': 'border border-yellow-500 text-yellow-500',
+        'subtle': 'border border-blue-500 text-blue-500',
     }"
     :outlined="False"
     class
@@ -20,12 +21,12 @@
 
 <button {{ attrs }} type="button" class="
     {% if outlined %}
-        {{ outlined_themes|get_item:theme }}
+        {{ outlined_variants|get_item:variant }}
     {% else %}
-        {{ themes|get_item:theme }}
+        {{ variants|get_item:variant }}
     {% endif %}
-    cursor-pointer whitespace-nowrap rounded-md
-    px-4 py-2 text-sm font-medium tracking-wide transition hover:opacity-75 text-center
+    cursor-pointer whitespace-nowrap rounded-md theme(radius.button)
+    px-4 py-2 font-medium tracking-wide transition hover:opacity-75 text-center
     focus-visible:outline
     focus-visible:outline-2
     focus-visible:outline-offset-2

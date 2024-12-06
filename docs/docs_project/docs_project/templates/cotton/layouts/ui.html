@@ -3,21 +3,9 @@
         <div class="relative h-full pr-10 border-r-yellow-800 border-opacity-10 hidden sm:block">
             <c-ui-docs.sidebar />
         </div>
-        <div class="overflow-auto flex-1 h-full py-6
-            max-w-[760px] mx-auto px-0 md:px-5
-            prose
-            prose-a:text-teal-600
-            prose-h2:text-3xl
-            prose-h3:text-2xl
-            prose-headings:text-[#1a384a]
-            prose-headings:font-semibold
-            prose-headings:font-light
-            dark:prose-headings:text-white
-
-            text-[#1a384a] dark:text-white dark:text-opacity-70
-        ">
+        <c-layouts.prose-container>
             {{ slot }}
-        </div>
+        </c-layouts.prose-container>
         <div class="relative h-full pl-10 border-opacity-10 hidden lg:block">
             {% if page_index %}
                 <div class="sticky top-[68px] pt-0 pb-10">

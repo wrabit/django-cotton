@@ -1,11 +1,13 @@
 <div class="sticky top-[80px] pb-6 text-[15.5px]">
     <c-sidebar-block>
-        <c-sidebar-link title="Getting started" url="{% url 'ui' %}" />
+        <c-slot name="title">Getting started</c-slot>
+        <c-sidebar-link title="Quickstart" url="{% url 'ui' %}" />
+        <c-sidebar-link title="Customization" url="{% url 'alpine-js' %}" />
 {#        <c-sidebar-link title="Configuration" url="{% url 'components' %}" />#}
     </c-sidebar-block>
     <c-sidebar-block>
-        <c-slot name="title">Form</c-slot>
-{#            <c-sidebar-link title="Button" url="{% url 'alpine-js' %}" />#}
+        <c-slot name="title">Components</c-slot>
+        <c-sidebar-link title="Button" url="{% url 'ui-button' %}" />
 {#            <c-sidebar-link title="Checkbox" url="{% url 'alpine-js' %}" />#}
 {#            <c-sidebar-link title="Combo" url="{% url 'form-fields' %}" />#}
 {#            <c-sidebar-link title="Datepicker" url="{% url 'alpine-js' %}" />#}
@@ -21,8 +23,8 @@
     <c-sidebar-block>
         <c-slot name="title">UI</c-slot>
         <c-sidebar-link title="Accordion" url="{% url 'alpine-js' %}" />
+        <c-sidebar-link title="Collapse" url="{% url 'alpine-js' %}" />
         <c-sidebar-link title="Dialog" url="{% url 'alpine-js' %}" />
-        <c-sidebar-link title="Sortable" url="{% url 'alpine-js' %}" />
         <c-sidebar-link title="Tabs" url="{% url 'alpine-js' %}" />
         <c-sidebar-link title="Tooltip" url="{% url 'alpine-js' %}" />
     </c-sidebar-block>

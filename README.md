@@ -474,6 +474,10 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 
 The directory where your components are stored.
 
+`COTTON_BASE_DIR` (default: None)  
+
+The directory that contains your project-level "templates" directory. 
+
 `COTTON_SNAKE_CASED_NAMES` (default: True)  
 
 Whether to search for component filenames in snake_case. If set to False, you can use kebab-cased / hyphenated filenames.

@@ -81,7 +81,10 @@ TEMPLATES = [
 
     <c-ul>
         <li><strong>App level</strong> - You can place your cotton folder in any of your installed app folders, like: <div><code>[project]/[app]/templates/cotton/row.html</code></div></li>
-        <li><strong>Project root</strong> - You can place your cotton folder in a project level templates directory, like: <div><code>[project]/templates/cotton/row.html</code></div></li>
+        <li>
+            <strong>Project root</strong> - You can place your cotton folder in a project level templates directory, like: <div><code>[project]/templates/cotton/row.html</code></div>
+            (where the <code>[project]</code> depends on the `BASE_DIR` or `COTTON_BASE_DIR` settings)
+        </li>
     </c-ul>
 
     <p>Any style will allow you to include your component the same way: <code>{{ '<c-row />'|force_escape }}</code></p>

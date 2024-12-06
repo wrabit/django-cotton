@@ -476,7 +476,7 @@ The directory where your components are stored.
 
 `COTTON_BASE_DIR` (default: None)  
 
-The directory that contains your project-level "templates" directory. 
+If you use a project-level templates folder then you can set the path here. This is not needed if your project already has a `BASE_DIR` variable.
 
 `COTTON_SNAKE_CASED_NAMES` (default: True)  
 
@@ -486,12 +486,7 @@ Whether to search for component filenames in snake_case. If set to False, you ca
 
 ## Caching
 
-Cotton is optimal when used with Django's cached.Loader. If you use <a href="https://django-cotton.com/docs/quickstart">automatic configuration</a> then the cached loader will be automatically applied. This feature has room for improvement, some desirables are:
-
-- Integration with a cache backend to survive runtime restarts / deployments.
-- Cache warming
-
-For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
+Cotton is optimal when used with Django's cached.Loader. If you use <a href="https://django-cotton.com/docs/quickstart">automatic configuration</a> then the cached loader will be automatically applied.
 
 <hr>
 
@@ -531,3 +526,7 @@ For full docs and demos, checkout <a href="https://django-cotton.com" target="_b
 **Notes:** 
 
 - Some features here can be resolved with 3rd party plugins, for example for expressions, you can use something like `django-expr` package. So the list focuses on a comparison of core feature of that library.
+
+<hr>
+
+For full docs and demos, checkout <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>

@@ -8,6 +8,14 @@
         <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
     </c-slot>
 
+    <c-example>
+        <c-slot name="code">
+{% cotton_verbatim %}{% verbatim %}
+<c-ui.button>Default</c-ui.button>
+{% endverbatim %}{% endcotton_verbatim %}
+        </c-slot>
+    </c-example>
+
     <div class="shadow-lg not-prose">
         <div class="min-h-40 md:px-24 rounded-xl rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
 
@@ -17,9 +25,7 @@
 
         </div>
         <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-<c-ui.button>Default</c-ui.button>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+            <c-snippet></c-snippet>
         </div>
     </div>
 

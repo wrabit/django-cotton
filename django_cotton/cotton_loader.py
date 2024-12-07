@@ -61,9 +61,14 @@ class Loader(BaseLoader):
                 dirs.append(template_dir)
 
         # Check project root templates, e.g. project/templates
-        root_template_dir = os.path.join(settings.BASE_DIR, "templates")
-        if os.path.isdir(root_template_dir):
-            dirs.append(root_template_dir)
+        base_dir = getattr(settings, "COTTON_BASE_DIR", None)
+        if base_dir is None:
+            base_dir = getattr(settings, "BASE_DIR", None)
+
+        if base_dir is not None:
+            root_template_dir = os.path.join(base_dir, "templates")
+            if os.path.isdir(root_template_dir):
+                dirs.append(root_template_dir)
 
         return dirs
 

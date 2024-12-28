@@ -1,0 +1,8 @@
+<div class="shadow-lg not-prose">
+    <div class="min-h-40 md:px-24 rounded-xl rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
+        {{ slot }}
+    </div>
+    {% if code %}
+        <c-snippet>{{ code }}</c-snippet>
+    {% endif %}
+</div>

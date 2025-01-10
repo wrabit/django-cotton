@@ -122,25 +122,60 @@ class CottonComponentNode(Node):
 
 
 def cotton_component(parser, token):
+    """
+    Parse a cotton component tag and return a CottonComponentNode.
+
+    It accepts spaces inside quoted attributes for example if we want to pass valid json that contains spaces in values.
+
+    @TODO Add support here for 'complex' attributes so we can eventually remove the need for the 'attr' tag. The idea
+     here is to render `{{` and `{%` blocks in tags.
+    """
+
     bits = token.split_contents()[1:]
     component_name = bits[0]
     attrs = {}
     only = False
 
-    node_class = CottonComponentNode
+    current_key = None
+    current_value = []
 
     for bit in bits[1:]:
         if bit == "only":
-            # if we see `only` we isolate context
             only = True
             continue
-        try:
-            key, value = bit.split("=")
-            attrs[key] = value
-        except ValueError:
-            attrs[bit] = True
+
+        if "=" in bit:
+            # If we were building a previous value, store it
+            if current_key:
+                attrs[current_key] = " ".join(current_value)
+                current_value = []
+
+            # Start new key-value pair
+            key, value = bit.split("=", 1)
+            if value.startswith(("'", '"')):
+                if value.endswith(("'", '"')) and value[0] == value[-1]:
+                    # Complete quoted value
+                    attrs[key] = value
+                else:
+                    # Start of quoted value
+                    current_key = key
+                    current_value = [value]
+            else:
+                # Simple unquoted value
+                attrs[key] = value
+        else:
+            if current_key:
+                # Continue building quoted value
+                current_value.append(bit)
+            else:
+                # Boolean attribute
+                attrs[bit] = True
+
+    # Store any final value being built
+    if current_key:
+        attrs[current_key] = " ".join(current_value)
 
     nodelist = parser.parse(("endc",))
     parser.delete_first_token()
 
-    return node_class(component_name, nodelist, attrs, only)
+    return CottonComponentNode(component_name, nodelist, attrs, only)

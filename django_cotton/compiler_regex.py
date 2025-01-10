@@ -130,7 +130,7 @@ class CottonCompiler:
 
         if len(matches) > 1:
             raise ValueError(
-                f"Multiple c-vars tags found in component template. Only one c-vars tag is allowed per template."
+                "Multiple c-vars tags found in component template. Only one c-vars tag is allowed per template."
             )
 
         # Process single c-vars tag if present

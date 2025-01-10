@@ -122,6 +122,15 @@ class CottonComponentNode(Node):
 
 
 def cotton_component(parser, token):
+    """
+    Parse a cotton component tag and return a CottonComponentNode.
+
+    It accepts spaces inside quoted attributes for example if we want to pass valid json that contains spaces in values.
+
+    @TODO Add support here for 'complex' attributes so we can eventually remove the need for the 'attr' tag. The idea
+     here is to render `{{` and `{%` blocks in tags.
+    """
+
     bits = token.split_contents()[1:]
     component_name = bits[0]
     attrs = {}

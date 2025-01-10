@@ -170,28 +170,3 @@ def cotton_component(parser, token):
     parser.delete_first_token()
 
     return CottonComponentNode(component_name, nodelist, attrs, only)
-
-
-def cotton_component_legacy(parser, token):
-    bits = token.split_contents()[1:]
-    component_name = bits[0]
-    attrs = {}
-    only = False
-
-    node_class = CottonComponentNode
-
-    for bit in bits[1:]:
-        if bit == "only":
-            # if we see `only` we isolate context
-            only = True
-            continue
-        try:
-            key, value = bit.split("=")
-            attrs[key] = value
-        except ValueError:
-            attrs[bit] = True
-
-    nodelist = parser.parse(("endc",))
-    parser.delete_first_token()
-
-    return node_class(component_name, nodelist, attrs, only)

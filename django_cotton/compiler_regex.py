@@ -7,7 +7,22 @@ class Tag:
         r"<(/?)c-([^\s/>]+)((?:\s+[^\s/>\"'=<>`]+(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|\S+))?)*)\s*(/?)\s*>",
         re.DOTALL,
     )
-    attr_pattern = re.compile(r'([^\s/>\"\'=<>`]+)(?:\s*=\s*(?:(["\'])(.*?)\2|(\S+)))?', re.DOTALL)
+    # attr_pattern = re.compile(r'([^\s/>\"\'=<>`]+)(?:\s*=\s*(?:(["\'])(.*?)\2|(\S+)))?', re.DOTALL)
+
+    attr_pattern = re.compile(
+        r"""([^\s/>\"\'=<>`]+)       # Attribute name
+           (?:                        # Optional group for value
+             \s*=\s*                  # Equals with optional whitespace
+             (?:
+               (["\'])               # Quote character
+               ((?:(?!\2)|.)*?)      # Any character that's not the quote character
+               \2                    # Matching quote
+               |                     # OR
+               (\S+)                 # Non-quoted value without spaces
+             )
+           )?""",
+        re.VERBOSE | re.DOTALL,
+    )
 
     def __init__(self, match: re.Match):
         self.html = match.group(0)
@@ -130,7 +145,7 @@ class CottonCompiler:
 
         if len(matches) > 1:
             raise ValueError(
-                f"Multiple c-vars tags found in component template. Only one c-vars tag is allowed per template."
+                "Multiple c-vars tags found in component template. Only one c-vars tag is allowed per template."
             )
 
         # Process single c-vars tag if present

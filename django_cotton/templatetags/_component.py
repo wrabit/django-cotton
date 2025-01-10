@@ -127,6 +127,57 @@ def cotton_component(parser, token):
     attrs = {}
     only = False
 
+    current_key = None
+    current_value = []
+
+    for bit in bits[1:]:
+        if bit == "only":
+            only = True
+            continue
+
+        if "=" in bit:
+            # If we were building a previous value, store it
+            if current_key:
+                attrs[current_key] = " ".join(current_value)
+                current_value = []
+
+            # Start new key-value pair
+            key, value = bit.split("=", 1)
+            if value.startswith(("'", '"')):
+                if value.endswith(("'", '"')) and value[0] == value[-1]:
+                    # Complete quoted value
+                    attrs[key] = value
+                else:
+                    # Start of quoted value
+                    current_key = key
+                    current_value = [value]
+            else:
+                # Simple unquoted value
+                attrs[key] = value
+        else:
+            if current_key:
+                # Continue building quoted value
+                current_value.append(bit)
+            else:
+                # Boolean attribute
+                attrs[bit] = True
+
+    # Store any final value being built
+    if current_key:
+        attrs[current_key] = " ".join(current_value)
+
+    nodelist = parser.parse(("endc",))
+    parser.delete_first_token()
+
+    return CottonComponentNode(component_name, nodelist, attrs, only)
+
+
+def cotton_component_legacy(parser, token):
+    bits = token.split_contents()[1:]
+    component_name = bits[0]
+    attrs = {}
+    only = False
+
     node_class = CottonComponentNode
 
     for bit in bits[1:]:

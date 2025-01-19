@@ -511,3 +511,24 @@ class AttributeHandlingTests(CottonTestCase):
                 response,
                 """attrs: ':string="variable" dynamic="Ive been resolved!" :complex-string="{'something': 1}" complex-dynamic="{'something': 1}"'""",
             )
+
+    def test_attributes_can_contain_valid_json(self):
+        self.create_template(
+            "cotton/json_attrs.html",
+            """
+                <button {{ attrs }}>{{ slot }}</button>
+            """,
+        )
+
+        self.create_template(
+            "json_attrs_view.html",
+            """
+                <c-json-attrs data-something='{"key=dd": "the value with= spaces"}' />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, """{"key=dd": "the value with= spaces"}""")

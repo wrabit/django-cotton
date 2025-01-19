@@ -14,6 +14,4 @@ def index_view(request):
     )
 
 
-urlpatterns = [
-    path("", index_view),
-]
+urlpatterns = [path("", index_view)]

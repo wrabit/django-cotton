@@ -2,31 +2,31 @@
     position="top"
     :positions="{
         'top': {
-            'content': 'bottom-full left-1/2 -translate-x-1/2 mb-3',
-            'arrow': 'bottom-[-3] left-1/2 -translate-x-1/2'
+            'content_classes': 'bottom-full left-1/2 -translate-x-1/2 mb-3',
+            'arrow_classes': 'bottom-[-3] left-1/2 -translate-x-1/2'
         },
         'bottom': {
-            'content': 'top-full left-1/2 -translate-x-1/2 mt-3',
-            'arrow': 'top-[-3] left-1/2 -translate-x-1/2'
+            'content_classes': 'top-full left-1/2 -translate-x-1/2 mt-3',
+            'arrow_classes': 'top-[-3] left-1/2 -translate-x-1/2'
         },
         'left': {
-            'content': 'right-full top-1/2 -translate-y-1/2 mr-3',
-            'arrow': 'right-[-3] top-1/2 -translate-y-1/2'
+            'content_classes': 'right-full top-1/2 -translate-y-1/2 mr-3',
+            'arrow_classes': 'right-[-3] top-1/2 -translate-y-1/2'
         },
         'right': {
-            'content': 'left-full top-1/2 -translate-y-1/2 ml-3',
-            'arrow': 'left-[-3] top-1/2 -translate-y-1/2'
+            'content_classes': 'left-full top-1/2 -translate-y-1/2 ml-3',
+            'arrow_classes': 'left-[-3] top-1/2 -translate-y-1/2'
         }
     }"
     theme="light"
     :themes="{
         'light': {
-            'content': 'bg-white text-gray-900 border border-gray-200',
-            'arrow': 'bg-white border border-gray-200'
+            'content_classes': 'bg-white text-gray-900 border border-gray-200',
+            'arrow_classes': 'bg-white border border-gray-200'
         },
         'dark': {
-            'content': 'bg-gray-900 text-white',
-            'arrow': 'bg-gray-900'
+            'content_classes': 'bg-gray-900 text-white',
+            'arrow_classes': 'bg-gray-900'
         }
     }"
     size="default"
@@ -57,8 +57,8 @@
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
         class="absolute z-2 px-3 py-2 text-sm font-medium rounded-lg shadow-sm
-            {{ positions|get_item:position|get_item:'content' }}
-            {{ themes|get_item:theme|get_item:'content' }}
+            {{ positions|get_item:position|get_item:'content_classes' }}
+            {{ themes|get_item:theme|get_item:'content_classes' }}
             {{ sizes|get_item:size }}
             {{ class }}
     ">
@@ -66,8 +66,8 @@
         {% if with_arrow is True %}
             <div
                 class="absolute z-[0] w-3 h-3 rounded-sm rotate-45
-                    {{ positions|get_item:position|get_item:'arrow' }}
-                    {{ themes|get_item:theme|get_item:'arrow' }}
+                    {{ positions|get_item:position|get_item:'arrow_classes' }}
+                    {{ themes|get_item:theme|get_item:'arrow_classes' }}
                    "
             ></div>
         {% endif %}

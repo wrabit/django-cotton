@@ -4,7 +4,7 @@
     :selected="[]"
     placeholder=""
     :max_tags="-1"
-    :writable="True"
+    :writable="False"
     :enable_search="False"
     :close_after_selecting="False"
 />
@@ -63,7 +63,7 @@
                 </template>
 
                 <div x-show="filteredOptions.length === 0" class="px-2 py-1 text-gray-500 text-sm">
-                    No options available
+                    No options found
                     <span x-show="newTag.trim() !== '' && allowCustomTags" class="text-gray-500">, press Enter to add "<span x-text='newTag'></span>"</span>
                 </div>
             </div>

@@ -10,7 +10,7 @@
 Bringing component-based design to Django templates.
 
 - Docs site + demos: <a href="https://django-cotton.com" target="_blank">django-cotton.com</a>
-- <a href="https://discord.gg/7fgedKq9" target="_blank">Discord community</a> (new)
+- <a href="https://discord.gg/4x8ntQwHMe" target="_blank">Discord community</a> (new)
 
 ## Contents
 

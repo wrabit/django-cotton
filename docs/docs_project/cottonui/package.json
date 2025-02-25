@@ -1,0 +1,24 @@
+{
+    "name": "cotton-ui",
+    "version": "1.0.0",
+    "description": "Cotton UI Javascript files",
+    "main": "static/js/cotton-ui.js",
+    "author": "wrabit",
+    "scripts": {
+        "build": "node ./build.js",
+        "watch": "node ./build.js --watch"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.19",
+        "brotli-size": "^4.0.0",
+        "esbuild": "^0.14.49",
+        "postcss": "^8.4.38",
+        "postcss-import": "^16.1.0",
+        "tailwindcss": "^3.4.4"
+    },
+    "dependencies": {
+        "date-fns": "^3.6.0",
+        "npm-run-all": "^4.1.5"
+    },
+    "license": "ISC"
+}

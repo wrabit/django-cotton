@@ -12,11 +12,12 @@
 
     <div class="shadow-lg">
         <div class="min-h-40 md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <c-ui.datepicker placeholder="DOB" />
+            <c-ui.datepicker mode="single" />
+
         </div>
         <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
             <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-ui.input placeholder="What's your name?" />
+                <c-ui.datepicker class="w-96" mode="single" />
             {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
         </div>
     </div>

@@ -13,7 +13,7 @@
     "buildCommand": "npm ci && npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css --minify"
   },
   "deploy": {
-    "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn docs_project.wsgi --bind 0.0.0.0:8000",
+    "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn docs_project.wsgi --workers=4 --threads=2 --worker-class=gthread --worker-tmp-dir=/dev/shm --max-requests=1000 --max-requests-jitter=50 --bind 0.0.0.0:8000",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

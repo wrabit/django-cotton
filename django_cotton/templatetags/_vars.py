@@ -35,11 +35,7 @@ class CottonVarsNode(Node):
                     except UnprocessableDynamicAttr:
                         pass
                 else:
-                    try:
-                        resolved_value = Variable(value).resolve(context)
-                    except (VariableDoesNotExist, IndexError):
-                        resolved_value = value
-                    attrs[key] = resolved_value
+                    attrs[key] = value
             attrs.exclude_from_string_output(key)
 
         # Process cvars without values

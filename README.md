@@ -136,7 +136,7 @@ Named slots are a powerful concept. They allow us to provide HTML to appear in o
 </c-button>
 ```
 
-Named slots can also contain any django native template logic:
+Named slots can also contain any html or django template expression:
 
 ```html
 <!-- in view -->

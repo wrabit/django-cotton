@@ -380,3 +380,39 @@ class CvarTests(CottonTestCase):
         rendered = render_to_string("cotton/direct_render.html")
 
         self.assertTrue("I'm all set" in rendered)
+
+    def test_cvars_template_basic_types_parsing(self):
+        self.create_template(
+            "cotton/cvars_template_basic_types.html",
+            """
+            <c-vars 
+                none="None" 
+                number="1" 
+                boolean_true="True" 
+                boolean_false="False" />
+                
+            {% if none == "None" %}
+                I am string None
+            {% endif %}
+            
+            {% if number == "1" %}
+                I am string 1
+            {% endif %}
+            
+            {% if boolean_true == "True" %}
+                I am string True
+            {% endif %}
+            
+            {% if boolean_false == "False" %}
+                I am string False
+            {% endif %}
+                
+            """,
+        )
+
+        rendered = render_to_string("cotton/cvars_template_basic_types.html")
+
+        self.assertTrue("I am string None" in rendered)
+        self.assertTrue("I am string 1" in rendered)
+        self.assertTrue("I am string True" in rendered)
+        self.assertTrue("I am string False" in rendered)

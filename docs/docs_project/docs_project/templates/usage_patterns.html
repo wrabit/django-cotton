@@ -1,0 +1,79 @@
+<c-layouts.with-sidebar>
+    <h1 id="components">Usage Patterns</h1>
+
+    <c-slot name="page_index">
+        <c-index-link><a href="#components" class="no-underline">Components</a></c-index-link>
+        <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
+        <c-index-sublink><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
+        <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
+        <c-index-sublink><a href="#index" class="no-underline">index.html</a></c-index-sublink>
+        <c-index-sublink><a href="#tag-style" class="no-underline">Tag Style</a></c-index-sublink>
+    </c-slot>
+
+    <h3 id="basics">Basics</h3>
+    <c-ul>
+        <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder ('cotton' path is <a href="{% url 'configuration' %}">configurable</a> using <code>COTTON_DIR</code>).</li>
+        <li>The <code>templates</code> folder can be located in either an app-level or top-level project root folder.</li>
+    </c-ul>
+
+    <c-hr />
+
+    <h3 id="naming">Naming</h3>
+    <p>Cotton uses the following naming conventions:</p>
+    <c-ul>
+        <li>By default, component file names are in snake_case (<c-highlight>my_component.html</c-highlight>).
+        <li>kebab-case filenames (<c-highlight>my-component.html</c-highlight>) can be enabled with <code>COTTON_SNAKE_CASED_NAMES = False</code> see <a href="{% url 'configuration' %}">configuration</a>.</li>
+        <li>Components are included in templates using kebab-case name of the component: <code>{{ "<c-my-component />"|force_escape }}</code></li>
+    </c-ul>
+
+    <c-hr />
+
+    <h3 id="subfolders">Subfolders</h3>
+
+    <c-ul>
+        <li>Components in subfolders can be called using dot notation to represent folder levels.</li>
+        <li>A component in <c-highlight>sidebar/menu/link.html</c-highlight> would be included with <code>{{ "<c-sidebar.menu.link />"|force_escape }}</code></li>
+    </c-ul>
+
+    <c-hr />
+
+    <h3 id="index">The index.html component</h3>
+
+    <p>When your component has sub-components, you can define the default component of a folder by adding an <code>index.html</code>. This helps to keep your project structure tidy and reduce additional code in the template.</p>
+
+    <c-snippet label="Project structure">
+        {% cotton_verbatim %}{% verbatim %}
+templates/
+├── cotton/
+│   ├── card/
+│   │   ├── index.html
+│   │   ├── header.html
+        {% endverbatim %}{% endcotton_verbatim %}
+    </c-snippet>
+
+    <c-snippet label="Usage">
+        {% cotton_verbatim %}{% verbatim %}
+<c-card>
+    <c-card.header>...</c-card.header>
+</c-card>
+        {% endverbatim %}{% endcotton_verbatim %}
+    </c-snippet>
+
+    <c-hr />
+
+    <h3 id="tag-style">Tag Style</h3>
+    <c-ul>
+        <li>Components can either be self-closing <code>{{ "<c-my-component />"|force_escape }}</code> or have a closing tag <code>{{ "<c-my-component></c-my-component>"|force_escape }}</code></li>
+    </c-ul>
+
+
+    <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'components' %}">Components</a>
+        </c-slot>
+        <c-slot name="next">
+            <a href="{% url 'form-fields' %}">Form Inputs</a>
+        </c-slot>
+    </c-navigation>
+
+</c-layouts.with-sidebar>

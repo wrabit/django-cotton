@@ -1,9 +1,9 @@
 <c-vars
     variant="default"
     :variants="{
-        'default': 'bg-neutral-50 text-gray-800 border dark:bg-gray-300/30 dark:text-neutral-300 dark:border-gray-300/20',
-        'primary': 'bg-teal-600 text-white',
-        'subtle': 'bg-neutral-50 text-gray-600 dark:bg-gray-300/10 dark:text-neutral-300',
+        'default': 'bg-white text-gray-800 border dark:bg-gray-400/30 dark:text-neutral-300 dark:border-gray-300/20 shadow',
+        'primary': 'bg-zinc-800 text-white dark:bg-white dark:text-zinc-800',
+        'subtle': 'bg-neutral-100 text-gray-600 dark:bg-gray-300/10 dark:text-neutral-300',
         'danger': 'bg-red-500 text-white',
         'ghost': 'bg-transparent text-gray-800 dark:text-white',
     }"
@@ -26,7 +26,9 @@
         {{ variants|get_item:variant }}
     {% endif %}
     cursor-pointer whitespace-nowrap rounded-md theme(radius.button)
-    px-4 py-2 font-medium tracking-wide transition hover:opacity-75 text-center
+    px-4 py-2.5 font-medium tracking-wide transition text-center
+{#    hover:opacity-75#}
+    hover:bg-zinc-900/10
     focus-visible:outline
     focus-visible:outline-2
     focus-visible:outline-offset-2

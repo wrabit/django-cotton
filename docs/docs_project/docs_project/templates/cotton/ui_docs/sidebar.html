@@ -1,4 +1,4 @@
-<div class="sticky top-[80px] pb-6 text-[15.5px]">
+<div class="sticky top-[80px] pb-6 text-sm">
     <c-sidebar-block>
         <c-slot name="title">Getting started</c-slot>
         <c-sidebar-link title="Quickstart" url="{% url 'ui' %}" />
@@ -7,25 +7,22 @@
     </c-sidebar-block>
     <c-sidebar-block>
         <c-slot name="title">Components</c-slot>
+        <c-sidebar-link title="Accordion" url="{% url 'ui-accordion' %}" />
         <c-sidebar-link title="Button" url="{% url 'ui-button' %}" />
+        <c-sidebar-link title="Collapse" url="{% url 'alpine-js' %}" />
 {#            <c-sidebar-link title="Checkbox" url="{% url 'alpine-js' %}" />#}
 {#            <c-sidebar-link title="Combo" url="{% url 'form-fields' %}" />#}
 {#            <c-sidebar-link title="Datepicker" url="{% url 'alpine-js' %}" />#}
         <c-sidebar-link title="Datepicker" url="{% url 'ui-datepicker' %}" />
+        <c-sidebar-link title="Dialog" url="{% url 'alpine-js' %}" />
         <c-sidebar-link title="Dropdown" url="{% url 'ui-dropdown' %}" />
         <c-sidebar-link title="Field" url="{% url 'ui-field' %}" />
         <c-sidebar-link title="Input" url="{% url 'ui-input' %}" />
 {#            <c-sidebar-link title="Radio" url="{% url 'alpine-js' %}" />#}
 {#            <c-sidebar-link title="Select" url="{% url 'alpine-js' %}" />#}
 {#            <c-sidebar-link title="Switch" url="{% url 'alpine-js' %}" />#}
-        <c-sidebar-link title="Textarea" url="{% url 'ui-textarea' %}" />
-    </c-sidebar-block>
-    <c-sidebar-block>
-        <c-slot name="title">UI</c-slot>
-        <c-sidebar-link title="Accordion" url="{% url 'alpine-js' %}" />
-        <c-sidebar-link title="Collapse" url="{% url 'alpine-js' %}" />
-        <c-sidebar-link title="Dialog" url="{% url 'alpine-js' %}" />
         <c-sidebar-link title="Tabs" url="{% url 'alpine-js' %}" />
+        <c-sidebar-link title="Textarea" url="{% url 'ui-textarea' %}" />
         <c-sidebar-link title="Tooltip" url="{% url 'ui-tooltip' %}" />
     </c-sidebar-block>
 </div>

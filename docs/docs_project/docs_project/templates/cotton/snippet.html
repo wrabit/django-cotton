@@ -1,7 +1,6 @@
 <c-vars
     language="xml"
-    rounded="rounded-xl"
-    size="md"
+    size="sm"
     :sizes="{
         'sm': 'text-[13.5px]',
         'md': 'text-[14.5px]',
@@ -9,9 +8,9 @@
     }"
 />
 
-<div class="group shadow relative flex-1 flex flex-col justify-start w-full {{ rounded }} overflow-hidden mb-3"
+<div class="group relative rounded flex-1 flex flex-col justify-start w-full overflow-auto mb-3"
      x-data="{
-        'code': '',
+    'code': '',
         copy() {
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(this.$refs.code.innerText)
@@ -33,13 +32,17 @@
         }
     }"
 >
-    {% if label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-gray-400 text-opacity-80 font-semibold">{{ label }}</div>{% endif %}
-    <button @click.prevent="copy" class="opacity-0 transition-opacity transition-duration-500ms group-hover:opacity-100 absolute right-0 top-0 pt-3 pr-5"><c-icons.copy class="w-6 h-6 text-gray-500" /></button>
+{% if label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-gray-400 text-opacity-80 font-semibold">{{ label }}</div>{% endif %}
+    <button @click.prevent="copy" class="opacity-0 transition-opacity transition-duration-500ms group-hover:opacity-100 absolute right-0 top-0 pt-3 pr-5"><c-icons.copy class="w-6 h-6 text-gray-500" stroke-width="1.5" /></button>
     <pre
-        class="flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none {{ sizes|get_item:size }}"
-    ><code x-ref="code" x-model="code" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-11 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+
+        class="flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none overflow-auto w-full {{ sizes|get_item:size }}"
+    ><code
+        x-ref="code"
+        x-model="code"
+        class="language-{{ language }} !bg-transparent flex-1 !pb-4 {% if label %} !pt-11 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800">{{ slot|strip }}</code></pre>
     {% if preview %}
-        <div class="px-6 py-6 prose-headings:text-gray-800 shadow bg-white dark:bg-gray-50 rounded-b-xl dark:!text-gray-800">
+        <div class="text-base px-6 py-6 prose-headings:text-gray-800 bg-white dark:bg-gray-50 rounded-b border-l border-r border-b">
             <div class="text-sm text-gray-400 font-semibold uppercase tracking-wider pb-3">preview</div>
             {{ preview }}
         </div>

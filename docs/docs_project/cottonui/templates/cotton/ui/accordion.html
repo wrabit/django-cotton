@@ -1,8 +1,6 @@
-<div x-data="{
-        activeAccordion: '',
-        setActiveAccordion(id) {
-            this.activeAccordion = (this.activeAccordion == id) ? '' : id
-        }
-    }" class="relative w-full mx-auto overflow-hidden text-sm font-normal bg-white border border-gray-200 divide-y divide-gray-200 rounded-md">
+<c-vars type="single" :collapsible="True" :disabled="False" />
+
+<div x-data="accordion('{{ type }}', {{ collapsible|json_encode }}, {{ disabled|json_encode }})"
+    {{ attrs.dict|merge:'class:w-full divide-y divide-gray-500 divide-opacity-20' }}>
     {{ slot }}
 </div>

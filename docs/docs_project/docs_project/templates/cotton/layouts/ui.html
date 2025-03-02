@@ -1,11 +1,13 @@
 <c-layouts.base>
-    <div class="mx-auto max-w-8xl grid sm:grid-cols-[200px_auto] lg:grid-cols-[230px_auto_250px] flex-1 px-5 h-full">
+    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_auto] lg:grid-cols-[230px_auto_250px] flex-1 px-5 h-full">
         <div class="relative h-full pr-10 border-r-yellow-800 border-opacity-10 hidden sm:block">
             <c-ui-docs.sidebar />
         </div>
-        <c-layouts.prose-container>
-            {{ slot }}
-        </c-layouts.prose-container>
+        <div class="overflow-auto">
+            <c-layouts.prose-container>
+                {{ slot }}
+            </c-layouts.prose-container>
+        </div>
         <div class="relative h-full pl-10 border-opacity-10 hidden lg:block">
             {% if page_index %}
                 <div class="sticky top-[68px] pt-0 pb-10">

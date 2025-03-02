@@ -51,26 +51,16 @@
       }
     },
     expand() {
-      if (this.type == "single") {
+      if (this.$data.type === "single") {
         this.$data.value = this.$id("accordion-item");
-      } else {
-        let index = this.$data.value.indexOf(this.$id("accordion-item"));
-        if (index < 0) {
-          this.$data.value.push(this.$id("accordion-item"));
-        }
       }
       this.$nextTick(() => {
         this.$dispatch("valueChange", { value: this.$data.value });
       });
     },
     collapse() {
-      if (this.type == "single" && this.collapsible) {
+      if (this.$data.type === "single" && this.collapsible) {
         this.$data.value = "";
-      } else {
-        let index = this.$data.value.indexOf(this.$id("accordion-item"));
-        if (index >= 0) {
-          this.$data.value.splice(index, 1);
-        }
       }
       this.$nextTick(() => {
         this.$dispatch("valueChange", { value: this.$data.value });

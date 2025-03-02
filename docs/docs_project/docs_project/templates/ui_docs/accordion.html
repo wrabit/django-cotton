@@ -1,5 +1,6 @@
 <c-layouts.ui>
-    <h1 id="components">Button
+    <h1>
+        Accordion
         <span class="text-gray-500 text-opacity-50 text-lg font-medium">&lt;ui.button</span>
     </h1>
 
@@ -8,41 +9,74 @@
         <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
     </c-slot>
 
-    <div class="shadow-lg not-prose">
-        <div class="min-h-40 md:px-24 rounded-xl rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-
-            <div class="w-full flex items-center justify-center space-x-4">
-                <c-ui.button>Default</c-ui.button>
-            </div>
-
-        </div>
-        <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-<c-ui.button>Default</c-ui.button>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
-
     <c-sample>
-
-            <div class="w-full flex items-center justify-center space-x-5">
-                <c-ui.button>Default</c-ui.button>
-                <c-ui.button variant="primary">Primary</c-ui.button>
-                <c-ui.button variant="danger">Danger</c-ui.button>
-                <c-ui.button variant="subtle">Subtle</c-ui.button>
-                <c-ui.button variant="ghost">Ghost</c-ui.button>
-            </div>
+        <c-ui.accordion>
+            <c-ui.accordion.accordion-item>
+                Do you offer bulk discounts?
+                <c-slot name="content">
+                    Yes! We provide special pricing for large orders. Contact our sales team for a custom quote and exclusive offers.
+                </c-slot>
+            </c-ui.accordion.accordion-item>
+            <c-ui.accordion.accordion-item>
+                How can I track my order?
+                <c-slot name="content">
+                    Once your order ships, you'll receive a tracking number via email. Use it on our website or the courier's site to check delivery status.
+                </c-slot>
+            </c-ui.accordion.accordion-item>
+            <c-ui.accordion.accordion-item>
+                Do you offer gift wrapping services?
+                <c-slot name="content">
+                    Absolutely! We offer gift wrapping for a small fee. Choose a wrapping style at checkout and add a personalized message.
+                </c-slot>
+            </c-ui.accordion.accordion-item>
+        </c-ui.accordion>
 
         <c-slot name="code">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-<c-ui.button>Default</c-ui.button>
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.accordion>
+    <c-ui.accordion.accordion-item>
+        Do you offer bulk discounts?
+        <c-slot name="content">
+            Yes! We provide special pricing for large orders. Contact our sales team for a custom quote and exclusive offers.
+        </c-slot>
+    </c-ui.accordion.accordion-item>
+    <c-ui.accordion.accordion-item>
+        How can I track my order?
+        <c-slot name="content">
+            Once your order ships, you'll receive a tracking number via email. Use it on our website or the courier's site to check delivery status.
+        </c-slot>
+    </c-ui.accordion.accordion-item>
+    <c-ui.accordion.accordion-item>
+        Do you offer gift wrapping services?
+        <c-slot name="content">
+            Absolutely! We offer gift wrapping for a small fee. Choose a wrapping style at checkout and add a personalized message.
+        </c-slot>
+    </c-ui.accordion.accordion-item>
+</c-ui.accordion>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <div class="min-h-40 md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
+
+        <div class="w-full flex items-center justify-center space-x-4">
+            <c-ui.button>Default</c-ui.button>
+            <c-ui.button variant="primary">Primary</c-ui.button>
+            <c-ui.button variant="danger">Danger</c-ui.button>
+            <c-ui.button variant="subtle">Subtle</c-ui.button>
+            <c-ui.button variant="ghost">Ghost</c-ui.button>
+        </div>
+
+    </div>
+    <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
+        <c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.button variant="default">Default</c-ui.button>
 <c-ui.button variant="primary">Primary</c-ui.button>
 <c-ui.button variant="danger">Danger</c-ui.button>
 <c-ui.button variant="subtle">Subtle</c-ui.button>
 <c-ui.button variant="ghost">Ghost</c-ui.button>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
+        {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+    </div>
 
     <h3>Outlined</h3>
 

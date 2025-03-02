@@ -1,0 +1,24 @@
+<c-vars content trigger icon />
+
+<div x-data="accordionItem()" x-bind="root" {{ attrs.dict|merge:'class:w-full' }}>
+    {% if slot %}
+    <button class="flex flex-1 text-left items-center justify-between px-2 py-4 font-medium transition-all w-full"
+        x-bind="trigger">
+        {{ slot }}
+        <span>
+            {% if icon %}
+                {{ icon }}
+            {% else %}
+                <span x-bind="icon">d</span>
+            {% endif %}
+        </span>
+    </button>
+    {% endif %}
+    {% if content %}
+    <div x-bind="content" class="overflow-hidden" role="region" x-cloak>
+        <div class="pb-4 pt-0 px-2">
+            {{ content }}
+        </div>
+    </div>
+    {% endif %}
+</div>

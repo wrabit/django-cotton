@@ -2,7 +2,7 @@
 
 <a
     href="{{ url }}"
-    class="font-semibold px-4 py-2 rounded-full border- text-base
+    class="px-4 py-2 rounded-full border- text-sm
     {% if active_startswith and request.path|startswith:url or active_exact and request.path == url %}
         dark:text-teal-400 dark:bg-teal-600/40 bg-transparent text-teal-600 border-teal-600
     {%  else %}

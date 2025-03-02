@@ -2,7 +2,7 @@ import functools
 from typing import Union
 
 from django.conf import settings
-from django.template import Library
+from django.template import Library, TemplateDoesNotExist
 from django.template.base import (
     Node,
 )
@@ -85,13 +85,30 @@ class CottonComponentNode(Node):
 
         template_path = self._generate_component_template_path(self.component_name, attrs.get("is"))
 
-        if template_path not in cache:
+        if template_path in cache:
+            return cache[template_path]
+
+        # Try to get the primary template
+        try:
             template = get_template(template_path)
             if hasattr(template, "template"):
                 template = template.template
             cache[template_path] = template
+            return template
+        except TemplateDoesNotExist:
+            # If the primary template doesn't exist, try the fallback path (index.html)
+            fallback_path = template_path.rsplit(".html", 1)[0] + "/index.html"
 
-        return cache[template_path]
+            # Check if the fallback template is already cached
+            if fallback_path in cache:
+                return cache[fallback_path]
+
+            # Try to get the fallback template
+            template = get_template(fallback_path)
+            if hasattr(template, "template"):
+                template = template.template
+            cache[fallback_path] = template
+            return template
 
     @staticmethod
     @functools.lru_cache(maxsize=400)

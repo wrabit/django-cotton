@@ -10,8 +10,9 @@ urlpatterns = [
         name="home",
     ),
     path("docs/quickstart", views.build_view("quickstart"), name="quickstart"),
-    path("docs/installation", views.build_view("installation"), name="installation"),
-    path("docs/usage", views.build_view("usage"), name="usage"),
+    path(
+        "docs/usage-patterns", views.build_view("usage_patterns"), name="usage-patterns"
+    ),
     # Features
     path("docs/components", views.build_view("components"), name="components"),
     path("docs/slots", views.build_view("slots"), name="slots"),

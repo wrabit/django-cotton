@@ -4,11 +4,6 @@
         <c-index-link><a href="#create-a-component" class="no-underline">Create a component</a></c-index-link>
         <c-index-link><a href="#templates-location" class="no-underline">Templates location</a></c-index-link>
         <c-index-link><a href="#include-a-component" class="no-underline">Include a component</a></c-index-link>
-        <c-index-link><a href="#usage" class="no-underline">Usage</a></c-index-link>
-        <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
-        <c-index-sublink><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
-        <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
-        <c-index-sublink><a href="#tag-style" class="no-underline">Tag Style</a></c-index-sublink>
     </c-slot>
 
     <h1 id="install">Quickstart</h1>
@@ -120,35 +115,6 @@ def dashboard_view(request):
 </div>
 </c-slot>
     </c-snippet>
-
-    <c-hr />
-
-    <h2 id="usage">Usage</h2>
-
-    <h3 id="basics">Basics</h3>
-    <c-ul>
-        <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder ('cotton' path is <a href="{% url 'configuration' %}">configurable</a> using <code>COTTON_DIR</code>).</li>
-        <li>The <code>templates</code> folder can be located in either an app-level or top-level project root folder.</li>
-    </c-ul>
-
-    <h3 id="naming">Naming</h3>
-    <p>Cotton uses the following naming conventions:</p>
-    <c-ul>
-        <li>Component file names by default are in snake_case: <c-highlight>my_component.html</c-highlight> (kebab-case filenames can be enabled, see <a href="{% url 'configuration' %}">configuration</a>)</li>
-        <li>and are included using kebab-case: <code>{{ "<c-my-component />"|force_escape }}</code></li>
-    </c-ul>
-
-    <h3 id="subfolders">Subfolders</h3>
-
-    <c-ul>
-        <li>Components in subfolders can be defined using dot notation</li>
-        <li>A component in <c-highlight>sidebar/menu/link.html</c-highlight> would be included as <code>{{ "<c-sidebar.menu.link />"|force_escape }}</code></li>
-    </c-ul>
-
-    <h3 id="tag-style">Tag Style</h3>
-    <c-ul>
-        <li>Components can either be self-closing <code>{{ "<c-my-component />"|force_escape }}</code> or have a closing tag <code>{{ "<c-my-component></c-my-component>"|force_escape }}</code></li>
-    </c-ul>
 
     <c-navigation>
         <c-slot name="prev">

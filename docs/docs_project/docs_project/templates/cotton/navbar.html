@@ -1,4 +1,4 @@
-<div class="py-4 mb-3 border-b dark:border-zinc-300/10 border-zinc-800/5 sticky top-0 md:backdrop-blur-lg z-10"
+<div class="mb-3 h-[65px] border-b dark:border-zinc-300/10 border-zinc-800/5 sticky top-0 bg-white/80 dark:bg-zinc-900/70 md:backdrop-blur-lg z-10"
      :class="{'bg-white dark:bg-gray-800': isOpen}"
      x-data="{isOpen: false}"
      x-init="
@@ -9,8 +9,8 @@
         });
      "
 >
-    <div class="px-5 max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex item-center items-center">
+    <div class="px-5 h-full max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex item-center items-center h-full">
 
             <!-- Mobile menu button-->
             <button @click="isOpen = !isOpen"
@@ -44,26 +44,13 @@
                 <c-icons.logo class="size-7 mt-[2px] text-teal-600 mr-1" stroke-width="3" />
                 <span class="text-[22px] text-[#1a384a] dark:text-gray-100 font-semibold">cotton</span>
 
-                <div class="hidden sm:inline text-gray-700 dark:text-white text-sm opacity-60 mt-0.5 mx-2">for</div>
-                <c-icons.django class="hidden sm:inline h-5 text-teal-600 mt-1.5" />
+                <div class="hidden sm:inline text-gray-700 dark:text-white text-xs opacity-60 mt-0.5 mx-1.5">for</div>
+                <c-icons.django class="hidden sm:inline w-[50px] text-teal-600 mt-1.5" />
             </a>
 
-{#            <a href="/" class="flex item-center items-center space-x-1.5">#}
-{#                <div class="flex items-center space-x-1">#}
-{#                    <c-icons.logo class="w-8 h-8 text-teal-600" />#}
-{#                    <span class="font-bold text-2xl ml-1.5 text-[#1a384a] dark:text-gray-100">cotton</span>#}
-{#                    <div class=" text-gray-700 dark:text-white text-sm opacity-50 mt-0.5 px-1">for</div>#}
-{#                    <c-icons.django class=" h-6 text-teal-600 mt-1.5" />#}
-{#                </div>#}
-{#            </a>#}
-
-            <div class="ml-5 sm:ml-14">
-                <c-navbar.nav-item url="{% url 'home' %}" active-exact>Docs</c-navbar.nav-item>
-                <c-navbar.nav-item url="{% url 'ui' %}" active-startswith>Cotton UI</c-navbar.nav-item>
-{% comment %}               <a href="{% url 'ui' %}" class="font-semibold px-4 py-1.5 rounded-full dark:bg-teal-600 text-white border-teal-600 border-2">primary</a>
-                <a href="{% url 'ui' %}" class="dark:text-teal-400 font-semibold px-4 py-1.5 rounded-full dark:bg-teal-600/40 bg-transparent text-teal-600 border-teal-600 border-2">secondary</a>
-                <a href="{% url 'ui' %}" class="dark:text-gray-400 font-semibold px-4 py-1.5 rounded-full bg-transparent text-teal-600 border-gray-600 border-2">slate</a>
-                <a href="{% url 'ui' %}" class="font-semibold px-0 py-1.5 rounded-full dark:bg-transparent dark:text-white border-transparent border-2">ghost</a>{% endcomment %}
+            <div class="ml-5 sm:ml-14 flex space-x-5 h-full items-center">
+                <c-navbar.nav-item url="{% url 'home' %}" active-exact>Development</c-navbar.nav-item>
+                <c-navbar.nav-item url="{% url 'ui' %}" active-startswith>UI Components</c-navbar.nav-item>
             </div>
         </div>
 
@@ -82,12 +69,12 @@
                         localStorage.theme = this.dark ? 'dark' : 'light'
                     }
                 }">
-                <c-icons.sun class="size-6 text-yellow-900/40 dark:text-gray-100/50" />
+                <c-icons.sun class="size-6 text-zinc-800 dark:text-gray-100/50" />
             </a>
-            <a href="https://github.com/wrabit/django-cotton" target="_blank" class="text-yellow-900/40 dark:text-gray-100/50 flex items-center space-x-2">
+            <a href="https://github.com/wrabit/django-cotton" target="_blank" class="text-zinc-800 dark:text-gray-100/50 flex items-center space-x-2">
                 <c-icons.github class="size-5" />
             </a>
-            <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-yellow-900/40 dark:text-gray-100/50 flex items-center space-x-2">
+            <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-zinc-800 dark:text-gray-100/50 flex items-center space-x-2">
                 <c-icons.discord class="size-6" />
             </a>
         </div>

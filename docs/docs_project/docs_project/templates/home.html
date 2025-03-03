@@ -21,8 +21,8 @@
 
     <div class="max-w-5xl mx-auto px-0">
         <div class="text-center mx-auto max-w-4xl leading-normal mb-6">
-            <h1 class="text-4xl md:text-5xl mb-15 dark:text-gray-200 font-medium mb-3 inline-flex flex-wrap items-center justify-center space-x-2 md:space-x-3 space-y-3">
-                <span class="w-full md:w-auto">Goodbye</span>
+            <h1 class="text-4xl md:text-5xl mb-15 dark:text-gray-200 mb-3 inline-flex flex-wrap items-center justify-center space-x-2 md:space-x-3 space-y-3">
+                <span class="w-full md:w-auto font-normal">Goodbye</span>
                 <c-tag class="text-xl sm:text-2xl md:text-4xl">
                     {% verbatim %}{% extends %}{% endverbatim %}
                 </c-tag>
@@ -38,14 +38,15 @@
                 </c-tag>
                 <div class="w-full shrink-0"></div>
                 <span class="pt-0 md:pt-5 clear-both flex-wrap inline-flex justify-center items-center space-x-2">
-                    <span class="">Hello</span>
-                    <span class="shrink-0 px-3 py-1 bg-teal-500/10 border-[3px] border-teal-600 font-mono text-xl sm:text-2xl md:text-4xl rounded-3xl text-teal-600 dark:text-white inline-block font-normal leading-normal">{{ '<c-comp />'|force_escape }}</span>
+                    <span class="font-normal">Hello</span>
+                    <span class="shrink-0 px-3 py-1.5 bg-teal-500/15 font-mono text-xl sm:text-2xl md:text-4xl rounded-lg text-teal-600 dark:text-white inline-block font-normal leading-normal">{{ '<c-comp />'|force_escape }}</span>
                 </span>
             </h1>
 
             <!-- A Faster, More Expressive Approach to Templating in Django-->
             <h2 class="!text-xl sm:!text-2xl italic !font-normal mt-3 md:mt-8 mb-10 pt-0 dark:!text-teal-300 text-yellow-900 text-opacity-50 brightness-75 dark:opacity-100">
-                Bringing component-based design to django templates
+                {#Bringing component-based design to django templates#}
+                Enabling Modern UI Composition in Django Templates
             </h2>
         </div>
 

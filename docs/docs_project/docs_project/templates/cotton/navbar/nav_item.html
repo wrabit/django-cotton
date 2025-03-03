@@ -2,11 +2,11 @@
 
 <a
     href="{{ url }}"
-    class="px-4 py-2 rounded-full border- text-sm
+    class="px-0 py-2 text-m border-b-[3px] mb-[-3px] h-full flex items-center
     {% if active_startswith and request.path|startswith:url or active_exact and request.path == url %}
-        dark:text-teal-400 dark:bg-teal-600/40 bg-transparent text-teal-600 border-teal-600
+        text-zinc-800 font-semibold dark:text-white darkbg-zinc-500/30 border-teal-600
     {%  else %}
-        dark:text-gray-100 text-gray-100 border-transparent
+        dark:text-zinc-3x400 text-zinc-500/50 border-transparent
     {% endif %}
 ">
     {{ slot }}

@@ -413,17 +413,17 @@ In addition, Cotton enables you to navigate around some of the limitations with 
     <c-slot name="icon">
         <svg>...</svg>
     </c-slot>
-</c-my-component>
+</c-my-header>
 ```
 
 ### Template expressions in attributes
 ❌ **Django native:**
 ```html
-{% my_component model="todos.{{ index }}.name" extra="{% get_extra %}" %}
+{% bio name="{{ first_name }} {{ last_name }}" extra="{% get_extra %}" %}
 ```
 ✅ **Cotton:**
 ```html
-<c-my-component model="todos.{{ index }}.name" extra="{% get_extra %} />
+<c-bio name="{{ first_name }} {{ last_name }}" extra="{% get_extra %} />
 ```
 
 ### Pass simple python types

@@ -405,13 +405,13 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 ### HTML in attributes
 ❌ **Django native:**
 ```html
-{% my_component header="<h1>Header</h1>" %}
+{% my_header icon="<svg>...</svg>" %}
 ```
 ✅ **Cotton:**
 ```html
-<c-my-component>
-    <c-slot name="header">
-        <h1>Header</h1>
+<c-my-header>
+    <c-slot name="icon">
+        <svg>...</svg>
     </c-slot>
 </c-my-component>
 ```
@@ -431,11 +431,13 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 ```html
 {% my_component default_options="['yes', 'no', 'maybe']" %}
 {% my_component config="{'open': True}" %}
+{% my_component enabled="True" %}
 ```
 ✅ **Cotton:**
 ```html
 <c-my-component :default_options="['yes', 'no', 'maybe']" />
 <c-my-component :config="{'open': True}" />
+<c-my-component :enabled="True" />
 
 (provides a List and Dict to component)
 ```

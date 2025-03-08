@@ -1,3 +1,5 @@
+@config "../tailwind.config.js";
+
 @utility step {
   counter-increment: step;
 

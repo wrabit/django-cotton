@@ -1,4 +1,5 @@
-export default () => ({
+export default (expanded) => ({
+    expanded: expanded,
     root: {
         ['x-id']() {
             return ['accordion-item'];
@@ -40,15 +41,30 @@ export default () => ({
             return true;
         },
     },
+    init() {
+        if (this.expanded) {
+            this.$nextTick(() => { this.expand() })
+        }
+    },
     expand() {
-        if (this.$data.type === 'single') {
+        if (this.type == 'single') {
             this.$data.value = this.$id('accordion-item')
+        } else {
+            let index = this.$data.value.indexOf(this.$id('accordion-item'))
+            if (index < 0) {
+                this.$data.value.push(this.$id('accordion-item'))
+            }
         }
         this.$nextTick(() => { this.$dispatch('valueChange', { value: this.$data.value }) })
     },
     collapse() {
-        if (this.$data.type === 'single' && this.collapsible) {
+        if (this.type == 'single' && this.collapsible) {
             this.$data.value = ''
+        } else {
+            let index = this.$data.value.indexOf(this.$id('accordion-item'))
+            if (index >= 0) {
+                this.$data.value.splice(index, 1)
+            }
         }
         this.$nextTick(() => { this.$dispatch('valueChange', { value: this.$data.value }) })
     },

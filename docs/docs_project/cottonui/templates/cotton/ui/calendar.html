@@ -8,7 +8,22 @@
     :max="None"
     :min="None"
     :disabled="None"
+    class
     required="false" />
+
+<div class="sdddsds sd sdsd sd {{ class }}"></div>
+
+{{ attrs.dict|merge:'class:p-4 antialiased bg-background font-bold border-input border rounded-lg shadow w-[19rem] min-h-[19rem]' }}
+{{ active_attrs|twmerge:'class:p-4 antialiased bg-background font-bold border-input border rounded-lg shadow w-[19rem] min-h-[19rem]' }}
+
+<c-card class="yellow" active="1">
+    <c-slot name="title" style="display:flex"></c-slot>
+</c-card>
+
+
+{{ attrs }}
+{{ title.attrs|twmerge:'class:' }}
+
 
 <div x-data='calendar({{ selected|json_encode }}, "{{ mode }}", {{ disabled|json_encode }} , {{ min|json_encode }}, {{ max|json_encode }}, {{ required|json_encode }})'
     x-bind="root"

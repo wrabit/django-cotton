@@ -1,5 +1,5 @@
 export default (type, collapsible, disabled) => ({
-    value: type == 'single' ? '' : [],
+    value: type === 'single' ? '' : [],
     type: type,
     disabled: disabled,
     collapsible: collapsible,

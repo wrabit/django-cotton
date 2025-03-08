@@ -1,11 +1,17 @@
 <c-layouts.ui>
-    <h1>
+    <c-header>
         Accordion
-        <span class="text-gray-500 text-opacity-50 text-lg font-medium">&lt;ui.button</span>
-    </h1>
+        <c-slot name="subheading">
+            Collapsible content panels that save space while keeping information accessible.
+        </c-slot>
+    </c-header>
+
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink><a href="#accordion" class="no-underline">Accordion</a></c-index-sublink>
+        <c-index-sublink><a href="#multiple" class="no-underline">Multiple</a></c-index-sublink>
+        <c-index-sublink><a href="#expanded" class="no-underline">Expanded</a></c-index-sublink>
+        <c-index-sublink><a href="#collapsible" class="no-underline">Collapsible</a></c-index-sublink>
         <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
     </c-slot>
 
@@ -57,128 +63,139 @@
         </c-slot>
     </c-sample>
 
-    <div class="min-h-40 md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
+    <h2>Multiple</h2>
 
-        <div class="w-full flex items-center justify-center space-x-4">
-            <c-ui.button>Default</c-ui.button>
-            <c-ui.button variant="primary">Primary</c-ui.button>
-            <c-ui.button variant="danger">Danger</c-ui.button>
-            <c-ui.button variant="subtle">Subtle</c-ui.button>
-            <c-ui.button variant="ghost">Ghost</c-ui.button>
-        </div>
+    <p>Permit more than one item to be open at the same time.</p>
 
-    </div>
-    <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
-        <c-snippet>{% cotton_verbatim %}{% verbatim %}
-<c-ui.button variant="default">Default</c-ui.button>
-<c-ui.button variant="primary">Primary</c-ui.button>
-<c-ui.button variant="danger">Danger</c-ui.button>
-<c-ui.button variant="subtle">Subtle</c-ui.button>
-<c-ui.button variant="ghost">Ghost</c-ui.button>
-        {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-    </div>
+    <c-sample>
+        <c-ui.accordion type="multiple">
+            <c-ui.accordion.item>
+                Terms &amp; Conditions
+                <c-slot name="content">
+                    None shall pass..
+                </c-slot>
+            </c-ui.accordion.item>
+            <c-ui.accordion.item>
+                Privacy Notice
+                <c-slot name="content">
+                    Give me your best shot.
+                </c-slot>
+            </c-ui.accordion.item>
+            <c-ui.accordion.item>
+                About us
+                <c-slot name="content">
+                    <p>We are the knights that say nee.</p>
+                </c-slot>
+            </c-ui.accordion.item>
+        </c-ui.accordion>
 
-    <h3>Outlined</h3>
-
-    <c-example>
-        <c-ui.button variant="default" outlined>Default</c-ui.button>
-        <c-ui.button variant="primary" outlined>Primary</c-ui.button>
-        <c-ui.button variant="danger" outlined>Danger</c-ui.button>
-        <c-ui.button variant="subtle" outlined>Subtle</c-ui.button>
-        <c-ui.button variant="ghost" outlined>Ghost</c-ui.button>
         <c-slot name="code">
-{% cotton_verbatim %}{% verbatim %}
-<c-ui.button>Default</c-ui.button>
-{% endverbatim %}{% endcotton_verbatim %}
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.accordion>
+    <c-ui.accordion.item>
+        Step 1
+        <c-slot name="content">
+            <input type="text" name="name" placeholder="Name">
         </c-slot>
-    </c-example>
+    </c-ui.accordion.item>
+    <c-ui.accordion.item expanded>
+        Step 2
+        <c-slot name="content">
+            <p>Sign on the dotted line...</p>
+        </c-slot>
+    </c-ui.accordion.item>
+</c-ui.accordion>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-    <h3>Addons</h3>
+    <h2>Expanded</h2>
 
-    <h3>Types</h3>
+    <p>Define which items are initially open.</p>
 
-    <h3>Field</h3>
+    <c-sample>
+        <c-ui.accordion>
+            <c-ui.accordion.item>
+                Quote
+                <c-slot name="content">
+                    <input type="text" name="name" placeholder="Name">
+                </c-slot>
+            </c-ui.accordion.item>
+            <c-ui.accordion.item expanded>
+                Checkout
+                <c-slot name="content">
+                    <p>Sign on the dotted line...</p>
+                </c-slot>
+            </c-ui.accordion.item>
+        </c-ui.accordion>
 
-    <p>Input can be used in the Field component to display alongside label, info, help and validation.</p>
-
-    <div class="shadow-lg">
-        <div class="md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 min-h-80 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <div class="space-y-3 w-full">
-                <div>
-                    <label class="font-semibold mb-3">Password:</label>
-                    <c-ui.input type="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-                <div>
-                    <label class="font-semibold mb-3">Password with reveal:</label>
-                    <c-ui.input type="password" value="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-            </div>
-        </div>
-        <div class="flex-1 rounded-b-lg pb-4 pt-11 px-6 m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-textarea/>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.accordion>
+    <c-ui.accordion.item>
+        Step 1
+        <c-slot name="content">
+            <input type="text" name="name" placeholder="Name">
+        </c-slot>
+    </c-ui.accordion.item>
+    <c-ui.accordion.item expanded>
+        Step 2
+        <c-slot name="content">
+            <p>Sign on the dotted line...</p>
+        </c-slot>
+    </c-ui.accordion.item>
+</c-ui.accordion>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
 
-    <c-ui.input>
-        <c-slot name="left_addon">{% heroicon_outline 'user-circle' class="text-gray-300" %}</c-slot>
-    </c-ui.input>
+    <h2>API</h2>
 
-    <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
-        inside standard Django templates.</p>
+    <h3 class="!text-gray-500">ui.accordion</h3>
 
-    <h3>API</h3>
+    <h4>Properties</h4>
 
-    <div class="table w-full border dark:text-gray-500 rounded-lg border-gray-400 border-opacity-30  flex items-center">
-        <table class="text-base">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Values</th>
-                    <th>Default</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>type</code></td>
-                    <td>Input type</td>
-                    <td>string</td>
-                    <td>text, password, email, number, tel, url</td>
-                    <td>text</td>
-                </tr>
-                <tr>
-                    <td>class</td>
-                    <td>Additional classes</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>left_addon</td>
-                    <td>Left addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>right_addon</td>
-                    <td>Right addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>placeholder</td>
-                    <td>Placeholder text</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-        </table>
-    </div>
+    <c-ui.tabs>
+        <c-ui.tab name="Properties" active>
+            <pre><code class="language-html">Properties</code></pre>
+        </c-ui.tab>
+        <c-ui.tab name="Slots">
+            <pre><code class="language-html">Slots</code></pre>
+        </c-ui.tab>
+    </c-ui.tabs>
+
+    <table class="table-auto text-normal">
+        <thead>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Values</th>
+            <th>Default</th>
+            <th>Description</th>
+        </thead>
+        <tbody>
+            <tr class="py-5">
+                <td><code class="!bg-white !text-zinc-700">type</code></td>
+                <td>String</td>
+                <td><code>single</code>, <code>multiple</code></td>
+                <td><code>single</code></td>
+                <td>Whether one or more items can be expanded at the same time.</td>
+            </tr>
+            <tr class="py-5">
+                <td><code>collapsible</code></td>
+                <td>Boolean</td>
+                <td><code>True</code>, <code>False</code></td>
+                <td><code>True</code></td>
+                <td>Enforce if one item must remain open at all times.</td>
+            </tr>
+            <tr class="py-5">
+                <td><code>disabled</code></td>
+                <td>Boolean</td>
+                <td><code>True</code>, <code>False</code></td>
+                <td><code>False</code></td>
+                <td>Prevents any interaction with the accordion.</td>
+            </tr>
+        </tbody>
+    </table>
 
 </c-layouts.ui>

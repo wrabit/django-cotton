@@ -1,12 +1,12 @@
-<c-vars url :active-exact="False" :active-startswith="False" />
+<c-vars url :active-exact="False" active-startswith />
 
 <a
     href="{{ url }}"
-    class="px-0 py-2 text-m border-b-[3px] mb-[-3px] h-full flex items-center
-    {% if active_startswith and request.path|startswith:url or active_exact and request.path == url %}
-        text-zinc-800 dark:text-white darkbg-zinc-500/30 border-teal-600
+    class="py-1 mb-[-3px] flex px-3 items-center rounded-full font-semibold
+    {% if active_startswith and request.path|startswith:active_startswith or active_exact and request.path == url %}
+        text-teal-500 darkbg-zinc-500/20 border2 border-teal-500/40 bg-teal-500/15
     {%  else %}
-        dark:text-zinc-3x400 text-zinc-500/50 border-transparent
+        text-zinc-400 border-transparent
     {% endif %}
 ">
     {{ slot }}

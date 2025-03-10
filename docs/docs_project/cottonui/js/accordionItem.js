@@ -24,7 +24,7 @@ export default (expanded) => ({
     },
     icon: {
         [':class']() {
-            return { '-rotate-180': this.$data.value.includes(this.$id('accordion-item')) }
+            return { '[&>*]:-rotate-180': this.$data.value.includes(this.$id('accordion-item')) }
         }
     },
     content: {

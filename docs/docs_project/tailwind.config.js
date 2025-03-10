@@ -11,7 +11,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                'sans': ['Inter Variable', 'Plus Jakarta Sans', ...defaultTheme.fontFamily.sans],
+                'sans': ['figtree', 'Inter Variable', 'Plus Jakarta Sans', ...defaultTheme.fontFamily.sans],
                 'mono': ['Roboto Mono', ...defaultTheme.fontFamily.mono],
             },
             spacing: {

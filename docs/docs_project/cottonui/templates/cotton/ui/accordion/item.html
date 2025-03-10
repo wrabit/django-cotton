@@ -5,11 +5,11 @@
     <button class="flex flex-1 text-left items-center justify-between px-2 py-4 font-medium transition-all w-full"
         x-bind="trigger">
         {{ slot }}
-        <span>
+        <span x-bind="icon">
             {% if icon %}
                 {{ icon }}
             {% else %}
-                <span x-bind="icon">d</span>
+                <c-heroicon.chevron-down class="size-4" />
             {% endif %}
         </span>
     </button>

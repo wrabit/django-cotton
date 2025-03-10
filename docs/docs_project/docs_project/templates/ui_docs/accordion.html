@@ -156,6 +156,7 @@
 
     <h4>Properties</h4>
 
+{#
     <c-ui.tabs>
         <c-ui.tab name="Properties" active>
             <pre><code class="language-html">Properties</code></pre>
@@ -164,18 +165,19 @@
             <pre><code class="language-html">Slots</code></pre>
         </c-ui.tab>
     </c-ui.tabs>
+#}
 
     <table class="table-auto text-normal">
-        <thead>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Values</th>
-            <th>Default</th>
-            <th>Description</th>
+        <thead class="not-prose text-sm text-left">
+            <th class="font-normal text-zinc-500">Name</th>
+            <th class="font-normal text-zinc-500">Type</th>
+            <th class="font-normal text-zinc-500">Values</th>
+            <th class="font-normal text-zinc-500">Default</th>
+            <th class="font-normal text-zinc-500">Description</th>
         </thead>
         <tbody>
             <tr class="py-5">
-                <td><code class="!bg-white !text-zinc-700">type</code></td>
+                <td><code class="!bg-teal-500 !text-white text-[14px] font-bold">type</code></td>
                 <td>String</td>
                 <td><code>single</code>, <code>multiple</code></td>
                 <td><code>single</code></td>

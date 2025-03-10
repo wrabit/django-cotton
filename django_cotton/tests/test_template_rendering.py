@@ -3,6 +3,74 @@ from django_cotton.tests.utils import get_compiled
 
 
 class TemplateRenderingTests(CottonTestCase):
+    def test_component_is_rendered(self):
+        self.create_template(
+            "cotton/render.html",
+            """<div class="i-am-component">{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "view.html",
+            """<c-render>Hello, World!</c-render>""",
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<div class="i-am-component">')
+            self.assertContains(response, "Hello, World!")
+
+    def test_nested_rendering(self):
+        self.create_template(
+            "cotton/parent.html",
+            """
+                <div class="i-am-parent">
+                    {{ slot }}
+                </div>            
+            """,
+        )
+
+        self.create_template(
+            "cotton/child.html",
+            """
+                <div class="i-am-child"></div>
+            """,
+        )
+
+        self.create_template(
+            "cotton/nested_render_view.html",
+            """
+            <c-parent>
+                <c-child>d</c-child>
+            </c-parent>            
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<div class="i-am-parent">')
+            self.assertContains(response, '<div class="i-am-child">')
+
+    def test_self_closing_is_rendered(self):
+        self.create_template("cotton/self_closing.html", """I self closed!""")
+        self.create_template(
+            "self_closing_view.html",
+            """
+                1: <c-self-closing/>
+                2: <c-self-closing />
+                3: <c-self-closing  />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "1: I self closed!")
+            self.assertContains(response, "2: I self closed!")
+            self.assertContains(response, "3: I self closed!")
+
     def test_new_lines_in_attributes_are_preserved(self):
         self.create_template(
             "cotton/preserved.html",
@@ -142,7 +210,7 @@ class TemplateRenderingTests(CottonTestCase):
 
     def test_cvars_isnt_changing_global_context(self):
         self.create_template(
-            "cotton/child.html",
+            "cotton/cvars_child.html",
             """
             <c-vars />
             
@@ -150,7 +218,7 @@ class TemplateRenderingTests(CottonTestCase):
             """,
         )
         self.create_template(
-            "cotton/parent.html",
+            "cotton/cvars_parent.html",
             """
             name: parent (class: {{ class }}))
             
@@ -161,9 +229,9 @@ class TemplateRenderingTests(CottonTestCase):
         self.create_template(
             "slot_scope_view.html",
             """
-            <c-parent>
-                <c-child class="testy" />
-            </c-parent>
+            <c-cvars-parent>
+                <c-cvars-child class="testy" />
+            </c-cvars-parent>
             """,
             "view/",
         )

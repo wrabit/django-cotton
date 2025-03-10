@@ -2,7 +2,7 @@ import functools
 from typing import Union
 
 from django.conf import settings
-from django.template import Library
+from django.template import Library, TemplateDoesNotExist
 from django.template.base import (
     Node,
 )
@@ -40,6 +40,10 @@ class CottonComponentNode(Node):
             value = self._strip_quotes_safely(value)
             if value is True:  # Boolean attribute
                 component_data["attrs"][key] = True
+            elif key.startswith("::"):  # Escaping 1 colon e.g for shorthand alpine
+                key = key[1:]
+                # component_data["slots"][key] = value
+                component_data["attrs"][key] = value
             elif key.startswith(":"):
                 key = key[1:]
                 try:
@@ -86,13 +90,30 @@ class CottonComponentNode(Node):
 
         template_path = self._generate_component_template_path(self.component_name, attrs.get("is"))
 
-        if template_path not in cache:
+        if template_path in cache:
+            return cache[template_path]
+
+        # Try to get the primary template
+        try:
             template = get_template(template_path)
             if hasattr(template, "template"):
                 template = template.template
             cache[template_path] = template
+            return template
+        except TemplateDoesNotExist:
+            # If the primary template doesn't exist, try the fallback path (index.html)
+            fallback_path = template_path.rsplit(".html", 1)[0] + "/index.html"
 
-        return cache[template_path]
+            # Check if the fallback template is already cached
+            if fallback_path in cache:
+                return cache[fallback_path]
+
+            # Try to get the fallback template
+            template = get_template(fallback_path)
+            if hasattr(template, "template"):
+                template = template.template
+            cache[fallback_path] = template
+            return template
 
     def _create_isolated_context(self, original_context, component_state):
         # Get the request object from the original context
@@ -131,7 +152,13 @@ class CottonComponentNode(Node):
                 )
             component_name = is_
 
-        component_tpl_path = component_name.replace(".", "/").replace("-", "_")
+        component_tpl_path = component_name.replace(".", "/")
+
+        # Cotton by default will look for snake_case version of comp names. This can be configured to allow hyphenated names.
+        snaked_cased_named = getattr(settings, "COTTON_SNAKE_CASED_NAMES", True)
+        if snaked_cased_named:
+            component_tpl_path = component_tpl_path.replace("-", "_")
+
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 
@@ -143,25 +170,60 @@ class CottonComponentNode(Node):
 
 
 def cotton_component(parser, token):
+    """
+    Parse a cotton component tag and return a CottonComponentNode.
+
+    It accepts spaces inside quoted attributes for example if we want to pass valid json that contains spaces in values.
+
+    @TODO Add support here for 'complex' attributes so we can eventually remove the need for the 'attr' tag. The idea
+     here is to render `{{` and `{%` blocks in tags.
+    """
+
     bits = token.split_contents()[1:]
     component_name = bits[0]
     attrs = {}
     only = False
 
-    node_class = CottonComponentNode
+    current_key = None
+    current_value = []
 
     for bit in bits[1:]:
         if bit == "only":
-            # if we see `only` we isolate context
             only = True
             continue
-        try:
-            key, value = bit.split("=")
-            attrs[key] = value
-        except ValueError:
-            attrs[bit] = True
+
+        if "=" in bit:
+            # If we were building a previous value, store it
+            if current_key:
+                attrs[current_key] = " ".join(current_value)
+                current_value = []
+
+            # Start new key-value pair
+            key, value = bit.split("=", 1)
+            if value.startswith(("'", '"')):
+                if value.endswith(("'", '"')) and value[0] == value[-1]:
+                    # Complete quoted value
+                    attrs[key] = value
+                else:
+                    # Start of quoted value
+                    current_key = key
+                    current_value = [value]
+            else:
+                # Simple unquoted value
+                attrs[key] = value
+        else:
+            if current_key:
+                # Continue building quoted value
+                current_value.append(bit)
+            else:
+                # Boolean attribute
+                attrs[bit] = True
+
+    # Store any final value being built
+    if current_key:
+        attrs[current_key] = " ".join(current_value)
 
     nodelist = parser.parse(("endc",))
     parser.delete_first_token()
 
-    return node_class(component_name, nodelist, attrs, only)
+    return CottonComponentNode(component_name, nodelist, attrs, only)

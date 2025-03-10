@@ -75,7 +75,7 @@ class ContextIsolationTests(CottonTestCase):
             self.assertContains(response, "From view context scope: ''")
             self.assertContains(response, "Direct attribute: 'yes'")
 
-    @override_settings(COTTON_CONTEXT_ISOLATION_ENABLED=False)
+    @override_settings(COTTON_ENABLE_CONTEXT_ISOLATION=False)
     def test_legacy_context_behaviour(self):
         """Test components do not have isolated context"""
         self.create_template(

@@ -2,23 +2,19 @@
     <c-slot name="page_index">
         <c-index-link><a href="#install" class="no-underline">Install Cotton</a></c-index-link>
         <c-index-link><a href="#create-a-component" class="no-underline">Create a component</a></c-index-link>
+        <c-index-link><a href="#templates-location" class="no-underline">Templates location</a></c-index-link>
         <c-index-link><a href="#include-a-component" class="no-underline">Include a component</a></c-index-link>
-        <c-index-link><a href="#usage" class="no-underline">Usage</a></c-index-link>
-        <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
-        <c-index-sublink><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
-        <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
-        <c-index-sublink><a href="#tag-style" class="no-underline">Tag Style</a></c-index-sublink>
     </c-slot>
 
     <h1 id="install">Quickstart</h1>
 
-    <h2>Install cotton</h2>
+    <h2 class="mt-0">Install cotton</h2>
     <p>Run the following command:</p>
     <c-snippet language="python">pip install django-cotton</c-snippet>
 
     <p>Then update your settings.py:</p>
 
-    <h3>Automatic configuration:</h3>
+    <h3>For automatic configuration:</h3>
 
     <c-snippet language="python" label="settings.py">{% cotton_verbatim %}{% verbatim %}
 INSTALLED_APPS = [
@@ -26,9 +22,9 @@ INSTALLED_APPS = [
 ]
     {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
-    <p>This will automatically handle the settings.py adding the required loader and templatetags.</p>
+    <p>This will attempt to automatically handle the settings.py by adding the required loader and templatetags.</p>
 
-    <h3>Customised configuration</h3>
+    <h3>For custom configuration</h3>
 
     <p>If your project requires any non-default loaders or you do not wish Cotton to manage your settings, you should instead provide `django_cotton.apps.SimpleAppConfig` in your INSTALLED_APPS:</p>
 
@@ -72,6 +68,21 @@ TEMPLATES = [
 </div>
     {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
 
+    <c-hr id="templates-location" />
+
+    <h2>Templates location</h2>
+
+    <p>Cotton supports 2 common approaches regarding the location of the <code>templates</code> directory:</p>
+
+    <c-ul>
+        <li><strong>App level</strong> - You can place your cotton folder in any of your installed app folders, like: <div><code>[project]/[app]/templates/cotton/row.html</code></div></li>
+        <li>
+            <strong>Project root</strong> - You can place your cotton folder in a project level templates directory, like: <div><code>[project]/templates/cotton/row.html</code></div>
+            (<code>[project]</code> location is provided by `BASE_DIR` if present or you may set it with `COTTON_BASE_DIR`)
+        </li>
+    </c-ul>
+
+    <p>Any style will allow you to include your component the same way: <code>{{ '<c-row />'|force_escape }}</code></p>
 
     <c-hr id="include-a-component" />
 
@@ -104,34 +115,6 @@ def dashboard_view(request):
 </div>
 </c-slot>
     </c-snippet>
-
-    <c-hr />
-
-    <h2 id="usage">Usage</h2>
-
-    <h3 id="basics">Basics</h3>
-    <c-ul>
-        <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder (unless you have set COTTON_DIR).</li>
-    </c-ul>
-
-    <h3 id="naming">Naming</h3>
-    <p>Cotton uses the following naming conventions:</p>
-    <c-ul>
-        <li>Component file names are in snake_case: <c-highlight>my_component.html</c-highlight></li>
-        <li>but are called using kebab-case: <c-highlight>{{ "<c-my-component />"|force_escape }}</c-highlight></li>
-    </c-ul>
-
-    <h3 id="subfolders">Subfolders</h3>
-
-    <c-ul>
-        <li>Components in subfolders can be defined using dot notation</li>
-        <li>A component in <c-highlight>sidebar/menu/link.html</c-highlight> would be included as <c-highlight>{{ "<c-sidebar.menu.link />"|force_escape }}</c-highlight></li>
-    </c-ul>
-
-    <h3 id="tag-style">Tag Style</h3>
-    <c-ul>
-        <li>Components can either be self-closing <c-highlight>{{ "<c-my-component />"|force_escape }}</c-highlight> or have a closing tag <c-highlight>{{ "<c-my-component></c-my-component>"|force_escape }}</c-highlight></li>
-    </c-ul>
 
     <c-navigation>
         <c-slot name="prev">

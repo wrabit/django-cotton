@@ -1,0 +1,39 @@
+<c-vars
+    :themes="{
+        'primary': 'bg-sky-500',
+        'subtle': 'bg-neutral-50 text-gray-800 dark:bg-gray-300/10 dark:text-neutral-300',
+        'danger': 'bg-red-500',
+        'warning': 'bg-yellow-500',
+        'info': 'bg-blue-500',
+    }"
+    theme="primary"
+    :outlined-themes="{
+        'primary': 'border border-sky-500 text-sky-500',
+        'subtle': 'border border-neutral-50 text-gray-800',
+        'danger': 'border border-red-500 text-red-500',
+        'warning': 'border border-yellow-500 text-yellow-500',
+        'info': 'border border-blue-500 text-blue-500',
+    }"
+    :outlined="False"
+    class
+/>
+
+<button {{ attrs }} type="button" class="
+    {% if outlined %}
+        {{ outlined_themes|get_item:theme }}
+    {% else %}
+        {{ themes|get_item:theme }}
+    {% endif %}
+    cursor-pointer whitespace-nowrap rounded-md
+    px-4 py-2 text-sm font-medium tracking-wide transition hover:opacity-75 text-center
+    focus-visible:outline
+    focus-visible:outline-2
+    focus-visible:outline-offset-2
+    focus-visible:outline-sky-500
+    active:opacity-100
+    active:outline-offset-0
+    disabled:opacity-75
+    disabled:cursor-not-allowed
+    {{ class }}">
+    {{ slot }}
+</button>

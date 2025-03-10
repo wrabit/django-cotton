@@ -70,6 +70,12 @@ class CottonTestCase(TestCase):
 
     def create_template(self, name, content, url=None, context={}):
         """Create a template file in the temporary directory and return the path"""
+
+        # To test the non-default of allowing non-snake-cased names
+        snake_cased_names = getattr(settings, "COTTON_SNAKE_CASED_NAMES", True)
+        if not snake_cased_names:
+            name = name.replace("_", "-")
+
         path = os.path.join(self.temp_dir, name)
 
         if os.path.exists(path):

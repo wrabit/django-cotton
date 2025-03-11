@@ -6,7 +6,7 @@ from django.template import Library, TemplateDoesNotExist
 from django.template.base import (
     Node,
 )
-from django.template.context import Context
+from django.template.context import Context, RequestContext
 from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
@@ -67,12 +67,18 @@ class CottonComponentNode(Node):
 
         template = self._get_cached_template(context, component_data["attrs"])
 
-        # Isolate context if needed
         if self.only:
+            # Complete isolation
             output = template.render(Context(component_state))
         else:
-            with context.push(component_state):
-                output = template.render(context)
+            if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", True):
+                # Default - partial isolation
+                new_context = self._create_partial_context(context, component_state)
+                output = template.render(new_context)
+            else:
+                # Legacy - no isolation
+                with context.push(component_state):
+                    output = template.render(context)
 
         cotton_data["stack"].pop()
 
@@ -109,6 +115,22 @@ class CottonComponentNode(Node):
                 template = template.template
             cache[fallback_path] = template
             return template
+
+    def _create_partial_context(self, original_context, component_state):
+        # Get the request object from the original context
+        request = original_context.get("request")
+
+        if request:
+            # Create a new RequestContext
+            new_context = RequestContext(request)
+
+            # Add the component_state to the new context
+            new_context.update(component_state)
+        else:
+            # If there's no request object, create a simple Context
+            new_context = Context(component_state)
+
+        return new_context
 
     @staticmethod
     @functools.lru_cache(maxsize=400)

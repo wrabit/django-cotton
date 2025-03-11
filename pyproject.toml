@@ -4,12 +4,12 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-cotton"
-version = "1.6.0"
+version = "2.0.0"
 description = "Bringing component based design to Django templates."
 authors = [ "Will Abbott <willabb83@gmail.com>",]
 license = "MIT"
 readme = "README.md"
-classifiers = [ "Development Status :: 3 - Alpha", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Programming Language :: Python :: 3.10", "Framework :: Django",]
+classifiers = [ "Development Status :: 5 - Production/Stable", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Programming Language :: Python :: 3.10", "Framework :: Django",]
 keywords = [ "django", "components", "ui",]
 exclude = [ "dev", "docs", "django_cotton/tests", "django_cotton/templates",]
 

@@ -44,6 +44,7 @@ def configure_django():
             },
         ],
         DEBUG=False,
+        COTTON_ENABLE_CONTEXT_ISOLATION=False,
     )
 
     import django

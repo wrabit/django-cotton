@@ -100,9 +100,9 @@ class ContextIsolationTests(CottonTestCase):
         self.create_template(
             "cotton/receiver.html",
             """
-            {{ global }} 
-            {{ direct }} 
-            {{ from_context_processor }}
+            Global Scope: {{ global }} 
+            Direct attribute: {{ direct }} 
+            Custom context processor: {{ from_context_processor }}
             
             Some context from django builtins:
             csrf: "{{ csrf_token }}" 
@@ -110,7 +110,6 @@ class ContextIsolationTests(CottonTestCase):
             messages: "{{ messages }}"
             user: "{{ user }}"
             perms: "{{ perms }}"
-            debug: "{{ debug }}"
             """,
         )
 
@@ -124,9 +123,11 @@ class ContextIsolationTests(CottonTestCase):
         # with example_processor added and 'logo' in the context
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            self.assertNotContains(response, "shouldnotbeseen")
-            self.assertContains(response, "hello")
-            self.assertContains(response, "logo.png")
+
+            self.assertNotContains(response, "Global Scope: shouldnotbeseen")
+            self.assertContains(response, "Direct attribute: hello")
+            self.assertContains(response, "Custom context processor: logo.png")
             self.assertNotContains(response, 'csrf: ""')
-            self.assertContains(response, 'user: "AnonymousUser"')
-            self.assertNotContains(response, 'perms: ""')
+            self.assertNotContains(response, 'request: "<WSGIRequest')
+            self.assertNotContains(response, 'messages: ""')
+            self.assertContains(response, 'perms: "PermWrapper')

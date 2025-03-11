@@ -13,16 +13,6 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-            <code>COTTON_ENABLE_CONTEXT_ISOLATION</code>
-            <div>boolean (default: True)</div>
-        </div>
-        <div>
-            Set to `False` to allow global context to be available through all components. (see <a href="{% url 'components' %}#context-isolation">context isolation</a> for more information.
-        </div>
-    </div>
-
     <c-hr />
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -63,6 +53,23 @@
 
         </div>
     </div>
+
+    {#
+    <c-hr />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+            <code>COTTON_ENABLE_CONTEXT_ISOLATION</code>
+            <div>bool (default: True)</div>
+        </div>
+        <div>
+            Limits component context to only direct attributes and context processor data.
+            When set to <code>False</code>, all components can access the entire view's context.
+            See <a href="{% url 'components' %}#context-isolation">context isolation</a> for more details.
+        </div>
+    </div>
+    #}
+
 
 
 </c-layouts.with-sidebar>

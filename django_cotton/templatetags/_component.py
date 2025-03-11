@@ -67,17 +67,18 @@ class CottonComponentNode(Node):
 
         template = self._get_cached_template(context, component_data["attrs"])
 
-        # Isolate context if needed
         if self.only:
+            # Complete isolation
             output = template.render(Context(component_state))
         else:
-            new_context = self._create_isolated_context(context, component_state)
-
-            output = template.render(new_context)
-
-            # with context.push(component_state):
-            #     print(context.flatten())
-            #     output = template.render(context)
+            if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", True):
+                # Default - partial isolation
+                new_context = self._create_partial_context(context, component_state)
+                output = template.render(new_context)
+            else:
+                # Legacy - no isolation
+                with context.push(component_state):
+                    output = template.render(context)
 
         cotton_data["stack"].pop()
 
@@ -115,29 +116,19 @@ class CottonComponentNode(Node):
             cache[fallback_path] = template
             return template
 
-    def _create_isolated_context(self, original_context, component_state):
+    def _create_partial_context(self, original_context, component_state):
         # Get the request object from the original context
         request = original_context.get("request")
 
         if request:
-            # Create a new RequestContext with only the default processors
+            # Create a new RequestContext
             new_context = RequestContext(request)
-
-            # Update the new context with any custom context processors
-            # for processor in original_context.get("_processors", []):
-            #     new_context.update(processor(request))
 
             # Add the component_state to the new context
             new_context.update(component_state)
         else:
             # If there's no request object, create a simple Context
             new_context = Context(component_state)
-
-        # If not using 'only', include all variables from the original context
-        # if not self.only:
-        #     for key, value in original_context.flatten().items():
-        #         if key not in new_context:
-        #             new_context[key] = value
 
         return new_context
 

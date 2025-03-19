@@ -327,6 +327,7 @@ context = { 'today': Weather.objects.get(...) }
 
     <h2>9. Context Isolation</h2>
 
+    {#
     <p>Cotton follows the component isolation approach used in React, Vue, and Svelte, where components don't share state by default. This prevents data leaks and hard-to-trace side effects between components.</p>
     <p>By default, each component's context only contains:</p>
 
@@ -336,7 +337,9 @@ context = { 'today': Weather.objects.get(...) }
         <li>All data from enabled context processors (from custom or built-in processors which typically provide: <code>user</code>, <code>request</code>, <code>messages</code>, <code>perms</code> etc.)</li>
     </c-ul>
 
+
     <h3>Further isolation using 'only'</h3>
+    #}
 
     <p>You can pass the <c-highlight>only</c-highlight> attribute to the component, which will prevent it from adopting any context other than its direct attributes.</p>
 

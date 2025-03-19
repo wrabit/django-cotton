@@ -96,6 +96,7 @@ class ContextIsolationTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, "blee")
 
+    @override_settings(COTTON_ENABLE_CONTEXT_ISOLATION=True)
     def test_context_isolated_by_default(self):
         self.create_template(
             "cotton/receiver.html",

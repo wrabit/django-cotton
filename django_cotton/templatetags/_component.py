@@ -42,7 +42,6 @@ class CottonComponentNode(Node):
                 component_data["attrs"][key] = True
             elif key.startswith("::"):  # Escaping 1 colon e.g for shorthand alpine
                 key = key[1:]
-                # component_data["slots"][key] = value
                 component_data["attrs"][key] = value
             elif key.startswith(":"):
                 key = key[1:]
@@ -71,7 +70,7 @@ class CottonComponentNode(Node):
             # Complete isolation
             output = template.render(Context(component_state))
         else:
-            if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", True):
+            if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False) is True:
                 # Default - partial isolation
                 new_context = self._create_partial_context(context, component_state)
                 output = template.render(new_context)

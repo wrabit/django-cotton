@@ -13,8 +13,11 @@ jobs:
 
     strategy:
       matrix:
-        python: ["3.10", "3.11", "3.12"]
-        django: ["4.2", "5.0", "5.1"]
+        python: ["3.10", "3.11", "3.12", "3.13"]
+        django: ["4.2", "5.0", "5.1", "5.2"]
+        exclude:
+          - { python: "3.13", django: "4.2" }
+          - { python: "3.13", django: "5.0" }
 
     name: Tests - python ${{ matrix.python }} × django ${{ matrix.django }}
 

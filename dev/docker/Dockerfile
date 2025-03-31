@@ -23,6 +23,6 @@ COPY . /app/
 # Install project dependencies
 RUN poetry config virtualenvs.create false \
     && poetry install \
-    && pip install -U "django==$DJANGO_VERSION.*"
+    && pip install -U --pre "django==$DJANGO_VERSION.*"
 
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

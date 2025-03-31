@@ -11,13 +11,20 @@ jobs:
   run_tests:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        python: ["3.10", "3.11", "3.12"]
+        django: ["4.2", "5.0", "5.1"]
+
+    name: Tests - python ${{ matrix.python }} × django ${{ matrix.django }}
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build
         run: |
-          docker build -f dev/docker/Dockerfile -t cotton-test-app dev/example_project
+          docker build -f dev/docker/Dockerfile --build-arg PYTHON_VERSION=${{ matrix.python }} --build-arg DJANGO_VERSION=${{ matrix.django }} -t cotton-test-app dev/example_project
 
       - name: Start Container
         run: |

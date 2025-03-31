@@ -9,5 +9,5 @@ description = "Development and test app for the django package."
 authors = ["Will Abbott <willabb83@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10"
 Django = "^5.1"

@@ -1,3 +1,6 @@
+import unittest
+
+import django
 from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_compiled
 
@@ -194,6 +197,7 @@ class TemplateRenderingTests(CottonTestCase):
         compiled = get_compiled(many_encoded_html_chars)
         self.assertTrue(many_encoded_html_chars in compiled)
 
+    @unittest.skipIf(django.VERSION < (5, 1), "Django 5.1+")
     def test_querystring_can_be_rendered(self):
         self.create_template("cotton/querystring.html", """{% querystring %}""")
         self.create_template(

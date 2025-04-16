@@ -245,3 +245,23 @@ class TemplateRenderingTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertTrue("name: child (class: testy)" in response.content.decode())
             self.assertTrue("name: parent (class: )" in response.content.decode())
+
+    def test_merge_attrs_from_context(self):
+        self.create_template(
+            "cotton/merge_attrs.html",
+            """<div cotton-attr {{ attrs }}></div>""",
+        )
+
+        self.create_template(
+            "merge_attrs_view.html",
+            """
+            <c-merge-attrs :attrs="widget_attrs" required="True" />
+            """,
+            "view/",
+            context={"widget_attrs": {"data-foo": "bar", "size": "40"}},
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<div cotton-attr data-foo="bar" size="40" required="True"></div>')

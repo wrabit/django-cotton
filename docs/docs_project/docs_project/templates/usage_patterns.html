@@ -8,6 +8,7 @@
         <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
         <c-index-sublink><a href="#index" class="no-underline">index.html</a></c-index-sublink>
         <c-index-sublink><a href="#tag-style" class="no-underline">Tag Style</a></c-index-sublink>
+        <c-index-sublink><a href="#attribute-proxying" class="no-underline">Attribute Proxying</a></c-index-sublink>
     </c-slot>
 
     <h3 id="basics">Basics</h3>
@@ -66,6 +67,28 @@ templates/
         <li>Components can either be self-closing <code>{{ "<c-my-component />"|force_escape }}</code> or have a closing tag <code>{{ "<c-my-component></c-my-component>"|force_escape }}</code></li>
     </c-ul>
 
+    <c-hr />
+
+    <h3 id="attribute-proxying">Attribute Proxying Pattern</h3>
+
+    <p>A powerful pattern enabled by the special <code>:attrs</code> dynamic attribute is the ability to create wrapper components that proxy all their attributes to an inner component:</p>
+
+    <c-snippet label="cotton/proxy_component.html">{% cotton_verbatim %}{% verbatim %}
+    <c-inner-component :attrs="attrs">{{ slot }}</c-inner-component>
+    {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+
+    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
+    <c-proxy-component 
+        class="outer-class" 
+        :count="42"
+        :enabled="False">
+        Content passed to inner component
+    </c-proxy-component>
+    {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+
+    <p>The attributes are passed through to the inner component with their original types preserved (strings, numbers, booleans, lists, etc.), making this pattern ideal for creating higher-order components.</p>
+
+    <p>This pattern is particularly useful for Django form fields, where you might create a component hierarchy that passes Django widget attributes through multiple layers while adding labels, error handling, and styling at each level.</p>
 
     <c-navigation>
         <c-slot name="prev">

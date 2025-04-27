@@ -7,6 +7,7 @@
             <c-index-sublink><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
             <c-index-sublink><a href="#dynamic-attributes" class="no-underline">Dynamic Attributes</a></c-index-sublink>
             <c-index-sublink><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
+            <c-index-sublink><a href="#attrs-merging" class="no-underline">Merging with :attrs</a></c-index-sublink>
             <c-index-sublink><a href="#vars" class="no-underline">Local state with {{ '<c-vars>'|force_escape }}</a></c-index-sublink>
             <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
             <c-index-sublink><a href="#dynamic-components" class="no-underline">Dynamic Components</a></c-index-sublink>
@@ -208,6 +209,36 @@ context = { 'today': Weather.objects.get(...) }
 
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
+
+    <c-hr id="attrs-merging" />
+
+    <h2>5.1 Merging Attributes with :attrs</h2>
+
+    <p>In addition to using <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> to output attributes, you can also pass in a dictionary of attributes using the special <code>:attrs</code> dynamic attribute. This is useful when you have a collection of attributes from your view or another component that you want to apply.</p>
+
+    <c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+    <input type="text" {{ attrs }} />
+    {% endcotton_verbatim %}{% endverbatim %}
+    </c-snippet>
+
+    <c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<!-- In your view -->
+context = {
+    'widget_attrs': {
+        'placeholder': 'Enter your name',
+        'data-validate': 'true',
+        'size': '40'
+    }
+}
+
+<!-- In your template -->
+<c-input :attrs="widget_attrs" required />
+
+<!-- html output
+<input type="text" placeholder="Enter your name" data-validate="true" size="40" required />
+-->
+{% endcotton_verbatim %}{% endverbatim %}
+    </c-snippet>
 
     <c-hr id="vars" />
 

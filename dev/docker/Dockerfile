@@ -1,6 +1,8 @@
+ARG PYTHON_VERSION=3.12
 # Use an official Python runtime as a base image
-FROM python:3.12-slim-bookworm
+FROM python:${PYTHON_VERSION}-slim-bookworm
 
+ARG DJANGO_VERSION=4.2
 # Setup env
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_NO_CACHE_DIR=off \
@@ -20,6 +22,7 @@ COPY . /app/
 
 # Install project dependencies
 RUN poetry config virtualenvs.create false \
-    && poetry install
+    && poetry install \
+    && pip install -U --pre "django==$DJANGO_VERSION.*"
 
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]

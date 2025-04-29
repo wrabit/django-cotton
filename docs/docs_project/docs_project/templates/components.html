@@ -7,6 +7,7 @@
             <c-index-sublink><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
             <c-index-sublink><a href="#dynamic-attributes" class="no-underline">Dynamic Attributes</a></c-index-sublink>
             <c-index-sublink><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
+            <c-index-sublink><a href="#attrs-merging" class="no-underline">Merging with :attrs</a></c-index-sublink>
             <c-index-sublink><a href="#vars" class="no-underline">Local state with {{ '<c-vars>'|force_escape }}</a></c-index-sublink>
             <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
             <c-index-sublink><a href="#dynamic-components" class="no-underline">Dynamic Components</a></c-index-sublink>
@@ -209,6 +210,40 @@ context = { 'today': Weather.objects.get(...) }
 {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
+    <c-hr id="attrs-merging" />
+
+    <h2>5.1 Merging Attributes with :attrs</h2>
+
+    <p>In addition to using <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> to output attributes, you can also pass in a dictionary of attributes using the special <code>:attrs</code> dynamic attribute. This is useful when you have a collection of attributes from your view or another component that you want to apply.</p>
+
+    <c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+    <input type="text" {{ attrs }} />
+    {% endcotton_verbatim %}{% endverbatim %}
+    </c-snippet>
+
+    <c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<!-- In your view -->
+context = {
+    'widget_attrs': {
+        'placeholder': 'Enter your name',
+        'data-validate': 'true',
+        'size': '40'
+    }
+}
+
+<!-- In your template -->
+<c-input :attrs="widget_attrs" required />
+
+<!-- html output
+<input type="text" placeholder="Enter your name" data-validate="true" size="40" required />
+-->
+{% endcotton_verbatim %}{% endverbatim %}
+    </c-snippet>
+
+    <c-note>
+        You can also proxy the whole attrs dictionary to other components. <code>{{ '<c-comp :attrs="attrs" />'|force_escape }}</code> This is useful when you want to pass all attributes from one component to another without having to specify each one individually. <a href="{% url 'usage-patterns' %}#attribute-proxying">More info</a>.
+    </c-note>
+
     <c-hr id="vars" />
 
     <h2>6. Defining Local Variables with <code>{{ '<c-vars />'|force_escape }}</code></h2>
@@ -327,6 +362,7 @@ context = { 'today': Weather.objects.get(...) }
 
     <h2>9. Context Isolation</h2>
 
+    {#
     <p>Cotton follows the component isolation approach used in React, Vue, and Svelte, where components don't share state by default. This prevents data leaks and hard-to-trace side effects between components.</p>
     <p>By default, each component's context only contains:</p>
 
@@ -336,7 +372,9 @@ context = { 'today': Weather.objects.get(...) }
         <li>All data from enabled context processors (from custom or built-in processors which typically provide: <code>user</code>, <code>request</code>, <code>messages</code>, <code>perms</code> etc.)</li>
     </c-ul>
 
+
     <h3>Further isolation using 'only'</h3>
+    #}
 
     <p>You can pass the <c-highlight>only</c-highlight> attribute to the component, which will prevent it from adopting any context other than its direct attributes.</p>
 

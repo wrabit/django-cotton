@@ -73,17 +73,24 @@ templates/
 
     <p>A powerful pattern enabled by the special <code>:attrs</code> dynamic attribute is the ability to create wrapper components that proxy all their attributes to an inner component:</p>
 
-    <c-snippet label="cotton/proxy_component.html">{% cotton_verbatim %}{% verbatim %}
-    <c-inner-component :attrs="attrs">{{ slot }}</c-inner-component>
+    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
+<c-outer
+    class="outer-class"
+    :count="42"
+    :enabled="False">
+    Content passed to inner component
+</c-outer>
     {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
 
-    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
-    <c-proxy-component 
-        class="outer-class" 
-        :count="42"
-        :enabled="False">
-        Content passed to inner component
-    </c-proxy-component>
+    <c-snippet label="cotton/outer.html">{% cotton_verbatim %}{% verbatim %}
+<c-inner :attrs="attrs">{{ slot }}</c-inner>
+    {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+
+    <c-snippet label="cotton/inner.html">{% cotton_verbatim %}{% verbatim %}
+{{ class }}     <!-- "outer-class" -->
+{{ count }}     <!-- 42 -->
+{{ enabled }}   <!-- False -->
+{{ slot }}      <!-- Content passed to inner component -->
     {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
 
     <p>The attributes are passed through to the inner component with their original types preserved (strings, numbers, booleans, lists, etc.), making this pattern ideal for creating higher-order components.</p>

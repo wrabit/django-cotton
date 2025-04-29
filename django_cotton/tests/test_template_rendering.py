@@ -245,3 +245,79 @@ class TemplateRenderingTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertTrue("name: child (class: testy)" in response.content.decode())
             self.assertTrue("name: parent (class: )" in response.content.decode())
+
+    def test_merge_attrs_from_context(self):
+        self.create_template(
+            "cotton/merge_attrs.html",
+            """<div cotton-attr {{ attrs }}></div>""",
+        )
+
+        self.create_template(
+            "merge_attrs_view.html",
+            """
+            <c-merge-attrs :attrs="widget_attrs" required="True" />
+            """,
+            "view/",
+            context={"widget_attrs": {"data-foo": "bar", "size": "40"}},
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<div cotton-attr data-foo="bar" size="40" required="True"></div>')
+
+    def test_proxy_attrs_to_nested_component(self):
+        # Inner component that will receive the proxied attributes
+        self.create_template(
+            "cotton/inner_component.html",
+            """
+            <div {{ attrs }}>
+                String: '{{ class }}'
+                Count: {{ count|add:"1" }}
+                Enabled check: {% if not enabled %}Not enabled works!{% endif %}
+                Items count: {{ items|length }}
+                {{ slot }}
+            </div>
+            """,
+        )
+        
+        # Outer component that will proxy the attributes
+        self.create_template(
+            "cotton/proxy_component.html",
+            """<c-inner-component :attrs="attrs">{{ slot }}</c-inner-component>""",
+        )
+
+        # View template that uses the proxy component
+        self.create_template(
+            "proxy_attrs_view.html",
+            """
+            <c-proxy-component 
+                class="outer-class" 
+                :count="42"
+                :enabled="False"
+                :items="item_list">
+                Proxied content
+            </c-proxy-component>
+            """,
+            "view/",
+            context={
+                "item_list": ["item1", "item2", "item3"],
+            },
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            content = response.content.decode().strip()
+            
+            # Check that type-preserving behavior works correctly
+            self.assertTrue("String: 'outer-class'" in content, 
+                            f"String attribute not handled correctly: {content}")
+            self.assertTrue("Count: 43" in content, 
+                            f"Numeric attribute not handled correctly (should be able to add 1): {content}")
+            self.assertTrue("Not enabled works!" in content, 
+                            f"Boolean attribute not handled correctly (False should evaluate as falsy): {content}")
+            self.assertTrue("Items count: 3" in content, 
+                            f"List attribute not handled correctly (should have length 3): {content}")
+            self.assertTrue("Proxied content" in content, 
+                            f"Slot content not passed correctly: {content}")

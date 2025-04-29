@@ -46,9 +46,15 @@ class CottonComponentNode(Node):
             elif key.startswith(":"):
                 key = key[1:]
                 try:
-                    component_data["attrs"][key] = DynamicAttr(value).resolve(context)
+                    resolved_value = DynamicAttr(value).resolve(context)
                 except UnprocessableDynamicAttr:
                     component_data["attrs"].unprocessable(key)
+                else:
+                    # Handle ":attrs" specially
+                    if key == "attrs":
+                        component_data["attrs"].dict.update(resolved_value)
+                    else:
+                        component_data["attrs"][key] = resolved_value
             else:
                 component_data["attrs"][key] = value
 

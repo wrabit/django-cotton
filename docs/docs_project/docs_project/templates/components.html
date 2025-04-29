@@ -240,6 +240,10 @@ context = {
 {% endcotton_verbatim %}{% endverbatim %}
     </c-snippet>
 
+    <c-note>
+        You can also proxy the whole attrs dictionary to other components. <code>{{ '<c-comp :attrs="attrs" />'|force_escape }}</code> This is useful when you want to pass all attributes from one component to another without having to specify each one individually. <a href="{% url 'usage-patterns' %}#attribute-proxying">More info</a>.
+    </c-note>
+
     <c-hr id="vars" />
 
     <h2>6. Defining Local Variables with <code>{{ '<c-vars />'|force_escape }}</code></h2>

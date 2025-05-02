@@ -1,0 +1,45 @@
+<c-vars
+    :autoresize="False"
+    size="base"
+    height="base"
+    :resizable="True"
+    :size_classes="{
+        'xs': 'text-xs px-2 py-1',
+        'sm': 'text-sm px-2.5 py-1.5',
+        'base': 'text-base px-3 py-2',
+        'lg': 'text-lg px-3.5 py-2.5',
+        'xl': 'text-xl px-4 py-3'
+    }"
+    :height_classes="{
+        'xs': 'h-16',
+        'sm': 'h-24',
+        'base': 'h-32',
+        'lg': 'h-48',
+        'xl': 'h-64'
+    }"
+/>
+
+<textarea
+    class="
+        w-full
+        border
+        border-gray-300
+        dark:bg-zinc-800
+        dark:border-zinc-700
+        dark:text-zinc-300
+        rounded-md
+        shadow-sm
+        focus:ring-indigo-500
+        focus:border-indigo-500
+        {% if resizable == False %} resize-none{% endif %}
+        {{ size_classes|get_item:size }}
+        {{ height_classes|get_item:height }}
+    "
+    {{ attrs }}
+    {% if auto§resize %}
+        x-data="{ resize: () => { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
+        x-init="$nextTick(() => resize())"  {# Ensure resize runs after initial render #}
+        @input="resize()"
+        style="overflow-y:hidden;"
+    {% endif %}
+>{{ slot }}</textarea> 

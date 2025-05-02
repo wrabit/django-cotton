@@ -1,179 +1,203 @@
 <c-layouts.ui>
-    <c-example-header tag="tooltip">
+    <c-header>
         Tooltip
-    </c-example-header>
+        <c-slot name="subheading">
+            Displays informative text when users hover over, focus on, or tap an element.
+        </c-slot>
+    </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink><a href="#default" class="no-underline">Default (Top)</a></c-index-sublink>
+        <c-index-sublink><a href="#positions" class="no-underline">Positions</a></c-index-sublink>
+        <c-index-sublink><a href="#offset" class="no-underline">Offset</a></c-index-sublink>
+        <c-index-sublink><a href="#html-content" class="no-underline">HTML Content</a></c-index-sublink>
         <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
     </c-slot>
 
-    <div class="shadow-lg not-prose">
-        <div class="min-h-40 md:px-24 rounded-xl rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 dark:bg-transparent bg-white flex items-center">
-
-
-            <div class="flex space-x-4">
-                <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="light">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded">Top</button>
-                </c-ui.tooltip>
-
-                <c-ui.tooltip content="This is a helpful tooltip" position="right" theme="light">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded">Right</button>
-                </c-ui.tooltip>
-
-                <c-ui.tooltip content="This is a helpful tooltip" position="bottom" theme="light">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded">Bottom</button>
-                </c-ui.tooltip>
-
-                <c-ui.tooltip content="This is a helpful tooltip" position="left" theme="light">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded">Left</button>
-                </c-ui.tooltip>
-
-                <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded">Dark</button>
-                </c-ui.tooltip>
-
-                <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
-                    Text
-                </c-ui.tooltip>
-
-                <c-ui.tooltip content="This is a helpful tooltip" position="top" theme="dark">
-                    Text
-                </c-ui.tooltip>
-            </div>
-
+    <h2 id="default">Default (Top)</h2>
+    <p>Hover or focus the button to see the default tooltip (positioned top).</p>
+    <c-sample>
+        <div class="p-8 flex justify-center"> {# Added padding for visibility #}
+            <c-ui.tooltip>
+                <button class="btn">Hover Me</button>
+                <c-slot name="content">
+                    This is a tooltip!
+                </c-slot>
+            </c-ui.tooltip>
         </div>
-        <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
-
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-<c-ui.button>Default</c-ui.button>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
-
-    <div class="shadow-lg">
-        <div class="min-h-40 md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-
-            <div class="w-full flex items-center justify-center space-x-4">
-                <c-ui.button>Default</c-ui.button>
-                <c-ui.button variant="primary">Primary</c-ui.button>
-                <c-ui.button variant="danger">Danger</c-ui.button>
-                <c-ui.button variant="subtle">Subtle</c-ui.button>
-                <c-ui.button variant="ghost">Ghost</c-ui.button>
-            </div>
-
-        </div>
-        <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-<c-ui.button variant="default">Default</c-ui.button>
-<c-ui.button variant="primary">Primary</c-ui.button>
-<c-ui.button variant="danger">Danger</c-ui.button>
-<c-ui.button variant="subtle">Subtle</c-ui.button>
-<c-ui.button variant="ghost">Ghost</c-ui.button>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
-
-    <h3>Outlined</h3>
-
-    <c-example>
-        <c-ui.button variant="default" outlined>Default</c-ui.button>
-        <c-ui.button variant="primary" outlined>Primary</c-ui.button>
-        <c-ui.button variant="danger" outlined>Danger</c-ui.button>
-        <c-ui.button variant="subtle" outlined>Subtle</c-ui.button>
-        <c-ui.button variant="ghost" outlined>Ghost</c-ui.button>
         <c-slot name="code">
-{% cotton_verbatim %}{% verbatim %}
-<c-ui.button>Default</c-ui.button>
-{% endverbatim %}{% endcotton_verbatim %}
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.tooltip>
+    <button class="btn">Hover Me</button>
+    <c-slot name="content">
+        This is a tooltip!
+    </c-slot>
+</c-ui.tooltip>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
         </c-slot>
-    </c-example>
+    </c-sample>
 
-    <h3>Addons</h3>
-
-    <h3>Types</h3>
-
-    <h3>Field</h3>
-
-    <p>Input can be used in the Field component to display alongside label, info, help and validation.</p>
-
-    <div class="shadow-lg">
-        <div class="md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 min-h-80 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <div class="space-y-3 w-full">
-                <div>
-                    <label class="font-semibold mb-3">Password:</label>
-                    <c-ui.input type="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-                <div>
-                    <label class="font-semibold mb-3">Password with reveal:</label>
-                    <c-ui.input type="password" value="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-            </div>
+    <h2 id="positions">Positions</h2>
+    <p>Control the tooltip position using the <code>position</code> attribute.</p>
+    <c-sample>
+        <div class="p-16 flex justify-center items-center gap-4"> {# Added padding for visibility #}
+            <c-ui.tooltip position="top">
+                <button class="btn">Top</button>
+                <c-slot name="content">Top Tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip position="bottom">
+                <button class="btn">Bottom</button>
+                <c-slot name="content">Bottom Tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip position="left">
+                <button class="btn">Left</button>
+                <c-slot name="content">Left Tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip position="right">
+                <button class="btn">Right</button>
+                <c-slot name="content">Right Tooltip</c-slot>
+            </c-ui.tooltip>
         </div>
-        <div class="flex-1 rounded-b-lg pb-4 pt-11 px-6 m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-textarea/>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.tooltip position="top">
+    <button class="btn">Top</button>
+    <c-slot name="content">Top Tooltip</c-slot>
+</c-ui.tooltip>
+
+<c-ui.tooltip position="bottom">
+    <button class="btn">Bottom</button>
+    <c-slot name="content">Bottom Tooltip</c-slot>
+</c-ui.tooltip>
+
+<c-ui.tooltip position="left">
+    <button class="btn">Left</button>
+    <c-slot name="content">Left Tooltip</c-slot>
+</c-ui.tooltip>
+
+<c-ui.tooltip position="right">
+    <button class="btn">Right</button>
+    <c-slot name="content">Right Tooltip</c-slot>
+</c-ui.tooltip>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="offset">Offset</h2>
+    <p>Adjust the spacing between the trigger and the tooltip using the <code>:offset</code> dynamic attribute (value in pixels).</p>
+    <c-sample>
+        <div class="p-8 flex justify-center gap-4"> {# Added padding for visibility #}
+            <c-ui.tooltip :offset="0">
+                <button class="btn">Offset 0</button>
+                <c-slot name="content">No gap</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip :offset="12">
+                <button class="btn">Offset 12</button>
+                <c-slot name="content">Large gap</c-slot>
+            </c-ui.tooltip>
         </div>
-    </div>
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.tooltip :offset="0">
+    <button class="btn">Offset 0</button>
+    <c-slot name="content">No gap</c-slot>
+</c-ui.tooltip>
 
+<c-ui.tooltip :offset="12">
+    <button class="btn">Offset 12</button>
+    <c-slot name="content">Large gap</c-slot>
+</c-ui.tooltip>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-    <c-ui.input>
-        <c-slot name="left_addon">{% heroicon_outline 'user-circle' class="text-gray-300" %}</c-slot>
-    </c-ui.input>
+    <h2 id="html-content">HTML Content</h2>
+    <p>You can include HTML markup within the <code>content</code> slot.</p>
+    <c-sample>
+        <div class="p-8 flex justify-center"> {# Added padding for visibility #}
+            <c-ui.tooltip>
+                <button class="btn">HTML</button>
+                <c-slot name="content">
+                    <strong>Important:</strong> <em>Check details!</em>
+                </c-slot>
+            </c-ui.tooltip>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.tooltip>
+    <button class="btn">HTML</button>
+    <c-slot name="content">
+        <strong>Important:</strong> <em>Check details!</em>
+    </c-slot>
+</c-ui.tooltip>
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-    <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
-        inside standard Django templates.</p>
+    <h2 id="api">API</h2>
 
-    <h3>API</h3>
+    <h3 class="!text-gray-500">ui.tooltip</h3>
 
-    <div class="table w-full border dark:text-gray-500 rounded-lg border-gray-400 border-opacity-30  flex items-center">
-        <table class="text-base">
-            <thead>
+    <h4>Properties</h4>
+    <div class="overflow-x-auto">
+        <table class="table-auto text-normal w-full">
+            <thead class="not-prose text-sm text-left">
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Values</th>
-                    <th>Default</th>
+                    <th class="font-normal text-zinc-500 p-2">Name</th>
+                    <th class="font-normal text-zinc-500 p-2">Type</th>
+                    <th class="font-normal text-zinc-500 p-2">Values</th>
+                    <th class="font-normal text-zinc-500 p-2">Default</th>
+                    <th class="font-normal text-zinc-500 p-2">Description</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><code>type</code></td>
-                    <td>Input type</td>
-                    <td>string</td>
-                    <td>text, password, email, number, tel, url</td>
-                    <td>text</td>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>position</code></td>
+                    <td class="p-2">String</td>
+                    <td class="p-2"><code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code></td>
+                    <td class="p-2"><code>top</code></td>
+                    <td class="p-2">The position of the tooltip relative to the trigger element.</td>
                 </tr>
-                <tr>
-                    <td>class</td>
-                    <td>Additional classes</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>:offset</code></td>
+                    <td class="p-2">Integer</td>
+                    <td class="p-2">Any integer</td>
+                    <td class="p-2"><code>4</code></td>
+                    <td class="p-2">The gap between the trigger and the tooltip in pixels.</td>
                 </tr>
-                <tr>
-                    <td>left_addon</td>
-                    <td>Left addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>attrs</code></td>
+                    <td class="p-2">Dict</td>
+                    <td class="p-2">HTML attribute dictionary</td>
+                    <td class="p-2"><code>{}</code></td>
+                    <td class="p-2">Passes HTML attributes directly to the wrapper <code>&lt;div&gt;</code> element.</td>
                 </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="mt-6">Slots</h4>
+     <div class="overflow-x-auto">
+        <table class="table-auto text-normal w-full">
+            <thead class="not-prose text-sm text-left">
                 <tr>
-                    <td>right_addon</td>
-                    <td>Right addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
+                    <th class="font-normal text-zinc-500 p-2">Name</th>
+                    <th class="font-normal text-zinc-500 p-2">Required</th>
+                    <th class="font-normal text-zinc-500 p-2">Description</th>
                 </tr>
-                <tr>
-                    <td>placeholder</td>
-                    <td>Placeholder text</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
+            </thead>
+            <tbody>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>slot</code> (default)</td>
+                    <td class="p-2">Yes</td>
+                    <td class="p-2">The element that triggers the tooltip (e.g., a button, icon, or text).</td>
                 </tr>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>content</code></td>
+                    <td class="p-2">Yes</td>
+                    <td class="p-2">The content (text or HTML) to display inside the tooltip.</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 

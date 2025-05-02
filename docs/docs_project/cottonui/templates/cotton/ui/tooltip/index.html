@@ -1,0 +1,48 @@
+<c-vars
+    position="top"
+    :offset="4" {# Gap between trigger and tooltip in pixels #}
+    content {# Declare the 'content' slot #}
+    :position_classes="{
+        'top':    'bottom-full left-1/2 -translate-x-1/2 mb-[var(--offset)]',
+        'bottom': 'top-full left-1/2 -translate-x-1/2 mt-[var(--offset)]',
+        'left':   'right-full top-1/2 -translate-y-1/2 mr-[var(--offset)]',
+        'right':  'left-full top-1/2 -translate-y-1/2 ml-[var(--offset)]'
+    }"
+/>
+
+<div x-data="{ open: false }" class="relative inline-block">
+    {# Trigger Element #}
+    <div
+        @mouseenter="open = true"
+        @mouseleave="open = false"
+        @focus="open = true"
+        @blur="open = false"
+        x-ref="trigger"
+        aria-describedby="tooltip-content-{{ component_id }}"
+        tabindex="0" {# Make it focusable if it's not inherently focusable #}
+        class="inline-block"
+    >
+        {{ slot }}
+    </div>
+
+    {# Tooltip Content - Conditionally rendered for performance #}
+    <template x-teleport="body">
+        <div
+            x-show="open"
+            x-transition:enter="transition ease-out duration-100"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-75"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-95"
+            x-ref="tooltip"
+            x-anchor.offset.{{ offset }}="$refs.trigger"
+            id="tooltip-content-{{ component_id }}"
+            role="tooltip"
+            class="absolute z-50 rounded-md bg-gray-900 dark:bg-gray-700 px-3 py-1.5 text-sm font-medium text-white shadow-sm {{ position_classes|get_item:position }}"
+            :style="`--offset: {{ offset }}px`"
+        >
+            {{ content }}
+        </div>
+    </template>
+</div> 

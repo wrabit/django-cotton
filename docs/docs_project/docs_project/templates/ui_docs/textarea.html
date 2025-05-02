@@ -1,25 +1,173 @@
 <c-layouts.ui>
-    <h1 id="components">Textarea</h1>
+    <c-header>
+        Textarea
+        <c-slot name="subheading">
+            A multi-line text input component.
+        </c-slot>
+    </c-header>
 
     <c-slot name="page_index">
+        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
         <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink><a href="#height" class="no-underline">Height</a></c-index-sublink>
+        <c-index-sublink><a href="#autoresize" class="no-underline">Autoresize</a></c-index-sublink>
+        <c-index-sublink><a href="#non-resizable" class="no-underline">Non-resizable</a></c-index-sublink>
+        <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
     </c-slot>
 
-    <div class="rounded-lg rounded-b-none border-b-transparent border p-5 min-h-80 mt-6 border-gray-700 px-8 py-5 dark:border dark:bg-transparent">
-        <textarea class="bg-transparent w-full border-gray-700 px-8 py-5 dark:border"></textarea>
+    <h2 id="default">Default</h2>
+    <p>The default textarea component.</p>
+    <c-sample>
+        <c-ui.textarea placeholder="Enter your text here..." />
+
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.textarea placeholder="Enter your text here..." />
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="sizes">Sizes</h2>
+    <p>Control the font size and padding using the <code>size</code> attribute.</p>
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.textarea size="xs" placeholder="Extra Small Text" />
+            <c-ui.textarea size="sm" placeholder="Small Text" />
+            <c-ui.textarea size="base" placeholder="Base Text (Default)" />
+            <c-ui.textarea size="lg" placeholder="Large Text" />
+            <c-ui.textarea size="xl" placeholder="Extra Large Text" />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.textarea size="xs" placeholder="Extra Small Text" />
+<c-ui.textarea size="sm" placeholder="Small Text" />
+<c-ui.textarea size="base" placeholder="Base Text (Default)" />
+<c-ui.textarea size="lg" placeholder="Large Text" />
+<c-ui.textarea size="xl" placeholder="Extra Large Text" />
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="height">Height</h2>
+    <p>Control the initial height using the <code>height</code> attribute. This sets a fixed height, which will be overridden if <code>:autoresize="True"</code> is used and the content grows.</p>
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.textarea height="xs" placeholder="Extra Small Height" />
+            <c-ui.textarea height="sm" placeholder="Small Height" />
+            <c-ui.textarea height="base" placeholder="Base Height (Default)" />
+            <c-ui.textarea height="lg" placeholder="Large Height" />
+            <c-ui.textarea height="xl" placeholder="Extra Large Height" />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.textarea height="xs" placeholder="Extra Small Height" />
+<c-ui.textarea height="sm" placeholder="Small Height" />
+<c-ui.textarea height="base" placeholder="Base Height (Default)" />
+<c-ui.textarea height="lg" placeholder="Large Height" />
+<c-ui.textarea height="xl" placeholder="Extra Large Height" />
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="autoresize">Autoresize</h2>
+    <p>Use the <code>:autoresize="True"</code> attribute to make the textarea automatically adjust its height based on the content. Requires Alpine.js.</p>
+    <c-sample>
+        <c-ui.textarea :autoresize="True" placeholder="Type something long here and the textarea will grow..." />
+
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.textarea :autoresize="True" placeholder="Type something long here..." />
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="non-resizable">Non-resizable</h2>
+    <p>Prevent the user from manually resizing the textarea using <code>:resizable="False"</code>.</p>
+    <c-sample>
+        <c-ui.textarea :resizable="False" placeholder="You cannot resize me." />
+
+        <c-slot name="code">
+<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-ui.textarea :resizable="False" placeholder="You cannot resize me." />
+{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="api">API</h2>
+
+    <h3 class="!text-gray-500">ui.textarea</h3>
+
+    <h4>Properties</h4>
+
+    <div class="overflow-x-auto">
+        <table class="table-auto text-normal w-full">
+            <thead class="not-prose text-sm text-left">
+                <tr>
+                    <th class="font-normal text-zinc-500 p-2">Name</th>
+                    <th class="font-normal text-zinc-500 p-2">Type</th>
+                    <th class="font-normal text-zinc-500 p-2">Values</th>
+                    <th class="font-normal text-zinc-500 p-2">Default</th>
+                    <th class="font-normal text-zinc-500 p-2">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code class="!bg-teal-500 !text-white text-[14px] font-bold">:autoresize</code></td>
+                    <td class="p-2">Boolean</td>
+                    <td class="p-2"><code>True</code>, <code>False</code></td>
+                    <td class="p-2"><code>False</code></td>
+                    <td class="p-2">Automatically adjusts height to fit content. Requires Alpine.js.</td>
+                </tr>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>size</code></td>
+                    <td class="p-2">String</td>
+                    <td class="p-2"><code>xs</code>, <code>sm</code>, <code>base</code>, <code>lg</code>, <code>xl</code></td>
+                    <td class="p-2"><code>base</code></td>
+                    <td class="p-2">Sets the font size and padding.</td>
+                </tr>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>height</code></td>
+                    <td class="p-2">String</td>
+                    <td class="p-2"><code>xs</code>, <code>sm</code>, <code>base</code>, <code>lg</code>, <code>xl</code></td>
+                    <td class="p-2"><code>base</code></td>
+                    <td class="p-2">Sets the initial fixed height. Overridden by autoresize.</td>
+                </tr>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>:resizable</code></td>
+                    <td class="p-2">Boolean</td>
+                    <td class="p-2"><code>True</code>, <code>False</code></td>
+                    <td class="p-2"><code>True</code></td>
+                    <td class="p-2">Allows or prevents manual resizing by the user via CSS.</td>
+                </tr>
+                 <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>attrs</code></td>
+                    <td class="p-2">Dict</td>
+                    <td class="p-2">HTML attribute dictionary</td>
+                    <td class="p-2"><code>{}</code></td>
+                    <td class="p-2">Passes HTML attributes (like <code>placeholder</code>, <code>name</code>, <code>id</code>, <code>rows</code>, etc.) directly to the underlying <code>&lt;textarea&gt;</code> element via <code>{{ attrs }}</code>.</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <div class="flex-1 rounded-b-lg pb-4 pt-11 px-6 m-0 bg-gray-800 dark:bg-gray-800">
-        <c-snippet>{% cotton_verbatim %}{% verbatim %}
-            <c-textarea />
-        {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+    <h4 class="mt-6">Slots</h4>
+     <div class="overflow-x-auto">
+        <table class="table-auto text-normal w-full">
+            <thead class="not-prose text-sm text-left">
+                <tr>
+                    <th class="font-normal text-zinc-500 p-2">Name</th>
+                    <th class="font-normal text-zinc-500 p-2">Default</th>
+                    <th class="font-normal text-zinc-500 p-2">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-t dark:border-zinc-700">
+                    <td class="p-2"><code>slot</code> (default)</td>
+                     <td class="p-2"><code>''</code></td>
+                    <td class="p-2">The initial content/value of the textarea.</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <h3>Autogrow</h3>
-
-    <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
-        inside standard Django templates.</p>
-
-    <h3>The basic building block:</h3>
-
-</c-layouts.ui>
+</c-layouts.ui> 

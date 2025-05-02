@@ -41,7 +41,10 @@ class DynamicAttr:
         raise UnprocessableDynamicAttr
 
     def _resolve_as_variable(self, context):
-        return Variable(self.value).resolve(context)
+        value = Variable(self.value).resolve(context)
+        if isinstance(value, Attrs):
+            return value.attrs_dict()
+        return value
 
     def _resolve_as_boolean(self, _):
         if self.value == "":
@@ -99,6 +102,9 @@ class Attrs(Mapping):
     @property
     def dict(self):
         return self._attrs
+
+    def attrs_dict(self):
+        return {k: v for k, v in self._attrs.items() if k not in self._exclude_from_str}
 
     def unprocessable(self, key):
         self._unprocessable.append(key)

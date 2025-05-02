@@ -264,7 +264,9 @@ class TemplateRenderingTests(CottonTestCase):
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            self.assertContains(response, '<div cotton-attr data-foo="bar" size="40" required="True"></div>')
+            self.assertContains(
+                response, '<div cotton-attr data-foo="bar" size="40" required="True"></div>'
+            )
 
     def test_proxy_attrs_to_nested_component(self):
         # Inner component that will receive the proxied attributes
@@ -280,7 +282,7 @@ class TemplateRenderingTests(CottonTestCase):
             </div>
             """,
         )
-        
+
         # Outer component that will proxy the attributes
         self.create_template(
             "cotton/proxy_component.html",
@@ -309,15 +311,66 @@ class TemplateRenderingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             content = response.content.decode().strip()
-            
+
             # Check that type-preserving behavior works correctly
-            self.assertTrue("String: 'outer-class'" in content, 
-                            f"String attribute not handled correctly: {content}")
-            self.assertTrue("Count: 43" in content, 
-                            f"Numeric attribute not handled correctly (should be able to add 1): {content}")
-            self.assertTrue("Not enabled works!" in content, 
-                            f"Boolean attribute not handled correctly (False should evaluate as falsy): {content}")
-            self.assertTrue("Items count: 3" in content, 
-                            f"List attribute not handled correctly (should have length 3): {content}")
-            self.assertTrue("Proxied content" in content, 
-                            f"Slot content not passed correctly: {content}")
+            self.assertTrue(
+                "String: 'outer-class'" in content,
+                f"String attribute not handled correctly: {content}",
+            )
+            self.assertTrue(
+                "Count: 43" in content,
+                f"Numeric attribute not handled correctly (should be able to add 1): {content}",
+            )
+            self.assertTrue(
+                "Not enabled works!" in content,
+                f"Boolean attribute not handled correctly (False should evaluate as falsy): {content}",
+            )
+            self.assertTrue(
+                "Items count: 3" in content,
+                f"List attribute not handled correctly (should have length 3): {content}",
+            )
+            self.assertTrue(
+                "Proxied content" in content, f"Slot content not passed correctly: {content}"
+            )
+
+    def test_passed_attrs_doesnt_include_cvars_from_source_component(self):
+        # Inner component that will receive the proxied attributes
+        self.create_template(
+            "cotton/target.html",
+            """
+            prop: '{{ prop }}'
+            attrs: '{{ attrs }}'
+            """,
+        )
+
+        # Outer component that will proxy the attributes
+        self.create_template(
+            "cotton/proxy.html",
+            """
+            <c-vars prop />
+            <c-target :attrs="attrs" />
+            """,
+        )
+
+        # View template that uses the proxy component
+        self.create_template(
+            "exclude_cvars_view.html",
+            """
+            <c-proxy attr="blue" prop="green" />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            content = response.content.decode().strip()
+
+            self.assertTrue(
+                "prop: 'green'"
+                in content,  # this will not be the case when context isolation is resolved
+                f"cvar shouldn't be present: {content}",
+            )
+            self.assertTrue(
+                f"""attrs: 'attr="blue"'""" in content,
+                f"Attrs were not proxied to the target: {content}",
+            )

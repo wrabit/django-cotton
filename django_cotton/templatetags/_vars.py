@@ -28,15 +28,17 @@ class CottonVarsNode(Node):
         vars = {}
 
         for key, value in self.var_dict.items():
+            key_to_exclude = key
             if key not in attrs.exclude_unprocessable():
                 if key.startswith(":"):
                     try:
-                        vars[key[1:]] = DynamicAttr(value, is_cvar=True).resolve(context)
+                        key_to_exclude = key[1:]
+                        vars[key_to_exclude] = DynamicAttr(value, is_cvar=True).resolve(context)
                     except UnprocessableDynamicAttr:
                         pass
                 else:
                     attrs[key] = value
-            attrs.exclude_from_string_output(key)
+            attrs.exclude_from_string_output(key_to_exclude)
 
         # Process cvars without values
         for empty_var in self.empty_vars:

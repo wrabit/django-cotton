@@ -416,3 +416,31 @@ class CvarTests(CottonTestCase):
         self.assertTrue("I am string 1" in rendered)
         self.assertTrue("I am string True" in rendered)
         self.assertTrue("I am string False" in rendered)
+
+    def test_dynamic_and_non_dynamic_cvars_of_the_same_name_cascade_as_one(self):
+        self.create_template(
+            "cotton/cvars_cascade.html",
+            """
+            <c-vars :action="{'do': 'it'}" />
+            
+            Attrs: '{{ attrs }}' <!-- Should not contain even 'action' (the non ':' dynamic version) -->
+            Action: '{{ action }}'
+            """,
+        )
+
+        # View template that uses the proxy component
+        self.create_template(
+            "cvars_cascade_view.html",
+            """
+            <c-cvars-cascade action="something completely different" />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            content = response.content.decode().strip()
+
+            self.assertTrue("Attrs: ''" in content)
+            self.assertTrue("Action: 'something completely different'" in content)

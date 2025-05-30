@@ -48,7 +48,7 @@
     <p>We can further customize components with attribute, which allow you to pass specific data into the component as key-value pairs.</p>
 
 <c-snippet label="cotton/weather.html">{% cotton_verbatim %}{% verbatim %}
-<p>It's {{ temperature }}<sup>{{ unit }}</sup> and the condition is {{ condition }}.</p>
+<p>It's {{ temperature }}<sup>o</sup>{{ unit }} and the condition is {{ condition }}.</p>
     {% endcotton_verbatim %}{% endverbatim %}
 </c-snippet>
 
@@ -56,7 +56,7 @@
 <c-weather temperature="23" unit="{{ unit }}" condition="windy"></c-weather>
 {% endcotton_verbatim %}{% endverbatim %}
 <c-slot name="preview">
-    It's 23<sup>c</sup> and the condition is windy.
+    It's 23<sup>o</sup>C and the condition is windy.
 </c-slot>
 </c-snippet>
 
@@ -118,7 +118,7 @@ context = { 'today': Weather.objects.get(...) }
     </c-snippet>
 
     <c-snippet label="cotton/weather.html">{% cotton_verbatim %}{% verbatim %}
-<p>It's {{ today.temperature }}<sup>{{ today.unit }}</sup> and the condition is {{ today.condition }}.</p>
+<p>It's {{ today.temperature }}<sup>o</sup>{{ today.unit }} and the condition is {{ today.condition }}.</p>
     {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
 
     <h3>Passing python types</h3>

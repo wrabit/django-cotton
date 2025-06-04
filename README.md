@@ -31,6 +31,7 @@ Bringing component-based design to Django templates.
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Configuration](#configuration)  
 [Caching](#caching)  
+[Tools](#tools)
 [Version support](#version-support)  
 [Changelog](#changelog)  
 [Comparison with other packages](#comparison-with-other-packages)  
@@ -565,6 +566,10 @@ Whether to search for component filenames in snake_case. If set to False, you ca
 Cotton is optimal when used with Django's cached.Loader. If you use <a href="https://django-cotton.com/docs/quickstart">automatic configuration</a> then the cached loader will be automatically applied.
 
 <hr>
+
+## Tools
+
+- [Cotton VS Code plugin](https://github.com/twentyforty/cotton-vscode-ext) from [twentyforty](https://github.com/twentyforty)
 
 ## Version Support
 

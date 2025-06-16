@@ -575,7 +575,7 @@ Cotton is optimal when used with Django's cached.Loader. If you use <a href="htt
 ## Version Support
 
 - Python >= 3.8
-- Django >4.2,<5.2
+- Django >4.2,<5.3
 
 <hr>
 

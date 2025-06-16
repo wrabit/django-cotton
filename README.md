@@ -569,7 +569,8 @@ Cotton is optimal when used with Django's cached.Loader. If you use <a href="htt
 
 ## Tools
 
-- [Cotton VS Code plugin](https://github.com/twentyforty/cotton-vscode-ext) from [twentyforty](https://github.com/twentyforty)
+- [Cotton VS Code plugin](https://github.com/twentyforty/cotton-vscode-ext) from [twentyforty](https://github.com/twentyforty)  
+- [Cotton Icons](https://github.com/wrabit/cotton-icons) - Heroicons and Tabler Icon sets for Cotton
 
 ## Version Support
 

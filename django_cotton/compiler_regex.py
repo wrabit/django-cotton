@@ -1,5 +1,6 @@
 import re
-from typing import List, Tuple
+from typing import List, Tuple, Optional
+from html.parser import HTMLParser
 
 
 class Tag:
@@ -153,3 +154,118 @@ class CottonCompiler:
         if vars_content:
             processed_html = f"{vars_content}{processed_html}{{% endvars %}}"
         return self.restore_ignorables(processed_html, ignorables)
+
+
+class CottonDirectiveParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.available_directives = ["c-if", "c-for"]
+        self.result = []
+        self.directive_blocks = []
+        
+    def has_directive(self, attrs: dict) -> Tuple[bool, Optional[str]]:
+        """
+        Check if a single directive is present in the element.
+        Raises ValueError if more than one directive is found.
+        """
+        directives = [directive for directive in self.available_directives if directive in attrs]
+        
+        if (len(directives) > 1):
+            raise ValueError(
+                "Multiple cotton directives found in the same element. Only one directive is allowed per HTML element."
+            )
+            
+        if directives:
+            return True, directives[0]
+        
+        return False, None
+
+    def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]):
+        """Handles opening tags, detects directives, and manages directive block buffering."""
+        attrs_dict = dict(attrs)
+        has_directive, directive = self.has_directive(attrs_dict)
+        
+        if has_directive:
+            directive_block = {
+                "directive": directive,
+                "directive_value": attrs_dict[directive],
+                "stack": [],
+                "buffer": []
+            }
+            clean_attrs = [(k, v) for k, v in attrs if k not in self.available_directives]
+            start_tag = f"<{tag}"
+            for k, v in clean_attrs:
+                start_tag += f' {k}="{v}"'
+            start_tag += ">"
+            directive_block["buffer"].append(start_tag)
+            directive_block["stack"].append(tag)
+            self.directive_blocks.append(directive_block)
+        elif self.directive_blocks:
+            start_tag = f"<{tag}"
+            for k, v in attrs:
+                start_tag += f' {k}="{v}"'
+            start_tag += ">"
+            current_block = self.directive_blocks[-1]
+            current_block["buffer"].append(start_tag)
+            current_block["stack"].append(tag)
+        else:
+            start_tag = f"<{tag}"
+            for k, v in attrs:
+                start_tag += f' {k}="{v}"'
+            start_tag += ">"
+            self.result.append(start_tag)
+
+    def handle_endtag(self, tag: str):
+        """Handles closing tags and finalizes directive blocks if applicable."""
+        if self.directive_blocks:
+            current_block = self.directive_blocks[-1]
+            current_block["buffer"].append(f"</{tag}>")
+            current_block["stack"].pop()
+            if not current_block["stack"]:
+                block_content = "".join(current_block["buffer"])
+                cleaned_directive = current_block["directive"].replace("c-", "")
+                
+                if (len(self.directive_blocks) > 1):
+                    parent_block = self.directive_blocks[-2]
+                    parent_block['buffer'].append(f"{{% {cleaned_directive} {current_block['directive_value']} %}}")
+                    parent_block['buffer'].append(block_content)
+                    parent_block['buffer'].append(f"{{% end{cleaned_directive} %}}")
+                else:
+                    self.result.append(f"{{% {cleaned_directive} {current_block['directive_value']} %}}")
+                    self.result.append(block_content)
+                    self.result.append(f"{{% end{cleaned_directive} %}}")
+
+                self.directive_blocks.pop()
+        else:
+            self.result.append(f"</{tag}>")
+
+    def handle_data(self, data: str):
+        """Handles raw text content inside or outside directive blocks."""
+        if self.directive_blocks:
+            current_block = self.directive_blocks[-1]
+            current_block["buffer"].append(data)
+        else:
+            self.result.append(data)
+
+    def handle_startendtag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]):
+        """Handles self-closing tags and buffers them appropriately."""
+        start_tag = f"<{tag}"
+        for k, v in attrs:
+            start_tag += f' {k}="{v}"'
+        start_tag += "/>"
+        
+        if self.directive_blocks:
+            current_block = self.directive_blocks[-1]
+            current_block["buffer"].append(start_tag)
+        else:
+            self.result.append(start_tag)
+
+    def process(self, html: str) -> str:
+        """Parses the input HTML and returns the transformed output with directives rendered."""
+        if not any(f'{directive}=' in html for directive in self.available_directives):
+            return html
+
+        self.feed(html)
+        final_result = "".join(self.result)
+        self.result = []
+        return "".join(final_result)

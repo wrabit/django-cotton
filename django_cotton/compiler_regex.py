@@ -175,10 +175,15 @@ class CottonDirectiveParser(HTMLParser):
                 "Multiple cotton directives found in the same element. Only one directive is allowed per HTML element."
             )
             
-        if directives:
-            return True, directives[0]
-        
-        return False, None
+        return (True, directives[0]) if directives else (False, None)
+    
+    def build_tag(self, tag: str, attrs: List[Tuple[str, Optional[str]]], self_closing=False) -> str:
+        """Build an HTML start tag (or self-closing tag) from the given tag name and attributes."""
+        parts = [f"<{tag}"]
+        for k, v in attrs:
+            parts.append(f' {k}="{v}"')
+        parts.append("/>" if self_closing else ">")
+        return "".join(parts)
     
     def adjust_conditional_directive(self, directive):
         """
@@ -186,16 +191,23 @@ class CottonDirectiveParser(HTMLParser):
         with 'elif' or 'else'. Raises a ValueError if the conditional structure is invalid
         (i.e., 'c-elif' or 'c-else' not immediately following a valid 'c-if' or 'c-elif').
         """
-        directive_error = ValueError(
-                f"An element with the '{directive}' directive must follow an element with a 'c-if' or 'c-elif' directive. Ensure that conditional directives follow the correct structure."
-            )
+        error = ValueError(
+            f"An element with the '{directive}' directive must follow an element "
+            "with a 'c-if' or 'c-elif' directive. Ensure that conditional directives "
+            "follow the correct structure."
+        )
         
-        if len(self.result) >= 1 and self.result[-1] == "{% endif %}":
-            self.result.pop()
-        elif len(self.result) >= 2 and self.result[-2] == "{% endif %}":
-            self.result.pop(-2) 
+        if len(self.directive_blocks) > 1:
+            buffer = self.directive_blocks[-2]['buffer']
         else:
-            raise directive_error
+            buffer = self.result
+        
+        if len(buffer) >= 1 and buffer[-1] == "{% endif %}":
+            buffer.pop()
+        elif len(buffer) >= 2 and buffer[-2] == "{% endif %}":
+            buffer.pop(-2) 
+        else:
+            raise error
 
     def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]):
         """Handles opening tags, detects directives, and manages directive block buffering."""
@@ -203,38 +215,26 @@ class CottonDirectiveParser(HTMLParser):
         has_directive, directive = self.has_directive(attrs_dict)
         
         if has_directive:
+            clean_attrs = [(k, v) for k, v in attrs if k not in self.available_directives]
+            tag_with_attrs = self.build_tag(tag, clean_attrs)
             directive_block = {
                 "directive": directive,
                 "directive_value": attrs_dict[directive],
-                "stack": [],
-                "buffer": []
+                "stack": [tag],
+                "buffer": [tag_with_attrs]
             }
-            clean_attrs = [(k, v) for k, v in attrs if k not in self.available_directives]
-            start_tag = f"<{tag}"
-            for k, v in clean_attrs:
-                start_tag += f' {k}="{v}"'
-            start_tag += ">"
-            directive_block["buffer"].append(start_tag)
-            directive_block["stack"].append(tag)
             self.directive_blocks.append(directive_block)
             
             if directive == "c-elif" or directive == "c-else":
                 self.adjust_conditional_directive(directive)
                 
         elif self.directive_blocks:
-            start_tag = f"<{tag}"
-            for k, v in attrs:
-                start_tag += f' {k}="{v}"'
-            start_tag += ">"
+            tag_with_attrs = self.build_tag(tag, attrs)
             current_block = self.directive_blocks[-1]
-            current_block["buffer"].append(start_tag)
+            current_block["buffer"].append(tag_with_attrs)
             current_block["stack"].append(tag)
         else:
-            start_tag = f"<{tag}"
-            for k, v in attrs:
-                start_tag += f' {k}="{v}"'
-            start_tag += ">"
-            self.result.append(start_tag)
+            self.result.append(self.build_tag(tag, attrs))
 
     def handle_endtag(self, tag: str):
         """Handles closing tags and finalizes directive blocks if applicable."""
@@ -245,19 +245,20 @@ class CottonDirectiveParser(HTMLParser):
 
             if not current_block["stack"]:
                 block_content = "".join(current_block["buffer"])
-                cleaned_directive_open = current_block["directive"].replace("c-", "")
-                cleaned_directive_close = "if" if cleaned_directive_open in ["elif", "else"] else cleaned_directive_open
-                cleaned_directive_value = current_block['directive_value'] if current_block['directive_value'] is not None else ""
+                directive = current_block["directive"].replace("c-", "")
+                closing = "if" if directive in ["elif", "else"] else directive
+                value = current_block["directive_value"] or ""
                 
-                if (len(self.directive_blocks) > 1):
-                    parent_block = self.directive_blocks[-2]
-                    parent_block['buffer'].append(f"{{% {cleaned_directive_open} {cleaned_directive_value} %}}")
-                    parent_block['buffer'].append(block_content)
-                    parent_block['buffer'].append(f"{{% end{cleaned_directive_close} %}}")
+                rendered = [
+                    f"{{% {directive} {value} %}}".strip(),
+                    block_content,
+                    f"{{% end{closing} %}}"
+                ]
+                
+                if len(self.directive_blocks) > 1:
+                    self.directive_blocks[-2]["buffer"].extend(rendered)
                 else:
-                    self.result.append(f"{{% {cleaned_directive_open} {cleaned_directive_value} %}}")
-                    self.result.append(block_content)
-                    self.result.append(f"{{% end{cleaned_directive_close} %}}")
+                    self.result.extend(rendered)
 
                 self.directive_blocks.pop()
         else:
@@ -266,23 +267,18 @@ class CottonDirectiveParser(HTMLParser):
     def handle_data(self, data: str):
         """Handles raw text content inside or outside directive blocks."""
         if self.directive_blocks:
-            current_block = self.directive_blocks[-1]
-            current_block["buffer"].append(data)
+            self.directive_blocks[-1]["buffer"].append(data)
         else:
             self.result.append(data)
 
     def handle_startendtag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]):
         """Handles self-closing tags and buffers them appropriately."""
-        start_tag = f"<{tag}"
-        for k, v in attrs:
-            start_tag += f' {k}="{v}"'
-        start_tag += "/>"
+        tag_with_attrs = self.build_tag(tag, attrs, self_closing=True)
         
         if self.directive_blocks:
-            current_block = self.directive_blocks[-1]
-            current_block["buffer"].append(start_tag)
+            self.directive_blocks[-1]["buffer"].append(tag_with_attrs)
         else:
-            self.result.append(start_tag)
+            self.result.append(tag_with_attrs)
 
     def process(self, html: str) -> str:
         """Parses the input HTML and returns the transformed output with directives rendered."""
@@ -291,5 +287,5 @@ class CottonDirectiveParser(HTMLParser):
 
         self.feed(html)
         final_result = "".join(self.result)
-        self.result = []
-        return "".join(final_result)
+        self.result = [] # reset for reuse
+        return final_result

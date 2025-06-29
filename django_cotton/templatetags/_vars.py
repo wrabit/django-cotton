@@ -22,8 +22,10 @@ class CottonVarsNode(Node):
         if cotton_data["stack"]:
             current_component = cotton_data["stack"][-1]
             attrs = current_component["attrs"]
+            slots = current_component.get("slots", {})
         else:
             attrs = Attrs({})
+            slots = {}
 
         vars = {}
 
@@ -31,13 +33,15 @@ class CottonVarsNode(Node):
             key_to_exclude = key
             if key not in attrs.exclude_unprocessable():
                 if key.startswith(":"):
-                    try:
-                        key_to_exclude = key[1:]
-                        vars[key_to_exclude] = DynamicAttr(value, is_cvar=True).resolve(context)
-                    except UnprocessableDynamicAttr:
-                        pass
+                    key_to_exclude = key[1:]
+                    if key_to_exclude not in slots:
+                        try:
+                            vars[key_to_exclude] = DynamicAttr(value, is_cvar=True).resolve(context)
+                        except UnprocessableDynamicAttr:
+                            pass
                 else:
-                    attrs[key] = value
+                    if key not in slots:
+                        attrs[key] = value
             attrs.exclude_from_string_output(key_to_exclude)
 
         # Process cvars without values

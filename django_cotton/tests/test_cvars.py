@@ -444,3 +444,57 @@ class CvarTests(CottonTestCase):
 
             self.assertTrue("Attrs: ''" in content)
             self.assertTrue("Action: 'something completely different'" in content)
+
+    def test_dynamic_cvars_can_be_overridden_by_named_slots(self):
+        self.create_template(
+            "cotton/cvars_named_slots.html",
+            """
+            <c-vars :action="{'do': 'it'}" />
+            
+            Action: '{{ action }}'
+            """,
+        )
+
+        # View template that uses the proxy component
+        self.create_template(
+            "cvars_named_slots_view.html",
+            """
+            <c-cvars-named-slots>
+                <c-slot name="action">overridden action</c-slot>
+            </c-cvars-named-slots>
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            content = response.content.decode().strip()
+
+            self.assertTrue("Action: 'overridden action'" in content)
+
+    def test_dynamic_cvars_are_not_present_in_attrs_string(self):
+        self.create_template(
+            "cotton/cvars_dynamic_attrs.html",
+            """
+            <c-vars :disabled />
+            
+            Attrs: '{{ attrs }}'
+            """,
+        )
+
+        # View template that uses the proxy component
+        self.create_template(
+            "cvars_dynamic_attrs_view.html",
+            """
+            <c-cvars-dynamic-attrs />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            content = response.content.decode().strip()
+
+            self.assertTrue("Attrs: ''" in content)

@@ -5,7 +5,7 @@
 # Django Cotton
 
 ![PyPI](https://img.shields.io/pypi/v/django-cotton?color=blue&style=flat-square)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/django-cotton?color=blue&style=flat-square)
+[![PyPI Downloads](https://static.pepy.tech/badge/django-cotton/month)](https://pepy.tech/projects/django-cotton)
 
 Bringing component-based design to Django templates.
 

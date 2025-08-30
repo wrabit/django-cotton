@@ -123,9 +123,7 @@ Named slots are a powerful concept. They allow us to provide HTML to appear in o
 <a href="{{ url }}" class="...">
     {{ slot }}
   
-    {% if icon %} 
-        {{ icon }} 
-    {% endif %}
+    {{ icon }}
 </a>
 ```
 ```html

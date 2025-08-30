@@ -122,8 +122,10 @@ Named slots are a powerful concept. They allow us to provide HTML to appear in o
 <!-- cotton/button.html -->
 <a href="{{ url }}" class="...">
     {{ slot }}
-  
-    {{ icon }}
+
+    <span class="some-class">
+        {{ icon }}
+    </span>
 </a>
 ```
 ```html

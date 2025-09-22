@@ -238,7 +238,7 @@ This benefits a number of use-cases, for example if you have a select component 
 
 ### Increase Re-usability with `{{ attrs }}`
 
-`{{ attrs }}` is a special variable that contains all the attributes passed to the component (except those defined as [c-vars](https://github.com/wrabit/django-cotton?tab=readme-ov-file#in-component-variables-with-c-vars) in a key="value" format. This is useful when you want to pass all attributes to a child element without having to explicitly define them in the component template. For example, you have inputs that can have any number of attributes defined:
+`{{ attrs }}` is a special variable that contains all the attributes passed to the component (except those defined as [c-vars](https://github.com/wrabit/django-cotton?tab=readme-ov-file#in-component-variables-with-c-vars)) in a key="value" format. This is useful when you want to pass all attributes to a child element without having to explicitly define them in the component template. For example, you have inputs that can have any number of attributes defined:
 
 ```html
 <!-- cotton/input.html -->

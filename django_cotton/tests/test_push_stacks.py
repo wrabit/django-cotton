@@ -1,4 +1,5 @@
 from django_cotton.tests.utils import CottonTestCase
+from django.template.loader import render_to_string
 
 
 class PushStackTests(CottonTestCase):
@@ -143,3 +144,31 @@ class PushStackTests(CottonTestCase):
 
         self.assertIn("init('alpha-one')", html)
         self.assertNotIn("init('beta-two')", html)
+
+    def test_stack_renders_without_middleware(self):
+        self.create_template(
+            "cotton/push_no_middleware.html",
+            """
+                <div>{{ slot }}</div>
+                <c-push to=\"scripts\">
+                    <script>console.log('pushed')</script>
+                </c-push>
+            """,
+        )
+
+        self.create_template(
+            "no_middleware_view.html",
+            """
+                <c-push-no-middleware>First</c-push-no-middleware>
+                <c-stack name=\"scripts\">
+                    <script>console.log('fallback')</script>
+                </c-stack>
+            """,
+        )
+
+        html = render_to_string("no_middleware_view.html")
+
+        # Without middleware, stack renders immediately with available items
+        self.assertIn("console.log('pushed')", html)
+        self.assertNotIn("console.log('fallback')", html)
+        self.assertNotIn("__COTTON_STACK", html)

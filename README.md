@@ -27,6 +27,7 @@ Bringing component-based design to Django templates.
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [Merging and Proxying Attributes with `:attrs`](#merging-and-proxying-attributes-with-attrs)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
+[Push Stacks](#push-stacks)  
 [HTMX Example](#an-example-with-htmx)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Configuration](#configuration)  
@@ -423,6 +424,54 @@ You can also provide a template expression, should the component be inside a sub
     <c-component is="field_{{ field.type }}" />
 {% endfor %}
 ```
+
+<hr>
+
+### Push Stacks
+
+Some components need to ship extra HTML (scripts, styles, Alpine data definitions, etc.) that belongs in a different slot in the template. Cotton's push/stack helpers let the component declare that markup once and render it later without duplication.
+
+Enable the middleware when you want to use stacks:
+
+```python
+MIDDLEWARE = [
+    # ...
+    "django_cotton.middleware.CottonStackMiddleware",
+]
+```
+
+Declare a stack in your base layout. The body is used as a fallback whenever nothing was pushed.
+
+```html
+<head>
+    <c-stack name="head">
+        <link rel="stylesheet" href="/static/base.css" />
+    </c-stack>
+</head>
+```
+
+Inside a component use `<c-push>` to send markup to a named stack. Cotton deduplicates pushes automatically so the script below only renders once, no matter how many times the component is used.
+
+```html
+<!-- cotton/tooltip.html -->
+<div class="tooltip">{{ slot }}</div>
+
+<c-push to="head">
+    <script src="/static/libs/tooltip.js"></script>
+</c-push>
+```
+
+Use the tooltip anywhere without worrying about double-including assets:
+
+```html
+<c-tooltip>Alpha</c-tooltip>
+<c-tooltip>Beta</c-tooltip>
+```
+
+Optional attributes:
+
+- `multiple` keeps every push instead of deduplicating by content.
+- `key="unique-id"` deduplicates pushes using the given key rather than the rendered HTML.
 
 <hr>
 

@@ -1,3 +1,5 @@
+import hashlib
+
 from django.template import Library, Node, TemplateSyntaxError
 from django.template.base import token_kwargs, FilterExpression
 from django.utils.safestring import mark_safe
@@ -25,7 +27,10 @@ class CottonStackNode(Node):
             rendered = "".join(pushes.get("items", [])) if pushes else ""
             return mark_safe(rendered or fallback)
 
-        placeholder = f"__COTTON_STACK__{stack_name}__"
+        # Generate unique placeholder to prevent accidental replacement
+        placeholder_id = hashlib.md5(f"{id(self)}_{stack_name}".encode()).hexdigest()[:8]
+        placeholder = f"__COTTON_STACK_{placeholder_id}_{stack_name}__"
+        
         cotton_data.setdefault("stack_placeholders", []).append(
             {
                 "placeholder": placeholder,
@@ -94,10 +99,18 @@ def cotton_stack(parser, token):
 def cotton_push(parser, token):
     bits = token.split_contents()[1:]
     kwargs = token_kwargs(bits, parser, support_legacy=False)
-    flags = {bit for bit in bits}
+    
+    # Separate flags from kwargs
+    flags = []
+    for bit in bits:
+        if "=" not in bit and bit not in kwargs.values():
+            flags.append(bit)
 
     if "to" not in kwargs:
         raise TemplateSyntaxError("c-push tag requires a 'to' attribute")
+
+    if "key" in kwargs and "id" in kwargs:
+        raise TemplateSyntaxError("c-push tag cannot have both 'key' and 'id' attributes")
 
     allow_multiple = "multiple" in flags
     if allow_multiple:

@@ -5,12 +5,15 @@ from django_cotton.templatetags._component import cotton_component
 from django_cotton.templatetags._vars import cotton_cvars
 from django_cotton.templatetags._slot import cotton_slot
 from django_cotton.templatetags._attr import cotton_attr
+from django_cotton.templatetags._stack import cotton_stack, cotton_push
 
 register = template.Library()
 register.tag("c", cotton_component)
 register.tag("slot", cotton_slot)
 register.tag("vars", cotton_cvars)
 register.tag("attr", cotton_attr)
+register.tag("stack", cotton_stack)
+register.tag("push", cotton_push)
 
 
 @register.filter

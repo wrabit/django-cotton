@@ -22,6 +22,10 @@ class Tag:
             return ""  # c-vars tags will be handled separately
         elif self.tag_name == "c-slot":
             return self._process_slot()
+        elif self.tag_name == "c-stack":
+            return self._process_stack()
+        elif self.tag_name == "c-push":
+            return self._process_push()
         elif self.tag_name.startswith("c-"):
             return self._process_component()
         else:
@@ -48,6 +52,26 @@ class Tag:
             return f"{opening_tag}{extracted_attrs}{{% endc %}}"
         return f"{opening_tag}{extracted_attrs}"
 
+    def _process_stack(self) -> str:
+        if self.is_closing:
+            return "{% endstack %}"
+
+        processed_attrs = self._process_simple_attributes()
+        opening_tag = f"{{% stack{processed_attrs} %}}"
+        if self.is_self_closing:
+            return f"{opening_tag}{{% endstack %}}"
+        return opening_tag
+
+    def _process_push(self) -> str:
+        if self.is_closing:
+            return "{% endpush %}"
+
+        processed_attrs = self._process_simple_attributes()
+        opening_tag = f"{{% push{processed_attrs} %}}"
+        if self.is_self_closing:
+            return f"{opening_tag}{{% endpush %}}"
+        return opening_tag
+
     def _process_attributes(self) -> Tuple[str, str]:
         """Move any complex attributes to the {% attr %} tag"""
         processed_attrs = []
@@ -65,6 +89,23 @@ class Tag:
                     processed_attrs.append(f'{key}="{actual_value}"')
 
         return " " + " ".join(processed_attrs), "".join(extracted_attrs)
+
+    def _process_simple_attributes(self) -> str:
+        attrs = []
+
+        for match in self.attr_pattern.finditer(self.attrs):
+            key, quote, value, unquoted_value = match.groups()
+            if value is None and unquoted_value is None:
+                attrs.append(key)
+            elif value is not None:
+                attrs.append(f"{key}={quote}{value}{quote}")
+            else:
+                attrs.append(f"{key}={unquoted_value}")
+
+        if not attrs:
+            return ""
+
+        return " " + " ".join(attrs)
 
 
 class CottonCompiler:

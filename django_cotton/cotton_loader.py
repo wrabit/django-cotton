@@ -10,7 +10,7 @@ from django.utils._os import safe_join
 from django.template import Template
 from django.apps import apps
 
-from django_cotton.compiler_regex import CottonCompiler
+from django_cotton.compiler_regex import CottonCompiler, CottonDirectiveParser
 
 
 class Loader(BaseLoader):
@@ -18,6 +18,7 @@ class Loader(BaseLoader):
         super().__init__(engine)
         self.cotton_compiler = CottonCompiler()
         self.cache_handler = CottonTemplateCacheHandler()
+        self.directive_parser = CottonDirectiveParser()
         self.dirs = dirs
 
     def get_contents(self, origin):
@@ -28,7 +29,8 @@ class Loader(BaseLoader):
             return cached_content
 
         template_string = self._get_template_string(origin.name)
-
+        template_string = self.directive_parser.process(template_string)
+        
         if "<c-" not in template_string and "{% cotton_verbatim" not in template_string:
             compiled = template_string
         else:

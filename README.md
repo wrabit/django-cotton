@@ -71,7 +71,7 @@ If you have previously specified a custom loader, you should perform [manual set
 ## Usage Basics
 - **Component Placement:** Components should be placed in the `templates/cotton` folder (or define a [custom folder](https://django-cotton.com/docs/configuration)).
 - **Naming Conventions:** 
-  - Component filenames use snake_case: `my_component.html`
+  - Component filenames use snake_case: `my_component.html` (or [configure](https://django-cotton.com/docs/configuration) for kebab-case)
   - Components are called using kebab-case prefixed by 'c-': `<c-my-component />`
 
 <hr>

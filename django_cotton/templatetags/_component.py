@@ -5,24 +5,26 @@ from django.conf import settings
 from django.template import Library, TemplateDoesNotExist
 from django.template.base import (
     Node,
+    Template,
 )
 from django.template.context import Context, RequestContext
 from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
 from django_cotton.exceptions import CottonIncompleteDynamicComponentError
-from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr
+from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr, strip_quotes_safely
 
 register = Library()
 
 
 class CottonComponentNode(Node):
-    def __init__(self, component_name, nodelist, attrs, only):
+    def __init__(self, component_name, nodelist, attrs, only, loaded_libraries=None):
         self.component_name = component_name
         self.nodelist = nodelist
         self.attrs = attrs
         self.template_cache = {}
         self.only = only
+        self.loaded_libraries = loaded_libraries or []
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
@@ -37,7 +39,7 @@ class CottonComponentNode(Node):
 
         # Process simple attributes and boolean attributes
         for key, value in self.attrs.items():
-            value = self._strip_quotes_safely(value)
+            value = strip_quotes_safely(value)
             if value is True:  # Boolean attribute
                 component_data["attrs"][key] = True
             elif key.startswith("::"):  # Escaping 1 colon e.g for shorthand alpine
@@ -56,7 +58,21 @@ class CottonComponentNode(Node):
                     else:
                         component_data["attrs"][key] = resolved_value
             else:
-                component_data["attrs"][key] = value
+                # Static attribute - check if it contains template syntax
+                if isinstance(value, str) and ("{{" in value or "{%" in value):
+                    try:
+                        # Evaluate template tags at render time (same as c-vars)
+                        # Prepend {% load %} tags for libraries that were loaded at parse time
+                        load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
+                        template_str = "".join(load_tags) + value
+                        mini_template = Template(template_str)
+                        rendered_value = mini_template.render(context)
+                        component_data["attrs"][key] = rendered_value
+                    except Exception:
+                        # If rendering fails, fall back to the raw value
+                        component_data["attrs"][key] = value
+                else:
+                    component_data["attrs"][key] = value
 
         # Render the nodelist to process any slot tags and vars
         default_slot = self.nodelist.render(context)
@@ -158,68 +174,21 @@ class CottonComponentNode(Node):
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 
-    @staticmethod
-    def _strip_quotes_safely(value):
-        if type(value) is str and value.startswith('"') and value.endswith('"'):
-            return value[1:-1]
-        return value
-
-
 def cotton_component(parser, token):
     """
     Parse a cotton component tag and return a CottonComponentNode.
 
-    It accepts spaces inside quoted attributes for example if we want to pass valid json that contains spaces in values.
-
-    @TODO Add support here for 'complex' attributes so we can eventually remove the need for the 'attr' tag. The idea
-     here is to render `{{` and `{%` blocks in tags.
+    Uses custom parser to preserve quotes and handle template tags in attributes.
     """
+    from django_cotton.tag_parser import parse_component_tag
 
-    bits = token.split_contents()[1:]
-    component_name = bits[0]
-    attrs = {}
-    only = False
+    # Use the custom parser that preserves quotes and handles nested template tags
+    component_name, attrs, only = parse_component_tag(token.contents)
 
-    current_key = None
-    current_value = []
-
-    for bit in bits[1:]:
-        if bit == "only":
-            only = True
-            continue
-
-        if "=" in bit:
-            # If we were building a previous value, store it
-            if current_key:
-                attrs[current_key] = " ".join(current_value)
-                current_value = []
-
-            # Start new key-value pair
-            key, value = bit.split("=", 1)
-            if value.startswith(("'", '"')):
-                if value.endswith(("'", '"')) and value[0] == value[-1]:
-                    # Complete quoted value
-                    attrs[key] = value
-                else:
-                    # Start of quoted value
-                    current_key = key
-                    current_value = [value]
-            else:
-                # Simple unquoted value
-                attrs[key] = value
-        else:
-            if current_key:
-                # Continue building quoted value
-                current_value.append(bit)
-            else:
-                # Boolean attribute
-                attrs[bit] = True
-
-    # Store any final value being built
-    if current_key:
-        attrs[current_key] = " ".join(current_value)
+    # Capture which template libraries were loaded at parse time
+    loaded_libraries = list(parser.libraries.keys()) if hasattr(parser, 'libraries') else []
 
     nodelist = parser.parse(("endc",))
     parser.delete_first_token()
 
-    return CottonComponentNode(component_name, nodelist, attrs, only)
+    return CottonComponentNode(component_name, nodelist, attrs, only, loaded_libraries)

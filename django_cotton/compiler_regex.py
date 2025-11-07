@@ -49,7 +49,7 @@ class Tag:
         return f"{opening_tag}{extracted_attrs}"
 
     def _process_attributes(self) -> Tuple[str, str]:
-        """Move any complex attributes to the {% attr %} tag"""
+        """Process attributes - nested tag support now handles template tags"""
         processed_attrs = []
         extracted_attrs = []
 
@@ -59,10 +59,10 @@ class Tag:
                 processed_attrs.append(key)
             else:
                 actual_value = value if value is not None else unquoted_value
-                if any(s in actual_value for s in ("{{", "{%", "=", "__COTTON_IGNORE_")):
-                    extracted_attrs.append(f"{{% attr {key} %}}{actual_value}{{% endattr %}}")
-                else:
-                    processed_attrs.append(f'{key}="{actual_value}"')
+                # Preserve the original quote character to avoid escaping issues
+                quote_char = quote if quote else '"'
+                # With nested tag support, all attributes can be passed directly
+                processed_attrs.append(f'{key}={quote_char}{actual_value}{quote_char}')
 
         return " " + " ".join(processed_attrs), "".join(extracted_attrs)
 

@@ -194,7 +194,8 @@ class CvarTests(CottonTestCase):
             "cotton/multiline_cvar_values.html",
             """
                 <c-vars multiline="line1
-                line2" />
+                line2"
+                 another="one" />
             """,
         )
 
@@ -478,7 +479,7 @@ class CvarTests(CottonTestCase):
             "cotton/cvars_dynamic_attrs.html",
             """
             <c-vars :disabled />
-            
+
             Attrs: '{{ attrs }}'
             """,
         )
@@ -498,3 +499,62 @@ class CvarTests(CottonTestCase):
             content = response.content.decode().strip()
 
             self.assertTrue("Attrs: ''" in content)
+
+    def test_cvars_with_trans_tag_in_defaults(self):
+        """Test that c-vars defaults can handle {% trans %} template tags for i18n"""
+        self.create_template(
+            "cotton/cvars_trans_tag.html",
+            """
+            {% load i18n %}
+            <c-vars label="{% trans 'Loading' %}" />
+
+            <span class="spinner" title="{{ label }}">{{ label }}</span>
+            """,
+        )
+
+        # View template that uses the component
+        self.create_template(
+            "cvars_trans_tag_view.html",
+            """
+            <c-cvars-trans-tag />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            # The trans tag should be evaluated and the translated text should appear
+            self.assertContains(response, 'title="Loading"')
+            self.assertContains(response, ">Loading<")
+
+    def test_cvars_with_trans_tag_override(self):
+        """Test that c-vars defaults with {% trans %} can be overridden"""
+        self.create_template(
+            "cotton/cvars_trans_override.html",
+            """
+            {% load i18n %}
+            <c-vars label="{% trans 'Loading' %}" />
+
+            <span class="spinner" title="{{ label }}">{{ label }}</span>
+            """,
+        )
+
+        # View template that overrides the default
+        self.create_template(
+            "cvars_trans_override_view.html",
+            """
+            <c-cvars-trans-override label="Custom Label" />
+            """,
+            "view/",
+        )
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            content = response.content.decode().strip()
+
+            # The custom label should override the trans tag default
+            self.assertContains(response, 'title="Custom Label"')
+            self.assertContains(response, ">Custom Label<")

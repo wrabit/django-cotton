@@ -534,3 +534,47 @@ class AttributeHandlingTests(CottonTestCase):
             response = self.client.get("/view/")
 
             self.assertContains(response, """{"key=dd": "the value with= spaces"}""")
+
+    def test_attributes_can_contain_url_tags(self):
+        """Test that component attributes can handle {% url %} template tags - replicates sidebar link scenario"""
+        from django.urls import path
+        from django.views.generic import TemplateView
+
+        # Create a sidebar link component that accepts a url attribute
+        self.create_template(
+            "cotton/sidebar_link.html",
+            """
+                <li class="menu-item">
+                    <a href="{{ url }}" class="link">{{ slot }}</a>
+                </li>
+            """,
+        )
+
+        # Create a dummy destination template
+        self.create_template(
+            "test_destination.html",
+            """<h1>Destination</h1>""",
+        )
+
+        # Manually register a NAMED URL pattern
+        url_pattern = path("destination/", TemplateView.as_view(template_name="test_destination.html"), name="test_destination")
+        self.url_module.urlpatterns.append(url_pattern)
+
+        # Use the component with {% url %} tag in the attribute
+        self.create_template(
+            "sidebar_link_view.html",
+            """
+                <c-sidebar-link url="{% url 'test_destination' %}">
+                    Go to Destination
+                </c-sidebar-link>
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            # The url tag should be evaluated and the URL should appear in the href
+            self.assertContains(response, 'href="/destination/"')
+            self.assertContains(response, 'class="link"')
+            self.assertContains(response, 'Go to Destination')

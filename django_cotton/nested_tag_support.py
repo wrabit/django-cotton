@@ -157,8 +157,10 @@ def enable_nested_tag_support():
     # Store original
     _original_tokenize = template_base.Lexer.tokenize
 
-    # Enable nested tag support
-    template_base.Lexer.tokenize = _create_smart_tokenize()
+    # Enable nested tag support for Lexer and DebugLexer
+    smart_tokenize = _create_smart_tokenize()
+    template_base.Lexer.tokenize = smart_tokenize
+    template_base.DebugLexer.tokenize = smart_tokenize
     _support_enabled = True
 
 

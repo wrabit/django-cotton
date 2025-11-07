@@ -553,8 +553,51 @@ class CvarTests(CottonTestCase):
         # Override URLconf
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            content = response.content.decode().strip()
 
             # The custom label should override the trans tag default
             self.assertContains(response, 'title="Custom Label"')
             self.assertContains(response, ">Custom Label<")
+
+    def test_cvars_with_url_tag_in_defaults(self):
+        """Test that c-vars defaults can handle {% url %} template tags"""
+        from django.urls import path
+        from django.views.generic import TemplateView
+
+        # Create the component with url tag in c-vars default
+        self.create_template(
+            "cotton/cvars_url_tag.html",
+            """
+            <c-vars url="{% url 'test_page' %}" />
+
+            <a href="{{ url }}" class="link">Test Link</a>
+            """,
+        )
+
+        # View template that uses the component
+        self.create_template(
+            "cvars_url_tag_view.html",
+            """
+            <c-cvars-url-tag />
+            """,
+            "view/",
+        )
+
+        # Create a dummy template
+        self.create_template(
+            "test_page.html",
+            """<h1>Test Page</h1>""",
+        )
+
+        # Manually register a named url pattern
+        url_pattern = path(
+            "test-page/", TemplateView.as_view(template_name="test_page.html"), name="test_page"
+        )
+        self.url_module.urlpatterns.append(url_pattern)
+
+        # Override URLconf
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            # The url tag should be evaluated and the URL should appear in the href
+            self.assertContains(response, 'href="/test-page/"')
+            self.assertContains(response, 'class="link"')

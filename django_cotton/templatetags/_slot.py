@@ -15,7 +15,7 @@ def cotton_slot(parser, token):
     if len(bits) < 1:
         raise TemplateSyntaxError("cotton slot tag must include a 'name'")
 
-    nodelist = parser.parse(("endslot",))
+    nodelist = parser.parse(("endc:slot",))
     parser.delete_first_token()
     return CottonSlotNode(bits[0], nodelist)
 

@@ -60,6 +60,14 @@
                     }
                 },
             }))
+
+            // Global syntax preference store
+            Alpine.store('syntaxPreference', localStorage.getItem('cotton-syntax-preference') || 'html');
+
+            // Watch for changes and persist to localStorage
+            Alpine.effect(() => {
+                localStorage.setItem('cotton-syntax-preference', Alpine.store('syntaxPreference'));
+            });
         })
     </script>
 </body>

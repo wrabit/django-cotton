@@ -102,7 +102,7 @@ def cotton_cvars(parser, token):
         # parser.libraries is a dict with library names (strings) as keys
         loaded_libraries = list(parser.libraries.keys())
 
-    nodelist = parser.parse(("endvars",))
+    nodelist = parser.parse(("endc:vars",))
     parser.delete_first_token()
 
     return CottonVarsNode(var_dict, empty_vars, nodelist, loaded_libraries)

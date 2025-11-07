@@ -71,9 +71,9 @@ class SlotTests(CottonTestCase):
 
         self.assertEqual(
             compiled,
-            """{% vars var1="string with space" %}
+            """{% c:vars var1="string with space" %}
             content
-            {% endvars %}""",
+            {% endc:vars %}""",
         )
 
     def test_named_slot_missing(self):

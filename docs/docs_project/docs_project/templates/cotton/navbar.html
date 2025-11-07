@@ -50,6 +50,20 @@
         </div>
 
         <div class="flex items-center space-x-2">
+            <!-- Syntax Preference Toggle -->
+            <button
+                @click="$store.syntaxPreference = $store.syntaxPreference === 'html' ? 'template' : 'html'"
+                class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg border-2 border-teal-600/30 dark:border-teal-600/50 hover:border-teal-600/60 dark:hover:border-teal-600/70 transition-colors"
+                :title="$store.syntaxPreference === 'html' ? 'Switch to Template Tag syntax' : 'Switch to HTML syntax'"
+                x-data="{
+                    get buttonText() {
+                        return this.$store.syntaxPreference === 'html' ? '<c->' : '{'+String.fromCharCode(37)+' c '+String.fromCharCode(37)+'}';
+                    }
+                }"
+            >
+                <span class="text-xs font-semibold text-gray-700 dark:text-gray-200" x-text="buttonText"></span>
+            </button>
+
             <a href="#" @click.prevent="toggleDark" x-data="{
                     'dark': false,
                     init() {

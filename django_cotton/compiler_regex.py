@@ -30,12 +30,12 @@ class Tag:
     def _process_slot(self) -> str:
         """Convert a c-slot tag to a Django template slot tag"""
         if self.is_closing:
-            return "{% endslot %}"
+            return "{% endc:slot %}"
         name_match = re.search(r'name=(["\'])(.*?)\1', self.attrs, re.DOTALL)
         if not name_match:
             raise ValueError(f"c-slot tag must have a name attribute: {self.html}")
         slot_name = name_match.group(2)
-        return f"{{% slot {slot_name} %}}"
+        return f"{{% c:slot {slot_name} %}}"
 
     def _process_component(self) -> str:
         """Convert a c- component tag to a Django template component tag"""
@@ -137,7 +137,7 @@ class CottonCompiler:
         match = matches[0] if matches else None
         if match:
             attrs = match.group(1)
-            vars_content = f"{{% vars {attrs.strip()} %}}"
+            vars_content = f"{{% c:vars {attrs.strip()} %}}"
             html = self.c_vars_pattern.sub("", html)  # Remove all c-vars tags
             return vars_content, html
 
@@ -151,5 +151,5 @@ class CottonCompiler:
         for original, replacement in replacements:
             processed_html = processed_html.replace(original, replacement)
         if vars_content:
-            processed_html = f"{vars_content}{processed_html}{{% endvars %}}"
+            processed_html = f"{vars_content}{processed_html}{{% endc:vars %}}"
         return self.restore_ignorables(processed_html, ignorables)

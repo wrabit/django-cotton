@@ -1,13 +1,19 @@
+{% load custom_tags force_escape %}
+
 <c-vars language="xml" rounded="rounded-xl" />
 
 <div class="group shadow relative flex-1 flex flex-col justify-start w-full {{ rounded }} overflow-hidden mb-3"
      x-data="{
         'code': '',
+        get currentCode() {
+            return this.$root.querySelector('[x-show=\"$store.syntaxPreference === \\\'html\\\'\"] code, [x-show=\"$store.syntaxPreference === \\\'template\\\'\"] code:not([style*=\\\'display: none\\\'])').innerText;
+        },
         copy() {
+            const text = this.currentCode;
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(this.$refs.code.innerText)
+                navigator.clipboard.writeText(text)
             } else {
-                this.unsecuredCopyToClipboard(this.$refs.code.innerText)
+                this.unsecuredCopyToClipboard(text)
             }
         },
         unsecuredCopyToClipboard(text) {
@@ -23,10 +29,29 @@
           document.body.removeChild(textArea);
         }
     }"
+    x-init="
+        $watch('$store.syntaxPreference', () => {
+            setTimeout(() => hljs.highlightAll(), 50);
+        });
+    "
 >
     {% if label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-gray-400 text-opacity-80 font-semibold">{{ label }}</div>{% endif %}
+
+    <!-- Syntax indicator badge -->
+    <div class="absolute left-0 bottom-0 px-3 py-1 text-xs text-gray-500 font-medium uppercase tracking-wide" x-text="$store.syntaxPreference === 'html' ? 'HTML Syntax' : 'Template Tags'"></div>
+
     <button @click.prevent="copy" class="opacity-0 transition-opacity transition-duration-500ms group-hover:opacity-100 absolute right-0 top-0 pt-3 pr-5"><c-icons.copy class="w-6 h-6 text-gray-500" /></button>
-    <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="code" x-model="code" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-11 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+
+    <!-- HTML Syntax Version -->
+    <div x-show="$store.syntaxPreference === 'html'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-11 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+    </div>
+
+    <!-- Template Tag Syntax Version -->
+    <div x-show="$store.syntaxPreference === 'template'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="templateCode" class="language-django flex-1 !pb-4 {% if label %} !pt-11 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip|to_template_tags }}</code></pre>
+    </div>
+
     {% if preview %}
         <div class="px-6 py-6 prose-headings:text-gray-800 shadow bg-white dark:bg-gray-50 rounded-b-xl dark:!text-gray-800">
             <div class="text-sm text-gray-400 font-semibold uppercase tracking-wider pb-3">preview</div>

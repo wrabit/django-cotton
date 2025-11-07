@@ -3,7 +3,6 @@ django-cotton
 
 App configuration to set up the cotton loader and builtins automatically.
 """
-import re
 from contextlib import suppress
 
 import django.contrib.admin
@@ -65,10 +64,11 @@ class LoaderAppConfig(AppConfig):
     default = True
 
     def ready(self):
-        from django.template import base
+        from django_cotton.nested_tag_support import enable_nested_tag_support
 
-        # Support for multiline tags
-        base.tag_re = re.compile(base.tag_re.pattern, re.DOTALL)
+        # Enable nested template tags in {% c %} and {% vars %} attributes
+        # This also handles multiline Cotton tags
+        enable_nested_tag_support()
 
         wrap_loaders("django")
 
@@ -82,7 +82,8 @@ class SimpleAppConfig(AppConfig):
     name = "django_cotton"
 
     def ready(self):
-        from django.template import base
+        from django_cotton.nested_tag_support import enable_nested_tag_support
 
-        # Support for multiline tags
-        base.tag_re = re.compile(base.tag_re.pattern, re.DOTALL)
+        # Enable nested template tags in {% c %} and {% vars %} attributes
+        # This also handles multiline Cotton tags
+        enable_nested_tag_support()

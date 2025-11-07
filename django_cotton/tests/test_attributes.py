@@ -68,7 +68,6 @@ class AttributeHandlingTests(CottonTestCase):
 
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-
             self.assertContains(response, "none is None")
             self.assertContains(response, "number is 1")
             self.assertContains(response, "boolean_true is True")
@@ -220,6 +219,7 @@ class AttributeHandlingTests(CottonTestCase):
                     attr1="Hello {{ name }}"
                     attr2="{{ test|default:'none' }}"
                     attr3="{% if 1 == 1 %}cowabonga!{% endif %}"
+                    attr4="{% if 1 == 2 %}cowabonga!{% else %}pizza{% endif %}"
                 >
                     <c-slot name="named">test</c-slot>
                 </c-native-tags-in-attributes>
@@ -234,6 +234,7 @@ class AttributeHandlingTests(CottonTestCase):
                 Attribute 1 says: '{{ attr1 }}'
                 Attribute 2 says: '{{ attr2 }}'
                 Attribute 3 says: '{{ attr3 }}'
+                Attribute 4 says: '{{ attr4 }}'
                 attrs tag is: '{{ attrs }}'            
             """,
         )
@@ -244,10 +245,11 @@ class AttributeHandlingTests(CottonTestCase):
             self.assertContains(response, "Attribute 1 says: 'Hello Will'")
             self.assertContains(response, "Attribute 2 says: 'world'")
             self.assertContains(response, "Attribute 3 says: 'cowabonga!'")
+            self.assertContains(response, "Attribute 4 says: 'pizza'")
 
             self.assertContains(
                 response,
-                """attrs tag is: 'attr1="Hello Will" attr2="world" attr3="cowabonga!"'""",
+                """attrs tag is: 'attr1="Hello Will" attr2="world" attr3="cowabonga!" attr4="pizza"'""",
             )
 
     def test_strings_with_spaces_can_be_passed(self):

@@ -3,23 +3,20 @@ Enable nested tag support for Django's template lexer to handle Cotton tags spec
 
 This allows template tags inside quoted attributes of {% c %} and {% vars %} tags to work properly.
 
-For example: 
+For example:
 <c-my-component label="{% trans 'Loading' %}" />
 <c-vars default_text="{% blocktrans %}Hello, {{ user }}!{% endblocktrans %}" %}" />
 """
 from django.template import base as template_base
 
 
-# Store the original tokenize method
-_original_tokenize = None
-_support_enabled = False
-
-
-def _create_smart_tokenize():
+def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokenize):
     """Create a smart tokenizer that handles {% c %} and {% vars %} tags specially."""
 
-    # Store original at creation time
-    original_tokenize = template_base.Lexer.tokenize
+    # Store originals at creation time
+    # We check isinstance(self, DebugLexer) to respect each engine's debug setting
+    lexer_tokenize = original_lexer_tokenize
+    debug_lexer_tokenize = original_debug_lexer_tokenize
 
     def smart_tokenize(self):
         """
@@ -37,7 +34,11 @@ def _create_smart_tokenize():
 
         if not has_c_tags and not has_vars_tags:
             # No Cotton tags - use Django's original tokenizer
-            return original_tokenize(self)
+            # Use DebugLexer tokenize if this is a DebugLexer instance (respects engine.debug)
+            if isinstance(self, template_base.DebugLexer):
+                return debug_lexer_tokenize(self)
+            else:
+                return lexer_tokenize(self)
 
         # Process Cotton tags specially
         result = []
@@ -63,8 +64,12 @@ def _create_smart_tokenize():
                 # No more Cotton tags - tokenize the rest with Django's original tokenizer
                 if position < len(template_string):
                     remaining = template_string[position:]
-                    temp_lexer = template_base.Lexer(remaining)
-                    tokens = original_tokenize(temp_lexer)
+                    # Create same type of lexer to preserve debug behavior (respects engine.debug)
+                    temp_lexer = self.__class__(remaining)
+                    if isinstance(self, template_base.DebugLexer):
+                        tokens = debug_lexer_tokenize(temp_lexer)
+                    else:
+                        tokens = lexer_tokenize(temp_lexer)
                     # Adjust line numbers for the tokens
                     lineno_offset = template_string[:position].count("\n")
                     for token in tokens:
@@ -75,8 +80,12 @@ def _create_smart_tokenize():
             # Tokenize everything before the Cotton tag with Django's original tokenizer
             if next_cotton > position:
                 before_cotton = template_string[position:next_cotton]
-                temp_lexer = template_base.Lexer(before_cotton)
-                tokens = original_tokenize(temp_lexer)
+                # Create same type of lexer to preserve debug behavior (respects engine.debug)
+                temp_lexer = self.__class__(before_cotton)
+                if isinstance(self, template_base.DebugLexer):
+                    tokens = debug_lexer_tokenize(temp_lexer)
+                else:
+                    tokens = lexer_tokenize(temp_lexer)
                 # Adjust line numbers for the tokens
                 lineno_offset = template_string[:position].count("\n")
                 for token in tokens:
@@ -141,32 +150,14 @@ def enable_nested_tag_support():
     """
     Enable nested tag support for Django's template lexer.
 
-    This should be called early in Django's initialization,
-    typically in an app's AppConfig.ready() method.
+    Called during Django initialization in AppConfig.ready().
+    Patches both Lexer and DebugLexer to handle nested tags in Cotton component attributes.
     """
-    global _original_tokenize, _support_enabled
+    # Capture originals before patching
+    original_lexer_tokenize = template_base.Lexer.tokenize
+    original_debug_lexer_tokenize = template_base.DebugLexer.tokenize
 
-    if _support_enabled:
-        return  # Already enabled
-
-    # Store original
-    _original_tokenize = template_base.Lexer.tokenize
-
-    # Enable nested tag support for Lexer and DebugLexer
-    smart_tokenize = _create_smart_tokenize()
+    # Create and apply the smart tokenizer to both Lexer and DebugLexer
+    smart_tokenize = _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokenize)
     template_base.Lexer.tokenize = smart_tokenize
     template_base.DebugLexer.tokenize = smart_tokenize
-    _support_enabled = True
-
-
-def disable_nested_tag_support():
-    """
-    Disable nested tag support and restore the original Django lexer behavior.
-    """
-    global _original_tokenize, _support_enabled
-
-    if not _support_enabled or not _original_tokenize:
-        return
-
-    template_base.Lexer.tokenize = _original_tokenize
-    _support_enabled = False

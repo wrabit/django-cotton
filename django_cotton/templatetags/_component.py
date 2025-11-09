@@ -77,16 +77,24 @@ class CottonComponentNode(Node):
         # Render the nodelist to process any slot tags and vars
         default_slot = self.nodelist.render(context)
 
+        # Load the component template first
+        template = self._get_cached_template(context, component_data["attrs"])
+
+        # Extract vars from the component template
+        vars = self._extract_vars_from_template(
+            template, context, component_data["attrs"], component_data["slots"]
+        )
+
         # Prepare the cotton-specific data
+        # Vars go first so component attrs can override them
         component_state = {
+            **vars,
             **component_data["slots"],
             **component_data["attrs"].make_attrs_accessible(),
             "attrs": component_data["attrs"],
             "slot": default_slot,
             "cotton_data": cotton_data,
         }
-
-        template = self._get_cached_template(context, component_data["attrs"])
 
         if self.only:
             # Complete isolation
@@ -152,6 +160,21 @@ class CottonComponentNode(Node):
             new_context = Context(component_state)
 
         return new_context
+
+    def _extract_vars_from_template(self, template, context, attrs, slots):
+        """Extract vars from any CottonVarsNode instances in the template."""
+        from django_cotton.templatetags._vars import CottonVarsNode
+
+        vars = {}
+
+        # Walk the template nodelist to find CottonVarsNode instances
+        for node in template.nodelist:
+            if isinstance(node, CottonVarsNode):
+                # Extract vars from this node
+                node_vars = node.extract_vars(context, attrs, slots)
+                vars.update(node_vars)
+
+        return vars
 
     @staticmethod
     @functools.lru_cache(maxsize=400)

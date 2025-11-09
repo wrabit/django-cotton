@@ -17,23 +17,13 @@ from django_cotton.utils import get_cotton_data
 
 
 class CottonVarsNode(Node):
-    def __init__(self, var_dict, empty_vars: List, nodelist, loaded_libraries: List[str]):
+    def __init__(self, var_dict, empty_vars: List, loaded_libraries: List[str]):
         self.var_dict = var_dict
         self.empty_vars = empty_vars
-        self.nodelist = nodelist
         self.loaded_libraries = loaded_libraries
 
-    def render(self, context):
-        cotton_data = get_cotton_data(context)
-
-        if cotton_data["stack"]:
-            current_component = cotton_data["stack"][-1]
-            attrs = current_component["attrs"]
-            slots = current_component.get("slots", {})
-        else:
-            attrs = Attrs({})
-            slots = {}
-
+    def extract_vars(self, context, attrs, slots):
+        """Extract and process vars, returning a dict of resolved values."""
         vars = {}
 
         for key, value in self.var_dict.items():
@@ -43,7 +33,9 @@ class CottonVarsNode(Node):
                     key_to_exclude = key[1:]
                     if key_to_exclude not in slots:
                         try:
-                            vars[key_to_exclude] = DynamicAttr(value, is_cvar=True).resolve(context)
+                            # Convert hyphens to underscores for template accessibility
+                            accessible_key = key_to_exclude.replace("-", "_")
+                            vars[accessible_key] = DynamicAttr(value, is_cvar=True).resolve(context)
                         except UnprocessableDynamicAttr:
                             pass
                 else:
@@ -56,34 +48,53 @@ class CottonVarsNode(Node):
                                 load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
                                 template_str = "".join(load_tags) + value
 
-                                # Create a mini-template and render it in the current context
                                 mini_template = Template(template_str)
                                 rendered_value = mini_template.render(context)
-                                attrs[key] = rendered_value
+                                # Convert hyphens to underscores for template accessibility
+                                accessible_key = key_to_exclude.replace("-", "_")
+                                vars[accessible_key] = rendered_value
                             except Exception:
                                 # If rendering fails, fall back to the raw value
-                                attrs[key] = value
+                                # Convert hyphens to underscores for template accessibility
+                                accessible_key = key_to_exclude.replace("-", "_")
+                                vars[accessible_key] = value
                         else:
                             # Plain static value
-                            attrs[key] = value
+                            # Convert hyphens to underscores for template accessibility
+                            accessible_key = key_to_exclude.replace("-", "_")
+                            vars[accessible_key] = value
             attrs.exclude_from_string_output(key_to_exclude)
 
         # Process cvars without values
         for empty_var in self.empty_vars:
             attrs.exclude_from_string_output(empty_var)
 
-        with context.push({**vars, **attrs.make_attrs_accessible(), "attrs": attrs}):
-            output = self.nodelist.render(context)
+        return vars
 
-        return output
+    def render(self, context):
+        # When rendered standalone (not as part of a component extraction),
+        # inject vars into the context
+        cotton_data = get_cotton_data(context)
+
+        # If there's a component on the stack, vars will be extracted by the component
+        # So we only need to inject if we're rendering standalone
+        if not cotton_data["stack"]:
+            # Standalone rendering - inject vars into context
+            attrs = Attrs({})
+            slots = {}
+            vars = self.extract_vars(context, attrs, slots)
+            context.update(vars)
+
+        # Vars node itself doesn't render anything
+        return ""
 
 
 def cotton_cvars(parser, token):
     """
-    Parse c-vars template tag using a custom character-by-character parser.
+    Parse standalone c-vars template tag using a custom character-by-character parser.
 
     This allows template tags like {% trans %} to work in c-vars defaults:
-        {% vars label="{% trans 'Loading' %}" %}
+        {% c:vars label="{% trans 'Loading' %}" %}
 
     The custom parser treats quoted strings as atomic units, preserving
     template tags inside them for Django to evaluate naturally at render time.
@@ -102,7 +113,4 @@ def cotton_cvars(parser, token):
         # parser.libraries is a dict with library names (strings) as keys
         loaded_libraries = list(parser.libraries.keys())
 
-    nodelist = parser.parse(("endc:vars",))
-    parser.delete_first_token()
-
-    return CottonVarsNode(var_dict, empty_vars, nodelist, loaded_libraries)
+    return CottonVarsNode(var_dict, empty_vars, loaded_libraries)

@@ -73,7 +73,7 @@ class SlotTests(CottonTestCase):
             compiled,
             """{% c:vars var1="string with space" %}
             content
-            {% endc:vars %}""",
+            """,
         )
 
     def test_named_slot_missing(self):

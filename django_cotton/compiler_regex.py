@@ -122,7 +122,7 @@ class CottonCompiler:
 
     def process_c_vars(self, html: str) -> Tuple[str, str]:
         """
-        Extract c-vars content and remove c-vars tags from the html.
+        Extract c-vars content and convert to standalone template tag.
         Raises ValueError if more than one c-vars tag is found.
         """
         # Find all matches of c-vars tags
@@ -137,8 +137,9 @@ class CottonCompiler:
         match = matches[0] if matches else None
         if match:
             attrs = match.group(1)
+            # Create standalone c:vars tag (no wrapping)
             vars_content = f"{{% c:vars {attrs.strip()} %}}"
-            html = self.c_vars_pattern.sub("", html)  # Remove all c-vars tags
+            html = self.c_vars_pattern.sub("", html)  # Remove c-vars tags from html
             return vars_content, html
 
         return "", html
@@ -151,5 +152,6 @@ class CottonCompiler:
         for original, replacement in replacements:
             processed_html = processed_html.replace(original, replacement)
         if vars_content:
-            processed_html = f"{vars_content}{processed_html}{{% endc:vars %}}"
+            # Insert standalone c:vars tag at the top (no wrapping)
+            processed_html = f"{vars_content}{processed_html}"
         return self.restore_ignorables(processed_html, ignorables)

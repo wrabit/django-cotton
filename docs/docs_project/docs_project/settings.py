@@ -28,7 +28,11 @@ SECRET_KEY = "django-insecure-%)7a&zw=le4uey^36*z*9^4#*iii65t)nyt$36mxq70@=(z6^n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", False)
 
-ALLOWED_HOSTS = ["0.0.0.0", "django-cotton.com", "www.django-cotton.com"]
+ALLOWED_HOSTS = [
+    "0.0.0.0",
+    "django-cotton.com",
+    "www.django-cotton.com",
+]
 
 
 # Application definition
@@ -157,4 +161,33 @@ CACHES = {
         ),
         "TIMEOUT": 86400,
     }
+}
+
+# Logging configuration to capture errors when DEBUG=False
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
 }

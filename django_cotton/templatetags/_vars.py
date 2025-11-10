@@ -91,10 +91,10 @@ class CottonVarsNode(Node):
 
 def cotton_cvars(parser, token):
     """
-    Parse standalone c-vars template tag using a custom character-by-character parser.
+    Parse standalone cotton:vars template tag using a custom character-by-character parser.
 
-    This allows template tags like {% trans %} to work in c-vars defaults:
-        {% c:vars label="{% trans 'Loading' %}" %}
+    This allows template tags like {% trans %} to work in cotton:vars defaults:
+        {% cotton:vars label="{% trans 'Loading' %}" %}
 
     The custom parser treats quoted strings as atomic units, preserving
     template tags inside them for Django to evaluate naturally at render time.

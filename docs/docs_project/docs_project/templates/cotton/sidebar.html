@@ -1,4 +1,41 @@
 <div class="sticky top-[68px] pb-6 pt-2">
+    <!-- Syntax Preference Switcher -->
+    <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-4">syntax</div>
+    <div class="mb-3 pb-3 border-bborder-gray-200 dark:border-gray-700" x-data>
+        <div class="flex items-center justify-between mb-1">
+
+            <div class="inline-flex bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5 gap-0.5">
+                <!-- Buttons with individual backgrounds -->
+                <button
+                    @click="$store.syntaxPreference = 'html'"
+                    class="px-2.5 py-1 text-sm transition-all duration-200 rounded-md min-w-[2rem]"
+                    :class="$store.syntaxPreference === 'html'
+                        ? 'bg-teal-600/20 text-teal-600 font-semibold'
+                        : 'text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'"
+                >
+                    &lt;c-
+                </button>
+                <button
+                    @click="$store.syntaxPreference = 'template'"
+                    class="px-2.5 py-1 text-sm transition-all duration-200 rounded-md min-w-[2rem]"
+                    :class="$store.syntaxPreference === 'template'
+                        ? 'bg-teal-600/20 text-teal-600 font-semibold'
+                        : 'text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'"
+                    x-text="'{' + String.fromCharCode(37) + ' cotton'"
+                >
+                </button>
+            </div>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-500">
+            <div x-show="$store.syntaxPreference === 'html'">
+                Snippets will be shown in cotton's HTML-like syntax.
+            </div>
+            <div x-show="$store.syntaxPreference === 'template'">
+                Snippets will be shown in Django template tag syntax.
+            </div>
+        </div>
+    </div>
+
     <c-sidebar-block>
         <c-slot name="title">Getting Started</c-slot>
         <ul>
@@ -10,6 +47,9 @@
             </c-sidebar-link>
             <c-sidebar-link url="{% url 'usage-patterns' %}">
                 Usage Patterns
+            </c-sidebar-link>
+            <c-sidebar-link url="{% url 'configuration' %}">
+                Configuration
             </c-sidebar-link>
         </ul>
     </c-sidebar-block>
@@ -33,9 +73,6 @@
     <c-sidebar-block>
         <c-slot name="title">More</c-slot>
         <ul>
-            <c-sidebar-link url="{% url 'configuration' %}">
-                Configuration
-            </c-sidebar-link>
             <c-sidebar-link url="{% url 'django-template-partials' %}">
                 Django Template Partials
             </c-sidebar-link>

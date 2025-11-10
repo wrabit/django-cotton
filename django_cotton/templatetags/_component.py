@@ -202,8 +202,13 @@ def cotton_component(parser, token):
     Parse a cotton component tag and return a CottonComponentNode.
 
     Uses custom parser to preserve quotes and handle template tags in attributes.
+    Supports self-closing syntax: {% cotton name /%} or {% cotton name / %}
     """
     from django_cotton.tag_parser import parse_component_tag
+    from django.template import NodeList
+
+    # Check if this is a self-closing tag
+    is_self_closing = token.contents.rstrip().endswith('/') or token.contents.rstrip().endswith(' /')
 
     # Use the custom parser that preserves quotes and handles nested template tags
     component_name, attrs, only = parse_component_tag(token.contents)
@@ -211,7 +216,11 @@ def cotton_component(parser, token):
     # Capture which template libraries were loaded at parse time
     loaded_libraries = list(parser.libraries.keys()) if hasattr(parser, 'libraries') else []
 
-    nodelist = parser.parse(("endc",))
-    parser.delete_first_token()
+    if is_self_closing:
+        # Self-closing tag has no content
+        nodelist = NodeList()
+    else:
+        nodelist = parser.parse(("endcotton",))
+        parser.delete_first_token()
 
     return CottonComponentNode(component_name, nodelist, attrs, only, loaded_libraries)

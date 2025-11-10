@@ -1,7 +1,7 @@
 """
 Enable nested tag support for Django's template lexer to handle Cotton tags specially.
 
-This allows template tags inside quoted attributes of {% c %}, {% c:vars %}, and {% c:slot %} tags to work properly.
+This allows template tags inside quoted attributes of {% cotton %}, {% cotton:vars %}, and {% cotton:slot %} tags to work properly.
 
 For example:
 <c-my-component label="{% trans 'Loading' %}" />
@@ -11,7 +11,7 @@ from django.template import base as template_base
 
 
 def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokenize):
-    """Create a smart tokenizer that handles {% c %} and {% vars %} tags specially."""
+    """Create a smart tokenizer that handles {% cotton %} and {% cotton:vars %} tags specially."""
 
     # Store originals at creation time
     # We check isinstance(self, DebugLexer) to respect each engine's debug setting
@@ -20,7 +20,7 @@ def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokeniz
 
     def smart_tokenize(self):
         """
-        Enhanced tokenizer that treats {% c %} and {% vars %} tags specially.
+        Enhanced tokenizer that treats {% cotton %} and {% cotton:vars %} tags specially.
 
         For Cotton tags, we parse the entire tag as one unit,
         preserving template tags inside quoted attribute values.
@@ -29,11 +29,11 @@ def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokeniz
         template_string = self.template_string
 
         # Check if there are any Cotton tags at all
-        has_c_tags = "{% c " in template_string or "{%c " in template_string
-        has_c_vars_tags = "{% c:vars " in template_string or "{%c:vars " in template_string
-        has_c_slot_tags = "{% c:slot " in template_string or "{%c:slot " in template_string
+        has_cotton_tags = "{% cotton " in template_string or "{%cotton " in template_string
+        has_cotton_vars_tags = "{% cotton:vars " in template_string or "{%cotton:vars " in template_string
+        has_cotton_slot_tags = "{% cotton:slot " in template_string or "{%cotton:slot " in template_string
 
-        if not has_c_tags and not has_c_vars_tags and not has_c_slot_tags:
+        if not has_cotton_tags and not has_cotton_vars_tags and not has_cotton_slot_tags:
             # No Cotton tags - use Django's original tokenizer
             # Use DebugLexer tokenize if this is a DebugLexer instance (respects engine.debug)
             if isinstance(self, template_base.DebugLexer):
@@ -46,16 +46,16 @@ def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokeniz
         position = 0
 
         while position < len(template_string):
-            # Look for the next Cotton tag ({% c %}, {% c:vars %}, or {% c:slot %})
-            next_c = template_string.find("{% c ", position)
-            next_c_no_space = template_string.find("{%c ", position)
-            next_c_vars = template_string.find("{% c:vars ", position)
-            next_c_vars_no_space = template_string.find("{%c:vars ", position)
-            next_c_slot = template_string.find("{% c:slot ", position)
-            next_c_slot_no_space = template_string.find("{%c:slot ", position)
+            # Look for the next Cotton tag ({% cotton %}, {% cotton:vars %}, or {% cotton:slot %})
+            next_cotton_tag = template_string.find("{% cotton ", position)
+            next_cotton_no_space = template_string.find("{%cotton ", position)
+            next_cotton_vars = template_string.find("{% cotton:vars ", position)
+            next_cotton_vars_no_space = template_string.find("{%cotton:vars ", position)
+            next_cotton_slot = template_string.find("{% cotton:slot ", position)
+            next_cotton_slot_no_space = template_string.find("{%cotton:slot ", position)
 
             # Find the earliest Cotton tag
-            candidates = [next_c, next_c_no_space, next_c_vars, next_c_vars_no_space, next_c_slot, next_c_slot_no_space]
+            candidates = [next_cotton_tag, next_cotton_no_space, next_cotton_vars, next_cotton_vars_no_space, next_cotton_slot, next_cotton_slot_no_space]
             valid_candidates = [c for c in candidates if c != -1]
 
             if not valid_candidates:
@@ -99,17 +99,17 @@ def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokeniz
             tag_start = next_cotton
             position = next_cotton + 2  # Skip {%
 
-            # Skip whitespace and tag name ('c', 'c:vars', or 'c:slot')
+            # Skip whitespace and tag name ('cotton', 'cotton:vars', or 'cotton:slot')
             while position < len(template_string) and template_string[position] in " \t\n":
                 position += 1
 
             # Skip tag name
-            if template_string[position : position + 6] == "c:vars":
+            if template_string[position : position + 11] == "cotton:vars":
+                position += 11
+            elif template_string[position : position + 11] == "cotton:slot":
+                position += 11
+            elif template_string[position : position + 6] == "cotton":
                 position += 6
-            elif template_string[position : position + 6] == "c:slot":
-                position += 6
-            elif template_string[position] == "c":
-                position += 1
 
             # Now find the end %}, respecting quotes
             in_quotes = False

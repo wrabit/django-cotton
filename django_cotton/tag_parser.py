@@ -1,7 +1,7 @@
 """
 Parser for Cotton's native Django template tag syntax.
 
-This module provides proper parsing of {% c %} and {% vars %} tags that handle quoted strings
+This module provides proper parsing of {% cotton %} and {% cotton:vars %} tags that handle quoted strings
 as atomic units, allowing template tags and variables within attribute values.
 
 Based on django-components' approach to handle complex attribute values.
@@ -13,39 +13,45 @@ from django.template.exceptions import TemplateSyntaxError
 def parse_component_tag(tag_content: str) -> Tuple[str, Dict[str, Any], bool]:
     """
     Parse a Cotton component tag like:
-    {% c component-name attr="value" :dynamic="expr" %}
-    
+    {% cotton component-name attr="value" :dynamic="expr" %}
+
     Properly handles:
     - Quoted strings with spaces
     - Template tags/variables inside quotes (preserves them as-is)
     - Dynamic attributes (prefixed with :)
     - Boolean attributes
     - The 'only' flag
-    
+    - Self-closing syntax: {% cotton name /%} or {% cotton name / %}
+
     This parser works character-by-character and treats quoted strings as atomic units,
     preserving any template tags inside them for later evaluation.
-    
+
     Args:
-        tag_content: The full content of the tag including 'c' (e.g., "c component-name attr='value'")
-        
+        tag_content: The full content of the tag including 'cotton' (e.g., "cotton component-name attr='value'")
+
     Returns:
         Tuple of (component_name, attrs_dict, only_flag)
     """
-    # Skip the tag name ('c') and whitespace
+    # Skip the tag name ('cotton') and whitespace
     index = 0
-    
-    # Skip 'c' and any following whitespace
-    if tag_content.startswith('c '):
-        index = 2
-    elif tag_content.startswith('c\t') or tag_content.startswith('c\n'):
-        index = 2
+
+    # Remove trailing self-closing syntax if present
+    tag_content = tag_content.rstrip()
+    if tag_content.endswith('/'):
+        tag_content = tag_content[:-1].rstrip()
+
+    # Skip 'cotton' and any following whitespace
+    if tag_content.startswith('cotton '):
+        index = 7
+    elif tag_content.startswith('cotton\t') or tag_content.startswith('cotton\n'):
+        index = 7
     else:
-        # Maybe just 'c' without space?
-        if tag_content == 'c':
+        # Maybe just 'cotton' without space?
+        if tag_content == 'cotton':
             raise TemplateSyntaxError("Component tag must have a name")
-        index = 1
-    
-    # Skip whitespace after 'c'
+        index = 6
+
+    # Skip whitespace after 'cotton'
     while index < len(tag_content) and tag_content[index] in ' \t\n':
         index += 1
     
@@ -150,7 +156,7 @@ def parse_component_tag(tag_content: str) -> Tuple[str, Dict[str, Any], bool]:
 def parse_vars_tag(tag_content: str) -> Tuple[Dict[str, Any], List[str]]:
     """
     Parse a Cotton vars tag like:
-    {% vars attr="value" :dynamic="expr" empty_attr %}
+    {% cotton:vars attr="value" :dynamic="expr" empty_attr %}
 
     Properly handles:
     - Quoted strings with spaces
@@ -162,26 +168,26 @@ def parse_vars_tag(tag_content: str) -> Tuple[Dict[str, Any], List[str]]:
     preserving any template tags inside them for later evaluation.
 
     Args:
-        tag_content: The full content of the tag including 'vars' (e.g., "vars attr='value'")
+        tag_content: The full content of the tag including 'cotton:vars' (e.g., "cotton:vars attr='value'")
 
     Returns:
         Tuple of (attrs_dict, empty_attrs_list)
     """
-    # Skip the tag name ('vars') and whitespace
+    # Skip the tag name ('cotton:vars') and whitespace
     index = 0
 
-    # Skip 'vars' and any following whitespace
-    if tag_content.startswith('vars '):
-        index = 5
-    elif tag_content.startswith('vars\t') or tag_content.startswith('vars\n'):
-        index = 5
+    # Skip 'cotton:vars' and any following whitespace
+    if tag_content.startswith('cotton:vars '):
+        index = 12
+    elif tag_content.startswith('cotton:vars\t') or tag_content.startswith('cotton:vars\n'):
+        index = 12
     else:
-        # Maybe just 'vars' without space?
-        if tag_content == 'vars':
+        # Maybe just 'cotton:vars' without space?
+        if tag_content == 'cotton:vars':
             return {}, []
-        index = 4
+        index = 11
 
-    # Skip whitespace after 'vars'
+    # Skip whitespace after 'cotton:vars'
     while index < len(tag_content) and tag_content[index] in ' \t\n':
         index += 1
 

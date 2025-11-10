@@ -71,7 +71,7 @@ class SlotTests(CottonTestCase):
 
         self.assertEqual(
             compiled,
-            """{% c:vars var1="string with space" %}
+            """{% cotton:vars var1="string with space" %}
             content
             """,
         )

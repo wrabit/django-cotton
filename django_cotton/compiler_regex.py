@@ -30,22 +30,22 @@ class Tag:
     def _process_slot(self) -> str:
         """Convert a c-slot tag to a Django template slot tag"""
         if self.is_closing:
-            return "{% endc:slot %}"
+            return "{% endcotton:slot %}"
         name_match = re.search(r'name=(["\'])(.*?)\1', self.attrs, re.DOTALL)
         if not name_match:
             raise ValueError(f"c-slot tag must have a name attribute: {self.html}")
         slot_name = name_match.group(2)
-        return f"{{% c:slot {slot_name} %}}"
+        return f"{{% cotton:slot {slot_name} %}}"
 
     def _process_component(self) -> str:
         """Convert a c- component tag to a Django template component tag"""
         component_name = self.tag_name[2:]
         if self.is_closing:
-            return "{% endc %}"
+            return "{% endcotton %}"
         processed_attrs, extracted_attrs = self._process_attributes()
-        opening_tag = f"{{% c {component_name}{processed_attrs} %}}"
+        opening_tag = f"{{% cotton {component_name}{processed_attrs} %}}"
         if self.is_self_closing:
-            return f"{opening_tag}{extracted_attrs}{{% endc %}}"
+            return f"{opening_tag}{extracted_attrs}{{% endcotton %}}"
         return f"{opening_tag}{extracted_attrs}"
 
     def _process_attributes(self) -> Tuple[str, str]:
@@ -64,7 +64,8 @@ class Tag:
                 # With nested tag support, all attributes can be passed directly
                 processed_attrs.append(f'{key}={quote_char}{actual_value}{quote_char}')
 
-        return " " + " ".join(processed_attrs), "".join(extracted_attrs)
+        attrs_str = " ".join(processed_attrs)
+        return " " + attrs_str if attrs_str else "", "".join(extracted_attrs)
 
 
 class CottonCompiler:
@@ -137,8 +138,8 @@ class CottonCompiler:
         match = matches[0] if matches else None
         if match:
             attrs = match.group(1)
-            # Create standalone c:vars tag (no wrapping)
-            vars_content = f"{{% c:vars {attrs.strip()} %}}"
+            # Create standalone cotton:vars tag (no wrapping)
+            vars_content = f"{{% cotton:vars {attrs.strip()} %}}"
             html = self.c_vars_pattern.sub("", html)  # Remove c-vars tags from html
             return vars_content, html
 
@@ -152,6 +153,6 @@ class CottonCompiler:
         for original, replacement in replacements:
             processed_html = processed_html.replace(original, replacement)
         if vars_content:
-            # Insert standalone c:vars tag at the top (no wrapping)
+            # Insert standalone cotton:vars tag at the top (no wrapping)
             processed_html = f"{vars_content}{processed_html}"
         return self.restore_ignorables(processed_html, ignorables)

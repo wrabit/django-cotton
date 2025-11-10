@@ -3,10 +3,16 @@
 <c-vars language="xml" rounded="rounded-xl" />
 
 <div class="group shadow relative flex-1 flex flex-col justify-start w-full {{ rounded }} overflow-hidden mb-3"
-     x-data="{
-        'code': '',
+     x-data="{% verbatim %}{
         get currentCode() {
-            return this.$root.querySelector('[x-show=\"$store.syntaxPreference === \\\'html\\\'\"] code, [x-show=\"$store.syntaxPreference === \\\'template\\\'\"] code:not([style*=\\\'display: none\\\'])').innerText;
+            const htmlCode = $refs.htmlCode;
+            const templateCode = $refs.templateCode;
+            if ($store.syntaxPreference === 'html' && htmlCode) {
+                return htmlCode.innerText;
+            } else if (templateCode) {
+                return templateCode.innerText;
+            }
+            return '';
         },
         copy() {
             const text = this.currentCode;
@@ -28,29 +34,60 @@
           }
           document.body.removeChild(textArea);
         }
-    }"
-    x-init="
+    }{% endverbatim %}"
+    x-init="{% verbatim %}
         $watch('$store.syntaxPreference', () => {
             setTimeout(() => hljs.highlightAll(), 50);
         });
-    "
+    {% endverbatim %}"
 >
-    {% if label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-gray-400 text-opacity-80 font-semibold">{{ label }}</div>{% endif %}
+    {% if label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-gray-500 font-semibold">{{ label }}</div>{% endif %}
 
-    <!-- Syntax indicator badge -->
-    <div class="absolute left-0 bottom-0 px-3 py-1 text-xs text-gray-500 font-medium uppercase tracking-wide" x-text="$store.syntaxPreference === 'html' ? 'HTML Syntax' : 'Template Tags'"></div>
-
-    <button @click.prevent="copy" class="opacity-0 transition-opacity transition-duration-500ms group-hover:opacity-100 absolute right-0 top-0 pt-3 pr-5"><c-icons.copy class="w-6 h-6 text-gray-500" /></button>
-
-    <!-- HTML Syntax Version -->
-    <div x-show="$store.syntaxPreference === 'html'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-11 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+    <!-- Top-right controls: syntax switcher + copy button -->
+    <div class="absolute right-0 top-0 pt-3 pr-5 flex items-center gap-3">
+        {% if "<c-" in slot %}
+            <div class="inline-flex rounded-lg p-0.5 gap-0.5">
+                <!-- Buttons with individual backgrounds -->
+                <button
+                    @click="$store.syntaxPreference = 'html'"
+                    class="px-2.5 py-1 text-[12px] transition-all duration-200 rounded-md min-w-[2rem]"
+                    :class="$store.syntaxPreference === 'html'
+                        ? 'bg-teal-600/20 text-teal-600 font-semibold'
+                        : 'text-gray-400 hover:text-gray-300'"
+                >
+                    &lt;c-
+                </button>
+                <button
+                    @click="$store.syntaxPreference = 'template'"
+                    class="px-2.5 py-1 text-[12px] transition-all duration-200 rounded-md min-w-[2rem]"
+                    :class="$store.syntaxPreference === 'template'
+                        ? 'bg-teal-600/20 text-teal-600 font-semibold'
+                        : 'text-gray-400 hover:text-gray-300'"
+                    x-text="'{' + String.fromCharCode(37) + ' cotton'"
+                >
+                </button>
+            </div>
+        {% endif %}
+        <!-- Copy button - always visible -->
+        <button @click.prevent="copy" class="transition-opacity text-gray-500 duration-200 hover:text-gray-400">
+            <c-icons.copy class="size-[1.1rem]" />
+        </button>
     </div>
 
-    <!-- Template Tag Syntax Version -->
-    <div x-show="$store.syntaxPreference === 'template'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="templateCode" class="language-django flex-1 !pb-4 {% if label %} !pt-11 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip|to_template_tags }}</code></pre>
-    </div>
+    {% if "<c-" in slot %}
+        <!-- HTML Syntax Version -->
+        <div x-show="$store.syntaxPreference === 'html'">
+            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-14 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+        </div>
+
+        <!-- Template Tag Syntax Version -->
+        <div x-show="$store.syntaxPreference === 'template'">
+            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="templateCode" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-14 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip|to_template_tags }}</code></pre>
+        </div>
+    {% else %}
+        <!-- No Cotton tags - show single version -->
+        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-14 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+    {% endif %}
 
     {% if preview %}
         <div class="px-6 py-6 prose-headings:text-gray-800 shadow bg-white dark:bg-gray-50 rounded-b-xl dark:!text-gray-800">

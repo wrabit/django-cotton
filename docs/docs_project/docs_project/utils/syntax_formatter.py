@@ -15,7 +15,7 @@ def compile_to_template_tags(html_code):
         html_code: HTML-style Cotton code (e.g., '<c-button>Click</c-button>')
 
     Returns:
-        Formatted template tag syntax (e.g., '{% c button %}Click{% endc %}')
+        Formatted template tag syntax (e.g., '{% cotton button %}Click{% endcotton %}')
     """
     try:
         # Check if there are any Cotton tags to convert

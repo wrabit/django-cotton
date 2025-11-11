@@ -76,11 +76,45 @@ class SlotTests(CottonTestCase):
             {% endvars %}""",
         )
 
+    def test_cvars_with_nested_quotes_in_django_filters(self):
+        """Test that cvars can handle Django filters with nested quotes"""
+        import datetime
+
+        self.create_template(
+            "cvars_nested_quotes_view.html",
+            """
+                <c-cvars-nested-quotes />
+            """,
+            "view/",
+            context={
+                "date": datetime.date(2024, 3, 15),
+                "user": None,
+            },
+        )
+
+        self.create_template(
+            "cotton/cvars_nested_quotes.html",
+            """
+            <c-vars
+                formatted_date="{{ date|date:"Y-m-d" }}"
+                user_name="{{ user|default:"Guest" }}"
+            />
+
+            Date: {{ formatted_date }}
+            User: {{ user_name }}
+            """,
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "Date: 2024-03-15")
+            self.assertContains(response, "User: Guest")
+
     def test_named_slot_missing(self):
         self.create_template(
             "test_empty_cvars_view.html",
             """
-                <c-empty-cvars />  
+                <c-empty-cvars />
             """,
             "view/",
         )
@@ -89,11 +123,11 @@ class SlotTests(CottonTestCase):
             "cotton/empty_cvars.html",
             """,
             <c-vars test1="None" test2="" test3 test4=None />
-            
+
             test1: '{{ test1 }}'
             test2: '{{ test2 }}'
             test3: '{{ test3 }}'
-            test4: '{{ test4 }}'     
+            test4: '{{ test4 }}'
             """,
         )
 

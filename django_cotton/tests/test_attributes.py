@@ -557,7 +557,11 @@ class AttributeHandlingTests(CottonTestCase):
         )
 
         # Manually register a NAMED URL pattern
-        url_pattern = path("destination/", TemplateView.as_view(template_name="test_destination.html"), name="test_destination")
+        url_pattern = path(
+            "destination/",
+            TemplateView.as_view(template_name="test_destination.html"),
+            name="test_destination",
+        )
         self.url_module.urlpatterns.append(url_pattern)
 
         # Use the component with {% url %} tag in the attribute
@@ -577,4 +581,97 @@ class AttributeHandlingTests(CottonTestCase):
             # The url tag should be evaluated and the URL should appear in the href
             self.assertContains(response, 'href="/destination/"')
             self.assertContains(response, 'class="link"')
-            self.assertContains(response, 'Go to Destination')
+            self.assertContains(response, "Go to Destination")
+
+    def test_nested_quotes_in_django_filters_double_quote_outer(self):
+        import datetime
+
+        self.create_template(
+            "cotton/alpine_click.html",
+            """
+                <button {{ attrs }}>{{ slot }}</button>
+            """,
+        )
+
+        self.create_template(
+            "alpine_click_view.html",
+            """
+                <c-alpine-click @click.stop.prevent="shownModal = 'reaction-modal-{{ event.tid }}-{{ date|date:"Y-m-d" }}'">
+                    Click Me
+                </c-alpine-click>
+            """,
+            "view/",
+            context={
+                "event": {"tid": "123"},
+                "date": datetime.date(2024, 3, 15),
+            },
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            # Verify the attribute was parsed correctly with the nested quotes
+            self.assertContains(response, "shownModal = 'reaction-modal-123-2024-03-15'")
+            self.assertContains(response, "Click Me")
+
+    def test_nested_quotes_in_django_filters_single_quote_outer(self):
+        import datetime
+
+        self.create_template(
+            "cotton/alpine_click2.html",
+            """
+                <button {{ attrs }}>{{ slot }}</button>
+            """,
+        )
+
+        self.create_template(
+            "alpine_click2_view.html",
+            """
+                <c-alpine-click2 @click.stop.prevent='shownModal = "reaction-modal-{{ event.tid }}-{{ date|date:\'Y-m-d\' }}"'>
+                    Click Me
+                </c-alpine-click2>
+            """,
+            "view/",
+            context={
+                "event": {"tid": "456"},
+                "date": datetime.date(2024, 6, 20),
+            },
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            # Verify the attribute was parsed correctly with the nested quotes
+            self.assertContains(response, 'shownModal = "reaction-modal-456-2024-06-20"')
+            self.assertContains(response, "Click Me")
+
+    def test_multiple_nested_template_tags_in_attribute(self):
+        self.create_template(
+            "cotton/multi_nested.html",
+            """
+                <div {{ attrs }}></div>
+            """,
+        )
+
+        self.create_template(
+            "multi_nested_view.html",
+            """
+                <c-multi-nested
+                    x-data="{ name: '{{ user.name|default:"Anonymous" }}', count: {{ count|default:"0" }} }"
+                    @click="alert('User: {{ user.name|default:"Guest" }}, Count: {{ count }}')">
+                </c-multi-nested>
+            """,
+            "view/",
+            context={
+                "user": {"name": "John"},
+                "count": 42,
+            },
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            # Verify both attributes were parsed with nested quotes intact
+            self.assertContains(response, "name: 'John'")
+            self.assertContains(response, "count: 42")
+            self.assertContains(response, "User: John")

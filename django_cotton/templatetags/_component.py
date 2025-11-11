@@ -183,7 +183,7 @@ def cotton_component(parser, token):
     from django_cotton.tag_parser import parse_component_tag
 
     # Use the custom parser that preserves quotes and handles nested template tags
-    component_name, attrs, only = parse_component_tag(token.contents)
+    result = parse_component_tag(token.contents)
 
     # Capture which template libraries were loaded at parse time
     loaded_libraries = list(parser.libraries.keys()) if hasattr(parser, 'libraries') else []
@@ -191,4 +191,4 @@ def cotton_component(parser, token):
     nodelist = parser.parse(("endc",))
     parser.delete_first_token()
 
-    return CottonComponentNode(component_name, nodelist, attrs, only, loaded_libraries)
+    return CottonComponentNode(result.name, nodelist, result.attrs, result.only, loaded_libraries)

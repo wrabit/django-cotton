@@ -102,10 +102,10 @@ def cotton_cvars(parser, token):
     from django_cotton.tag_parser import parse_vars_tag
 
     # Use the custom parser that handles quoted strings properly
-    var_dict, empty_vars = parse_vars_tag(token.contents)
+    result = parse_vars_tag(token.contents)
 
     # Strip quotes from all values (parser returns them with quotes)
-    var_dict = {k: strip_quotes_safely(v) for k, v in var_dict.items()}
+    var_dict = {k: strip_quotes_safely(v) for k, v in result.attrs.items()}
 
     # Capture which template libraries were loaded at parse time
     loaded_libraries = []
@@ -113,4 +113,4 @@ def cotton_cvars(parser, token):
         # parser.libraries is a dict with library names (strings) as keys
         loaded_libraries = list(parser.libraries.keys())
 
-    return CottonVarsNode(var_dict, empty_vars, loaded_libraries)
+    return CottonVarsNode(var_dict, result.empty_attrs, loaded_libraries)

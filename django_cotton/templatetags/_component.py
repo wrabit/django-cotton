@@ -211,7 +211,7 @@ def cotton_component(parser, token):
     is_self_closing = token.contents.rstrip().endswith('/') or token.contents.rstrip().endswith(' /')
 
     # Use the custom parser that preserves quotes and handles nested template tags
-    component_name, attrs, only = parse_component_tag(token.contents)
+    result = parse_component_tag(token.contents)
 
     # Capture which template libraries were loaded at parse time
     loaded_libraries = list(parser.libraries.keys()) if hasattr(parser, 'libraries') else []
@@ -223,4 +223,4 @@ def cotton_component(parser, token):
         nodelist = parser.parse(("endcotton",))
         parser.delete_first_token()
 
-    return CottonComponentNode(component_name, nodelist, attrs, only, loaded_libraries)
+    return CottonComponentNode(result.name, nodelist, result.attrs, result.only, loaded_libraries)

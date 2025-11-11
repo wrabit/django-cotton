@@ -6,266 +6,228 @@ as atomic units, allowing template tags and variables within attribute values.
 
 Based on django-components' approach to handle complex attribute values.
 """
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Any, NamedTuple
 from django.template.exceptions import TemplateSyntaxError
 
 
-def parse_component_tag(tag_content: str) -> Tuple[str, Dict[str, Any], bool]:
-    """
-    Parse a Cotton component tag like:
-    {% cotton component-name attr="value" :dynamic="expr" %}
+# Parsing delimiters
+WHITESPACE = " \t\n"
+ATTR_KEY_DELIMITERS = "= \t\n"  # Attribute keys stop at '=' or whitespace
 
-    Properly handles:
-    - Quoted strings with spaces
-    - Template tags/variables inside quotes (preserves them as-is)
-    - Dynamic attributes (prefixed with :)
-    - Boolean attributes
-    - The 'only' flag
-    - Self-closing syntax: {% cotton name /%} or {% cotton name / %}
 
-    This parser works character-by-character and treats quoted strings as atomic units,
-    preserving any template tags inside them for later evaluation.
+class ComponentTagResult(NamedTuple):
+    """Result of parsing a {% cotton %} tag."""
 
-    Args:
-        tag_content: The full content of the tag including 'cotton' (e.g., "cotton component-name attr='value'")
+    name: str
+    attrs: Dict[str, Any]
+    only: bool
 
-    Returns:
-        Tuple of (component_name, attrs_dict, only_flag)
-    """
-    # Skip the tag name ('cotton') and whitespace
-    index = 0
 
-    # Remove trailing self-closing syntax if present
-    tag_content = tag_content.rstrip()
-    if tag_content.endswith('/'):
-        tag_content = tag_content[:-1].rstrip()
+class VarsTagResult(NamedTuple):
+    """Result of parsing a {% cotton:vars %} tag."""
 
-    # Skip 'cotton' and any following whitespace
-    if tag_content.startswith('cotton '):
-        index = 7
-    elif tag_content.startswith('cotton\t') or tag_content.startswith('cotton\n'):
-        index = 7
-    else:
-        # Maybe just 'cotton' without space?
-        if tag_content == 'cotton':
-            raise TemplateSyntaxError("Component tag must have a name")
-        index = 6
+    attrs: Dict[str, Any]
+    empty_attrs: List[str]
 
-    # Skip whitespace after 'cotton'
-    while index < len(tag_content) and tag_content[index] in ' \t\n':
+
+def _skip_whitespace(tag_content: str, index: int) -> int:
+    while index < len(tag_content) and tag_content[index] in WHITESPACE:
         index += 1
-    
-    if index >= len(tag_content):
-        raise TemplateSyntaxError("Component tag must have a name")
-    
-    # Extract component name
+    return index
+
+
+def _parse_component_name(tag_content: str, index: int) -> Tuple[str, int]:
     name_start = index
-    while index < len(tag_content) and tag_content[index] not in ' \t\n=':
+    while index < len(tag_content) and tag_content[index] not in WHITESPACE:
         index += 1
-    
-    component_name = tag_content[name_start:index]
-    
-    # Parse attributes
-    attrs = {}
-    only = False
-    
+    return tag_content[name_start:index], index
+
+
+def _parse_attribute_key(tag_content: str, index: int) -> Tuple[str, int]:
+    key_start = index
+    while index < len(tag_content) and tag_content[index] not in ATTR_KEY_DELIMITERS:
+        index += 1
+    return tag_content[key_start:index], index
+
+
+def _parse_unquoted_value(tag_content: str, index: int) -> Tuple[str, int]:
+    value_start = index
+    while index < len(tag_content) and tag_content[index] not in WHITESPACE:
+        index += 1
+    return tag_content[value_start:index], index
+
+
+def _skip_tag_name(tag_content: str, tag_name: str) -> int:
+    """Skip tag name ('cotton' or 'cotton:vars') and return index after it."""
+    tag_len = len(tag_name)
+    if (
+        tag_content.startswith(f"{tag_name} ")
+        or tag_content.startswith(f"{tag_name}\t")
+        or tag_content.startswith(f"{tag_name}\n")
+    ):
+        return tag_len + 1
+    return tag_len
+
+
+def _is_keyword_at_position(tag_content: str, index: int, keyword: str) -> bool:
+    """Check if keyword appears at index as a whole word (not part of another word)."""
+    end = index + len(keyword)
+    if tag_content[index:end] == keyword:
+        return end >= len(tag_content) or tag_content[end] in WHITESPACE
+    return False
+
+
+def _parse_quoted_value(tag_content: str, start_index: int, quote_char: str) -> Tuple[str, int]:
+    """
+    Parse quoted attribute value, ignoring quotes inside Django template syntax.
+
+    Supports nested quotes like:
+    - @click="modal = 'id-{{ date|date:"Y-m-d" }}'"
+    - x-data='{ name: "{{ user|default:"Guest" }}" }'
+
+    Returns: (value_with_quotes, new_index)
+    """
+    index = start_index
+    value_start = index
+
+    # Track when we're inside {{ }} or {% %} blocks to ignore quotes within them
+    django_var_depth = 0
+    django_tag_depth = 0
+
     while index < len(tag_content):
-        # Skip whitespace
-        while index < len(tag_content) and tag_content[index] in ' \t\n':
+        if tag_content[index] == "\\" and index + 1 < len(tag_content):
+            index += 2
+        elif tag_content[index : index + 2] == "{{":
+            django_var_depth += 1
+            index += 2
+        elif tag_content[index : index + 2] == "}}":
+            django_var_depth = max(0, django_var_depth - 1)
+            index += 2
+        elif tag_content[index : index + 2] == "{%":
+            django_tag_depth += 1
+            index += 2
+        elif tag_content[index : index + 2] == "%}":
+            django_tag_depth = max(0, django_tag_depth - 1)
+            index += 2
+        elif tag_content[index] == quote_char and django_var_depth == 0 and django_tag_depth == 0:
+            value = tag_content[value_start:index]
+            value_with_quotes = quote_char + value + quote_char
             index += 1
-        
-        if index >= len(tag_content):
-            break
-        
-        # Check for 'only' flag
-        if tag_content[index:index+4] == 'only':
-            # Make sure it's the word 'only' and not part of another word
-            if index + 4 >= len(tag_content) or tag_content[index+4] in ' \t\n':
-                only = True
-                index += 4
-                continue
-        
-        # Parse attribute key
-        key_start = index
-        while index < len(tag_content) and tag_content[index] not in '= \t\n':
-            index += 1
-        
-        if index == key_start:
-            # No key found, skip
-            index += 1
-            continue
-        
-        key = tag_content[key_start:index]
-        
-        # Skip whitespace after key
-        while index < len(tag_content) and tag_content[index] in ' \t\n':
-            index += 1
-        
-        # Check for '='
-        if index < len(tag_content) and tag_content[index] == '=':
-            index += 1  # Skip '='
-            
-            # Skip whitespace after '='
-            while index < len(tag_content) and tag_content[index] in ' \t\n':
-                index += 1
-            
-            # Parse value - this is the critical part
-            if index < len(tag_content):
-                if tag_content[index] in ('"', "'"):
-                    # Quoted value - read until closing quote
-                    quote_char = tag_content[index]
-                    index += 1
-                    value_start = index
-
-                    # Read content, handling escapes
-                    while index < len(tag_content):
-                        if tag_content[index] == '\\' and index + 1 < len(tag_content):
-                            # Skip escaped character
-                            index += 2
-                        elif tag_content[index] == quote_char:
-                            # Found closing quote
-                            value = tag_content[value_start:index]
-                            value_with_quotes = quote_char + value + quote_char
-                            index += 1
-                            break
-                        else:
-                            index += 1
-                    else:
-                        # Unclosed quote
-                        value = tag_content[value_start:]
-                        value_with_quotes = quote_char + value
-
-                    # Store value WITH quotes to match old parser behavior
-                    # The component render will strip them with _strip_quotes_safely()
-                    attrs[key] = value_with_quotes
-                else:
-                    # Unquoted value
-                    value_start = index
-                    while index < len(tag_content) and tag_content[index] not in ' \t\n':
-                        index += 1
-                    attrs[key] = tag_content[value_start:index]
-            else:
-                attrs[key] = ""
+            return value_with_quotes, index
         else:
-            # Boolean attribute
-            attrs[key] = True
-    
-    return component_name, attrs, only
+            index += 1
+
+    # Unclosed quote
+    value = tag_content[value_start:]
+    value_with_quotes = quote_char + value
+    return value_with_quotes, index
 
 
-def parse_vars_tag(tag_content: str) -> Tuple[Dict[str, Any], List[str]]:
+def _parse_attributes(
+    tag_content: str, start_index: int, check_only: bool = False
+) -> Tuple[Dict[str, Any], List[str], bool, int]:
     """
-    Parse a Cotton vars tag like:
-    {% cotton:vars attr="value" :dynamic="expr" empty_attr %}
+    Parse attributes from tag content.
 
-    Properly handles:
-    - Quoted strings with spaces
-    - Template tags/variables inside quotes (preserves them as-is)
-    - Dynamic attributes (prefixed with :)
-    - Empty attributes (no value)
-
-    This parser works character-by-character and treats quoted strings as atomic units,
-    preserving any template tags inside them for later evaluation.
-
-    Args:
-        tag_content: The full content of the tag including 'cotton:vars' (e.g., "cotton:vars attr='value'")
-
-    Returns:
-        Tuple of (attrs_dict, empty_attrs_list)
+    Returns: (attrs_dict, empty_attrs_list, only_flag, final_index)
     """
-    # Skip the tag name ('cotton:vars') and whitespace
-    index = 0
-
-    # Skip 'cotton:vars' and any following whitespace
-    if tag_content.startswith('cotton:vars '):
-        index = 12
-    elif tag_content.startswith('cotton:vars\t') or tag_content.startswith('cotton:vars\n'):
-        index = 12
-    else:
-        # Maybe just 'cotton:vars' without space?
-        if tag_content == 'cotton:vars':
-            return {}, []
-        index = 11
-
-    # Skip whitespace after 'cotton:vars'
-    while index < len(tag_content) and tag_content[index] in ' \t\n':
-        index += 1
-
-    # Parse attributes
     attrs = {}
     empty_attrs = []
+    only = False
+    index = start_index
 
     while index < len(tag_content):
-        # Skip whitespace
-        while index < len(tag_content) and tag_content[index] in ' \t\n':
-            index += 1
+        index = _skip_whitespace(tag_content, index)
 
         if index >= len(tag_content):
             break
 
-        # Parse attribute key
-        key_start = index
-        while index < len(tag_content) and tag_content[index] not in '= \t\n':
-            index += 1
+        # Check for 'only' flag
+        if check_only and _is_keyword_at_position(tag_content, index, "only"):
+            only = True
+            index += 4
+            continue
 
-        if index == key_start:
-            # No key found, skip
+        # Parse attribute key
+        key, index = _parse_attribute_key(tag_content, index)
+
+        if not key:
             index += 1
             continue
 
-        key = tag_content[key_start:index]
-
-        # Skip whitespace after key
-        while index < len(tag_content) and tag_content[index] in ' \t\n':
-            index += 1
+        index = _skip_whitespace(tag_content, index)
 
         # Check for '='
-        if index < len(tag_content) and tag_content[index] == '=':
-            index += 1  # Skip '='
+        if index < len(tag_content) and tag_content[index] == "=":
+            index += 1
+            index = _skip_whitespace(tag_content, index)
 
-            # Skip whitespace after '='
-            while index < len(tag_content) and tag_content[index] in ' \t\n':
-                index += 1
-
-            # Parse value - this is the critical part
+            # Parse value
             if index < len(tag_content):
                 if tag_content[index] in ('"', "'"):
-                    # Quoted value - read until closing quote
                     quote_char = tag_content[index]
                     index += 1
-                    value_start = index
-
-                    # Read content, handling escapes
-                    while index < len(tag_content):
-                        if tag_content[index] == '\\' and index + 1 < len(tag_content):
-                            # Skip escaped character
-                            index += 2
-                        elif tag_content[index] == quote_char:
-                            # Found closing quote
-                            value = tag_content[value_start:index]
-                            value_with_quotes = quote_char + value + quote_char
-                            index += 1
-                            break
-                        else:
-                            index += 1
-                    else:
-                        # Unclosed quote
-                        value = tag_content[value_start:]
-                        value_with_quotes = quote_char + value
-
-                    # Store value WITH quotes
-                    # The vars parser will strip them with strip_quotes_safely()
+                    value_with_quotes, index = _parse_quoted_value(tag_content, index, quote_char)
                     attrs[key] = value_with_quotes
                 else:
-                    # Unquoted value
-                    value_start = index
-                    while index < len(tag_content) and tag_content[index] not in ' \t\n':
-                        index += 1
-                    attrs[key] = tag_content[value_start:index]
+                    value, index = _parse_unquoted_value(tag_content, index)
+                    attrs[key] = value
             else:
                 attrs[key] = ""
         else:
-            # Empty attribute (no value)
-            empty_attrs.append(key)
+            # Boolean/empty attribute
+            if check_only:
+                attrs[key] = True
+            else:
+                empty_attrs.append(key)
 
-    return attrs, empty_attrs
+    return attrs, empty_attrs, only, index
+
+
+def parse_component_tag(tag_content: str) -> ComponentTagResult:
+    """
+    Parse {% cotton component-name attr="value" :dynamic="expr" %} tags.
+
+    Handles quoted strings, template tags inside quotes, dynamic attributes,
+    boolean attributes, the 'only' flag, and self-closing syntax (/%} or / %}).
+    """
+    # Remove trailing self-closing syntax if present
+    tag_content = tag_content.rstrip()
+    if tag_content.endswith("/"):
+        tag_content = tag_content[:-1].rstrip()
+
+    if tag_content == "cotton":
+        raise TemplateSyntaxError("Component tag must have a name")
+
+    index = _skip_tag_name(tag_content, "cotton")
+    index = _skip_whitespace(tag_content, index)
+
+    if index >= len(tag_content):
+        raise TemplateSyntaxError("Component tag must have a name")
+
+    component_name, index = _parse_component_name(tag_content, index)
+
+    if not component_name:
+        raise TemplateSyntaxError("Component tag must have a name")
+
+    attrs, empty_attrs, only, _ = _parse_attributes(tag_content, index, check_only=True)
+
+    return ComponentTagResult(name=component_name, attrs=attrs, only=only)
+
+
+def parse_vars_tag(tag_content: str) -> VarsTagResult:
+    """
+    Parse {% cotton:vars attr="value" :dynamic="expr" empty_attr %} tags.
+
+    Handles quoted strings, template tags inside quotes, dynamic attributes,
+    and empty attributes (no value).
+    """
+    if tag_content == "cotton:vars":
+        return VarsTagResult(attrs={}, empty_attrs=[])
+
+    index = _skip_tag_name(tag_content, "cotton:vars")
+    index = _skip_whitespace(tag_content, index)
+
+    attrs, empty_attrs, _, _ = _parse_attributes(tag_content, index, check_only=False)
+
+    return VarsTagResult(attrs=attrs, empty_attrs=empty_attrs)

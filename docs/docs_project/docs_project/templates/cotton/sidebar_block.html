@@ -1,0 +1,7 @@
+<div class="py-4 {{ class }} first:pt-0 leading-7">
+    {% if title %}
+        <c-sidebar-heading>{{ title }}</c-sidebar-heading>
+    {% endif %}
+
+    {{ slot }}
+</div>

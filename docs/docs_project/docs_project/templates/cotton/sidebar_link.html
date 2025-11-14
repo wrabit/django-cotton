@@ -1,0 +1,14 @@
+<li class="relative my-1">
+    {% if request.path == url %}
+        <div class="absolute left-[-17px] w-[3px] h-full bg-teal-600"></div>
+    {% endif %}
+    <a href="{{ url }}"
+       class="dark:text-white text-[#1a384a]
+        {% if request.path == url %}
+            dark:text-opacity-100 font-semibold
+        {% else %}
+            dark:opacity-70
+        {% endif %}">
+        {{ slot }}
+    </a>
+</li>

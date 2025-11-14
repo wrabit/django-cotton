@@ -5,6 +5,7 @@ requires-python = ">=3.10, <4"
 dependencies = [
     "django~=5.1",
     "heroicons~=2.6.0",
+    "cotton-icons",
     "gunicorn~=20.1.0",
     "asgiref>=3.6.0,<4",
     "whitenoise~=6.2.0",
@@ -26,6 +27,7 @@ python = "^3.10"
 Django = "^5.1"
 django-cotton = "*"
 heroicons = "2.6.0"
+cotton-icons = "*"
 gunicorn = "20.1.0"
 asgiref = ">=3.6.0,<4"
 whitenoise = "6.2.0"

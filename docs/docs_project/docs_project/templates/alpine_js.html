@@ -33,7 +33,7 @@
 
     <p>Before we think about components and adding interactivity, we'll create the design in HTML and Tailwind CSS. This way we can make sure we're happy with the overall look and design.</p>
 
-    <c-snippet label="Static example">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="Static example">{% cotton:verbatim %}{% verbatim %}
 <div class="bg-white rounded-lg overflow-hidden border shadow">
 
     <!-- the navigation for the tabs -->
@@ -51,7 +51,7 @@
         <p>Lorem ipsum ...</p>
     </div>
 </div>
-    {% endcotton_verbatim %}{% endverbatim %}
+    {% endcotton:verbatim %}{% endverbatim %}
     <c-slot name="preview">
 <div class="bg-white rounded-lg overflow-hidden border shadow">
     <div class="flex items-center space-x-5 w-full bg-gray-100">
@@ -75,7 +75,7 @@
 
     <h3>{{ '<c-tabs />'|force_escape }} component</h3>
 
-    <c-snippet label="cotton/tabs.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/tabs.html">{% cotton:verbatim %}{% verbatim %}
 <div class="bg-white rounded-lg overflow-hidden border shadow">
     <div class="flex items-center space-x-5 w-full bg-gray-100">
         <!-- tab navigation will go here -->
@@ -86,27 +86,27 @@
         {{ slot }}
     </div>
 </div>
-    {% endcotton_verbatim %}{% endverbatim %}
+    {% endcotton:verbatim %}{% endverbatim %}
     </c-snippet>
 
     <h3>{{ '<c-tab />'|force_escape }} component</h3>
 
-    <c-snippet label="cotton/tab.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/tab.html">{% cotton:verbatim %}{% verbatim %}
 <div>
     {{ slot }}
 </div>
-    {% endcotton_verbatim %}{% endverbatim %}
+    {% endcotton:verbatim %}{% endverbatim %}
     </c-snippet>
 
     <p>This will give us the ability to initiate a set of tabs using markup like:</p>
 
-    <c-snippet>{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-tabs>
     <c-tab>Content for tab 1</c-tab>
     <c-tab>Content for tab 2</c-tab>
     <c-tab>Content for tab 3</c-tab>
 </c-tabs>
-    {% endcotton_verbatim %}{% endverbatim %}
+    {% endcotton:verbatim %}{% endverbatim %}
     </c-snippet>
 
     <c-hr />
@@ -119,7 +119,7 @@
 
     <p>In alpine you can define re-usable data functions. Place this code somewhere globally in your project.</p>
 
-<c-snippet language="xml">{% cotton_verbatim %}{% verbatim %}
+<c-snippet language="xml">{% cotton:verbatim %}{% verbatim %}
 <!-- Place this in somewhere like base layout of your app -->
 <script>
     document.addEventListener('alpine:init', () => {
@@ -135,14 +135,14 @@
         }))
     })
 </script>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
     <h3 id="modify-tabs">Modifying tabs.html</h3>
 
     <p>Next we'll make the appropriate changes to our tabs.html component to integrate alpine.js</p>
 
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <div x-data="tabs" x-init="$watch('tabs', () => currentTab = tabs[0])" class="...">
     <!-- The $watch function will set the first tab as the active tab. -->
     <div class="...">
@@ -157,31 +157,31 @@
         <!-- All of the <c-tab /> items will go here. -->
     </div>
 </div>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
     <h3 id="modify-tab">Modifying tab.html</h3>
 
     <p>We now need to modify the tab component so that it is registered each time it is imported into the dom.</p>
 
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <div x-data x-show="isCurrent('{{ name }}')" x-init="register('{{ name }}')">
     {{ slot }}
 </div>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
 <h2 id="example">Usage and example</h2>
 
 <p>We have now built a re-usable tab component that satisfies all of our initial goals.</p>
 
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-tabs>
     <c-tab name="Tab 1">Tab 1 content</c-tab>
     <c-tab name="Tab 2">Tab 2 content</c-tab>
     <c-tab name="Tab 3">Tab 3 content</c-tab>
 </c-tabs>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     <c-examples.tabs.tabs>
         <c-examples.tabs.tab name="Tab 1">

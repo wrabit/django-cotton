@@ -13,9 +13,9 @@
 
     <p>For this example, we're using Tailwind for styling. Let's start with a standard input:</p>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <input type="text" name="shoe_size" placeholder="Shoe Size" class="border rounded shadow px-3 py-1.5">
-{% endverbatim %}{% endcotton_verbatim %}
+{% endverbatim %}{% endcotton:verbatim %}
     <c-slot name="preview">
         <input type="text" name="shoe_size" placeholder="Shoe Size" class="border border-gray-300 rounded-md shadow px-3 py-1.5">
     </c-slot>
@@ -23,15 +23,15 @@
 
     <p>Having to repeat this code more than once may get tedious and difficult to maintain. Let's componentize.</p>
 
-<c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
 <input type="text" name="{{ name }}" placeholder="{{ placeholder }}" class="border rounded shadow px-3 py-1.5">
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <c-input name="shoe_size" placeholder="Shoe Size" />
 <c-input name="country" placeholder="Country" />
 <c-input name="age" placeholder="Age" />
-{% endverbatim %}{% endcotton_verbatim %}
+{% endverbatim %}{% endcotton:verbatim %}
     <c-slot name="preview">
         <div class="mb-2"><input type="text" placeholder="Shoe Size" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
         <div class="mb-2"><input type="text" placeholder="Country" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
@@ -43,18 +43,18 @@
 
     <p>You will probably need more than just a text input in your project. So let's declare an attribute `text` in <code>{{ '<c-vars />'|force_escape }}</code>. Adding it as a var will allow us to set "text" as the default. Additionally, it will be excluded from <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>:</p>
 
-<c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars type="text" />
 
 <input type="{{ type }}" {{ attrs }} class="border rounded shadow px-3 py-1.5">
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <c-input name="some_text" placeholder="Just a text field" />
 <c-input type="email" name="email" placeholder="Email" />
 <c-input type="password" name="password" placeholder="Password" />
 <c-input type="number" name="Count" placeholder="Password" />
-{% endverbatim %}{% endcotton_verbatim %}
+{% endverbatim %}{% endcotton:verbatim %}
     <c-slot name="preview">
         <div class="mb-2"><input type="text" placeholder="Just a text field" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
         <div class="mb-2"><input type="email" placeholder="Email" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
@@ -67,7 +67,7 @@
 
     <p>Let's also handle displaying errors when we need to.</p>
 
-<c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars type="text" errors />
 
 <input type="{{ type }}" {{ attrs }} class="border rounded shadow px-3 py-1.5 {% if errors %}border-red-500{% endif %}">
@@ -75,11 +75,11 @@
 {% if errors %}
     <div class="text-red-500 text-sm mt-1">{{ errors.as_text }}</div>
 {% endif %}
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <c-input name="surname" placeholder="Surname" :errors="form.surname.errors" />
-{% endverbatim %}{% endcotton_verbatim %}
+{% endverbatim %}{% endcotton:verbatim %}
     <c-slot name="preview">
         <div class="mb-2"><input type="text" placeholder="Surname" class="border rounded-md shadow px-3 py-1.5 border-red-500"></div>
         <div class="text-red-500 text-sm mt-1">Your surname is required.</div>
@@ -90,7 +90,7 @@
 
     <p>To take customization a step further and to demonstrate the flexibility of cotton, let's now give our input component the ability to display icons.</p>
 
-<c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars type="text" leading_icon trailing_icon />
 
 <div class="border rounded shadow flex items-center">
@@ -100,9 +100,9 @@
 
     <input type="{{ type }}" {{ attrs }} class="px-3 py-1.5 w-full">
 </div>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 
 <c-input name="text" name="username" placeholder="Username">
     <c-slot name="leading_icon">
@@ -116,7 +116,7 @@
     </c-slot>
 </c-input>
 
-{% endverbatim %}{% endcotton_verbatim %}
+{% endverbatim %}{% endcotton:verbatim %}
     <c-slot name="preview">
         <div class="flex flex-col space-y-3 max-w-[300px]">
             <c-demo.inputs.with-icons name="username" placeholder="Username">

@@ -1,6 +1,6 @@
 {% load custom_tags force_escape %}
 
-<c-vars language="xml" rounded="rounded-xl" />
+<c-vars language="xml" rounded="rounded-xl" ignore_syntax_choice :hide_label="False" />
 
 <div class="group shadow relative flex-1 flex flex-col justify-start w-full {{ rounded }} overflow-hidden mb-3"
      x-data="{% verbatim %}{
@@ -41,30 +41,30 @@
         });
     {% endverbatim %}"
 >
-    {% if label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-gray-500 font-semibold">{{ label }}</div>{% endif %}
+    {% if label and not hide_label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-gray-500 font-semibold">{{ label }}</div>{% endif %}
 
     <!-- Top-right controls: syntax switcher + copy button -->
     <div class="absolute right-0 top-0 pt-3 pr-5 flex items-center gap-3">
-        {% if "<c-" in slot %}
-            <div class="inline-flex rounded-lg p-0.5 gap-0.5">
+        {% if "<c-" in slot and not ignore_syntax_choice %}
+            <div class="inline-flex rounded-lg gap-0.5">
                 <!-- Buttons with individual backgrounds -->
                 <button
                     @click="$store.syntaxPreference = 'html'"
-                    class="px-2.5 py-1 text-[12px] transition-all duration-200 rounded-md min-w-[2rem]"
+                    class="px-2 py-1 text-[12px] transition-all duration-200 rounded-md min-w-[2rem]"
                     :class="$store.syntaxPreference === 'html'
-                        ? 'bg-teal-600/20 text-teal-600 font-semibold'
+                        ? 'bg-teal-600/20 text-teal-600 '
                         : 'text-gray-400 hover:text-gray-300'"
                 >
-                    &lt;c-
+                    HTML
                 </button>
                 <button
                     @click="$store.syntaxPreference = 'template'"
-                    class="px-2.5 py-1 text-[12px] transition-all duration-200 rounded-md min-w-[2rem]"
+                    class="px-2 py-1 text-[12px] transition-all duration-200 rounded-md min-w-[2rem]"
                     :class="$store.syntaxPreference === 'template'
-                        ? 'bg-teal-600/20 text-teal-600 font-semibold'
+                        ? 'bg-teal-600/20 text-teal-600 '
                         : 'text-gray-400 hover:text-gray-300'"
-                    x-text="'{' + String.fromCharCode(37) + ' cotton'"
                 >
+                    Native
                 </button>
             </div>
         {% endif %}
@@ -74,19 +74,19 @@
         </button>
     </div>
 
-    {% if "<c-" in slot %}
+    {% if "<c-" in slot and not ignore_syntax_choice %}
         <!-- HTML Syntax Version -->
         <div x-show="$store.syntaxPreference === 'html'">
-            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-14 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
         </div>
 
         <!-- Template Tag Syntax Version -->
         <div x-show="$store.syntaxPreference === 'template'">
-            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="templateCode" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-14 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip|to_template_tags }}</code></pre>
+            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="templateCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip|to_template_tags }}</code></pre>
         </div>
     {% else %}
-        <!-- No Cotton tags - show single version -->
-        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if label %} !pt-14 {% else %} !pt-4 {% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+        <!-- No Cotton tags OR ignore-syntax-choice is set - show single static version -->
+        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
     {% endif %}
 
     {% if preview %}

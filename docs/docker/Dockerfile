@@ -10,7 +10,7 @@ RUN ["npx", "tailwindcss", "-o", "./docs_project/static/app.css"]
 
 # Use an official Python runtime as a base image
 FROM python:3.12-slim-bookworm AS base
-¬¬
+
 # Setup env
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_NO_CACHE_DIR=off \

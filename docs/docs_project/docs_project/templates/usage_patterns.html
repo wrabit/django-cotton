@@ -6,8 +6,8 @@
         <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
         <c-index-sublink><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
         <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
+        <c-index-sublink><a href="#tag-syntax" class="no-underline">Tag Syntax</a></c-index-sublink>
         <c-index-sublink><a href="#index" class="no-underline">index.html</a></c-index-sublink>
-        <c-index-sublink><a href="#tag-style" class="no-underline">Tag Style</a></c-index-sublink>
         <c-index-sublink><a href="#attribute-proxying" class="no-underline">Attribute Proxying</a></c-index-sublink>
     </c-slot>
 
@@ -38,34 +38,105 @@
 
     <c-hr />
 
+    <h3 id="tag-syntax">Tag Syntax</h3>
+
+    <p>Cotton components can be used with HTML-like syntax or native Django template tags.</p>
+
+    <h4 class="text-lg font-semibold mt-6 mb-3">HTML-like Syntax</h4>
+
+    <p>Cotton enables you to use html-like syntax to include your components. This tends to enhance productivity as editors and IDEs often provide autocompletion, auto closing and syntax highlighting of xml-like tags out of the box.</p>
+
+    <c-snippet label="With content">{% cotton:verbatim %}{% verbatim %}
+<c-button>
+    Click me
+</c-button>
+    {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+    <h4 class="text-lg font-semibold mt-6 mb-3">Native Template Tags</h4>
+
+    <p>If you prefer using native template tags you can use Cotton's template tags.</p>
+
+    <h5 class="font-semibold mt-4 mb-2">HTML Syntax</h5>
+    <c-snippet label="HTML-like syntax" ignore-syntax-choice>{% cotton:verbatim %}{% verbatim %}
+<c-button title="Click me">
+    Click here
+</c-button>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+    <h5 class="font-semibold mt-4 mb-2">Native Syntax</h5>
+
+    <c-snippet label="Native Django template syntax" ignore-syntax-choice>
+{{ '{%'|force_escape }} cotton button title="Click me" {{ '%}'|force_escape }}
+    Click here
+{{ '{%'|force_escape }} endcotton {{ '%}'|force_escape }}
+    </c-snippet>
+
+    <h4 class="text-lg font-semibold mt-6 mb-3">Syntax Comparison</h4>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200 dark:border-gray-700">
+            <thead class="dark:bg-gray-800">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">Feature</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">HTML-like Syntax</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">Native Template Syntax</th>
+                </tr>
+            </thead>
+
+            <tr class="border-b dark:border-b-gray-700 border-b-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Component</td>
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-gray-100"><code>&lt;c-button&gt;...&lt;/c-button&gt;</code></td>
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-gray-100"><code>{{ '{%'|force_escape }} cotton button {{ '%}'|force_escape }}...{{ '{%'|force_escape }} endcotton {{ '%}'|force_escape }}</code></td>
+            </tr>
+            <tr class="border-b dark:border-b-gray-700 border-b-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Self-closing Component</td>
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-gray-100"><code>&lt;c-button /&gt;</code></td>
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-gray-100"><code>{{ '{%'|force_escape }} cotton button / {{ '%}'|force_escape }}</code></td>
+            </tr>
+            <tr class="border-b dark:border-b-gray-700 border-b-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Variables</td>
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-gray-100"><code>&lt;c-vars title /&gt;</code></td>
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-gray-100"><code>{{ '{%'|force_escape }} cotton:vars title {{ '%}'|force_escape }}</code></td>
+            </tr>
+            <tr class="border-b dark:border-b-gray-700 border-b-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">Named Slot</td>
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-gray-100"><code>
+                    <div>&lt;c-slot name="header"&gt;</div>
+                    <div>...</div>
+                    <div>&lt;/c-slot&gt;</div>
+                </code>
+                </td>
+                <td class="px-4 py-3 text-sm font-mono text-gray-900 dark:text-gray-100"><code><div>{{ '{%'|force_escape }} cotton:slot header {{ '%}'|force_escape }}</div>
+                    <div>...</div>
+                    <div>{{ '{%'|force_escape }} endcotton:slot {{ '%}'|force_escape }}</div>
+                </code></td>
+            </tr>
+        </table>
+    </div>
+
+    <c-hr />
+
     <h3 id="index">The index.html component</h3>
 
     <p>When your component has sub-components, you can define the default component of a folder by adding an <code>index.html</code>. This helps to keep your project structure tidy and reduce additional code in the template.</p>
 
     <c-snippet label="Project structure">
-        {% cotton_verbatim %}{% verbatim %}
+        {% cotton:verbatim %}{% verbatim %}
 templates/
 ├── cotton/
 │   ├── card/
 │   │   ├── index.html
 │   │   ├── header.html
-        {% endverbatim %}{% endcotton_verbatim %}
+        {% endverbatim %}{% endcotton:verbatim %}
     </c-snippet>
 
     <c-snippet label="Usage">
-        {% cotton_verbatim %}{% verbatim %}
+        {% cotton:verbatim %}{% verbatim %}
 <c-card>
     <c-card.header>...</c-card.header>
 </c-card>
-        {% endverbatim %}{% endcotton_verbatim %}
+        {% endverbatim %}{% endcotton:verbatim %}
     </c-snippet>
-
-    <c-hr />
-
-    <h3 id="tag-style">Tag Style</h3>
-    <c-ul>
-        <li>Components can either be self-closing <code>{{ "<c-my-component />"|force_escape }}</code> or have a closing tag <code>{{ "<c-my-component></c-my-component>"|force_escape }}</code></li>
-    </c-ul>
 
     <c-hr />
 
@@ -73,25 +144,25 @@ templates/
 
     <p>The <code>:attrs</code> dynamic attribute enables us to create wrapper components that proxy all their attributes to an inner component:</p>
 
-    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-outer
     class="outer-class"
     :count="42"
     :enabled="False">
     Content passed to inner component
 </c-outer>
-    {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
 
-    <c-snippet label="cotton/outer.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/outer.html">{% cotton:verbatim %}{% verbatim %}
 <c-inner :attrs="attrs">{{ slot }}</c-inner>
-    {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
 
-    <c-snippet label="cotton/inner.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/inner.html">{% cotton:verbatim %}{% verbatim %}
 {{ class }}     <!-- "outer-class" -->
 {{ count }}     <!-- 42 -->
 {{ enabled }}   <!-- False -->
 {{ slot }}      <!-- Content passed to inner component -->
-    {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
 
     <p>The attributes are passed through to the inner component with their original types preserved (strings, numbers, booleans, lists, etc.), making this pattern ideal for creating higher-order components.</p>
 

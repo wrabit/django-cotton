@@ -11,25 +11,25 @@ class CompilerUnitTests(unittest.TestCase):
     def test_compile_cvars_tag(self):
         source = '<c-vars title="Test" />'
         result = self.compiler.process(source)
-        expected = '{% vars title="Test" %}{% endvars %}'
+        expected = '{% cotton:vars title="Test" %}'
         self.assertEqual(result, expected)
 
     def test_compile_component_tag(self):
         source = '<c-test_button>Click</c-test_button>'
         result = self.compiler.process(source)
-        expected = '{% c test_button  %}Click{% endc %}'
+        expected = '{% cotton test_button %}Click{% endcotton %}'
         self.assertEqual(result, expected)
 
     def test_compile_self_closing_component(self):
         source = '<c-test_button />'
         result = self.compiler.process(source)
-        expected = '{% c test_button  %}{% endc %}'
+        expected = '{% cotton test_button %}{% endcotton %}'
         self.assertEqual(result, expected)
 
     def test_compile_component_with_attrs(self):
         source = '<c-test_button class="btn" :count="5">Text</c-test_button>'
         result = self.compiler.process(source)
-        expected = '{% c test_button class="btn" :count="5" %}Text{% endc %}'
+        expected = '{% cotton test_button class="btn" :count="5" %}Text{% endcotton %}'
         self.assertEqual(result, expected)
 
     def test_ignore_components_in_django_comments(self):
@@ -37,13 +37,23 @@ class CompilerUnitTests(unittest.TestCase):
         result = self.compiler.process(source)
         self.assertEqual(result, source)
 
+    def test_ignore_components_in_django_verbatim(self):
+        source = '{% verbatim %}<c-test_button />{% endverbatim %}'
+        result = self.compiler.process(source)
+        self.assertEqual(result, source)
+
+        # Test named verbatim blocks
+        source_named = '{% verbatim myblock %}<c-test_button />{% endverbatim myblock %}'
+        result_named = self.compiler.process(source_named)
+        self.assertEqual(result_named, source_named)
+
     def test_ignore_components_in_template_comments(self):
         source = '{# <c-test_button /> #}'
         result = self.compiler.process(source)
         self.assertEqual(result, source)
 
     def test_ignore_components_in_cotton_verbatim(self):
-        source = '{% cotton_verbatim %}<c-test_button />{% endcotton_verbatim %}'
+        source = '{% cotton:verbatim %}<c-test_button />{% endcotton:verbatim %}'
         result = self.compiler.process(source)
         expected = '<c-test_button />'
         self.assertEqual(result, expected)
@@ -51,13 +61,13 @@ class CompilerUnitTests(unittest.TestCase):
     def test_preserve_django_template_tags(self):
         source = '<c-test_button>{% if True %}Yes{% endif %}</c-test_button>'
         result = self.compiler.process(source)
-        expected = '{% c test_button  %}{% if True %}Yes{% endif %}{% endc %}'
+        expected = '{% cotton test_button %}{% if True %}Yes{% endif %}{% endcotton %}'
         self.assertEqual(result, expected)
 
     def test_preserve_django_variables(self):
         source = '<c-test_button>{{ user.name }}</c-test_button>'
         result = self.compiler.process(source)
-        expected = '{% c test_button  %}{{ user.name }}{% endc %}'
+        expected = '{% cotton test_button %}{{ user.name }}{% endcotton %}'
         self.assertEqual(result, expected)
 
     def test_preserve_regular_html(self):
@@ -71,7 +81,7 @@ class CompilerUnitTests(unittest.TestCase):
             {# I'm a comment with a cotton tag <c-vars /> #}
             {% comment %}I'm a django comment with a cotton tag <c-hello />{% endcomment %}
             {{ '<c-vars />'|safe }}
-            {% cotton_verbatim %}<c-ignoreme />{% endcotton_verbatim %}
+            {% cotton:verbatim %}<c-ignoreme />{% endcotton:verbatim %}
         """
         )
 
@@ -88,7 +98,7 @@ class CompilerUnitTests(unittest.TestCase):
             compiled,
         )
         self.assertIn("<c-ignoreme />", compiled)
-        self.assertNotIn("{% cotton_verbatim %}", compiled)
+        self.assertNotIn("{% cotton:verbatim %}", compiled)
 
     def test_raises_error_on_duplicate_cvars(self):
         with self.assertRaises(ValueError) as cm:

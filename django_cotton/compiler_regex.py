@@ -72,8 +72,10 @@ class CottonCompiler:
     def __init__(self):
         self.c_vars_pattern = re.compile(r"<c-vars\s([^>]*)(?:/>|>(.*?)</c-vars>)", re.DOTALL)
         self.ignore_pattern = re.compile(
-            # cotton_verbatim isnt a real template tag, it's just a way to ignore <c-* tags from being compiled
-            r"({%\s*cotton_verbatim\s*%}.*?{%\s*endcotton_verbatim\s*%}|"
+            # Ignore Django's verbatim blocks (including named blocks)
+            r"({%\s*verbatim(?:\s+\w+)?\s*%}.*?{%\s*endverbatim(?:\s+\w+)?\s*%}|"
+            # cotton:verbatim isnt a real template tag, it's just a way to ignore <c-* tags from being compiled
+            r"{%\s*cotton:verbatim\s*%}.*?{%\s*endcotton:verbatim\s*%}|"
             # Ignore both forms of comments
             r"{%\s*comment\s*%}.*?{%\s*endcomment\s*%}|{#.*?#}|"
             # Ignore django template tags and variables
@@ -81,7 +83,7 @@ class CottonCompiler:
             re.DOTALL,
         )
         self.cotton_verbatim_pattern = re.compile(
-            r"{%\s*cotton_verbatim\s*%}(.*?){%\s*endcotton_verbatim\s*%}", re.DOTALL
+            r"{%\s*cotton:verbatim\s*%}(.*?){%\s*endcotton:verbatim\s*%}", re.DOTALL
         )
 
     def exclude_ignorables(self, html: str) -> Tuple[str, List[Tuple[str, str]]]:
@@ -97,8 +99,8 @@ class CottonCompiler:
 
     def restore_ignorables(self, html: str, ignorables: List[Tuple[str, str]]) -> str:
         for placeholder, content in ignorables:
-            if content.strip().startswith("{% cotton_verbatim %}"):
-                # Extract content between cotton_verbatim tags, we don't want to leave these in
+            if content.strip().startswith("{% cotton:verbatim %}"):
+                # Extract content between cotton:verbatim tags, we don't want to leave these in
                 match = self.cotton_verbatim_pattern.search(content)
                 if match:
                     content = match.group(1)

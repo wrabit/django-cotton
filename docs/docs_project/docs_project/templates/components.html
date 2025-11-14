@@ -23,19 +23,19 @@
 
     <p>The <code>{% verbatim %}{{ slot }}{% endverbatim %}</code> variable captures all content passed between a component's opening and closing tags.</p>
 
-<c-snippet label="cotton/box.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/box.html">{% cotton:verbatim %}{% verbatim %}
 <div class="box">
     {{ slot }}
 </div>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <p>Used in a parent template:</p>
 
-<c-snippet label="my_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="my_view.html">{% cotton:verbatim %}{% verbatim %}
 <c-box>
     <p>Some <strong>content</strong></p>
 </c-box>
-{% endverbatim %}{% endcotton_verbatim %}
+{% endverbatim %}{% endcotton:verbatim %}
 <c-slot name="preview">
     <div class="border rounded shadow p-5">Some <strong>content</strong></div>
 </c-slot>
@@ -47,14 +47,14 @@
 
     <p>We can further customize components with attribute, which allow you to pass specific data into the component as key-value pairs.</p>
 
-<c-snippet label="cotton/weather.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/weather.html">{% cotton:verbatim %}{% verbatim %}
 <p>It's {{ temperature }}<sup>o</sup>{{ unit }} and the condition is {{ condition }}.</p>
-    {% endcotton_verbatim %}{% endverbatim %}
+    {% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-weather temperature="23" unit="{{ unit }}" condition="windy"></c-weather>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     It's 23<sup>o</sup>C and the condition is windy.
 </c-slot>
@@ -68,14 +68,14 @@
 
     <p>So as with normal attributes, you reference the slot content like normal variables, as in:</p>
 
-<c-snippet label="cotton/weather_card.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/weather_card.html">{% cotton:verbatim %}{% verbatim %}
 <div class="flex ...">
     <h2>{{ day }}:</h2> {{ icon }} {{ label }}
 </div>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
-    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-weather-card day="Tuesday">
     <c-slot name="icon">
         <img src="sunny-icon.png" alt="Sunny">
@@ -85,7 +85,7 @@
         <div class="yellow">Sunny</div>
     </c-slot>
 </c-weather-card>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     <div class="flex items-center justify-center space-x-5 rounded border p-5">
         <h3 class="m-0 !text-gray-800">Tuesday:</h3>
@@ -109,50 +109,50 @@
 
     <p>Sometimes you'll want to pass a variable from the parent's context 'as is' for the child component to perform what it wants.</p>
 
-    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <!--
 context = { 'today': Weather.objects.get(...) }
 -->
 <c-weather :today="today"></c-weather>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
     </c-snippet>
 
-    <c-snippet label="cotton/weather.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/weather.html">{% cotton:verbatim %}{% verbatim %}
 <p>It's {{ today.temperature }}<sup>o</sup>{{ today.unit }} and the condition is {{ today.condition }}.</p>
-    {% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
 
     <h3>Passing python types</h3>
 
-<c-snippet label="Integers & Floats">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="Integers & Floats">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :prop="1" />
 <!-- {% prop == 1 %} -->
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="None">{% cotton_verbatim %}<c-mycomp :prop="None" />
+<c-snippet label="None">{% cotton:verbatim %}<c-mycomp :prop="None" />
 {% verbatim %}<!-- {% prop is None %} -->
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="Lists">{% cotton_verbatim %}<c-mycomp :items="['item1','item2','item3']" />
+<c-snippet label="Lists">{% cotton:verbatim %}<c-mycomp :items="['item1','item2','item3']" />
 {% verbatim %}<!-- {% for item in items %} -->
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="Dicts">{% cotton_verbatim %}<c-mycomp :mydict="{'name': 'Thom', 'products': [1,2]}" />
+<c-snippet label="Dicts">{% cotton:verbatim %}<c-mycomp :mydict="{'name': 'Thom', 'products': [1,2]}" />
 {% verbatim %}<!-- {{ mydict.name }}, {{ mydict.products }} -->
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="Parent variable">{% cotton_verbatim %}<c-mycomp :product="product" />
+<c-snippet label="Parent variable">{% cotton:verbatim %}<c-mycomp :product="product" />
 {% verbatim %}<!-- {{ product.title }} -->
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="With template expressions">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="With template expressions">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :slides="['{{ image1 }}', '{{ image2 }}']" />
 <!-- {% for images in slides %} -->
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-<c-snippet label="Generated with template expressions">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="Generated with template expressions">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :is_highlighted="{% if important %}True{% endif %}" />
 <!-- {% is_valid is False %} -->
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <c-note>
         <span class="font-semibold">Note:</span> You can use the same dynamic attribute patterns in <a href="#vars">c-vars</a> to apply dynamic defaults to your components.
@@ -160,9 +160,9 @@ context = { 'today': Weather.objects.get(...) }
 
     <p>A quick example of this is a select component that you want to fill with options:</p>
 
-<c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-select :options="['no', 'yes', 'maybe']" />
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     <div class="mb-2">Are carrots tasty?</div>
     <select class="border border-gray-300 rounded px-3 py-2 shadow w-full">
@@ -173,13 +173,13 @@ context = { 'today': Weather.objects.get(...) }
 </c-slot>
 </c-snippet>
 
-<c-snippet label="cotton/select.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/select.html">{% cotton:verbatim %}{% verbatim %}
 <select>
     {% for option in options %}
         <option value="{{ option }}">{{ option }}</option>
     {% endfor %}
 </select>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
     <c-hr id="attrs" />
@@ -188,17 +188,17 @@ context = { 'today': Weather.objects.get(...) }
 
     <p>Sometimes it's useful to be able to reflect all attributes provided in the parent on to an HTML element in the component. This is particularly powerful when you are building <a href="{% url 'form-fields' %}">form inputs</a>.</p>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <c-input name="first_name" placeholder="First name" />
 <c-input name="last_name" placeholder="Last name" value="Smith" readonly  />
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     <div class="mb-2"><input type="text" autocomplete="off" class="border px-2 py-1 shadow rounded" name="first_name" placeholder="First name" /></div>
     <div><input type="text" autocomplete="off" class="border px-2 py-1 shadow rounded" name="last_name" placeholder="Last name" value="Smith" readonly /></div>
 </c-slot>
 </c-snippet>
 
-<c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
 <input type="text" {{ attrs }} />
 
 <!-- html output
@@ -207,7 +207,7 @@ context = { 'today': Weather.objects.get(...) }
 -->
 
 
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
     <c-hr id="attrs-merging" />
@@ -216,12 +216,12 @@ context = { 'today': Weather.objects.get(...) }
 
     <p>In addition to using <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> to output attributes, you can also pass in a dictionary of attributes using the special <code>:attrs</code> dynamic attribute. This is useful when you have a collection of attributes from your view or another component that you want to apply.</p>
 
-    <c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
     <input type="text" {{ attrs }} />
-    {% endcotton_verbatim %}{% endverbatim %}
+    {% endcotton:verbatim %}{% endverbatim %}
     </c-snippet>
 
-    <c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <!-- In your view -->
 context = {
     'widget_attrs': {
@@ -237,7 +237,7 @@ context = {
 <!-- html output
 <input type="text" placeholder="Enter your name" data-validate="true" size="40" required />
 -->
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
     </c-snippet>
 
     <c-note>
@@ -256,19 +256,19 @@ context = {
 
     <p>In components with common defaults, <code>{{ '<c-vars />'|force_escape }}</code> can pre-define attributes that rarely need overriding.</p>
 
-<c-snippet label="cotton/alert.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/alert.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars type="success" />
 
 <div class="{% if type == 'success' %} .. {% elif type == 'danger' %} .. {% endif %}">
     {{ slot }}
 </div>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <c-alert>All good!</c-alert>
 <c-alert type="danger">Oh no!</c-alert>
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     <div class="bg-green-100 border-2 border-green-300 text-green-600 rounded-lg px-5 py-2 mb-2">All good!</div>
     <div class="bg-red-100 border-2 border-red-200 text-red-600 rounded-lg px-5 py-2">Oh no!</div>
@@ -279,7 +279,7 @@ context = {
 
     <p>Keys in <code>{{ '<c-vars />'|force_escape }}</code> are omitted from <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>, making them ideal for configuration attributes that shouldn't appear in HTML attributes.</p>
 
-<c-snippet label="cotton/input_group.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input_group.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars label errors />
 
 <label>{{ label }}</label>
@@ -291,13 +291,13 @@ context = {
         {{ error }}
     {% endfor %}
 {% endif %}
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <c-input-group label="First name" placeholder="First name" :errors="errors.first_name" />
 <c-input-group label="Last name" placeholder="Last name" :errors="errors.last_name" />
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     <div class="mb-1">
         <label>First name</label><br>
@@ -319,18 +319,18 @@ context = {
 
     <p>Sometimes you just want to pass a simple boolean to a component. Cotton supports providing the attribute name without a value which will provide a boolean True to the component.</p>
 
-<c-snippet label="cotton/input.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
 <input type="text" {{ attrs }} />
 
 {% if required is True %}
     <span class="text-red-500">*</span>
 {% endif %}
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
-<c-snippet label="form_view.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 <c-input name="telephone" required />
-{% endcotton_verbatim %}{% endverbatim %}
+{% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     <input type="text" autocomplete="off" class="border px-2 py-1 shadow rounded" name="telephone" placeholder="Telephone" /> <span class="text-red-500 text-2xl">*</span>
 </c-slot>
@@ -342,21 +342,21 @@ context = {
 
     <p>There can be times where components need to be included dynamically. For these cases we can reach for a special <code>{{ '<c-component>'|force_escape }}</code> tag with an <code>is</code> attribute:</p>
 
-<c-snippet label="cotton/icon_list.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/icon_list.html">{% cotton:verbatim %}{% verbatim %}
 {% for icon in icons %}
     <c-component is="icons.{{ icon }}" />
 {% endfor %}
-{% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+{% endcotton:verbatim %}{% endverbatim %}</c-snippet>
 
     <p>The <code>is</code> attribute is similar to other attributes so we have a number of possibilities to define it:</p>
 
-<c-snippet label="cotton/icon_list.html">{% cotton_verbatim %}{% verbatim %}
+<c-snippet label="cotton/icon_list.html">{% cotton:verbatim %}{% verbatim %}
 <!-- as variable -->
 <c-component :is="icon_name" />
 
 <!-- as an expression -->
 <c-component is="icon_{{ icon_name }}" />
-{% endcotton_verbatim %}{% endverbatim %}</c-snippet>
+{% endcotton:verbatim %}{% endverbatim %}</c-snippet>
 
     <c-hr id="context-isolation" />
 

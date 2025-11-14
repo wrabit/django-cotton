@@ -1,6 +1,6 @@
 ARG PLATFORM=linux/amd64
 
-# ---- Tailwind Build Stage (build is quicker like this vs installing npm, node separately) ----
+# ---- Tailwind Build Stage (build is qui¬cker like this vs installing npm, node separately) ----
 FROM node:16-slim AS build_tailwind
 WORKDIR /css
 COPY package*.json ./
@@ -10,7 +10,7 @@ RUN ["npx", "tailwindcss", "-o", "./docs_project/static/app.css"]
 
 # Use an official Python runtime as a base image
 FROM python:3.12-slim-bookworm AS base
-
+¬¬
 # Setup env
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_NO_CACHE_DIR=off \

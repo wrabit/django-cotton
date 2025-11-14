@@ -77,16 +77,24 @@ class CottonComponentNode(Node):
         # Render the nodelist to process any slot tags and vars
         default_slot = self.nodelist.render(context)
 
+        # Load the component template first
+        template = self._get_cached_template(context, component_data["attrs"])
+
+        # Extract vars from the component template
+        vars = self._extract_vars_from_template(
+            template, context, component_data["attrs"], component_data["slots"]
+        )
+
         # Prepare the cotton-specific data
+        # Vars go first so component attrs can override them
         component_state = {
+            **vars,
             **component_data["slots"],
             **component_data["attrs"].make_attrs_accessible(),
             "attrs": component_data["attrs"],
             "slot": default_slot,
             "cotton_data": cotton_data,
         }
-
-        template = self._get_cached_template(context, component_data["attrs"])
 
         if self.only:
             # Complete isolation
@@ -153,6 +161,21 @@ class CottonComponentNode(Node):
 
         return new_context
 
+    def _extract_vars_from_template(self, template, context, attrs, slots):
+        """Extract vars from any CottonVarsNode instances in the template."""
+        from django_cotton.templatetags._vars import CottonVarsNode
+
+        vars = {}
+
+        # Walk the template nodelist to find CottonVarsNode instances
+        for node in template.nodelist:
+            if isinstance(node, CottonVarsNode):
+                # Extract vars from this node
+                node_vars = node.extract_vars(context, attrs, slots)
+                vars.update(node_vars)
+
+        return vars
+
     @staticmethod
     @functools.lru_cache(maxsize=400)
     def _generate_component_template_path(component_name: str, is_: Union[str, None]) -> str:
@@ -179,8 +202,13 @@ def cotton_component(parser, token):
     Parse a cotton component tag and return a CottonComponentNode.
 
     Uses custom parser to preserve quotes and handle template tags in attributes.
+    Supports self-closing syntax: {% cotton name /%} or {% cotton name / %}
     """
     from django_cotton.tag_parser import parse_component_tag
+    from django.template import NodeList
+
+    # Check if this is a self-closing tag
+    is_self_closing = token.contents.rstrip().endswith('/') or token.contents.rstrip().endswith(' /')
 
     # Use the custom parser that preserves quotes and handles nested template tags
     result = parse_component_tag(token.contents)
@@ -188,7 +216,11 @@ def cotton_component(parser, token):
     # Capture which template libraries were loaded at parse time
     loaded_libraries = list(parser.libraries.keys()) if hasattr(parser, 'libraries') else []
 
-    nodelist = parser.parse(("endc",))
-    parser.delete_first_token()
+    if is_self_closing:
+        # Self-closing tag has no content
+        nodelist = NodeList()
+    else:
+        nodelist = parser.parse(("endcotton",))
+        parser.delete_first_token()
 
     return CottonComponentNode(result.name, nodelist, result.attrs, result.only, loaded_libraries)

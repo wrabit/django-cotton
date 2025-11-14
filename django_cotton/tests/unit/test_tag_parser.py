@@ -70,42 +70,42 @@ class TagParserTests(unittest.TestCase):
         self.assertEqual(idx, 27)
 
     def test_parse_component_tag_basic(self):
-        result = parse_component_tag("c test_comp")
+        result = parse_component_tag("cotton test_comp")
         self.assertEqual(result.name, "test_comp")
         self.assertEqual(result.attrs, {})
         self.assertEqual(result.only, False)
 
     def test_parse_component_tag_with_attrs(self):
-        result = parse_component_tag('c test_comp class="btn" :count="5"')
+        result = parse_component_tag('cotton test_comp class="btn" :count="5"')
         self.assertEqual(result.name, "test_comp")
         self.assertEqual(result.attrs["class"], '"btn"')
         self.assertEqual(result.attrs[":count"], '"5"')
 
     def test_parse_component_tag_with_only(self):
-        result = parse_component_tag("c test_comp only")
+        result = parse_component_tag("cotton test_comp only")
         self.assertEqual(result.name, "test_comp")
         self.assertEqual(result.only, True)
 
     def test_parse_component_tag_self_closing(self):
-        result = parse_component_tag("c test_comp /")
+        result = parse_component_tag("cotton test_comp /")
         self.assertEqual(result.name, "test_comp")
 
-        result = parse_component_tag("c test_comp / ")
+        result = parse_component_tag("cotton test_comp / ")
         self.assertEqual(result.name, "test_comp")
 
     def test_parse_vars_tag_basic(self):
-        result = parse_vars_tag("vars")
+        result = parse_vars_tag("cotton:vars")
         self.assertEqual(result.attrs, {})
         self.assertEqual(result.empty_attrs, [])
 
     def test_parse_vars_tag_with_attrs(self):
-        result = parse_vars_tag('vars title="Test" count="5"')
+        result = parse_vars_tag('cotton:vars title="Test" count="5"')
         self.assertEqual(result.attrs["title"], '"Test"')
         self.assertEqual(result.attrs["count"], '"5"')
         self.assertEqual(result.empty_attrs, [])
 
     def test_parse_vars_tag_with_empty_attrs(self):
-        result = parse_vars_tag("vars active disabled")
+        result = parse_vars_tag("cotton:vars active disabled")
         self.assertEqual(result.attrs, {})
         self.assertIn("active", result.empty_attrs)
         self.assertIn("disabled", result.empty_attrs)

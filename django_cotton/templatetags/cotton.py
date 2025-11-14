@@ -6,9 +6,9 @@ from django_cotton.templatetags._vars import cotton_cvars
 from django_cotton.templatetags._slot import cotton_slot
 
 register = template.Library()
-register.tag("c", cotton_component)
-register.tag("slot", cotton_slot)
-register.tag("vars", cotton_cvars)
+register.tag("cotton", cotton_component)
+register.tag("cotton:slot", cotton_slot)
+register.tag("cotton:vars", cotton_cvars)
 
 
 @register.filter

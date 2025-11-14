@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_cotton",
     "heroicons",
+    "cotton_icons",
+    "docs_project",
 ]
 
 MIDDLEWARE = [

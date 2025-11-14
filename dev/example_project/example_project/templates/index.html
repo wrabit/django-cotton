@@ -1,45 +1,45 @@
 <h1>Welcome to our simplified Cotton demo</h1>
 
 
-{% c button class="btn-primary" %}
+{% cotton button class="btn-primary" %}
     Click me!
-{% endc %}
+{% endcotton %}
 
-{% c card title="hello" :id="2" class="green" some_prop :testy="view_context" %}
-    {% slot name=":some_prop" %}None{% endslot %}
-{% endc %}
+{% cotton card title="hello" :id="2" class="green" some_prop :testy="view_context" %}
+    {% cotton:slot name=":some_prop" %}None{% endcotton:slot %}
+{% endcotton %}
 
-{% c card title="My Card" %}
+{% cotton card title="My Card" %}
 
     Default content here
 
-    {% c card var_override="sssasasasasa" title="My Override" some_attr="1+1" %}
+    {% cotton card var_override="sssasasasasa" title="My Override" some_attr="1+1" %}
         This is the content of my card.
-        {% c button class="btn-secondary" %}
+        {% cotton button class="btn-secondary" %}
             Card button
-        {% endc %}
-        {% slot name="footer" %}
+        {% endcotton %}
+        {% cotton:slot name="footer" %}
             This is the footer of my card. {{ view_context }}
-        {% endslot %}
-    {% endc %}
+        {% endcotton:slot %}
+    {% endcotton %}
 
-    {% c card title="My Override" %}
+    {% cotton card title="My Override" %}
         This is the content of my card.
-        {% c button class="btn-secondary" %}
+        {% cotton button class="btn-secondary" %}
             Card button
-        {% endc %}
-        {% slot name="footer" %}
+        {% endcotton %}
+        {% cotton:slot name="footer" %}
             This is the footer of my card. {{ view_context }}
-        {% endslot %}
-    {% endc %}
+        {% endcotton:slot %}
+    {% endcotton %}
 
-    {% c button class="btn-secondary" %}
+    {% cotton button class="btn-secondary" %}
         Card button
-    {% endc %}
-    {% slot name="footer" %}
+    {% endcotton %}
+    {% cotton:slot name="footer" %}
         This is the footer of my card.
-    {% endslot %}
-{% endc %}
+    {% endcotton:slot %}
+{% endcotton %}
 
 <p>Current time: {{ current_time }}</p>
 

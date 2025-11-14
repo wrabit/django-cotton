@@ -1,7 +1,7 @@
 """
 Parser for Cotton's native Django template tag syntax.
 
-This module provides proper parsing of {% c %} and {% vars %} tags that handle quoted strings
+This module provides proper parsing of {% cotton %} and {% cotton:vars %} tags that handle quoted strings
 as atomic units, allowing template tags and variables within attribute values.
 
 Based on django-components' approach to handle complex attribute values.
@@ -16,14 +16,16 @@ ATTR_KEY_DELIMITERS = "= \t\n"  # Attribute keys stop at '=' or whitespace
 
 
 class ComponentTagResult(NamedTuple):
-    """Result of parsing a {% c %} tag."""
+    """Result of parsing a {% cotton %} tag."""
+
     name: str
     attrs: Dict[str, Any]
     only: bool
 
 
 class VarsTagResult(NamedTuple):
-    """Result of parsing a {% vars %} tag."""
+    """Result of parsing a {% cotton:vars %} tag."""
+
     attrs: Dict[str, Any]
     empty_attrs: List[str]
 
@@ -56,9 +58,13 @@ def _parse_unquoted_value(tag_content: str, index: int) -> Tuple[str, int]:
 
 
 def _skip_tag_name(tag_content: str, tag_name: str) -> int:
-    """Skip tag name ('c' or 'vars') and return index after it."""
+    """Skip tag name ('cotton' or 'cotton:vars') and return index after it."""
     tag_len = len(tag_name)
-    if tag_content.startswith(f"{tag_name} ") or tag_content.startswith(f"{tag_name}\t") or tag_content.startswith(f"{tag_name}\n"):
+    if (
+        tag_content.startswith(f"{tag_name} ")
+        or tag_content.startswith(f"{tag_name}\t")
+        or tag_content.startswith(f"{tag_name}\n")
+    ):
         return tag_len + 1
     return tag_len
 
@@ -117,7 +123,9 @@ def _parse_quoted_value(tag_content: str, start_index: int, quote_char: str) -> 
     return value_with_quotes, index
 
 
-def _parse_attributes(tag_content: str, start_index: int, check_only: bool = False) -> Tuple[Dict[str, Any], List[str], bool, int]:
+def _parse_attributes(
+    tag_content: str, start_index: int, check_only: bool = False
+) -> Tuple[Dict[str, Any], List[str], bool, int]:
     """
     Parse attributes from tag content.
 
@@ -178,15 +186,20 @@ def _parse_attributes(tag_content: str, start_index: int, check_only: bool = Fal
 
 def parse_component_tag(tag_content: str) -> ComponentTagResult:
     """
-    Parse {% c component-name attr="value" :dynamic="expr" %} tags.
+    Parse {% cotton component-name attr="value" :dynamic="expr" %} tags.
 
     Handles quoted strings, template tags inside quotes, dynamic attributes,
-    boolean attributes, and the 'only' flag.
+    boolean attributes, the 'only' flag, and self-closing syntax (/%} or / %}).
     """
-    if tag_content == "c":
+    # Remove trailing self-closing syntax if present
+    tag_content = tag_content.rstrip()
+    if tag_content.endswith("/"):
+        tag_content = tag_content[:-1].rstrip()
+
+    if tag_content == "cotton":
         raise TemplateSyntaxError("Component tag must have a name")
 
-    index = _skip_tag_name(tag_content, "c")
+    index = _skip_tag_name(tag_content, "cotton")
     index = _skip_whitespace(tag_content, index)
 
     if index >= len(tag_content):
@@ -204,15 +217,15 @@ def parse_component_tag(tag_content: str) -> ComponentTagResult:
 
 def parse_vars_tag(tag_content: str) -> VarsTagResult:
     """
-    Parse {% vars attr="value" :dynamic="expr" empty_attr %} tags.
+    Parse {% cotton:vars attr="value" :dynamic="expr" empty_attr %} tags.
 
     Handles quoted strings, template tags inside quotes, dynamic attributes,
     and empty attributes (no value).
     """
-    if tag_content == "vars":
+    if tag_content == "cotton:vars":
         return VarsTagResult(attrs={}, empty_attrs=[])
 
-    index = _skip_tag_name(tag_content, "vars")
+    index = _skip_tag_name(tag_content, "cotton:vars")
     index = _skip_whitespace(tag_content, index)
 
     attrs, empty_attrs, _, _ = _parse_attributes(tag_content, index, check_only=False)

@@ -20,7 +20,8 @@
 
     <script>
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        // Default to dark mode if no preference is set
+        if (localStorage.theme === 'dark' || !('theme' in localStorage)) {
           document.documentElement.classList.add('dark')
         } else {
           document.documentElement.classList.remove('dark')
@@ -60,6 +61,14 @@
                     }
                 },
             }))
+
+            // Global syntax preference store
+            Alpine.store('syntaxPreference', localStorage.getItem('cotton-syntax-preference') || 'html');
+
+            // Watch for changes and persist to localStorage
+            Alpine.effect(() => {
+                localStorage.setItem('cotton-syntax-preference', Alpine.store('syntaxPreference'));
+            });
         })
     </script>
 </body>

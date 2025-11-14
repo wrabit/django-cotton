@@ -30,22 +30,22 @@ class Tag:
     def _process_slot(self) -> str:
         """Convert a c-slot tag to a Django template slot tag"""
         if self.is_closing:
-            return "{% endslot %}"
+            return "{% endcotton:slot %}"
         name_match = re.search(r'name=(["\'])(.*?)\1', self.attrs, re.DOTALL)
         if not name_match:
             raise ValueError(f"c-slot tag must have a name attribute: {self.html}")
         slot_name = name_match.group(2)
-        return f"{{% slot {slot_name} %}}"
+        return f"{{% cotton:slot {slot_name} %}}"
 
     def _process_component(self) -> str:
         """Convert a c- component tag to a Django template component tag"""
         component_name = self.tag_name[2:]
         if self.is_closing:
-            return "{% endc %}"
+            return "{% endcotton %}"
         processed_attrs, extracted_attrs = self._process_attributes()
-        opening_tag = f"{{% c {component_name}{processed_attrs} %}}"
+        opening_tag = f"{{% cotton {component_name}{processed_attrs} %}}"
         if self.is_self_closing:
-            return f"{opening_tag}{extracted_attrs}{{% endc %}}"
+            return f"{opening_tag}{extracted_attrs}{{% endcotton %}}"
         return f"{opening_tag}{extracted_attrs}"
 
     def _process_attributes(self) -> Tuple[str, str]:
@@ -64,15 +64,18 @@ class Tag:
                 # With nested tag support, all attributes can be passed directly
                 processed_attrs.append(f'{key}={quote_char}{actual_value}{quote_char}')
 
-        return " " + " ".join(processed_attrs), "".join(extracted_attrs)
+        attrs_str = " ".join(processed_attrs)
+        return " " + attrs_str if attrs_str else "", "".join(extracted_attrs)
 
 
 class CottonCompiler:
     def __init__(self):
         self.c_vars_pattern = re.compile(r"<c-vars\s([^>]*)(?:/>|>(.*?)</c-vars>)", re.DOTALL)
         self.ignore_pattern = re.compile(
-            # cotton_verbatim isnt a real template tag, it's just a way to ignore <c-* tags from being compiled
-            r"({%\s*cotton_verbatim\s*%}.*?{%\s*endcotton_verbatim\s*%}|"
+            # Ignore Django's verbatim blocks (including named blocks)
+            r"({%\s*verbatim(?:\s+\w+)?\s*%}.*?{%\s*endverbatim(?:\s+\w+)?\s*%}|"
+            # cotton:verbatim isnt a real template tag, it's just a way to ignore <c-* tags from being compiled
+            r"{%\s*cotton:verbatim\s*%}.*?{%\s*endcotton:verbatim\s*%}|"
             # Ignore both forms of comments
             r"{%\s*comment\s*%}.*?{%\s*endcomment\s*%}|{#.*?#}|"
             # Ignore django template tags and variables
@@ -80,7 +83,7 @@ class CottonCompiler:
             re.DOTALL,
         )
         self.cotton_verbatim_pattern = re.compile(
-            r"{%\s*cotton_verbatim\s*%}(.*?){%\s*endcotton_verbatim\s*%}", re.DOTALL
+            r"{%\s*cotton:verbatim\s*%}(.*?){%\s*endcotton:verbatim\s*%}", re.DOTALL
         )
 
     def exclude_ignorables(self, html: str) -> Tuple[str, List[Tuple[str, str]]]:
@@ -96,8 +99,8 @@ class CottonCompiler:
 
     def restore_ignorables(self, html: str, ignorables: List[Tuple[str, str]]) -> str:
         for placeholder, content in ignorables:
-            if content.strip().startswith("{% cotton_verbatim %}"):
-                # Extract content between cotton_verbatim tags, we don't want to leave these in
+            if content.strip().startswith("{% cotton:verbatim %}"):
+                # Extract content between cotton:verbatim tags, we don't want to leave these in
                 match = self.cotton_verbatim_pattern.search(content)
                 if match:
                     content = match.group(1)
@@ -122,7 +125,7 @@ class CottonCompiler:
 
     def process_c_vars(self, html: str) -> Tuple[str, str]:
         """
-        Extract c-vars content and remove c-vars tags from the html.
+        Extract c-vars content and convert to standalone template tag.
         Raises ValueError if more than one c-vars tag is found.
         """
         # Find all matches of c-vars tags
@@ -137,8 +140,9 @@ class CottonCompiler:
         match = matches[0] if matches else None
         if match:
             attrs = match.group(1)
-            vars_content = f"{{% vars {attrs.strip()} %}}"
-            html = self.c_vars_pattern.sub("", html)  # Remove all c-vars tags
+            # Create standalone cotton:vars tag (no wrapping)
+            vars_content = f"{{% cotton:vars {attrs.strip()} %}}"
+            html = self.c_vars_pattern.sub("", html)  # Remove c-vars tags from html
             return vars_content, html
 
         return "", html
@@ -151,5 +155,6 @@ class CottonCompiler:
         for original, replacement in replacements:
             processed_html = processed_html.replace(original, replacement)
         if vars_content:
-            processed_html = f"{vars_content}{processed_html}{{% endvars %}}"
+            # Insert standalone cotton:vars tag at the top (no wrapping)
+            processed_html = f"{vars_content}{processed_html}"
         return self.restore_ignorables(processed_html, ignorables)

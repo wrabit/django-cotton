@@ -8,14 +8,14 @@
 
     <p>Cotton's component-ized approach provides another compelling use-case. Sure, there are svg icon packages for Django already, but what if you need to use a custom icon in your project?</p>
 
-    <c-snippet label="plane.svg">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="plane.svg">{% cotton:verbatim %}{% verbatim %}
 <svg viewBox="0 0 512 512">
   <g fill="none" stroke="#000" stroke-width="30" stroke-linejoin="round">
     <path d="M143.533 256 79.267 384.533v-192.8L497 127.467z"/>
     <path d="M143.533 256 79.267 384.533l119.352-73.448zM15 127.467h482L79.267 191.733z"/>
     <path d="M143.533 256 497 127.467l-241 241z"/>
   </g>
-</svg>{% endverbatim %}{% endcotton_verbatim %}
+</svg>{% endverbatim %}{% endcotton:verbatim %}
 <c-slot name="preview">
 <svg viewBox="0 0 512 512" class="size-20 mx-auto">
   <g fill="none" stroke="#000" stroke-width="30" stroke-linejoin="round">
@@ -29,7 +29,7 @@
 
     <h2 id="cottonizing">Let's "cotton-ize"</h2>
 
-    <c-snippet label="cotton/icons/plane.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="cotton/icons/plane.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars stroke_width="30" />
 
 <svg {{ attrs }} viewBox="0 0 512 512">
@@ -38,15 +38,15 @@
     <path d="M143.533 256 79.267 384.533l119.352-73.448zM15 127.467h482L79.267 191.733z"/>
     <path d="M143.533 256 497 127.467l-241 241z"/>
   </g>
-</svg>{% endverbatim %}{% endcotton_verbatim %}
+</svg>{% endverbatim %}{% endcotton:verbatim %}
     </c-snippet>
 
-    <c-snippet label="view.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-icons.plane class="size-20 text-red-500" />
 <c-icons.plane class="size-20 text-teal-500" />
 <c-icons.plane class="size-20 text-gray-500 animate-bounce" />
 <c-icons.plane class="size-24 text-purple-500" stroke_width="10" />
-    {% endverbatim %}{% endcotton_verbatim %}
+    {% endverbatim %}{% endcotton:verbatim %}
     <c-slot name="preview">
         <div class="flex items-center space-x-10 justify-center">
             <c-examples.icons.plane class="size-20 text-red-500" />

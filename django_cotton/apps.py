@@ -66,7 +66,7 @@ class LoaderAppConfig(AppConfig):
     def ready(self):
         from django_cotton.nested_tag_support import enable_nested_tag_support
 
-        # Enable nested template tags in {% c %} and {% vars %} attributes
+        # Enable nested template tags in {% cotton %} and {% cotton:vars %} attributes
         enable_nested_tag_support()
 
         wrap_loaders("django")
@@ -83,5 +83,5 @@ class SimpleAppConfig(AppConfig):
     def ready(self):
         from django_cotton.nested_tag_support import enable_nested_tag_support
 
-        # Enable nested template tags in {% c %} and {% vars %} attributes
+        # Enable nested template tags in {% cotton %} and {% cotton:vars %} attributes
         enable_nested_tag_support()

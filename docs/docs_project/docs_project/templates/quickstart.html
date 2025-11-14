@@ -10,17 +10,17 @@
 
     <h2 class="mt-0">Install cotton</h2>
     <p>Run the following command:</p>
-    <c-snippet language="python">pip install django-cotton</c-snippet>
+    <c-snippet language="python" hide-label>pip install django-cotton</c-snippet>
 
     <p>Then update your settings.py:</p>
 
     <h3>For automatic configuration:</h3>
 
-    <c-snippet language="python" label="settings.py">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet language="python" label="settings.py">{% cotton:verbatim %}{% verbatim %}
 INSTALLED_APPS = [
     'django_cotton',
 ]
-    {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+    {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <p>This will attempt to automatically handle the settings.py by adding the required loader and templatetags.</p>
 
@@ -28,7 +28,7 @@ INSTALLED_APPS = [
 
     <p>If your project requires any non-default loaders or you do not wish Cotton to manage your settings, you should instead provide `django_cotton.apps.SimpleAppConfig` in your INSTALLED_APPS:</p>
 
-    <c-snippet language="python" label="settings.py">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet language="python" label="settings.py">{% cotton:verbatim %}{% verbatim %}
 INSTALLED_APPS = [
     'django_cotton.apps.SimpleAppConfig',
 ]
@@ -52,7 +52,7 @@ TEMPLATES = [
         }
     }
 ]
-    {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+    {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <c-hr id="create-a-component" />
 
@@ -60,13 +60,13 @@ TEMPLATES = [
 
     <p>Create a new directory in your templates directory called <span class="font-mono">cotton</span>. Inside this directory create a new file called <span class="font-mono">card.html</span> with the following content:</p>
 
-    <c-snippet label="templates/cotton/card.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="templates/cotton/card.html">{% cotton:verbatim %}{% verbatim %}
 <div class="bg-white shadow rounded border p-4">
     <h2>{{ title }}</h2>
     <p>{{ slot }}</p>
     <button href="{% url url %}">Read more</button>
 </div>
-    {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+    {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <c-hr id="templates-location" />
 
@@ -88,12 +88,12 @@ TEMPLATES = [
 
     <h2>Include a component</h2>
 
-<c-snippet language="python" label="views.py">{% cotton_verbatim %}{% verbatim %}
+<c-snippet language="python" label="views.py">{% cotton:verbatim %}{% verbatim %}
 def dashboard_view(request):
     return render(request, "dashboard.html")
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-    <c-snippet label="templates/dashboard.html">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet label="templates/dashboard.html">{% cotton:verbatim %}{% verbatim %}
 <c-card title="Trees" url="trees">
     We have the best trees
 </c-card>
@@ -101,7 +101,7 @@ def dashboard_view(request):
 <c-card title="Spades" url="spades">
     The best spades in the land
 </c-card>
-    {% endverbatim %}{% endcotton_verbatim %}
+    {% endverbatim %}{% endcotton:verbatim %}
 <c-slot name="preview">
 <div class="bg-white shadow rounded border p-4 mb-3">
     <h2 class="m-0 !text-gray-800">Trees</h2>

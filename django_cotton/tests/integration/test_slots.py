@@ -71,9 +71,9 @@ class SlotTests(CottonTestCase):
 
         self.assertEqual(
             compiled,
-            """{% vars var1="string with space" %}
+            """{% cotton:vars var1="string with space" %}
             content
-            {% endvars %}""",
+            """,
         )
 
     def test_cvars_with_nested_quotes_in_django_filters(self):

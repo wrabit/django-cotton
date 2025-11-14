@@ -20,7 +20,7 @@
                 <div class="w-full shrink-0"></div>
                 <span class="pt-0 md:pt-5 clear-both flex-wrap inline-flex justify-center items-center space-x-2">
                     <span class="">Hello</span>
-                    <span class="shrink-0 px-3 py-1 bg-teal-500/10 border-[3px] border-teal-600 font-mono text-xl sm:text-2xl md:text-4xl rounded-3xl text-teal-600 dark:text-white inline-block font-normal leading-normal">{{ '<c-comp />'|force_escape }}</span>
+                    <span class="shrink-0 px-3 py-1 bg-teal-500/10 border-[3px] border-teal-600 font-mono text-xl sm:text-2xl md:text-4xl rounded-3xl text-teal-600 dark:text-white inline-block font-normal leading-normal">{{ '<c-cotton>'|force_escape }}</span>
                 </span>
             </h1>
 
@@ -37,7 +37,7 @@
                     <c-demo.snippet-tabs labels="view.html|product_layout.html" tabs_id="compare">
                         <div class="flex flex-col h-full" x-show="active === 0">
 
-<c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+<c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
 {% extends "product_layout.html" %}
 
 {% block img_url %}
@@ -55,12 +55,12 @@ Item Title
     $10
     {% endblock %}
 {% endblock %}
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>
                         <div class="flex flex-col h-full" x-show="active === 1">
 
-<c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+<c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
 <div id="container">
     <div id="header">
         <img src="{% block img_url %}{% endblock %}" />
@@ -81,7 +81,7 @@ Item Title
         {% endblock %}
     </div>
 </div>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>
                     </c-demo.snippet-tabs>
@@ -93,19 +93,19 @@ Item Title
                     <c-demo.snippet-tabs labels="view.html|product.html" tabs_id="compare">
                         <div class="flex flex-col h-full" x-show="active === 0">
 
-<c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+<c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
 
 <c-product img_url="icon.png"
     title="Item Title"
     price="$10">
     Description of the product
-</c-product>{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+</c-product>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>
 
                         <div class="flex flex-col h-full" x-show="active === 1">
 
-<c-snippet rounded="rounded-b-xl">{% cotton_verbatim %}{% verbatim %}
+<c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
 <div id="container">
     <div id="header">
         <img src="{{ img_url }}" />
@@ -122,7 +122,7 @@ Item Title
         {% endif %}
     </div>
 </div>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>
                     </c-demo.snippet-tabs>

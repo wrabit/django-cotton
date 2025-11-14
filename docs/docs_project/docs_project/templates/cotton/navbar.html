@@ -1,8 +1,4 @@
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-
-<div class="mb-3 h-[65px] border-b dark:border-zinc-300/10 border-zinc-800/5 sticky top-0 bg-white/80 dark:bg-zinc-900/70 md:backdrop-blur-lg z-10"
-     :class="{'bg-white dark:bg-gray-800': isOpen}"
+<div class="py-5 sticky top-0 bg-amber-50 dark:bg-gray-900 md:bg-transparent dark:md:bg-transparent border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
      x-data="{isOpen: false}"
      x-init="
         window.addEventListener('resize', () => {
@@ -12,8 +8,8 @@
         });
      "
 >
-    <div class="px-5 h-full max-w-7xl mx-auto flex items-center justify-between">
-        <div class="flex item-center items-center h-full">
+    <div class="px-5 max-w-8xl mx-auto flex items-center justify-between">
+        <div class="flex item-center items-center">
 
             <!-- Mobile menu button-->
             <button @click="isOpen = !isOpen"
@@ -27,7 +23,7 @@
 
                   Menu open: "hidden", Menu closed: "block"
                 -->
-                <svg x-show="!isOpen" class="size-8" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"
+                <svg x-show="!isOpen" class="h-7 w-7 " fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"
                      aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round"
                           d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
@@ -37,30 +33,20 @@
 
                   Menu open: "block", Menu closed: "hidden"
                 -->
-                <svg x-show="isOpen" class="size-8" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"
+                <svg x-show="isOpen" class="h-7 w-7 " fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"
                      aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
 
-            <a href="/" class="flex items-center">
-                <c-icons.logo class="size-[1.8rem] text-teal-600 mr-1.5" stroke-width="3" />
-                <span class="text-[25px] text-[#1a384a] dark:text-gray-100 font-semibold">cotton</span>
-
-                <div class="hidden sm:inline text-gray-700 dark:text-white text-xs opacity-60 mt-0.5 mx-1.5">for</div>
-                <c-icons.django class="hidden sm:inline w-[45px] text-teal-600 mt-1.5" />
+            <a href="/" class="flex item-center items-center space-x-1.5">
+                <div class="flex items-center space-x-1">
+                    <c-icons.logo class="size-8 text-teal-600" />
+                    <span class="font-bold text-2xl ml-1.5 text-[#1a384a] dark:text-gray-100">cotton</span>
+                    <div class=" text-gray-700 dark:text-white text-sm opacity-50 mt-0.5 px-1">for</div>
+                    <c-icons.django class=" h-[1.4rem] text-teal-600 mt-1.5" />
+                </div>
             </a>
-
-            <div class="ml-5 sm:ml-14 flex space-x-3 h-full items-center">
-                <c-navbar.nav-item url="{% url 'home' %}" active-exact active-startswith="/docs/">
-                    <c-heroicon.book-open class="size-5 mr-2" />
-                    Docs
-                </c-navbar.nav-item>
-                <c-navbar.nav-item url="{% url 'ui' %}" active-startswith="/ui">
-                    <c-heroicon.code-bracket class="size-5 mr-2" />
-                    Components
-                </c-navbar.nav-item>
-            </div>
         </div>
 
         <div class="flex items-center space-x-2">
@@ -76,20 +62,15 @@
 
                         // Whenever the user explicitly chooses light mode
                         localStorage.theme = this.dark ? 'dark' : 'light'
-
-                        this.$dispatch('theme-changed', this.dark)
                     }
                 }">
-                <c-icons.sun class="size-6 text-zinc-800 dark:text-gray-100/50" />
+                <c-icons.sun class="size-7 text-yellow-900/40 dark:text-gray-100/50" />
             </a>
-
-{#            <a href="https://github.com/wrabit/django-cotton" target="_blank" class="text-zinc-800 dark:text-gray-100/50 flex items-center space-x-2">
-                <c-icons.github class="size-5" />
-            </a>#}
-            <!-- Place this tag where you want the button to render. -->
-            <a class="github-button" href="https://github.com/wrabit/django-cotton" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" data-show-count="true" aria-label="Star wrabit/django-cotton on GitHub">Star</a>
-            <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-zinc-800 dark:text-gray-100/50 flex items-center space-x-2">
-                <c-icons.discord class="size-6" />
+            <a href="https://github.com/wrabit/django-cotton" target="_blank" class="text-yellow-900/40 dark:text-gray-100/50 flex items-center space-x-2">
+                <c-icons.github class="size-6" />
+            </a>
+            <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-yellow-900/40 dark:text-gray-100/50 flex items-center space-x-2">
+                <c-icons.discord class="size-7" />
             </a>
         </div>
     </div>

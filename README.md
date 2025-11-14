@@ -14,9 +14,10 @@ Bringing component-based design to Django templates.
 
 ## Contents
 
-[Why?](#why-cotton)  
-[Install](#install)  
-[Usage Basics](#usage-basics)  
+[Why?](#why-cotton)
+[Install](#install)
+[Usage Basics](#usage-basics)
+[Template Syntax Options](#template-syntax-options)
 [Your First component](#your-first-component)  
 [Attributes](#add-attributes)  
 [Named Slots](#named-slots)  
@@ -70,9 +71,30 @@ If you have previously specified a custom loader, you should perform [manual set
 
 ## Usage Basics
 - **Component Placement:** Components should be placed in the `templates/cotton` folder (or define a [custom folder](https://django-cotton.com/docs/configuration)).
-- **Naming Conventions:** 
+- **Naming Conventions:**
   - Component filenames use snake_case: `my_component.html` (or [configure](https://django-cotton.com/docs/configuration) for kebab-case)
   - Components are called using kebab-case prefixed by 'c-': `<c-my-component />`
+
+## Template Syntax Options
+
+Cotton supports two syntax styles for using components in your templates:
+
+### HTML-like Syntax (Recommended)
+This syntax has better IDE support - code formatting, autocompletion, autoclosing and syntax highlighting. 
+
+### Native Django Template Tag Syntax
+For those who prefer Django's native template tag style, Cotton provides equivalent template tags for all features.
+
+### Syntax Comparison
+
+| Feature | HTML-like Syntax | Native Template Syntax |
+|---------|-----------------|------------------------|
+| **Component** | `<c-button>...</c-button>` | `{% cotton button %}...{% endcotton %}` |
+| **Self-closing** | `<c-button />` | `{% cotton button / %}` |
+| **Variables** | `<c-vars title />` | `{% cotton:vars title %}` |
+| **Named Slot** | `<c-slot name="header">...</c-slot>` | `{% cotton:slot header %}...{% endcotton:slot %}` |
+
+Both syntaxes are functionally equivalent and can be used interchangeably. For a complete syntax comparison and more details, see the [full documentation](https://django-cotton.com/docs/usage-patterns#tag-syntax).
 
 <hr>
 

@@ -675,3 +675,13 @@ class AttributeHandlingTests(CottonTestCase):
             self.assertContains(response, "name: 'John'")
             self.assertContains(response, "count: 42")
             self.assertContains(response, "User: John")
+
+    def test_html_syntax_with_same_quote_type_nested_compilation(self):
+        from django_cotton.tests.utils import get_compiled
+
+        compiled = get_compiled(
+            '<c-test_comp title="{% translate "Profile" %}" />'
+        )
+
+        self.assertIn("{% translate", compiled)
+        self.assertIn("Profile", compiled)

@@ -5,7 +5,7 @@
 # Django Cotton
 
 ![PyPI](https://img.shields.io/pypi/v/django-cotton?color=blue&style=flat-square)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/django-cotton?color=blue&style=flat-square)
+[![PyPI Downloads](https://static.pepy.tech/badge/django-cotton/month)](https://pepy.tech/projects/django-cotton)
 
 Bringing component-based design to Django templates.
 
@@ -16,7 +16,7 @@ Bringing component-based design to Django templates.
 
 [Why?](#why-cotton)  
 [Install](#install)  
-[Usage Basics](#usage-basics)  
+[Usage Basics](#usage-basics)   
 [Your First component](#your-first-component)  
 [Attributes](#add-attributes)  
 [Named Slots](#named-slots)  
@@ -25,11 +25,14 @@ Bringing component-based design to Django templates.
 [Boolean attributes](#boolean-attributes)  
 [Passing Python data types](#passing-python-data-types)  
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
+[Merging and Proxying Attributes with `:attrs`](#merging-and-proxying-attributes-with-attrs)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [HTMX Example](#an-example-with-htmx)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
+[Template Syntax Options](#template-syntax-options)  
 [Configuration](#configuration)  
 [Caching](#caching)  
+[Tools](#tools)  
 [Version support](#version-support)  
 [Changelog](#changelog)  
 [Comparison with other packages](#comparison-with-other-packages)  
@@ -43,8 +46,8 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 ## Key Features
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
 - **Interoperable with Django:** Cotton only enhances django's existing template system (no Jinja needed).
-- **HTML-like Syntax:** Better code editor support and productivity as component tags are similar to html tags.
-- **Minimal Overhead:** Compiles to native Django components with dynamic caching.
+- **HTML-like Syntax:** Native code editor syntax highlighting, code formatting and autoclosing ([VS Code plugin](#tools) for autocompletion).  
+- **Minimal Overhead:** Compiles to native Django template tags with dynamic caching.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
 - **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
 
@@ -68,11 +71,9 @@ If you have previously specified a custom loader, you should perform [manual set
 
 ## Usage Basics
 - **Component Placement:** Components should be placed in the `templates/cotton` folder (or define a [custom folder](https://django-cotton.com/docs/configuration)).
-- **Naming Conventions:** 
-  - Component filenames use snake_case: `my_component.html`
+- **Naming Conventions:**
+  - Component filenames use snake_case: `my_component.html` (or [configure](https://django-cotton.com/docs/configuration) for kebab-case)
   - Components are called using kebab-case prefixed by 'c-': `<c-my-component />`
-
-<hr>
 
 ## Walkthrough
 
@@ -120,9 +121,11 @@ Named slots are a powerful concept. They allow us to provide HTML to appear in o
 <!-- cotton/button.html -->
 <a href="{{ url }}" class="...">
     {{ slot }}
-  
-    {% if icon %} 
-        {{ icon }} 
+
+    {% if icon %}
+        <span class="some-class">
+            {{ icon }}
+        </span>
     {% endif %}
 </a>
 ```
@@ -234,7 +237,7 @@ This benefits a number of use-cases, for example if you have a select component 
 
 ### Increase Re-usability with `{{ attrs }}`
 
-`{{ attrs }}` is a special variable that contains all the attributes passed to the component in an key="value" format. This is useful when you want to pass all attributes to a child element without having to explicitly define them in the component template. For example, you have inputs that can have any number of attributes defined:
+`{{ attrs }}` is a special variable that contains all the attributes passed to the component (except those defined as [c-vars](https://github.com/wrabit/django-cotton?tab=readme-ov-file#in-component-variables-with-c-vars)) in a key="value" format. This is useful when you want to pass all attributes to a child element without having to explicitly define them in the component template. For example, you have inputs that can have any number of attributes defined:
 
 ```html
 <!-- cotton/input.html -->
@@ -252,6 +255,78 @@ This benefits a number of use-cases, for example if you have a select component 
 <input type="text" class="..." placeholder="Enter your name" />
 <input type="text" class="..." name="country" id="country" value="Japan" required />
 ```
+
+### Merging and Proxying Attributes with `:attrs`
+
+While `{{ attrs }}` is great for outputting all attributes passed to a component, Cotton provides more control with the special dynamic attribute `:attrs`.
+
+**Merge a dictionary of attributes**
+
+You can pass a dictionary of attributes (e.g., from your Django view's context) to a component using the `:attrs` syntax. These attributes are then merged with any other attributes passed directly and become available in the component's `attrs` variable (for use with `{{ attrs }}`). This is useful for applying a pre-defined set of attributes.
+
+```html
+<!-- cotton/input.html -->
+<input type="text" {{ attrs }} />
+```
+
+```python
+# In your view context
+context = {
+    'widget_attrs': {
+        'placeholder': 'Enter your name',
+        'data-validate': 'true',
+        'size': '40'
+    }
+}
+```
+
+```html
+<!-- In your template (e.g., form_view.html) -->
+<c-input :attrs="widget_attrs" required />
+```
+
+```html
+<!-- HTML output -->
+<input type="text" placeholder="Enter your name" data-validate="true" size="40" required />
+```
+Notice how `required` (passed directly to `<c-input>`) is merged with attributes from `widget_attrs`.
+
+**Proxy attributes to a nested component**
+
+The `:attrs` attribute also allows you to pass all attributes received by a wrapper component directly to a nested component. This is powerful for creating higher-order components or wrapping existing ones. When you use `<c-child :attrs="attrs">`, the child component receives the `attrs` dictionary of the parent.
+
+```html
+<!-- cotton/outer_wrapper.html -->
+<c-vars message /> <!-- 'message' is for outer_wrapper, not to be passed via attrs -->
+<p>Outer message: {{ message }}</p>
+<c-inner-component :attrs="attrs">
+    {{ slot }}
+</c-inner-component>
+```
+
+```html
+<!-- cotton/inner_component.html -->
+<div class="inner {{ class }}">
+    {{ slot }}
+</div>
+```
+
+```html
+<!-- In view -->
+<c-outer-wrapper message="Hello from outside"
+                 class="special-class">
+    Inner content
+</c-outer-wrapper>
+```
+
+```html
+<!-- HTML output -->
+<p>Outer message: Hello from outside</p>
+<div class="inner special-class">
+    Inner content
+</div>
+```
+Attributes like `class` are passed from `<c-outer_wrapper>` to `<c-inner_component>` via its `attrs` variable, while `message` (declared in `<c-vars>`) is used by `outer-wrapper` itself and excluded from the `attrs` passed down.
 
 ### In-component Variables with `<c-vars>`
 
@@ -471,6 +546,27 @@ In addition, Cotton enables you to navigate around some of the limitations with 
 
 <hr>
 
+## Template Syntax Options
+
+Cotton supports two syntax styles for using components in your templates:
+
+### HTML-like Syntax (Recommended)
+This syntax has better IDE support - code formatting, autocompletion, autoclosing and syntax highlighting. 
+
+### Native Django Template Tag Syntax
+For those who prefer Django's native template tag style, Cotton provides equivalent template tags for all features.
+
+### Syntax Comparison
+
+| Feature | HTML-like Syntax | Native Template Syntax |
+|---------|-----------------|------------------------|
+| **Component** | `<c-button>...</c-button>` | `{% cotton button %}...{% endcotton %}` |
+| **Self-closing** | `<c-button />` | `{% cotton button / %}` |
+| **Variables** | `<c-vars title />` | `{% cotton:vars title %}` |
+| **Named Slot** | `<c-slot name="header">...</c-slot>` | `{% cotton:slot header %}...{% endcotton:slot %}` |
+
+<hr>
+
 ## Configuration
 
 `COTTON_DIR` (default: "cotton")  
@@ -493,10 +589,15 @@ Cotton is optimal when used with Django's cached.Loader. If you use <a href="htt
 
 <hr>
 
+## Tools
+
+- [Cotton VS Code plugin](https://marketplace.visualstudio.com/items?itemName=twentyforty.django-cotton) from [twentyforty](https://github.com/twentyforty)  
+- [Cotton Icons](https://github.com/wrabit/cotton-icons) - Heroicons and Tabler Icon sets for Cotton
+
 ## Version Support
 
-- Python >= 3.8
-- Django >4.2,<5.2
+- Python >=3.8,<4
+- Django >4.2,<5.3
 
 <hr>
 

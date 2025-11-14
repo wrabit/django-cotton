@@ -4,18 +4,18 @@
     <p>Both packages come with an auto-setup feature, but to get the packages working together we need to opt instead
         for the corresponding 'SimpleAppConfig' from each package:</p>
 
-    <c-snippet language="python">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet  hide-label language="python">{% cotton:verbatim %}{% verbatim %}
 INSTALLED_APPS = [
     "django_cotton.apps.SimpleAppConfig",
     "template_partials.apps.SimpleAppConfig",
 ]
-{% endverbatim %}{% endcotton_verbatim %}
+{% endverbatim %}{% endcotton:verbatim %}
     </c-snippet>
 
     <p>This means we need to modify the TEMPLATES block ourselves to add the loaders and tags we need for each package. The loaders
         should be applied in a specific way so the packages work together, whilst still benefiting from Django's cached loader system.</p>
 
-    <c-snippet language="python">{% cotton_verbatim %}{% verbatim %}
+    <c-snippet hide-label language="python">{% cotton:verbatim %}{% verbatim %}
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -46,7 +46,7 @@ TEMPLATES = [
         },
     },
 ]
-{% endverbatim %}{% endcotton_verbatim %}
+{% endverbatim %}{% endcotton:verbatim %}
     </c-snippet>
 
 <c-note>

@@ -4,8 +4,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-cotton"
-version = "2.1.0"
-description = "Bringing component based design to Django templates."
+version = "2.4.0"
+description = "Enabling Modern UI Composition in Django."
 authors = [ "Will Abbott <willabb83@gmail.com>",]
 license = "MIT"
 readme = "README.md"
@@ -22,4 +22,4 @@ profile = "black"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4"
-django = ">=4.2,<5.3"
+django = ">=4.2,<7.0"

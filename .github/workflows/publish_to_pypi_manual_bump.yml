@@ -19,25 +19,7 @@ jobs:
       - name: Install required libraries
         run: python3 -m pip install toml
 
-#      - name: Update Version in pyproject.toml
-#        run: |
-#          git fetch origin main
-#          git reset --hard origin/main
-#          python -c "import toml; f = open('./pyproject.toml', 'r'); c = toml.load(f); f.close(); v = list(map(int, c['tool']['poetry']['version'].split('.'))); v[-1] += 1; c['tool']['poetry']['version'] = '.'.join(map(str, v)); f = open('./pyproject.toml', 'w'); toml.dump(c, f); f.close();"
-#          git config --local user.email "action@github.com"
-#          git config --local user.name "GitHub Action"
-#          git add -A
-#          git commit -m "Automatic version bump" --allow-empty
-#          git push origin main
-
       - name: Build and publish to PyPI
         uses: JRubics/poetry-publish@v1.17
         with:
           pypi_token: ${{ secrets.PYPI_TOKEN }}
-
-  trigger_deploy_docs:
-    needs: publish_pypi
-    uses: ./.github/workflows/deploy_docs.yml
-    secrets:
-      RAILWAY_PROJECT_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
-      RAILWAY_SERVICE: ${{ secrets.RAILWAY_SERVICE }}

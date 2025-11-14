@@ -1,6 +1,6 @@
 ARG PLATFORM=linux/amd64
 
-# ---- Tailwind Build Stage (build is quicker like this vs installing npm, node separately) ----
+# ---- Tailwind Build Stage (build is qui¬cker like this vs installing npm, node separately) ----
 FROM node:16-slim AS build_tailwind
 WORKDIR /css
 COPY package*.json ./

@@ -1,0 +1,112 @@
+import unittest
+
+from django_cotton.tag_parser import (
+    _skip_whitespace,
+    _parse_component_name,
+    _parse_attribute_key,
+    _parse_unquoted_value,
+    _parse_quoted_value,
+    parse_component_tag,
+    parse_vars_tag,
+)
+
+
+class TagParserTests(unittest.TestCase):
+    def test_skip_whitespace(self):
+        self.assertEqual(_skip_whitespace("   hello", 0), 3)
+        self.assertEqual(_skip_whitespace("\t\nhello", 0), 2)
+        self.assertEqual(_skip_whitespace("hello", 0), 0)
+        self.assertEqual(_skip_whitespace("  ", 0), 2)
+
+    def test_parse_component_name(self):
+        name, idx = _parse_component_name("test_button class='test'", 0)
+        self.assertEqual(name, "test_button")
+        self.assertEqual(idx, 11)
+
+        name, idx = _parse_component_name("test_card\tattr='val'", 0)
+        self.assertEqual(name, "test_card")
+        self.assertEqual(idx, 9)
+
+    def test_parse_attribute_key(self):
+        key, idx = _parse_attribute_key("class='test'", 0)
+        self.assertEqual(key, "class")
+        self.assertEqual(idx, 5)
+
+        key, idx = _parse_attribute_key("disabled ", 0)
+        self.assertEqual(key, "disabled")
+        self.assertEqual(idx, 8)
+
+    def test_parse_unquoted_value(self):
+        val, idx = _parse_unquoted_value("true class", 0)
+        self.assertEqual(val, "true")
+        self.assertEqual(idx, 4)
+
+        val, idx = _parse_unquoted_value("123\t", 0)
+        self.assertEqual(val, "123")
+        self.assertEqual(idx, 3)
+
+    def test_parse_quoted_value_basic(self):
+        val, idx = _parse_quoted_value("hello'", 0, "'")
+        self.assertEqual(val, "'hello'")
+        self.assertEqual(idx, 6)
+
+        val, idx = _parse_quoted_value('world"', 0, '"')
+        self.assertEqual(val, '"world"')
+        self.assertEqual(idx, 6)
+
+    def test_parse_quoted_value_with_django_vars(self):
+        val, idx = _parse_quoted_value('test {{ var }}"', 0, '"')
+        self.assertEqual(val, '"test {{ var }}"')
+        self.assertEqual(idx, 15)
+
+    def test_parse_quoted_value_with_django_tags(self):
+        val, idx = _parse_quoted_value('test {% if x %}yes{% endif %}"', 0, '"')
+        self.assertEqual(val, '"test {% if x %}yes{% endif %}"')
+        self.assertEqual(idx, 30)
+
+    def test_parse_quoted_value_with_nested_quotes(self):
+        val, idx = _parse_quoted_value('id-{{ date|date:"Y-m-d" }}"', 0, '"')
+        self.assertEqual(val, '"id-{{ date|date:"Y-m-d" }}"')
+        self.assertEqual(idx, 27)
+
+    def test_parse_component_tag_basic(self):
+        result = parse_component_tag("c test_comp")
+        self.assertEqual(result.name, "test_comp")
+        self.assertEqual(result.attrs, {})
+        self.assertEqual(result.only, False)
+
+    def test_parse_component_tag_with_attrs(self):
+        result = parse_component_tag('c test_comp class="btn" :count="5"')
+        self.assertEqual(result.name, "test_comp")
+        self.assertEqual(result.attrs["class"], '"btn"')
+        self.assertEqual(result.attrs[":count"], '"5"')
+
+    def test_parse_component_tag_with_only(self):
+        result = parse_component_tag("c test_comp only")
+        self.assertEqual(result.name, "test_comp")
+        self.assertEqual(result.only, True)
+
+    def test_parse_component_tag_self_closing(self):
+        result = parse_component_tag("c test_comp /")
+        self.assertEqual(result.name, "test_comp")
+
+        result = parse_component_tag("c test_comp / ")
+        self.assertEqual(result.name, "test_comp")
+
+    def test_parse_vars_tag_basic(self):
+        result = parse_vars_tag("vars")
+        self.assertEqual(result.attrs, {})
+        self.assertEqual(result.empty_attrs, [])
+
+    def test_parse_vars_tag_with_attrs(self):
+        result = parse_vars_tag('vars title="Test" count="5"')
+        self.assertEqual(result.attrs["title"], '"Test"')
+        self.assertEqual(result.attrs["count"], '"5"')
+        self.assertEqual(result.empty_attrs, [])
+
+    def test_parse_vars_tag_with_empty_attrs(self):
+        result = parse_vars_tag("vars active disabled")
+        self.assertEqual(result.attrs, {})
+        self.assertIn("active", result.empty_attrs)
+        self.assertIn("disabled", result.empty_attrs)
+

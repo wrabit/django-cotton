@@ -1,5 +1,6 @@
 import re
-from typing import List, Tuple
+from typing import List, Tuple, Optional
+from html.parser import HTMLParser
 
 
 class Tag:
@@ -153,3 +154,138 @@ class CottonCompiler:
         if vars_content:
             processed_html = f"{vars_content}{processed_html}{{% endvars %}}"
         return self.restore_ignorables(processed_html, ignorables)
+
+
+class CottonDirectiveParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.available_directives = ["c-if", "c-elif", "c-else", "c-for"]
+        self.result = []
+        self.directive_blocks = []
+        
+    def has_directive(self, attrs: dict) -> Tuple[bool, Optional[str]]:
+        """
+        Check if a single directive is present in the element.
+        Raises ValueError if more than one directive is found.
+        """
+        directives = [directive for directive in self.available_directives if directive in attrs]
+        
+        if (len(directives) > 1):
+            raise ValueError(
+                "Multiple cotton directives found in the same element. Only one directive is allowed per HTML element."
+            )
+            
+        return (True, directives[0]) if directives else (False, None)
+    
+    def build_tag(self, tag: str, attrs: List[Tuple[str, Optional[str]]], self_closing=False) -> str:
+        """Build an HTML start tag (or self-closing tag) from the given tag name and attributes."""
+        parts = [f"<{tag}"]
+        for k, v in attrs:
+            parts.append(f' {k}="{v}"')
+        parts.append("/>" if self_closing else ">")
+        return "".join(parts)
+    
+    def adjust_conditional_directive(self, directive):
+        """
+        Removes the closing {% endif %} from the previous block to allow continuation 
+        with 'elif' or 'else'. Raises a ValueError if the conditional structure is invalid
+        (i.e., 'c-elif' or 'c-else' not immediately following a valid 'c-if' or 'c-elif').
+        """
+        error = ValueError(
+            f"An element with the '{directive}' directive must follow an element "
+            "with a 'c-if' or 'c-elif' directive. Ensure that conditional directives "
+            "follow the correct structure."
+        )
+        
+        if len(self.directive_blocks) > 1:
+            buffer = self.directive_blocks[-2]['buffer']
+        else:
+            buffer = self.result
+        
+        if len(buffer) >= 1 and buffer[-1] == "{% endif %}":
+            buffer.pop()
+        elif len(buffer) >= 2 and buffer[-2] == "{% endif %}":
+            buffer.pop(-2) 
+        else:
+            raise error
+
+    def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]):
+        """Handles opening tags, detects directives, and manages directive block buffering."""
+        attrs_dict = dict(attrs)
+        has_directive, directive = self.has_directive(attrs_dict)
+        
+        if has_directive:
+            clean_attrs = [(k, v) for k, v in attrs if k not in self.available_directives]
+            tag_with_attrs = self.build_tag(tag, clean_attrs)
+            directive_block = {
+                "directive": directive,
+                "directive_value": attrs_dict[directive],
+                "stack": [tag],
+                "buffer": [tag_with_attrs]
+            }
+            self.directive_blocks.append(directive_block)
+            
+            if directive == "c-elif" or directive == "c-else":
+                self.adjust_conditional_directive(directive)
+                
+        elif self.directive_blocks:
+            tag_with_attrs = self.build_tag(tag, attrs)
+            current_block = self.directive_blocks[-1]
+            current_block["buffer"].append(tag_with_attrs)
+            current_block["stack"].append(tag)
+        else:
+            self.result.append(self.build_tag(tag, attrs))
+
+    def handle_endtag(self, tag: str):
+        """Handles closing tags and finalizes directive blocks if applicable."""
+        if self.directive_blocks:
+            current_block = self.directive_blocks[-1]
+            current_block["buffer"].append(f"</{tag}>")
+            current_block["stack"].pop()
+
+            if not current_block["stack"]:
+                block_content = "".join(current_block["buffer"])
+                directive = current_block["directive"].replace("c-", "")
+                closing = "if" if directive in ["elif", "else"] else directive
+                value = current_block["directive_value"] or ""
+                
+                rendered = [
+                    f"{{% {directive} {value} %}}".strip(),
+                    block_content,
+                    f"{{% end{closing} %}}"
+                ]
+                
+                if len(self.directive_blocks) > 1:
+                    self.directive_blocks[-2]["buffer"].extend(rendered)
+                else:
+                    self.result.extend(rendered)
+
+                self.directive_blocks.pop()
+        else:
+            self.result.append(f"</{tag}>")
+
+    def handle_data(self, data: str):
+        """Handles raw text content inside or outside directive blocks."""
+        if self.directive_blocks:
+            self.directive_blocks[-1]["buffer"].append(data)
+        else:
+            self.result.append(data)
+
+    def handle_startendtag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]):
+        """Handles self-closing tags and buffers them appropriately."""
+        tag_with_attrs = self.build_tag(tag, attrs, self_closing=True)
+        
+        if self.directive_blocks:
+            self.directive_blocks[-1]["buffer"].append(tag_with_attrs)
+        else:
+            self.result.append(tag_with_attrs)
+
+    def process(self, html: str) -> str:
+        """Parses the input HTML and returns the transformed output with directives rendered."""
+        if not any(f'{directive}=' in html for directive in self.available_directives):
+            return html
+
+        self.feed(html)
+        final_result = "".join(self.result)
+        self.result = [] # reset for reuse
+        return final_result

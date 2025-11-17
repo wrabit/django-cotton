@@ -1,0 +1,8 @@
+<c-vars variant="default" size="md" :value="None" :accent="True" />
+
+<div x-data='tabs({{ value|json_encode }})' 
+    data-variant="{{ variant }}"
+    data-size="{{ size }}"
+    {{ attrs.dict|merge:'class:w-full' }}>
+    {{ slot }}
+</div>

@@ -16,7 +16,9 @@ var accordionItem_default = (expanded) => ({
   },
   trigger: {
     ["@click"]() {
-      return this.toggle();
+      if (!this.disabled) {
+        return this.toggle();
+      }
     },
     [":aria-expanded"]() {
       return this.$data.value.includes(this.$id("accordion-item"));
@@ -28,12 +30,12 @@ var accordionItem_default = (expanded) => ({
       return this.$id("accordion-item") + "-trigger";
     },
     [":disabled"]() {
-      return this.$data.disabled;
+      return this.disabled;
     }
   },
   icon: {
     [":class"]() {
-      return { "-rotate-180": this.$data.value.includes(this.$id("accordion-item")) };
+      return { "[&>*]:-rotate-180": this.$data.value.includes(this.$id("accordion-item")) };
     }
   },
   content: {
@@ -602,6 +604,29 @@ var calendar_default = (selected, mode, disabled, min, max, required) => ({
       return this.modeHandler.isRangeMiddle(date);
     }
     return false;
+  }
+});
+
+// js/checkbox.js
+var checkbox_default = (name, initialValues = []) => ({
+  values: Array.isArray(initialValues) ? initialValues : [],
+  name,
+  init() {
+    if (this.values.length === 0) {
+      const checkedInputs = this.$el.querySelectorAll('input[type="checkbox"]:checked');
+      this.values = Array.from(checkedInputs).map((input) => input.value);
+    }
+  },
+  toggle(optionValue) {
+    if (this.isChecked(optionValue)) {
+      this.values = this.values.filter((v) => v !== optionValue);
+    } else {
+      this.values.push(optionValue);
+    }
+    this.$dispatch("change", { values: this.values });
+  },
+  isChecked(optionValue) {
+    return this.values.includes(optionValue);
   }
 });
 
@@ -2653,6 +2678,53 @@ var popover_default = () => ({
   }
 });
 
+// js/radio.js
+var radio_default = (name, initialValue = null) => ({
+  value: initialValue,
+  name,
+  init() {
+    if (this.value === null) {
+      const checkedInput = this.$el.querySelector('input[type="radio"]:checked');
+      if (checkedInput) {
+        this.value = checkedInput.value;
+      }
+    }
+  },
+  select(optionValue) {
+    this.value = optionValue;
+    this.$dispatch("change", { value: optionValue });
+  },
+  isSelected(optionValue) {
+    return this.value === optionValue;
+  },
+  selectNext() {
+    const radios = Array.from(this.$el.querySelectorAll('[role="radio"]:not([aria-disabled="true"])'));
+    const currentIndex = radios.findIndex((r) => r === document.activeElement);
+    if (currentIndex === -1)
+      return;
+    const nextIndex = (currentIndex + 1) % radios.length;
+    radios[nextIndex].focus();
+    this.select(radios[nextIndex].dataset.value);
+  },
+  selectPrevious() {
+    const radios = Array.from(this.$el.querySelectorAll('[role="radio"]:not([aria-disabled="true"])'));
+    const currentIndex = radios.findIndex((r) => r === document.activeElement);
+    if (currentIndex === -1)
+      return;
+    const prevIndex = currentIndex === 0 ? radios.length - 1 : currentIndex - 1;
+    radios[prevIndex].focus();
+    this.select(radios[prevIndex].dataset.value);
+  },
+  hasRovingTabindex(optionValue) {
+    if (this.value === optionValue)
+      return true;
+    const radios = Array.from(this.$el.querySelectorAll('[role="radio"]:not([aria-disabled="true"])'));
+    if (!this.value && radios[0] && radios[0].dataset.value === optionValue)
+      return true;
+    return false;
+  }
+});
+
 // js/select.js
 var select_default = (multiple, disabled) => ({
   options: [],
@@ -2869,18 +2941,15 @@ var switchInput_default = (disabled) => ({
 });
 
 // js/tabs.js
-var tabs_default = (defaultValue, activationMode) => ({
-  active: defaultValue,
+var tabs_default = (initialTab = null, activationMode = "automatic") => ({
+  active: initialTab,
   activationMode,
-  tabsList: {
-    ["x-id"]() {
-      return ["tab"];
-    },
-    ["x-on:keydown.left.prevent"]() {
-      return this.$focus.wrap().previous();
-    },
-    ["x-on:keydown.right.prevent"]() {
-      return this.$focus.wrap().next();
+  init() {
+    if (this.active === null) {
+      const firstTab = this.$el.querySelector("[data-tab-value]");
+      if (firstTab) {
+        this.active = firstTab.dataset.tabValue;
+      }
     }
   }
 });
@@ -2948,12 +3017,14 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("avatar", avatar_default);
   Alpine.data("banner", banner_default);
   Alpine.data("calendar", calendar_default);
+  Alpine.data("checkbox", checkbox_default);
   Alpine.data("command", command_default);
   Alpine.data("datePicker", datePicker_default);
   Alpine.data("dialog", dialog_default);
   Alpine.data("dropdownMenu", dropdownMenu_default);
   Alpine.data("dropdownMenuSub", dropdownMenuSub_default);
   Alpine.data("popover", popover_default);
+  Alpine.data("radio", radio_default);
   Alpine.data("select", select_default);
   Alpine.data("sheet", sheet_default);
   Alpine.data("switchInput", switchInput_default);

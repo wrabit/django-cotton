@@ -1,34 +1,67 @@
 <c-vars
     position="top"
-    :offset="4" {# Gap between trigger and tooltip in pixels #}
-    content {# Declare the 'content' slot #}
-    :position_classes="{
-        'top':    'bottom-full left-1/2 -translate-x-1/2 mb-[var(--offset)]',
-        'bottom': 'top-full left-1/2 -translate-x-1/2 mt-[var(--offset)]',
-        'left':   'right-full top-1/2 -translate-y-1/2 mr-[var(--offset)]',
-        'right':  'left-full top-1/2 -translate-y-1/2 ml-[var(--offset)]'
-    }"
+    :offset="4"
+    content
 />
 
-<div x-data="{ open: false }" class="relative inline-block">
+<div
+    x-data="{
+        open: false,
+        tooltipPosition: { x: 0, y: 0 },
+        updatePosition() {
+            if (!this.open) return;
+
+            const trigger = this.$refs.trigger;
+            const tooltip = this.$refs.tooltip;
+            if (!trigger || !tooltip) return;
+
+            const triggerRect = trigger.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const gap = {{ offset }};
+
+            let x = 0, y = 0;
+
+            switch ('{{ position }}') {
+                case 'top':
+                    x = triggerRect.left + (triggerRect.width / 2) - (tooltipRect.width / 2);
+                    y = triggerRect.top - tooltipRect.height - gap;
+                    break;
+                case 'bottom':
+                    x = triggerRect.left + (triggerRect.width / 2) - (tooltipRect.width / 2);
+                    y = triggerRect.bottom + gap;
+                    break;
+                case 'left':
+                    x = triggerRect.left - tooltipRect.width - gap;
+                    y = triggerRect.top + (triggerRect.height / 2) - (tooltipRect.height / 2);
+                    break;
+                case 'right':
+                    x = triggerRect.right + gap;
+                    y = triggerRect.top + (triggerRect.height / 2) - (tooltipRect.height / 2);
+                    break;
+            }
+
+            this.tooltipPosition = { x, y };
+        }
+    }"
+    class="relative inline-block"
+>
     {# Trigger Element #}
     <div
-        @mouseenter="open = true"
+        @mouseenter="open = true; $nextTick(() => updatePosition())"
         @mouseleave="open = false"
-        @focus="open = true"
+        @focus="open = true; $nextTick(() => updatePosition())"
         @blur="open = false"
         x-ref="trigger"
-        aria-describedby="tooltip-content-{{ component_id }}"
-        tabindex="0" {# Make it focusable if it's not inherently focusable #}
         class="inline-block"
     >
         {{ slot }}
     </div>
 
-    {# Tooltip Content - Conditionally rendered for performance #}
+    {# Tooltip Content #}
     <template x-teleport="body">
         <div
             x-show="open"
+            x-cloak
             x-transition:enter="transition ease-out duration-100"
             x-transition:enter-start="opacity-0 scale-95"
             x-transition:enter-end="opacity-100 scale-100"
@@ -36,11 +69,9 @@
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
             x-ref="tooltip"
-            x-anchor.offset.{{ offset }}="$refs.trigger"
-            id="tooltip-content-{{ component_id }}"
             role="tooltip"
-            class="absolute z-50 rounded-md bg-gray-900 dark:bg-gray-700 px-3 py-1.5 text-sm font-medium text-white shadow-sm {{ position_classes|get_item:position }}"
-            :style="`--offset: {{ offset }}px`"
+            class="fixed z-50 rounded-md bg-zinc-900 dark:bg-zinc-700 px-3 py-1.5 text-sm font-medium text-white shadow-lg pointer-events-none"
+            :style="`left: ${tooltipPosition.x}px; top: ${tooltipPosition.y}px;`"
         >
             {{ content }}
         </div>

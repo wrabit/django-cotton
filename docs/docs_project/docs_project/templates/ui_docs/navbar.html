@@ -1,0 +1,254 @@
+<c-layouts.ui>
+    <c-header>
+        Navbar
+        <c-slot name="subheading">
+            Arrange navigation links horizontally or vertically.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink><a href="#horizontal" class="no-underline">Horizontal Navbar</a></c-index-sublink>
+        <c-index-sublink><a href="#current" class="no-underline">Current Page</a></c-index-sublink>
+        <c-index-sublink><a href="#badges" class="no-underline">With Badges</a></c-index-sublink>
+        <c-index-sublink><a href="#navlist" class="no-underline">Navlist (Sidebar)</a></c-index-sublink>
+        <c-index-sublink><a href="#navlist-groups" class="no-underline">Navlist Groups</a></c-index-sublink>
+        <c-index-sublink><a href="#expandable" class="no-underline">Expandable Groups</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <c-ui.navbar>
+            <c-ui.navbar.item href="javascript:void(0)" :current="True">Home</c-ui.navbar.item>
+            <c-ui.navbar.item href="javascript:void(0)">Features</c-ui.navbar.item>
+            <c-ui.navbar.item href="javascript:void(0)">Pricing</c-ui.navbar.item>
+            <c-ui.navbar.item href="javascript:void(0)">About</c-ui.navbar.item>
+        </c-ui.navbar>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navbar>
+    <c-ui.navbar.item href="/" :current="True">Home</c-ui.navbar.item>
+    <c-ui.navbar.item href="/features">Features</c-ui.navbar.item>
+    <c-ui.navbar.item href="/pricing">Pricing</c-ui.navbar.item>
+    <c-ui.navbar.item href="/about">About</c-ui.navbar.item>
+</c-ui.navbar>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="current">Detecting the Current Page</h2>
+
+    <p>Use the <code>:current</code> prop to manually mark the active navigation item. This applies accent styling to indicate the current page.</p>
+
+    <c-sample code-only>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navbar>
+    <c-ui.navbar.item href="/" :current="True">Home</c-ui.navbar.item>
+    <c-ui.navbar.item href="/" :current="is_home">Home</c-ui.navbar.item>
+    <c-ui.navbar.item href="/" :current="{% if request.path == '/'%}True{% endif %}">Home</c-ui.navbar.item>
+</c-ui.navbar>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="badges">With Badges</h2>
+
+    <p>Add a trailing badge to a navbar item using the <code>badge</code> prop. Customize the badge color with <code>badge_color</code>.</p>
+
+    <c-sample>
+        <c-ui.navbar>
+            <c-ui.navbar.item href="javascript:void(0)">Home</c-ui.navbar.item>
+            <c-ui.navbar.item href="javascript:void(0)" badge="12">Inbox</c-ui.navbar.item>
+            <c-ui.navbar.item href="javascript:void(0)">Contacts</c-ui.navbar.item>
+            <c-ui.navbar.item href="javascript:void(0)" badge="Pro" badge_color="purple" badge_variant="solid">Calendar</c-ui.navbar.item>
+        </c-ui.navbar>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navbar>
+    <c-ui.navbar.item href="/">Home</c-ui.navbar.item>
+    <c-ui.navbar.item href="/inbox" badge="12">Inbox</c-ui.navbar.item>
+    <c-ui.navbar.item href="/contacts">Contacts</c-ui.navbar.item>
+    <c-ui.navbar.item href="/calendar" badge="Pro" badge_color="purple" badge_variant="solid">Calendar</c-ui.navbar.item>
+</c-ui.navbar>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="navlist">Navlist (Sidebar)</h2>
+
+    <p>Arrange your navbar vertically using the <code>navlist</code> component for sidebar navigation.</p>
+
+    <c-sample>
+        <c-ui.navlist class="w-64">
+            <c-ui.navlist.item href="javascript:void(0)" :current="True">Dashboard</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Team</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+        </c-ui.navlist>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navlist class="w-64">
+    <c-ui.navlist.item href="/dashboard" :current="True">Dashboard</c-ui.navlist.item>
+    <c-ui.navlist.item href="/projects">Projects</c-ui.navlist.item>
+    <c-ui.navlist.item href="/team">Team</c-ui.navlist.item>
+    <c-ui.navlist.item href="/settings">Settings</c-ui.navlist.item>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="navlist-groups">Navlist Groups</h2>
+
+    <p>Group related navigation items using <code>navlist.group</code> with a heading.</p>
+
+    <c-sample>
+        <c-ui.navlist class="w-64">
+            <c-ui.navlist.item href="javascript:void(0)">Dashboard</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
+
+            <c-ui.navlist.group heading="Account">
+                <c-ui.navlist.item href="javascript:void(0)" :current="True">Profile</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Billing</c-ui.navlist.item>
+            </c-ui.navlist.group>
+        </c-ui.navlist>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navlist class="w-64">
+    <c-ui.navlist.item href="/dashboard">Dashboard</c-ui.navlist.item>
+    <c-ui.navlist.item href="/projects">Projects</c-ui.navlist.item>
+
+    <c-ui.navlist.group heading="Account">
+        <c-ui.navlist.item href="/profile" :current="True">Profile</c-ui.navlist.item>
+        <c-ui.navlist.item href="/settings">Settings</c-ui.navlist.item>
+        <c-ui.navlist.item href="/billing">Billing</c-ui.navlist.item>
+    </c-ui.navlist.group>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="expandable">Expandable Groups</h2>
+
+    <p>Create collapsible navigation groups using the <code>:expandable</code> prop. Control the initial state with <code>:expanded</code>.</p>
+
+    <c-sample>
+        <c-ui.navlist class="w-64">
+            <c-ui.navlist.item href="javascript:void(0)">Dashboard</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Transactions</c-ui.navlist.item>
+
+            <c-ui.navlist.group heading="Account" :expandable="True" :expanded="True">
+                <c-ui.navlist.item href="javascript:void(0)">Profile</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Billing</c-ui.navlist.item>
+            </c-ui.navlist.group>
+
+            <c-ui.navlist.group heading="Team" :expandable="True" :expanded="False">
+                <c-ui.navlist.item href="javascript:void(0)">Members</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Invitations</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Permissions</c-ui.navlist.item>
+            </c-ui.navlist.group>
+        </c-ui.navlist>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navlist class="w-64">
+    <c-ui.navlist.item href="/dashboard">Dashboard</c-ui.navlist.item>
+    <c-ui.navlist.item href="/transactions">Transactions</c-ui.navlist.item>
+
+    <c-ui.navlist.group heading="Account" :expandable="True" :expanded="True">
+        <c-ui.navlist.item href="/profile">Profile</c-ui.navlist.item>
+        <c-ui.navlist.item href="/settings">Settings</c-ui.navlist.item>
+        <c-ui.navlist.item href="/billing">Billing</c-ui.navlist.item>
+    </c-ui.navlist.group>
+
+    <c-ui.navlist.group heading="Team" :expandable="True" :expanded="False">
+        <c-ui.navlist.item href="/team/members">Members</c-ui.navlist.item>
+        <c-ui.navlist.item href="/team/invitations">Invitations</c-ui.navlist.item>
+        <c-ui.navlist.item href="/team/permissions">Permissions</c-ui.navlist.item>
+    </c-ui.navlist.group>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="navlist-badges">Navlist with Badges</h2>
+
+    <p>Show additional information with badges on navlist items.</p>
+
+    <c-sample>
+        <c-ui.navlist class="w-64">
+            <c-ui.navlist.item href="javascript:void(0)">Home</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)" badge="12">Inbox</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Contacts</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)" badge="Pro" badge_color="lime" badge_variant="solid">Calendar</c-ui.navlist.item>
+        </c-ui.navlist>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navlist class="w-64">
+    <c-ui.navlist.item href="/">Home</c-ui.navlist.item>
+    <c-ui.navlist.item href="/inbox" badge="12">Inbox</c-ui.navlist.item>
+    <c-ui.navlist.item href="/contacts">Contacts</c-ui.navlist.item>
+    <c-ui.navlist.item href="/calendar" badge="Pro" badge_color="lime" badge_variant="solid">Calendar</c-ui.navlist.item>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h4 id="reference">Navbar Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="" description="The navigation items."></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Navbar Item Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="href" type="str" default="" description="URL the item links to.">
+            <c-slot name="options_content">Any URL</c-slot>
+        </c-api-prop>
+        <c-api-prop name=":current" type="bool" :options="['True', 'False']" default="False" description="If true, applies active styling to indicate the current page." />
+        <c-api-prop name="badge" type="str" default="" description="Content to display as a badge.">
+            <c-slot name="options_content">Any text or number</c-slot>
+        </c-api-prop>
+        <c-api-prop name="badge_color" type="str" :options="['zinc', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose']" default="zinc" description="Color of the badge." />
+        <c-api-prop name="badge_variant" type="str" :options="['', 'solid', 'pill']" default="" description="Variant of the badge." />
+    </c-api-props>
+
+    <h4 class="mt-6">Navlist Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="" description="The navigation items and groups."></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Navlist Item Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="href" type="str" default="#" description="URL the item links to.">
+            <c-slot name="options_content">Any URL</c-slot>
+        </c-api-prop>
+        <c-api-prop name=":current" type="bool" :options="['True', 'False']" default="False" description="If true, applies active styling to indicate the current page." />
+        <c-api-prop name="badge" type="str" default="" description="Content to display as a badge.">
+            <c-slot name="options_content">Any text or number</c-slot>
+        </c-api-prop>
+        <c-api-prop name="badge_color" type="str" :options="['zinc', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose']" default="zinc" description="Color of the badge." />
+        <c-api-prop name="badge_variant" type="str" :options="['', 'solid', 'pill']" default="" description="Variant of the badge." />
+    </c-api-props>
+
+    <h4 class="mt-6">Navlist Group Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="heading" type="str" default="" description="Text displayed as the group heading.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name=":expandable" type="bool" :options="['True', 'False']" default="False" description="If true, makes the group collapsible with a toggle button." />
+        <c-api-prop name=":expanded" type="bool" :options="['True', 'False']" default="True" description="If true, expands the group by default when expandable is enabled." />
+        <c-api-prop name="slot (default)" type="—" default="" description="The group's navigation items."></c-api-prop>
+    </c-api-props>
+
+</c-layouts.ui>

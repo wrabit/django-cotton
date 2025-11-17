@@ -1,6 +1,12 @@
-<c-vars type="single" :collapsible="True" :disabled="False" />
+<c-vars type="single" :collapsible="True" :disabled="False" icon_closed="" icon_open="" />
 
 <div x-data="accordion('{{ type }}', {{ collapsible|json_encode }}, {{ disabled|json_encode }})"
-    {{ attrs.dict|merge:'class:w-full divide-y divide-gray-500 divide-opacity-20' }}>
+    {{ attrs.dict|merge:'class:w-full divide-y divide-zinc-500 divide-opacity-20' }}>
+    {% if icon_closed %}
+    <template data-accordion-icon-closed>{{ icon_closed }}</template>
+    {% endif %}
+    {% if icon_open %}
+    <template data-accordion-icon-open>{{ icon_open }}</template>
+    {% endif %}
     {{ slot }}
 </div>

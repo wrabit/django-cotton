@@ -1,0 +1,36 @@
+<c-vars
+    name
+    form
+    message
+/>
+
+{% if message %}
+    {# Explicit message provided #}
+    <div {{ attrs.dict|merge:'class:text-sm text-red-600 dark:text-red-400 mt-1.5' }}>
+        {{ message }}
+    </div>
+{% elif form and name %}
+    {# Django form integration - look up errors by field name #}
+    {% if name == '__all__' %}
+        {# Non-field errors #}
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <div {{ attrs.dict|merge:'class:text-sm text-red-600 dark:text-red-400 mt-1.5' }}>
+                    {{ error }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        {# Field-specific errors - accessed via form.errors dict #}
+        {% for error in form.errors|get_item:name %}
+            <div {{ attrs.dict|merge:'class:text-sm text-red-600 dark:text-red-400 mt-1.5' }}>
+                {{ error }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% elif slot %}
+    {# Slot content provided #}
+    <div {{ attrs.dict|merge:'class:text-sm text-red-600 dark:text-red-400 mt-1.5' }}>
+        {{ slot }}
+    </div>
+{% endif %}

@@ -8,196 +8,239 @@
 
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#accordion" class="no-underline">Accordion</a></c-index-sublink>
         <c-index-sublink><a href="#multiple" class="no-underline">Multiple</a></c-index-sublink>
         <c-index-sublink><a href="#expanded" class="no-underline">Expanded</a></c-index-sublink>
-        <c-index-sublink><a href="#collapsible" class="no-underline">Collapsible</a></c-index-sublink>
-        <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
+        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink><a href="#icon-position" class="no-underline">Icon Position</a></c-index-sublink>
+        <c-index-sublink><a href="#custom-icon" class="no-underline">Custom Icon</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
     <c-sample>
         <c-ui.accordion>
-            <c-ui.accordion.item>
-                Do you offer bulk discounts?
-                <c-slot name="content">
-                    Yes! We provide special pricing for large orders. Contact our sales team for a custom quote and exclusive offers.
-                </c-slot>
+            <c-ui.accordion.item header="Do you offer bulk discounts?">
+                Yes! We provide special pricing for large orders.
             </c-ui.accordion.item>
-            <c-ui.accordion.item>
-                How can I track my order?
-                <c-slot name="content">
-                    Once your order ships, you'll receive a tracking number via email. Use it on our website or the courier's site to check delivery status.
-                </c-slot>
+            <c-ui.accordion.item header="How can I track my order?">
+                Once your order ships, you'll receive a tracking number via email.
             </c-ui.accordion.item>
-            <c-ui.accordion.item>
-                Do you offer gift wrapping services?
-                <c-slot name="content">
-                    Absolutely! We offer gift wrapping for a small fee. Choose a wrapping style at checkout and add a personalized message.
-                </c-slot>
+            <c-ui.accordion.item header="Do you offer gift wrapping services?">
+                Absolutely! We offer gift wrapping for a small fee.
             </c-ui.accordion.item>
         </c-ui.accordion>
 
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet language="django">{% cotton:verbatim %}{% verbatim %}
 <c-ui.accordion>
-    <c-ui.accordion.item>
-        Do you offer bulk discounts?
-        <c-slot name="content">
-            Yes! We provide special pricing for large orders. Contact our sales team for a custom quote and exclusive offers.
-        </c-slot>
+    <c-ui.accordion.item header="Do you offer bulk discounts?">
+        Yes! We provide special pricing for large orders.
     </c-ui.accordion.item>
-    <c-ui.accordion.item>
-        How can I track my order?
-        <c-slot name="content">
-            Once your order ships, you'll receive a tracking number via email. Use it on our website or the courier's site to check delivery status.
-        </c-slot>
+    <c-ui.accordion.item header="How can I track my order?">
+        Once your order ships, you'll receive a tracking number via email.
     </c-ui.accordion.item>
-    <c-ui.accordion.item>
-        Do you offer gift wrapping services?
-        <c-slot name="content">
-            Absolutely! We offer gift wrapping for a small fee. Choose a wrapping style at checkout and add a personalized message.
-        </c-slot>
+    <c-ui.accordion.item header="Do you offer gift wrapping services?">
+        Absolutely! We offer gift wrapping for a small fee.
     </c-ui.accordion.item>
 </c-ui.accordion>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
-    <h2>Multiple</h2>
+    <h2 id="multiple">Multiple</h2>
 
     <p>Permit more than one item to be open at the same time.</p>
 
     <c-sample>
         <c-ui.accordion type="multiple">
-            <c-ui.accordion.item>
-                Terms &amp; Conditions
-                <c-slot name="content">
-                    None shall pass..
-                </c-slot>
+            <c-ui.accordion.item header="Terms & Conditions">
+                By using this service, you agree to our terms and conditions. Please read carefully before proceeding.
             </c-ui.accordion.item>
-            <c-ui.accordion.item>
-                Privacy Notice
-                <c-slot name="content">
-                    Give me your best shot.
-                </c-slot>
+            <c-ui.accordion.item header="Privacy Notice">
+                We respect your privacy and will never share your personal information with third parties.
             </c-ui.accordion.item>
-            <c-ui.accordion.item>
-                About us
-                <c-slot name="content">
-                    <p>We are the knights that say nee.</p>
-                </c-slot>
+            <c-ui.accordion.item header="About us">
+                We are a team dedicated to building beautiful, accessible UI components for Django developers.
             </c-ui.accordion.item>
         </c-ui.accordion>
 
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
-<c-ui.accordion>
-    <c-ui.accordion.item>
-        Step 1
-        <c-slot name="content">
-            <input type="text" name="name" placeholder="Name">
-        </c-slot>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion type="multiple">
+    <c-ui.accordion.item header="Terms &amp; Conditions">
+        By using this service, you agree to our terms and conditions.
     </c-ui.accordion.item>
-    <c-ui.accordion.item expanded>
-        Step 2
-        <c-slot name="content">
-            <p>Sign on the dotted line...</p>
-        </c-slot>
+    <c-ui.accordion.item header="Privacy Notice">
+        We respect your privacy and will never share your information.
     </c-ui.accordion.item>
-</c-ui.accordion>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+    <c-ui.accordion.item header="About us">
+        We are a team dedicated to building beautiful UI components.
+    </c-ui.accordion.item>
+</c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
-    <h2>Expanded</h2>
+    <h2 id="expanded">Expanded</h2>
 
-    <p>Define which items are initially open.</p>
+    <p>Define which items are initially open using the <code>:expanded="True"</code> attribute.</p>
 
     <c-sample>
         <c-ui.accordion>
-            <c-ui.accordion.item>
-                Quote
-                <c-slot name="content">
-                    <input type="text" name="name" placeholder="Name">
-                </c-slot>
+            <c-ui.accordion.item header="Step 1: Enter Details">
+                <c-ui.input type="text" name="name" placeholder="Your name" class="border border-zinc-300 dark:border-zinc-600 rounded px-3 py-2 w-full mb-3" />
+                <c-ui.input type="email" name="email" placeholder="Email address" class="border border-zinc-300 dark:border-zinc-600 rounded px-3 py-2 w-full" />
             </c-ui.accordion.item>
-            <c-ui.accordion.item expanded>
-                Checkout
-                <c-slot name="content">
-                    <p>Sign on the dotted line...</p>
-                </c-slot>
+            <c-ui.accordion.item header="Step 2: Review & Submit" :expanded="True">
+                <p>Please review your information and click submit to complete the process.</p>
             </c-ui.accordion.item>
         </c-ui.accordion>
 
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
-<c-ui.accordion>
-    <c-ui.accordion.item>
-        Step 1
-        <c-slot name="content">
-            <input type="text" name="name" placeholder="Name">
-        </c-slot>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion>
+    <c-ui.accordion.item header="Step 1: Enter Details">
+        <input type="text" name="name" placeholder="Your name">
+        <input type="email" name="email" placeholder="Email address">
     </c-ui.accordion.item>
-    <c-ui.accordion.item expanded>
-        Step 2
-        <c-slot name="content">
-            <p>Sign on the dotted line...</p>
-        </c-slot>
+    <c-ui.accordion.item header="Step 2: Review & Submit" :expanded="True">
+        <p>Please review your information and click submit to complete the process.</p>
     </c-ui.accordion.item>
-</c-ui.accordion>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+</c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
+    <h2 id="disabled">Disabled</h2>
 
-    <h2>API</h2>
+    <p>Disable individual accordion items with <code>:disabled="True"</code>.</p>
 
-    <h3 class="!text-gray-500">ui.accordion</h3>
+    <c-sample>
+        <c-ui.accordion>
+            <c-ui.accordion.item header="Available Features">
+                All features are accessible and ready to use in your current plan.
+            </c-ui.accordion.item>
+            <c-ui.accordion.item header="Premium Features" :disabled="True">
+                These features require a premium subscription. Upgrade to unlock.
+            </c-ui.accordion.item>
+            <c-ui.accordion.item header="Beta Features" :disabled="True">
+                These experimental features are coming soon. Stay tuned!
+            </c-ui.accordion.item>
+        </c-ui.accordion>
 
-    <h4>Properties</h4>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion>
+    <c-ui.accordion.item header="Available Features">
+        All features are accessible and ready to use.
+    </c-ui.accordion.item>
+    <c-ui.accordion.item header="Premium Features" :disabled="True">
+        These features require a premium subscription.
+    </c-ui.accordion.item>
+    <c-ui.accordion.item header="Beta Features" :disabled="True">
+        These experimental features are coming soon.
+    </c-ui.accordion.item>
+</c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-{#
-    <c-ui.tabs>
-        <c-ui.tab name="Properties" active>
-            <pre><code class="language-html">Properties</code></pre>
-        </c-ui.tab>
-        <c-ui.tab name="Slots">
-            <pre><code class="language-html">Slots</code></pre>
-        </c-ui.tab>
-    </c-ui.tabs>
-#}
+    <h2 id="icon-position">Icon Position</h2>
 
-    <table class="table-auto text-normal">
-        <thead class="not-prose text-sm text-left">
-            <th class="font-normal text-zinc-500">Name</th>
-            <th class="font-normal text-zinc-500">Type</th>
-            <th class="font-normal text-zinc-500">Values</th>
-            <th class="font-normal text-zinc-500">Default</th>
-            <th class="font-normal text-zinc-500">Description</th>
-        </thead>
-        <tbody>
-            <tr class="py-5">
-                <td><code class="!bg-teal-500 !text-white text-[14px] font-bold">type</code></td>
-                <td>String</td>
-                <td><code>single</code>, <code>multiple</code></td>
-                <td><code>single</code></td>
-                <td>Whether one or more items can be expanded at the same time.</td>
-            </tr>
-            <tr class="py-5">
-                <td><code>collapsible</code></td>
-                <td>Boolean</td>
-                <td><code>True</code>, <code>False</code></td>
-                <td><code>True</code></td>
-                <td>Enforce if one item must remain open at all times.</td>
-            </tr>
-            <tr class="py-5">
-                <td><code>disabled</code></td>
-                <td>Boolean</td>
-                <td><code>True</code>, <code>False</code></td>
-                <td><code>False</code></td>
-                <td>Prevents any interaction with the accordion.</td>
-            </tr>
-        </tbody>
-    </table>
+    <p>Control where the chevron appears using <code>icon_position="leading"</code> to place it before the header text.</p>
+
+    <c-sample>
+        <c-ui.accordion>
+            <c-ui.accordion.item header="Security Settings" icon_position="leading">
+                Enable two-factor authentication and manage your security preferences here.
+            </c-ui.accordion.item>
+            <c-ui.accordion.item header="Notification Preferences" icon_position="leading">
+                Choose which notifications you want to receive via email, SMS, or push.
+            </c-ui.accordion.item>
+            <c-ui.accordion.item header="Privacy Controls" icon_position="leading">
+                Manage who can see your profile and activity on the platform.
+            </c-ui.accordion.item>
+        </c-ui.accordion>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion>
+    <c-ui.accordion.item header="Security Settings" icon_position="leading">
+        Enable two-factor authentication and manage your security preferences.
+    </c-ui.accordion.item>
+    <c-ui.accordion.item header="Notification Preferences" icon_position="leading">
+        Choose which notifications you want to receive.
+    </c-ui.accordion.item>
+</c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="custom-icon">Custom Icon</h2>
+
+    <p>Use different icons for closed and open states with <code>icon_closed</code> and <code>icon_open</code> slots.</p>
+
+    <c-sample>
+        <c-ui.accordion>
+            <c-ui.accordion.item header="Expand for details">
+                <c-slot name="icon_closed">
+                    <c-heroicon.plus class="size-5" />
+                </c-slot>
+                <c-slot name="icon_open">
+                    <c-heroicon.minus class="size-5" />
+                </c-slot>
+                The icon changes from a plus to a minus when expanded, providing clear visual feedback about the accordion state.
+            </c-ui.accordion.item>
+            <c-ui.accordion.item header="Click to reveal more">
+                <c-slot name="icon_closed">
+                    <c-heroicon.plus class="size-5" />
+                </c-slot>
+                <c-slot name="icon_open">
+                    <c-heroicon.minus class="size-5" />
+                </c-slot>
+                This pattern works well for FAQ sections where users expect clear open/close indicators.
+            </c-ui.accordion.item>
+            <c-ui.accordion.item header="Additional information">
+                <c-slot name="icon_closed">
+                    <c-heroicon.plus class="size-5" />
+                </c-slot>
+                <c-slot name="icon_open">
+                    <c-heroicon.minus class="size-5" />
+                </c-slot>
+                Both icons automatically respect the accent color setting for consistent theming.
+            </c-ui.accordion.item>
+        </c-ui.accordion>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion>
+    <c-ui.accordion.item header="Expand for details">
+        <c-slot name="icon_closed">
+            <c-heroicon.plus class="size-5" />
+        </c-slot>
+        <c-slot name="icon_open">
+            <c-heroicon.minus class="size-5" />
+        </c-slot>
+        The icon changes from plus to minus when expanded.
+    </c-ui.accordion.item>
+</c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h4 id="reference">Accordion Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="type" type="str" :options="['single', 'multiple']" default="single" description="Whether one or more items can be expanded at the same time." />
+        <c-api-prop name=":collapsible" type="bool" :options="['True', 'False']" default="True" description="Enforce if one item must remain open at all times." />
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Prevents any interaction with the accordion." />
+    </c-api-props>
+
+    <h4 class="mt-6">Accordion Item Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="header" type="str" default="" description="Text for the accordion trigger button (header)." />
+        <c-api-prop name="icon_position" type="str" :options="['trailing', 'leading']" default="trailing" description="Position of the chevron icon relative to the header text." />
+        <c-api-prop name=":expanded" type="bool" :options="['True', 'False']" default="False" description="Whether this item is initially expanded." />
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Whether this item is disabled and cannot be interacted with." />
+        <c-api-prop name=":accent" type="bool" :options="['True', 'False']" default="True" description="Whether to use accent colors for the chevron icon." />
+    </c-api-props>
+
+    <h4 class="mt-6">Accordion Item Slots</h4>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="" description="The collapsible content that appears when the accordion item is expanded." />
+        <c-api-prop name="icon_closed" type="—" default="" description="Custom icon to display when the accordion item is closed. Overrides the default chevron." />
+        <c-api-prop name="icon_open" type="—" default="" description="Custom icon to display when the accordion item is open. Overrides the default chevron." />
+    </c-api-props>
 
 </c-layouts.ui>

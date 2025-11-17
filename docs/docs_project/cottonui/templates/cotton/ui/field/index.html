@@ -1,0 +1,31 @@
+<c-vars
+    variant="block"
+    label=""
+    description=""
+    description_trailing=""
+    error=""
+    badge=""
+    form
+    name=""
+    :for="None"
+/>
+
+<div {{ attrs.dict|merge:'class:' }} class="{% if variant == 'inline' %}flex items-start gap-4{% else %}space-y-1.5{% endif %}">
+    {% if label %}
+        <c-ui.label badge="{{ badge }}" :for="for">{{ label }}</c-ui.label>
+    {% endif %}
+
+    {% if description %}
+        <c-ui.description>{{ description }}</c-ui.description>
+    {% endif %}
+
+    {{ slot }}
+
+    {% if description_trailing %}
+        <c-ui.description>{{ description_trailing }}</c-ui.description>
+    {% endif %}
+
+    {% if error and form and name %}
+        <c-ui.error :form="form" name="{{ name }}" />
+    {% endif %}
+</div>

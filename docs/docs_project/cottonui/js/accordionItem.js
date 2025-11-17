@@ -7,7 +7,9 @@ export default (expanded) => ({
     },
     trigger: {
         ['@click']() {
-            return this.toggle();
+            if (!this.disabled) {
+                return this.toggle();
+            }
         },
         [':aria-expanded']() {
             return this.$data.value.includes(this.$id('accordion-item'));
@@ -19,7 +21,7 @@ export default (expanded) => ({
             return this.$id('accordion-item') + '-trigger';
         },
         [':disabled']() {
-            return this.$data.disabled;
+            return this.disabled;
         },
     },
     icon: {

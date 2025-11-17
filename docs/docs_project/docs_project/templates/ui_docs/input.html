@@ -1,111 +1,79 @@
 <c-layouts.ui>
-
-    <h1 id="components">Input
-        <span class="text-gray-500 text-opacity-50 text-lg font-medium">&lt;ui.input</span>
-    </h1>
+    <c-header>
+        Input
+        <c-slot name="subheading">
+            A single-line text input component.
+        </c-slot>
+    </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
+        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink><a href="#types" class="no-underline">Types</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <div class="shadow-lg">
-        <div class="min-h-40 md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <c-ui.input placeholder="What's your name?" />
+    <c-sample>
+        <c-ui.input placeholder="What's your name?" />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.input placeholder="What's your name?" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="types">Types</h2>
+
+    <p>Use the <code>type</code> attribute to change the input type.</p>
+
+    <c-sample>
+        <div class="space-y-3">
+            <c-ui.input type="text" placeholder="Text (default)" />
+            <c-ui.input type="email" placeholder="Email address" />
+            <c-ui.input type="password" placeholder="Password" />
+            <c-ui.input type="number" placeholder="Number" />
+            <c-ui.input type="tel" placeholder="Telephone" />
+            <c-ui.input type="url" placeholder="URL" />
         </div>
-        <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-ui.input placeholder="What's your name?" />
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
 
-    <h3>Addons</h3>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.input type="text" placeholder="Text (default)" />
+<c-ui.input type="email" placeholder="Email address" />
+<c-ui.input type="password" placeholder="Password" />
+<c-ui.input type="number" placeholder="Number" />
+<c-ui.input type="tel" placeholder="Telephone" />
+<c-ui.input type="url" placeholder="URL" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-    <h3>Types</h3>
+    <h4 id="reference">Props</h4>
 
-    <h3>Field</h3>
-
-    <p>Input can be used in the Field component to display alongside label, info, help and validation.</p>
-
-    <div class="shadow-lg">
-        <div class="md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 min-h-80 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <div class="space-y-3 w-full">
-                <div>
-                    <label class="font-semibold mb-3">Password:</label>
-                    <c-ui.input type="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-                <div>
-                    <label class="font-semibold mb-3">Password with reveal:</label>
-                    <c-ui.input type="password" value="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-            </div>
-        </div>
-        <div class="flex-1 rounded-b-lg pb-4 pt-11 px-6 m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-textarea/>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
-
-
-    <c-ui.input>
-        <c-slot name="left_addon">{% heroicon_outline 'user-circle' class="text-gray-300" %}</c-slot>
-    </c-ui.input>
-
-    <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
-        inside standard Django templates.</p>
-
-    <h3>API</h3>
-
-    <div class="table w-full border dark:text-gray-500 rounded-lg border-gray-400 border-opacity-30  flex items-center">
-        <table class="text-base">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Values</th>
-                    <th>Default</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>type</code></td>
-                    <td>Input type</td>
-                    <td>string</td>
-                    <td>text, password, email, number, tel, url</td>
-                    <td>text</td>
-                </tr>
-                <tr>
-                    <td>class</td>
-                    <td>Additional classes</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>left_addon</td>
-                    <td>Left addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>right_addon</td>
-                    <td>Right addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>placeholder</td>
-                    <td>Placeholder text</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-        </table>
-    </div>
+    <c-api-props>
+        <c-api-prop name="type" type="str" :options="['text', 'password', 'email', 'number', 'tel', 'url']" default="text" description="The HTML input type." />
+        <c-api-prop name="placeholder" type="str" default="" description="Placeholder text displayed when the input is empty.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="disabled" type="bool" :options="['True', 'False']" default="False" description="Prevents interaction with the input." />
+        <c-api-prop name="label" type="str" default="" description="Shorthand: Automatically wraps the input with a label in a field structure.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="description" type="str" default="" description="Shorthand: Adds helper text before the input.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="description_trailing" type="str" default="" description="Shorthand: Adds helper text after the input.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="error" type="str" default="" description="Shorthand: Field name for Django form error lookup, or explicit error message.">
+            <c-slot name="options_content">Field name or message text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="badge" type="str" default="" description="Shorthand: Badge text for the label (e.g., 'Required' or 'Optional').">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name=":form" type="Form" default="None" description="Shorthand: Django form instance for automatic error display.">
+            <c-slot name="options_content">Django form object</c-slot>
+        </c-api-prop>
+    </c-api-props>
 
 </c-layouts.ui>

@@ -1,112 +1,52 @@
 <c-layouts.ui>
-
     <c-header>
-        Datepicker
+        Date Picker
+        <c-slot name="subheading">
+            A date selection component with calendar interface.
+        </c-slot>
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
+        <c-index-sublink><a href="#single-date" class="no-underline">Single Date</a></c-index-sublink>
+        <c-index-sublink><a href="#date-range" class="no-underline">Date Range</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <div class="shadow-lg">
-        <div class="min-h-40 md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <c-ui.datepicker mode="single" />
+    <c-sample>
+        <c-ui.datepicker mode="single" />
 
-        </div>
-        <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-ui.datepicker class="w-96" mode="single" />
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.datepicker mode="single" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-    <h3>Addons</h3>
+    <h2 id="date-range">Date Range</h2>
 
-    <h3>Types</h3>
+    <p>Select a range of dates with a start and end date.</p>
 
-    <h3>Field</h3>
+    <c-sample>
+        <c-ui.datepicker mode="range" />
 
-    <p>Input can be used in the Field component to display alongside label, info, help and validation.</p>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.datepicker mode="range" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-    <div class="shadow-lg">
-        <div class="md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 min-h-80 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <div class="space-y-3 w-full">
-                <div>
-                    <label class="font-semibold mb-3">Password:</label>
-                    <c-ui.input type="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-                <div>
-                    <label class="font-semibold mb-3">Password with reveal:</label>
-                    <c-ui.input type="password" value="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-            </div>
-        </div>
-        <div class="flex-1 rounded-b-lg pb-4 pt-11 px-6 m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-textarea/>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
+    <h4 id="reference">Props</h4>
 
-
-    <c-ui.input>
-        <c-slot name="left_addon">{% heroicon_outline 'user-circle' class="text-gray-300" %}</c-slot>
-    </c-ui.input>
-
-    <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
-        inside standard Django templates.</p>
-
-    <h3>API</h3>
-
-    <div class="table w-full border dark:text-gray-500 rounded-lg border-gray-400 border-opacity-30  flex items-center">
-        <table class="text-base">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Values</th>
-                    <th>Default</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>type</code></td>
-                    <td>Input type</td>
-                    <td>string</td>
-                    <td>text, password, email, number, tel, url</td>
-                    <td>text</td>
-                </tr>
-                <tr>
-                    <td>class</td>
-                    <td>Additional classes</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>left_addon</td>
-                    <td>Left addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>right_addon</td>
-                    <td>Right addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>placeholder</td>
-                    <td>Placeholder text</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-        </table>
-    </div>
+    <c-api-props>
+        <c-api-prop name="mode" type="str" :options="['single', 'range', 'multiple']" default="single" description="Selection mode for single date, date range, or multiple dates."></c-api-prop>
+        <c-api-prop name="placeholder" type="str" default="Select date" description="Placeholder text for the input field.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="disabled" type="bool" :options="['True', 'False']" default="False" description="Prevents interaction with the datepicker."></c-api-prop>
+        <c-api-prop name="format" type="str" default="MM/dd/yyyy" description="Date format for display.">
+            <c-slot name="options_content">Any valid date format string</c-slot>
+        </c-api-prop>
+    </c-api-props>
 
 </c-layouts.ui>

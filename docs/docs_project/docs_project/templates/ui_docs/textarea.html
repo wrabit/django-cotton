@@ -12,18 +12,16 @@
         <c-index-sublink><a href="#height" class="no-underline">Height</a></c-index-sublink>
         <c-index-sublink><a href="#autoresize" class="no-underline">Autoresize</a></c-index-sublink>
         <c-index-sublink><a href="#non-resizable" class="no-underline">Non-resizable</a></c-index-sublink>
-        <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <h2 id="default">Default</h2>
-    <p>The default textarea component.</p>
     <c-sample>
         <c-ui.textarea placeholder="Enter your text here..." />
 
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.textarea placeholder="Enter your text here..." />
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
@@ -38,13 +36,13 @@
             <c-ui.textarea size="xl" placeholder="Extra Large Text" />
         </div>
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.textarea size="xs" placeholder="Extra Small Text" />
 <c-ui.textarea size="sm" placeholder="Small Text" />
 <c-ui.textarea size="base" placeholder="Base Text (Default)" />
 <c-ui.textarea size="lg" placeholder="Large Text" />
 <c-ui.textarea size="xl" placeholder="Extra Large Text" />
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
@@ -59,13 +57,13 @@
             <c-ui.textarea height="xl" placeholder="Extra Large Height" />
         </div>
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.textarea height="xs" placeholder="Extra Small Height" />
 <c-ui.textarea height="sm" placeholder="Small Height" />
 <c-ui.textarea height="base" placeholder="Base Height (Default)" />
 <c-ui.textarea height="lg" placeholder="Large Height" />
 <c-ui.textarea height="xl" placeholder="Extra Large Height" />
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
@@ -75,9 +73,9 @@
         <c-ui.textarea :autoresize="True" placeholder="Type something long here and the textarea will grow..." />
 
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.textarea :autoresize="True" placeholder="Type something long here..." />
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
@@ -87,87 +85,43 @@
         <c-ui.textarea :resizable="False" placeholder="You cannot resize me." />
 
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.textarea :resizable="False" placeholder="You cannot resize me." />
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
-    <h2 id="api">API</h2>
+    <h4 id="reference">Props</h4>
 
-    <h3 class="!text-gray-500">ui.textarea</h3>
-
-    <h4>Properties</h4>
-
-    <div class="overflow-x-auto">
-        <table class="table-auto text-normal w-full">
-            <thead class="not-prose text-sm text-left">
-                <tr>
-                    <th class="font-normal text-zinc-500 p-2">Name</th>
-                    <th class="font-normal text-zinc-500 p-2">Type</th>
-                    <th class="font-normal text-zinc-500 p-2">Values</th>
-                    <th class="font-normal text-zinc-500 p-2">Default</th>
-                    <th class="font-normal text-zinc-500 p-2">Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code class="!bg-teal-500 !text-white text-[14px] font-bold">:autoresize</code></td>
-                    <td class="p-2">Boolean</td>
-                    <td class="p-2"><code>True</code>, <code>False</code></td>
-                    <td class="p-2"><code>False</code></td>
-                    <td class="p-2">Automatically adjusts height to fit content. Requires Alpine.js.</td>
-                </tr>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>size</code></td>
-                    <td class="p-2">String</td>
-                    <td class="p-2"><code>xs</code>, <code>sm</code>, <code>base</code>, <code>lg</code>, <code>xl</code></td>
-                    <td class="p-2"><code>base</code></td>
-                    <td class="p-2">Sets the font size and padding.</td>
-                </tr>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>height</code></td>
-                    <td class="p-2">String</td>
-                    <td class="p-2"><code>xs</code>, <code>sm</code>, <code>base</code>, <code>lg</code>, <code>xl</code></td>
-                    <td class="p-2"><code>base</code></td>
-                    <td class="p-2">Sets the initial fixed height. Overridden by autoresize.</td>
-                </tr>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>:resizable</code></td>
-                    <td class="p-2">Boolean</td>
-                    <td class="p-2"><code>True</code>, <code>False</code></td>
-                    <td class="p-2"><code>True</code></td>
-                    <td class="p-2">Allows or prevents manual resizing by the user via CSS.</td>
-                </tr>
-                 <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>attrs</code></td>
-                    <td class="p-2">Dict</td>
-                    <td class="p-2">HTML attribute dictionary</td>
-                    <td class="p-2"><code>{}</code></td>
-                    <td class="p-2">Passes HTML attributes (like <code>placeholder</code>, <code>name</code>, <code>id</code>, <code>rows</code>, etc.) directly to the underlying <code>&lt;textarea&gt;</code> element via <code>{{ attrs }}</code>.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <c-api-props>
+        <c-api-prop name=":autoresize" type="bool" :options="['True', 'False']" default="False" description="Automatically adjusts height to fit content. Requires Alpine.js." />
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'base', 'lg', 'xl']" default="base" description="Sets the font size and padding." />
+        <c-api-prop name="height" type="str" :options="['xs', 'sm', 'base', 'lg', 'xl']" default="base" description="Sets the initial fixed height. Overridden by autoresize." />
+        <c-api-prop name=":resizable" type="bool" :options="['True', 'False']" default="True" description="Allows or prevents manual resizing by the user via CSS." />
+        <c-api-prop name="label" type="str" default="" description="Shorthand: Automatically wraps the textarea with a label in a field structure.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="description" type="str" default="" description="Shorthand: Adds helper text before the textarea.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="description_trailing" type="str" default="" description="Shorthand: Adds helper text after the textarea.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="error" type="str" default="" description="Shorthand: Field name for Django form error lookup, or explicit error message.">
+            <c-slot name="options_content">Field name or message text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="badge" type="str" default="" description="Shorthand: Badge text for the label (e.g., 'Required' or 'Optional').">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name=":form" type="Form" default="None" description="Shorthand: Django form instance for automatic error display.">
+            <c-slot name="options_content">Django form object</c-slot>
+        </c-api-prop>
+    </c-api-props>
 
     <h4 class="mt-6">Slots</h4>
-     <div class="overflow-x-auto">
-        <table class="table-auto text-normal w-full">
-            <thead class="not-prose text-sm text-left">
-                <tr>
-                    <th class="font-normal text-zinc-500 p-2">Name</th>
-                    <th class="font-normal text-zinc-500 p-2">Default</th>
-                    <th class="font-normal text-zinc-500 p-2">Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>slot</code> (default)</td>
-                     <td class="p-2"><code>''</code></td>
-                    <td class="p-2">The initial content/value of the textarea.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="" description="The initial content/value of the textarea."></c-api-prop>
+    </c-api-props>
 
 </c-layouts.ui> 

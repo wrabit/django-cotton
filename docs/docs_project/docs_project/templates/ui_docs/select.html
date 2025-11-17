@@ -1,0 +1,478 @@
+<c-layouts.ui>
+    <c-header>
+        Select
+        <c-slot name="subheading">
+            Native HTML select by default, with an optional rich listbox variant for advanced features.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink><a href="#native" class="no-underline">Native (Default)</a></c-index-sublink>
+        <c-index-sublink><a href="#listbox" class="no-underline">Listbox Variant</a></c-index-sublink>
+        <c-index-sublink><a href="#grouped" class="no-underline">Grouped Options</a></c-index-sublink>
+        <c-index-sublink><a href="#icons" class="no-underline">With Icons</a></c-index-sublink>
+        <c-index-sublink><a href="#descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
+        <c-index-sublink><a href="#rich" class="no-underline">Rich Options</a></c-index-sublink>
+        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64">
+                <c-ui.select name="fruit" placeholder="Choose a fruit">
+                    <c-ui.select.option value="apple">Apple</c-ui.select.option>
+                    <c-ui.select.option value="banana">Banana</c-ui.select.option>
+                    <c-ui.select.option value="orange">Orange</c-ui.select.option>
+                    <c-ui.select.option value="grape">Grape</c-ui.select.option>
+                    <c-ui.select.option value="mango">Mango</c-ui.select.option>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64">
+    <c-ui.select name="fruit" placeholder="Choose a fruit">
+        <c-ui.select.option value="apple">Apple</c-ui.select.option>
+        <c-ui.select.option value="banana">Banana</c-ui.select.option>
+        <c-ui.select.option value="orange">Orange</c-ui.select.option>
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="native">Native Select (Default)</h2>
+    <p>By default, select uses the native HTML <code>&lt;select&gt;</code> element. This is perfect for most use cases - it works great on mobile, has built-in accessibility, and requires no JavaScript.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64">
+                <c-ui.select name="country" placeholder="Select a country">
+                    <c-ui.select.option value="us">United States</c-ui.select.option>
+                    <c-ui.select.option value="uk">United Kingdom</c-ui.select.option>
+                    <c-ui.select.option value="ca">Canada</c-ui.select.option>
+                    <c-ui.select.option value="au">Australia</c-ui.select.option>
+                    <c-ui.select.option value="de">Germany</c-ui.select.option>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64">
+    <c-ui.select name="country" placeholder="Select a country">
+        <c-ui.select.option value="us">United States</c-ui.select.option>
+        <c-ui.select.option value="uk">United Kingdom</c-ui.select.option>
+        <c-ui.select.option value="ca">Canada</c-ui.select.option>
+        ...
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="listbox">Listbox Variant</h2>
+    <p>Use <code>variant="listbox"</code> when you need custom styling, icons, descriptions, or search functionality. This provides a rich, fully customizable dropdown experience.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64">
+                <c-ui.select name="plan" variant="listbox" placeholder="Choose a plan">
+                    <c-ui.menu.item value="free">Free</c-ui.menu.item>
+                    <c-ui.menu.item value="starter">Starter</c-ui.menu.item>
+                    <c-ui.menu.item value="pro">Professional</c-ui.menu.item>
+                    <c-ui.menu.item value="enterprise">Enterprise</c-ui.menu.item>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64">
+    <c-ui.select name="plan" variant="listbox" placeholder="Choose a plan">
+        <c-ui.menu.item value="free">Free</c-ui.menu.item>
+        <c-ui.menu.item value="starter">Starter</c-ui.menu.item>
+        <c-ui.menu.item value="pro">Professional</c-ui.menu.item>
+        <c-ui.menu.item value="enterprise">Enterprise</c-ui.menu.item>
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="grouped">Grouped Options</h2>
+    <p>Organize options into logical groups with labels.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64">
+                <c-ui.select name="region" variant="listbox" placeholder="Select a region">
+                    <c-ui.menu.group label="North America">
+                        <c-ui.menu.item value="us" group="North America">United States</c-ui.menu.item>
+                        <c-ui.menu.item value="ca" group="North America">Canada</c-ui.menu.item>
+                        <c-ui.menu.item value="mx" group="North America">Mexico</c-ui.menu.item>
+                    </c-ui.menu.group>
+                    <c-ui.menu.group label="Europe">
+                        <c-ui.menu.item value="uk" group="Europe">United Kingdom</c-ui.menu.item>
+                        <c-ui.menu.item value="de" group="Europe">Germany</c-ui.menu.item>
+                        <c-ui.menu.item value="fr" group="Europe">France</c-ui.menu.item>
+                    </c-ui.menu.group>
+                    <c-ui.menu.group label="Asia">
+                        <c-ui.menu.item value="jp" group="Asia">Japan</c-ui.menu.item>
+                        <c-ui.menu.item value="cn" group="Asia">China</c-ui.menu.item>
+                        <c-ui.menu.item value="in" group="Asia">India</c-ui.menu.item>
+                    </c-ui.menu.group>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64">
+    <c-ui.select name="region" variant="listbox" placeholder="Select a region">
+        <c-ui.menu.group label="North America">
+            <c-ui.menu.item value="us" group="North America">United States</c-ui.menu.item>
+            <c-ui.menu.item value="ca" group="North America">Canada</c-ui.menu.item>
+        </c-ui.menu.group>
+        <c-ui.menu.group label="Europe">
+            <c-ui.menu.item value="uk" group="Europe">United Kingdom</c-ui.menu.item>
+            <c-ui.menu.item value="de" group="Europe">Germany</c-ui.menu.item>
+        </c-ui.menu.group>
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="icons">Options with Icons</h2>
+    <p>Add icons to options for better visual context.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64">
+                <c-ui.select name="payment" variant="listbox" placeholder="Select payment method">
+                    <c-ui.menu.item value="card" label="Credit Card">
+                        <c-slot name="icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                            </svg>
+                        </c-slot>
+                    </c-ui.menu.item>
+                    <c-ui.menu.item value="paypal" label="PayPal">
+                        <c-slot name="icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
+                            </svg>
+                        </c-slot>
+                    </c-ui.menu.item>
+                    <c-ui.menu.item value="bank" label="Bank Transfer">
+                        <c-slot name="icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                            </svg>
+                        </c-slot>
+                    </c-ui.menu.item>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64">
+    <c-ui.select name="payment" variant="listbox" placeholder="Select payment method">
+        <c-ui.menu.item value="card" label="Credit Card">
+            <c-slot name="icon">
+                <svg>...</svg>
+            </c-slot>
+        </c-ui.menu.item>
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="descriptions">Options with Descriptions</h2>
+    <p>Add descriptions to provide additional context for each option.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64">
+                <c-ui.select name="plan" variant="listbox" placeholder="Choose your plan">
+                    <c-ui.menu.item value="free" label="Free" description="Perfect for personal projects" />
+                    <c-ui.menu.item value="starter" label="Starter" description="Great for small teams • $9/month" />
+                    <c-ui.menu.item value="pro" label="Professional" description="For growing businesses • $29/month" />
+                    <c-ui.menu.item value="enterprise" label="Enterprise" description="Advanced features & support • $99/month" />
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64">
+    <c-ui.select name="plan" variant="listbox" placeholder="Choose your plan">
+        <c-ui.menu.item value="free" label="Free" description="Perfect for personal projects" />
+        <c-ui.menu.item value="starter" label="Starter" description="Great for small teams • $9/month" />
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="rich">Options with Icons and Descriptions</h2>
+    <p>Combine icons and descriptions for maximum context.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64">
+                <c-ui.select name="integration" variant="listbox" placeholder="Select integration">
+                    <c-ui.menu.group label="Development">
+                        <c-ui.menu.item value="github" label="GitHub" description="Version control and collaboration" group="Development">
+                            <c-slot name="icon">
+                                <svg fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </c-slot>
+                        </c-ui.menu.item>
+                        <c-ui.menu.item value="gitlab" label="GitLab" description="DevOps platform" group="Development">
+                            <c-slot name="icon">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                                </svg>
+                            </c-slot>
+                        </c-ui.menu.item>
+                    </c-ui.menu.group>
+                    <c-ui.menu.group label="Communication">
+                        <c-ui.menu.item value="slack" label="Slack" description="Team messaging" group="Communication">
+                            <c-slot name="icon">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+                                </svg>
+                            </c-slot>
+                        </c-ui.menu.item>
+                    </c-ui.menu.group>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64">
+    <c-ui.select name="integration" variant="listbox" placeholder="Select integration">
+        <c-ui.menu.group label="Development">
+            <c-ui.menu.item value="github" label="GitHub" description="Version control" group="Development">
+                <c-slot name="icon">
+                    <svg>...</svg>
+                </c-slot>
+            </c-ui.menu.item>
+        </c-ui.menu.group>
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="sizes">Sizes</h2>
+    <p>Select components come in three sizes.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64 space-y-4">
+                <c-ui.select name="size-sm" variant="listbox" placeholder="Small select" size="sm">
+                    <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+                    <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
+                </c-ui.select>
+
+                <c-ui.select name="size-default" variant="listbox" placeholder="Default select">
+                    <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+                    <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
+                </c-ui.select>
+
+                <c-ui.select name="size-lg" variant="listbox" placeholder="Large select" size="lg">
+                    <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+                    <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64 space-y-4">
+    <c-ui.select name="size-sm" variant="listbox" size="sm">
+        <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+    </c-ui.select>
+
+    <c-ui.select name="size-default" variant="listbox">
+        <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+    </c-ui.select>
+
+    <c-ui.select name="size-lg" variant="listbox" size="lg">
+        <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="disabled">Disabled State</h2>
+    <p>Disable the select to prevent interaction, or disable specific options.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64 space-y-4">
+                <c-ui.select name="disabled" variant="listbox" placeholder="Disabled select" :disabled="True">
+                    <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+                    <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
+                </c-ui.select>
+
+                <c-ui.select name="disabled-options" variant="listbox" placeholder="Select an option">
+                    <c-ui.menu.item value="available">Available</c-ui.menu.item>
+                    <c-ui.menu.item value="sold-out" :disabled="True">Sold Out</c-ui.menu.item>
+                    <c-ui.menu.item value="coming-soon" :disabled="True">Coming Soon</c-ui.menu.item>
+                    <c-ui.menu.item value="in-stock">In Stock</c-ui.menu.item>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="w-full max-w-64 space-y-4">
+    <!-- Disabled select -->
+    <c-ui.select name="disabled" variant="listbox" :disabled="True">
+        <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+    </c-ui.select>
+
+    <!-- Disabled options -->
+    <c-ui.select name="options" variant="listbox">
+        <c-ui.menu.item value="available">Available</c-ui.menu.item>
+        <c-ui.menu.item value="sold-out" :disabled="True">Sold Out</c-ui.menu.item>
+    </c-ui.select>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h4 id="reference">Props</h4>
+
+    <h4>Select (Main Component)</h4>
+    <c-api-props>
+        <c-api-prop
+            name="name"
+            type="str"
+            default=""
+            description="Form field name for submission."
+        />
+        <c-api-prop
+            name="placeholder"
+            type="str"
+            default="Select an option"
+            description="Placeholder text when no option selected."
+        />
+        <c-api-prop
+            name="disabled"
+            type="bool"
+            default="False"
+            description="Disable the entire select."
+        />
+        <c-api-prop
+            name="required"
+            type="bool"
+            default="False"
+            description="Make the field required."
+        />
+    </c-api-props>
+
+    <h4>Select.Trigger</h4>
+    <c-api-props>
+        <c-api-prop
+            name="size"
+            type="str"
+            :options="['sm', '', 'lg']"
+            default=""
+            description="Size variant: 'sm', '' (default), 'lg'."
+        />
+    </c-api-props>
+
+    <h4>Select.Search</h4>
+    <c-api-props>
+        <c-api-prop
+            name="placeholder"
+            type="str"
+            default="Search..."
+            description="Search input placeholder text."
+        />
+    </c-api-props>
+
+    <h4>Select.Group</h4>
+    <c-api-props>
+        <c-api-prop
+            name="label"
+            type="str"
+            default=""
+            description="Group label text displayed above grouped options."
+        />
+    </c-api-props>
+
+    <h4>Select.Option</h4>
+    <c-api-props>
+        <c-api-prop
+            name="value"
+            type="str"
+            default=""
+            description="Option value (required). Submitted with the form."
+        />
+        <c-api-prop
+            name="label"
+            type="str"
+            default=""
+            description="Option label. Defaults to slot content if not provided."
+        />
+        <c-api-prop
+            name="description"
+            type="str"
+            default=""
+            description="Secondary description text displayed below the option label."
+        />
+        <c-api-prop
+            name="group"
+            type="str"
+            default=""
+            description="Group identifier for filtering. Should match the group label."
+        />
+        <c-api-prop
+            name="disabled"
+            type="bool"
+            default="False"
+            description="Disable this specific option."
+        />
+    </c-api-props>
+
+    <h4>Slots</h4>
+    <c-api-props>
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="Main select content including trigger, search, groups, and options."
+        />
+        <c-api-prop
+            name="icon (Option only)"
+            type="slot"
+            default=""
+            description="Icon or avatar displayed before option label. Provide an SVG element."
+        />
+    </c-api-props>
+
+    <h4>Events</h4>
+    <c-api-props>
+        <c-api-prop
+            name="select-change"
+            type="CustomEvent"
+            default=""
+            description="Fired when selection changes. Detail: { value, label }"
+        />
+    </c-api-props>
+
+</c-layouts.ui>

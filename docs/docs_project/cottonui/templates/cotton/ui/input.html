@@ -1,43 +1,109 @@
 <c-vars
     type="text"
-    class=""
+    class
     left_addon
     right_addon
     placeholder
     size
+    label
+    description
+    description_trailing
+    error
+    badge
+    form
+    name
     :sizes="{
         'sm': 'py-1.5'
     }"
 />
-<div
-    class="flex
-        flex-grow
-        items-center
-        border-gray-300
-        bg-white
-        dark:text-white
-        dark:bg-white/10
-        shadow
-        rounded
-        ring-1 ring-gray-400 ring-opacity-40 focus-within:ring-2 focus-within:ring-tel-600
-    "
->
-    {% if left_addon %}
-        <div class="flex flex-shrink-0 pl-3 self-stretch items-center bg-gray100 border-gray300 rounded-l">
-            {{ left_addon }}
-        </div>
-    {% endif %}
 
-    <input
-        type="{{ type }}"
-        placeholder="{{ placeholder }}"
-        class="flex-grow px-3.5 py-1.5 {% if not left_addon %}rounded-l{% endif %} {% if not right_addon %}rounded-r{% endif %} bg-transparent w-full border-0 focus:outline-none focus:ring-0 {{ class }}"
-        {{ attrs }}
+{% if label or description or description_trailing or error %}
+    <c-ui.field
+        label="{{ label }}"
+        description="{{ description }}"
+        description_trailing="{{ description_trailing }}"
+        error="{{ error }}"
+        badge="{{ badge }}"
+        :form="form"
+        name="{{ name }}">
+        <div
+            class="flex
+                flex-grow
+                items-center
+                border
+                border-zinc-300
+                dark:border-zinc-700
+                bg-white
+                dark:text-white
+                dark:bg-zinc-900
+                shadow-sm
+                rounded-lg
+                transition-colors
+                hover:border-zinc-400
+                dark:hover:border-zinc-600
+                focus-within:outline-none
+                focus-within:ring-2
+                focus-within:ring-accent
+            "
+        >
+            {% if left_addon %}
+                <div class="flex flex-shrink-0 pl-3 self-stretch items-center bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700 rounded-l">
+                    {{ left_addon }}
+                </div>
+            {% endif %}
+
+            <input
+                type="{{ type }}"
+                placeholder="{{ placeholder }}"
+                class="flex-grow px-3.5 py-1.5 {% if not left_addon %}rounded-l{% endif %} {% if not right_addon %}rounded-r{% endif %} bg-transparent w-full border-0 focus:outline-none focus:ring-0 {{ class }}"
+                {{ attrs }}
+            >
+
+            {% if right_addon %}
+                <div class="flex-shrink-0 px-3 py-2 bg-zinc-100 dark:bg-zinc-800 border-l border-zinc-300 dark:border-zinc-700 rounded-r">
+                    {{ right_addon }}
+                </div>
+            {% endif %}
+        </div>
+    </c-ui.field>
+{% else %}
+    <div
+        class="flex
+            flex-grow
+            items-center
+            border
+            border-zinc-300
+            dark:border-zinc-700
+            bg-white
+            dark:text-white
+            dark:bg-zinc-900
+            shadow
+            rounded-lg
+            transition-colors
+            hover:border-zinc-400
+            dark:hover:border-zinc-600
+            focus-within:outline-none
+            focus-within:ring-2
+            focus-within:ring-accent
+        "
     >
+        {% if left_addon %}
+            <div class="flex flex-shrink-0 pl-3 self-stretch items-center bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700 rounded-l">
+                {{ left_addon }}
+            </div>
+        {% endif %}
 
-    {% if right_addon %}
-        <div class="flex-shrink-0 px-3 py-2 bg-gray-100 border-l border-gray-300 rounded-r">
-            {{ right_addon }}
-        </div>
-    {% endif %}
-</div>
+        <input
+            type="{{ type }}"
+            placeholder="{{ placeholder }}"
+            class="flex-grow px-3.5 py-1.5 {% if not left_addon %}rounded-l{% endif %} {% if not right_addon %}rounded-r{% endif %} bg-transparent w-full border-0 focus:outline-none focus:ring-0 {{ class }}"
+            {{ attrs }}
+        >
+
+        {% if right_addon %}
+            <div class="flex-shrink-0 px-3 py-2 bg-zinc-100 dark:bg-zinc-800 border-l border-zinc-300 dark:border-zinc-700 rounded-r">
+                {{ right_addon }}
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

@@ -1,0 +1,14 @@
+<c-vars
+    value=""
+    :disabled="False"
+    :selected="False"
+/>
+
+<option
+    value="{{ value }}"
+    {% if disabled %}disabled{% endif %}
+    {% if selected %}selected{% endif %}
+    {{ attrs }}
+>
+    {{ slot }}
+</option>

@@ -1,148 +1,48 @@
 <c-layouts.ui>
-
-    <h1 id="components">
+    <c-header>
         Dropdown
-        {#<span class="text-gray-500 text-opacity-50 text-lg font-medium">&lt;ui.dropdown /&gt;</span>#}
-    </h1>
-    <p class="mt-[-20] text-gray-500">Creates an html dropdown to contain navigation menus or anything you want.</p>
+        <c-slot name="subheading">
+            A dropdown menu component for navigation and actions.
+        </c-slot>
+    </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
+        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <div class="shadow-lg dark:shadow-none border rounded border-gray-400/30">
-        <div class="min-h-40 md:px-24 p-5 px-8 py-5 dark:bg-transparent bg-white flex items-center justify-center">
-            <c-ui.dropdown>
-                <button class="inline-flex items-center justify-center h-12 py-2 pl-3 pr-12 text-sm font-medium transition-colors bg-white border rounded-md text-neutral-700 hover:bg-neutral-100 active:bg-white focus:bg-white focus:outline-none disabled:opacity-50 disabled:pointer-events-none">
-                    <img src="https://cdn.devdojo.com/images/may2023/adam.jpeg" class="object-cover w-8 h-8 border rounded-full border-neutral-200" />
-                    <span class="flex flex-col items-start flex-shrink-0 h-full ml-2 leading-none translate-y-px">
-                        <span>Adam Wathan</span>
-                        <span class="text-xs font-light text-neutral-400">@adamwathan</span>
-                    </span>
-                    <svg class="absolute right-0 w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" /></svg>
-                </button>
-            </c-ui.dropdown>
-        </div>
-        <div class="flex- pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800 overflow-hidden h-40
-            relative
+    <h2 id="default">Default</h2>
 
-            after:content-['']
-            after:absolute
-            after:inset-0
-            after:block
-            after:bg-gradient-to-b
-            after:from-gray-900/10
-            after:to-gray-900/70
-            after:opacity-100
-            after:z-[1]
-
-        ">
-            <div class=" hidden absolute z-[2] flex items-center justify-center inset-0">
-                <button class="border rounded-full border-teal-600bg-teal-800 px-4 py-1">
-                    Expand
-                </button>
-            </div>
-            <c-snippet size="sm">{% cotton_verbatim %}{% verbatim %}
-<c-ui.dropdown>
-    <c-ui.button>...</c-ui.button>
-
-    <c-slot name="contents">
-        <c-ui.dropdown.menu>
+    <c-sample>
+        <c-ui.dropdown trigger_text="Account">
             <c-ui.dropdown.item>Profile</c-ui.dropdown.item>
             <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
             <c-ui.dropdown.item>Logout</c-ui.dropdown.item>
-        </c-ui.dropdown.menu>
-    </c-slot>
+        </c-ui.dropdown>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dropdown trigger_text="Account">
+    <c-ui.dropdown.item>Profile</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Logout</c-ui.dropdown.item>
 </c-ui.dropdown>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-    <h3>Position</h3>
+    <h4 id="reference">Props</h4>
 
-    <h3>Size</h3>
+    <c-api-props>
+        <c-api-prop name="trigger_text" type="str" default="Select" description="The text displayed on the dropdown trigger button.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+    </c-api-props>
 
-    <h3>Advanced</h3>
+    <h4 class="mt-6">Slots</h4>
 
-    <div class="shadow-lg">
-        <div class="md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 min-h-80 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <div class="space-y-3 w-full">
-                <div>
-                    <label class="font-semibold mb-3">Password:</label>
-                    <c-ui.input type="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-                <div>
-                    <label class="font-semibold mb-3">Password with reveal:</label>
-                    <c-ui.input type="password" value="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-            </div>
-        </div>
-        <div class="flex-1 rounded-b-lg pb-4 pt-11 px-6 m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-textarea/>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
-    </div>
-
-
-    <c-ui.input>
-        <c-slot name="left_addon">{% heroicon_outline 'user-circle' class="text-gray-300" %}</c-slot>
-    </c-ui.input>
-
-    <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
-        inside standard Django templates.</p>
-
-    <h3>API</h3>
-
-    <div class="table w-full border dark:text-gray-500 rounded-lg border-gray-400 border-opacity-30  flex items-center">
-        <table class="text-base">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Values</th>
-                    <th>Default</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>type</code></td>
-                    <td>Input type</td>
-                    <td>string</td>
-                    <td>text, password, email, number, tel, url</td>
-                    <td>text</td>
-                </tr>
-                <tr>
-                    <td>class</td>
-                    <td>Additional classes</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>left_addon</td>
-                    <td>Left addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>right_addon</td>
-                    <td>Right addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>placeholder</td>
-                    <td>Placeholder text</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-        </table>
-    </div>
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="Required" description="The dropdown menu items. Use <c-ui.dropdown.item> components."></c-api-prop>
+    </c-api-props>
 
 </c-layouts.ui>

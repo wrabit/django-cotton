@@ -1,0 +1,267 @@
+<c-layouts.ui>
+    <c-header>
+        Card
+        <c-slot name="subheading">
+            A versatile container for grouping related content and actions.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink><a href="#compact" class="no-underline">Compact</a></c-index-sublink>
+        <c-index-sublink><a href="#with-header" class="no-underline">With Header</a></c-index-sublink>
+        <c-index-sublink><a href="#with-actions" class="no-underline">With Actions</a></c-index-sublink>
+        <c-index-sublink><a href="#interactive" class="no-underline">Interactive</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <c-ui.card>
+            <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Welcome Back</h3>
+            <p class="text-zinc-600 dark:text-zinc-400">
+                Your dashboard shows an overview of your recent activity and important metrics.
+            </p>
+        </c-ui.card>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.card>
+    <h3 class="text-lg font-semibold mb-2">Welcome Back</h3>
+    <p class="text-zinc-600">
+        Your dashboard shows an overview of your recent activity.
+    </p>
+</c-ui.card>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="compact">Compact Size</h2>
+
+    <p>Use the compact size for smaller cards like notifications, alerts, or list items.</p>
+
+    <c-sample>
+        <div class="grid md:grid-cols-2 gap-4">
+            <c-ui.card size="sm">
+                <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">New Message</h4>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">You have 3 unread messages</p>
+            </c-ui.card>
+
+            <c-ui.card size="sm">
+                <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">Task Complete</h4>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Your export has finished processing</p>
+            </c-ui.card>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.card size="sm">
+    <h4 class="font-semibold">New Message</h4>
+    <p class="text-sm text-zinc-600 mt-1">You have 3 unread messages</p>
+</c-ui.card>
+
+<c-ui.card size="sm">
+    <h4 class="font-semibold">Task Complete</h4>
+    <p class="text-sm text-zinc-600 mt-1">Your export has finished processing</p>
+</c-ui.card>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="with-header">With Header and Content</h2>
+
+    <p>Structure your card with distinct header and content sections.</p>
+
+    <c-sample>
+        <c-ui.card class="space-y-4">
+            <div>
+                <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">Team Members</h3>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Manage your team and permissions</p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex items-center justify-between py-2">
+                    <div>
+                        <div class="font-medium text-zinc-900 dark:text-zinc-100">Sarah Chen</div>
+                        <div class="text-sm text-zinc-600 dark:text-zinc-400">sarah@example.com</div>
+                    </div>
+                    <c-ui.badge>Admin</c-ui.badge>
+                </div>
+
+                <div class="flex items-center justify-between py-2">
+                    <div>
+                        <div class="font-medium text-zinc-900 dark:text-zinc-100">Michael Park</div>
+                        <div class="text-sm text-zinc-600 dark:text-zinc-400">michael@example.com</div>
+                    </div>
+                    <c-ui.badge color="blue">Member</c-ui.badge>
+                </div>
+            </div>
+        </c-ui.card>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.card class="space-y-4">
+    <div>
+        <h3 class="text-xl font-bold">Team Members</h3>
+        <p class="text-sm text-zinc-600 mt-1">Manage your team and permissions</p>
+    </div>
+
+    <div class="space-y-3">
+        <div class="flex items-center justify-between py-2">
+            <div>
+                <div class="font-medium">Sarah Chen</div>
+                <div class="text-sm text-zinc-600">sarah@example.com</div>
+            </div>
+            <c-ui.badge>Admin</c-ui.badge>
+        </div>
+    </div>
+</c-ui.card>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="with-actions">With Actions</h2>
+
+    <p>Add buttons and actions to your card footer.</p>
+
+    <c-sample>
+        <c-ui.card class="space-y-6">
+            <div>
+                <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Export Data</h3>
+                <p class="text-zinc-600 dark:text-zinc-400 mt-2">
+                    Download your account data in CSV or JSON format. This may take a few minutes for large datasets.
+                </p>
+            </div>
+
+            <div class="flex gap-3">
+                <c-ui.button variant="primary">Download CSV</c-ui.button>
+                <c-ui.button variant="default">Download JSON</c-ui.button>
+            </div>
+        </c-ui.card>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.card class="space-y-6">
+    <div>
+        <h3 class="text-lg font-semibold">Export Data</h3>
+        <p class="text-zinc-600 mt-2">
+            Download your account data in CSV or JSON format.
+        </p>
+    </div>
+
+    <div class="flex gap-3">
+        <c-ui.button variant="primary">Download CSV</c-ui.button>
+        <c-ui.button variant="default">Download JSON</c-ui.button>
+    </div>
+</c-ui.card>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="interactive">Interactive Cards</h2>
+
+    <p>Make cards clickable by wrapping them in a link. Add hover states for better user feedback.</p>
+
+    <c-sample>
+        <div class="grid md:grid-cols-3 gap-4">
+            <a href="javascript:void(0)" class="block">
+                <c-ui.card size="sm" class="hover:shadow-md transition-shadow">
+                    <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">Documentation</h4>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Learn how to integrate our API</p>
+                </c-ui.card>
+            </a>
+
+            <a href="javascript:void(0)" class="block">
+                <c-ui.card size="sm" class="hover:shadow-md transition-shadow">
+                    <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">Support</h4>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Get help from our support team</p>
+                </c-ui.card>
+            </a>
+
+            <a href="javascript:void(0)" class="block">
+                <c-ui.card size="sm" class="hover:shadow-md transition-shadow">
+                    <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">Community</h4>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Join our developer community</p>
+                </c-ui.card>
+            </a>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<a href="/docs">
+    <c-ui.card size="sm" class="hover:shadow-md transition-shadow">
+        <h4 class="font-semibold">Documentation</h4>
+        <p class="text-sm text-zinc-600 mt-2">Learn how to integrate our API</p>
+    </c-ui.card>
+</a>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="form-example">Form Layout</h2>
+
+    <p>Cards work great for containing forms and input groups.</p>
+
+    <c-sample>
+        <c-ui.card class="space-y-6 max-w-md">
+            <div>
+                <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">Account Settings</h3>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Update your profile information</p>
+            </div>
+
+            <div class="space-y-4">
+                <c-ui.input
+                    label="Full Name"
+                    type="text"
+                    placeholder="Enter your name"
+                />
+
+                <c-ui.input
+                    label="Email"
+                    type="email"
+                    placeholder="you@example.com"
+                />
+
+                <c-ui.textarea
+                    label="Bio"
+                    placeholder="Tell us about yourself"
+                    height="sm"
+                />
+            </div>
+
+            <div class="flex gap-3">
+                <c-ui.button variant="primary">Save Changes</c-ui.button>
+                <c-ui.button variant="ghost">Cancel</c-ui.button>
+            </div>
+        </c-ui.card>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.card class="space-y-6">
+    <div>
+        <h3 class="text-xl font-bold">Account Settings</h3>
+        <p class="text-sm text-zinc-600 mt-1">Update your profile information</p>
+    </div>
+
+    <div class="space-y-4">
+        <c-ui.input label="Full Name" type="text" />
+        <c-ui.input label="Email" type="email" />
+        <c-ui.textarea label="Bio" height="sm" />
+    </div>
+
+    <div class="flex gap-3">
+        <c-ui.button variant="primary">Save Changes</c-ui.button>
+        <c-ui.button variant="ghost">Cancel</c-ui.button>
+    </div>
+</c-ui.card>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h4 id="reference">Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="size" type="str" :options="['sm', 'default']" default="default" description="Controls the padding size of the card." />
+        <c-api-prop name="slot (default)" type="—" default="" description="The card's content."></c-api-prop>
+    </c-api-props>
+
+</c-layouts.ui>

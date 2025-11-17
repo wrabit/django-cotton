@@ -7,15 +7,13 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default (Top)</a></c-index-sublink>
+        <c-index-sublink><a href="#default" class="no-underline">Tooltip</a></c-index-sublink>
         <c-index-sublink><a href="#positions" class="no-underline">Positions</a></c-index-sublink>
         <c-index-sublink><a href="#offset" class="no-underline">Offset</a></c-index-sublink>
         <c-index-sublink><a href="#html-content" class="no-underline">HTML Content</a></c-index-sublink>
-        <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <h2 id="default">Default (Top)</h2>
-    <p>Hover or focus the button to see the default tooltip (positioned top).</p>
     <c-sample>
         <div class="p-8 flex justify-center"> {# Added padding for visibility #}
             <c-ui.tooltip>
@@ -26,14 +24,14 @@
             </c-ui.tooltip>
         </div>
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.tooltip>
     <button class="btn">Hover Me</button>
     <c-slot name="content">
         This is a tooltip!
     </c-slot>
 </c-ui.tooltip>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
@@ -59,7 +57,7 @@
             </c-ui.tooltip>
         </div>
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.tooltip position="top">
     <button class="btn">Top</button>
     <c-slot name="content">Top Tooltip</c-slot>
@@ -79,7 +77,7 @@
     <button class="btn">Right</button>
     <c-slot name="content">Right Tooltip</c-slot>
 </c-ui.tooltip>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
@@ -97,7 +95,7 @@
             </c-ui.tooltip>
         </div>
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.tooltip :offset="0">
     <button class="btn">Offset 0</button>
     <c-slot name="content">No gap</c-slot>
@@ -107,7 +105,7 @@
     <button class="btn">Offset 12</button>
     <c-slot name="content">Large gap</c-slot>
 </c-ui.tooltip>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
@@ -123,82 +121,33 @@
             </c-ui.tooltip>
         </div>
         <c-slot name="code">
-<c-snippet>{% cotton_verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.tooltip>
     <button class="btn">HTML</button>
     <c-slot name="content">
         <strong>Important:</strong> <em>Check details!</em>
     </c-slot>
 </c-ui.tooltip>
-{% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
-    <h2 id="api">API</h2>
+    <h2 id="reference">Reference</h2>
 
-    <h3 class="!text-gray-500">ui.tooltip</h3>
+    <h4>Props</h4>
 
-    <h4>Properties</h4>
-    <div class="overflow-x-auto">
-        <table class="table-auto text-normal w-full">
-            <thead class="not-prose text-sm text-left">
-                <tr>
-                    <th class="font-normal text-zinc-500 p-2">Name</th>
-                    <th class="font-normal text-zinc-500 p-2">Type</th>
-                    <th class="font-normal text-zinc-500 p-2">Values</th>
-                    <th class="font-normal text-zinc-500 p-2">Default</th>
-                    <th class="font-normal text-zinc-500 p-2">Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>position</code></td>
-                    <td class="p-2">String</td>
-                    <td class="p-2"><code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code></td>
-                    <td class="p-2"><code>top</code></td>
-                    <td class="p-2">The position of the tooltip relative to the trigger element.</td>
-                </tr>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>:offset</code></td>
-                    <td class="p-2">Integer</td>
-                    <td class="p-2">Any integer</td>
-                    <td class="p-2"><code>4</code></td>
-                    <td class="p-2">The gap between the trigger and the tooltip in pixels.</td>
-                </tr>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>attrs</code></td>
-                    <td class="p-2">Dict</td>
-                    <td class="p-2">HTML attribute dictionary</td>
-                    <td class="p-2"><code>{}</code></td>
-                    <td class="p-2">Passes HTML attributes directly to the wrapper <code>&lt;div&gt;</code> element.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <c-api-props>
+        <c-api-prop name="position" type="str" :options="['top', 'bottom', 'left', 'right']" default="top" description="The position of the tooltip relative to the trigger element." />
+        <c-api-prop name=":offset" type="int" default="4" description="The gap between the trigger and the tooltip in pixels.">
+            <c-slot name="options_content">Any integer</c-slot>
+        </c-api-prop>
+    </c-api-props>
 
     <h4 class="mt-6">Slots</h4>
-     <div class="overflow-x-auto">
-        <table class="table-auto text-normal w-full">
-            <thead class="not-prose text-sm text-left">
-                <tr>
-                    <th class="font-normal text-zinc-500 p-2">Name</th>
-                    <th class="font-normal text-zinc-500 p-2">Required</th>
-                    <th class="font-normal text-zinc-500 p-2">Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>slot</code> (default)</td>
-                    <td class="p-2">Yes</td>
-                    <td class="p-2">The element that triggers the tooltip (e.g., a button, icon, or text).</td>
-                </tr>
-                <tr class="border-t dark:border-zinc-700">
-                    <td class="p-2"><code>content</code></td>
-                    <td class="p-2">Yes</td>
-                    <td class="p-2">The content (text or HTML) to display inside the tooltip.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" description="The element that triggers the tooltip (e.g., a button, icon, or text)." default="Required"></c-api-prop>
+        <c-api-prop name="content" type="—" description="The content (text or HTML) to display inside the tooltip." default="Required"></c-api-prop>
+    </c-api-props>
 
 </c-layouts.ui>

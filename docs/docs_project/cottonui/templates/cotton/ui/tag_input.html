@@ -18,14 +18,14 @@
 >
     <div @click="focus()"
          @click.outside="handleBlur()"
-         class="border relative border-gray-300 rounded-t shadow pt-1.5 pr-1 pl-1 pb-0 bg-white"
-         :class="{'rounded-b': !isOpen, 'ring-2 ring-blue-500': isFocused}">
+         class="border relative border-zinc-300 dark:border-zinc-600 rounded-t shadow pt-1.5 pr-1 pl-1 pb-0 bg-white dark:bg-zinc-800"
+         :class="{'rounded-b': !isOpen, 'ring-2 ring-accent': isFocused}">
         <div class="flex flex-wrap space-x-1">
             <template x-for="(tag, index) in tags" :key="index">
-                <span class="inline-flex space-x-2 items-center bg-gray-200 text-gray-800 rounded-full select-none px-3 text-sm py-0.5 mb-1.5 leading-6">
+                <span class="inline-flex space-x-2 items-center bg-zinc-200 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 rounded-full select-none px-3 text-sm py-0.5 mb-1.5 leading-6">
                     <span x-text="tag"></span>
                     <button @click.stop="removeTag(tag)" class="focus:outline-none" :tabindex="isFocused ? 0 : -1">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 text-gray-400 hover:text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300">
                           <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
                         </svg>
                     </button>
@@ -34,7 +34,7 @@
 
             <input x-ref="input"
                    x-model="newTag"
-                   class="tags-input-text text-sm flex-1 py-0.5 ml-2 mb-1.5 mt-0.5 pl-1.5 border-0 appearance-none focus:outline-none focus:ring-0 outline-none"
+                   class="tags-input-text text-sm flex-1 py-0.5 ml-2 mb-1.5 mt-0.5 pl-1.5 border-0 appearance-none focus:outline-none focus:ring-0 outline-none dark:bg-zinc-800 dark:text-zinc-200"
                    :placeholder="getPlaceholder"
                    @keydown="onKeyDown($event)"
                    @keydown.backspace="handleBackspace($event)"
@@ -43,33 +43,33 @@
             >
 
             <div x-show="isOpen"
-                 class="top-[100%] left-[-1px] right-[-1px] absolute z-10 bg-white border-b border-l border-r border-gray-300 rounded-b shadow !ml-0 overflow-y-auto max-h-72">
+                 class="top-[100%] left-[-1px] right-[-1px] absolute z-10 bg-white dark:bg-zinc-800 border-b border-l border-r border-zinc-300 dark:border-zinc-600 rounded-b shadow !ml-0 overflow-y-auto max-h-72">
                 <template x-if="enableSearch && filteredOptions.length > 10">
-                    <div class="p-2 border-b border-gray-300">
+                    <div class="p-2 border-b border-zinc-300 dark:border-zinc-600">
                         <input x-model="searchTerm"
                                @input="search"
                                @keydown.stop
-                               class="w-full px-2 py-1 border border-gray-300 rounded"
+                               class="w-full px-2 py-1 border border-zinc-300 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-200 rounded"
                                placeholder="Search options...">
                     </div>
                 </template>
                 <template x-for="(option, index) in filteredOptions" :key="index">
-                    <div class="px-2 py-1 hover:bg-gray-100 cursor-pointer"
-                         :class="{'bg-gray-100': index === highlightedIndex}"
+                    <div class="px-2 py-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer"
+                         :class="{'bg-zinc-100 dark:bg-zinc-700': index === highlightedIndex}"
                          @click.stop="selectOption(option)"
                          @mouseover="highlightedIndex = index">
                         <span x-text="option"></span>
                     </div>
                 </template>
 
-                <div x-show="filteredOptions.length === 0" class="px-2 py-1 text-gray-500 text-sm">
+                <div x-show="filteredOptions.length === 0" class="px-2 py-1 text-zinc-500 dark:text-zinc-400 text-sm">
                     No options found
-                    <span x-show="newTag.trim() !== '' && allowCustomTags" class="text-gray-500">, press Enter to add "<span x-text='newTag'></span>"</span>
+                    <span x-show="newTag.trim() !== '' && allowCustomTags" class="text-zinc-500 dark:text-zinc-400">, press Enter to add "<span x-text='newTag'></span>"</span>
                 </div>
             </div>
         </div>
 
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"  class="w-4 h-4 text-gray-500 right-3 absolute top-3">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"  class="w-4 h-4 text-zinc-500 dark:text-zinc-400 right-3 absolute top-3">
           <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
         </svg>
     </div>

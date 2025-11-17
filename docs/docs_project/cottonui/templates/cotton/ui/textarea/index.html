@@ -3,6 +3,13 @@
     size="base"
     height="base"
     :resizable="True"
+    label
+    description
+    description_trailing
+    error
+    badge
+    form
+    name
     :size_classes="{
         'xs': 'text-xs px-2 py-1',
         'sm': 'text-sm px-2.5 py-1.5',
@@ -19,27 +26,73 @@
     }"
 />
 
-<textarea
-    class="
-        w-full
-        border
-        border-gray-300
-        dark:bg-zinc-800
-        dark:border-zinc-700
-        dark:text-zinc-300
-        rounded-md
-        shadow-sm
-        focus:ring-indigo-500
-        focus:border-indigo-500
-        {% if resizable == False %} resize-none{% endif %}
-        {{ size_classes|get_item:size }}
-        {{ height_classes|get_item:height }}
-    "
-    {{ attrs }}
-    {% if auto§resize %}
-        x-data="{ resize: () => { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
-        x-init="$nextTick(() => resize())"  {# Ensure resize runs after initial render #}
-        @input="resize()"
-        style="overflow-y:hidden;"
-    {% endif %}
->{{ slot }}</textarea> 
+{% if label or description or description_trailing or error %}
+    <c-ui.field
+        label="{{ label }}"
+        description="{{ description }}"
+        description_trailing="{{ description_trailing }}"
+        error="{{ error }}"
+        badge="{{ badge }}"
+        :form="form"
+        name="{{ name }}">
+        <textarea
+            class="
+                w-full
+                border
+                border-zinc-300
+                dark:border-zinc-700
+                bg-white
+                dark:bg-zinc-900
+                dark:text-zinc-300
+                rounded-lg
+                shadow-sm
+                transition-colors
+                hover:border-zinc-400
+                dark:hover:border-zinc-600
+                focus:outline-none
+                focus:ring-2
+                focus:ring-accent
+                {% if resizable == False %} resize-none{% endif %}
+                {{ size_classes|get_item:size }}
+                {{ height_classes|get_item:height }}
+            "
+            {{ attrs }}
+            {% if autoresize %}
+                x-data="{ resize: () => { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
+                x-init="$nextTick(() => resize())"
+                @input="resize()"
+                style="overflow-y:hidden;"
+            {% endif %}
+        >{{ slot }}</textarea>
+    </c-ui.field>
+{% else %}
+    <textarea
+        class="
+            w-full
+            border
+            border-zinc-300
+            dark:border-zinc-700
+            bg-white
+            dark:bg-zinc-900
+            dark:text-zinc-300
+            rounded-lg
+            shadow-sm
+            transition-colors
+            hover:border-zinc-400
+            dark:hover:border-zinc-600
+            focus:outline-none
+            focus:ring-2
+            focus:ring-accent
+            {% if resizable == False %} resize-none{% endif %}
+            {{ size_classes|get_item:size }}
+            {{ height_classes|get_item:height }}
+        "
+        {{ attrs }}
+        {% if autoresize %}
+            x-data="{ resize: () => { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
+            x-init="$nextTick(() => resize())"
+            @input="resize()"
+            style="overflow-y:hidden;"
+        {% endif %}
+    >{{ slot }}</textarea>
+{% endif %}

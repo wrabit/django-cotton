@@ -268,7 +268,7 @@ class TemplateRenderingTests(CottonTestCase):
                 response, '<div cotton-attr data-foo="bar" size="40" required="True"></div>'
             )
 
-    def test_docs/docs_project/pyproject.tomlproxy_attrs_to_nested_component(self):
+    def test_proxy_attrs_to_nested_component(self):
         # Inner component that will receive the proxied attributes
         self.create_template(
             "cotton/inner_component.html",

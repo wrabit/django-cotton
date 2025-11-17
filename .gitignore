@@ -6,6 +6,7 @@ __pycache__
 db.sqlite3
 media
 **/static/app.css
+staticfiles/
 
 # Backup files # 
 *.bak 
@@ -111,6 +112,14 @@ GitHub.sublime-settings
 !.vscode/extensions.json 
 .history
 
+# OS
 .DS_Store
+Thumbs.db
+
+# npm
 node_modules/
-staticfiles/
+
+# local
+*.local.*
+*.local
+

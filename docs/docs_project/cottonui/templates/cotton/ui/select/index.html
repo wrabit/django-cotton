@@ -1,0 +1,82 @@
+<c-vars
+    variant="native"
+    name
+    placeholder="Select an option"
+    value
+    :disabled="False"
+    size
+    :required="False"
+    label
+    description
+    description_trailing
+    error
+    badge
+    form
+/>
+
+{% if label or description or description_trailing or error %}
+    <c-ui.field
+        label="{{ label }}"
+        description="{{ description }}"
+        description_trailing="{{ description_trailing }}"
+        error="{{ error }}"
+        badge="{{ badge }}"
+        :form="form"
+        name="{{ name }}">
+        {% if variant == "listbox" %}
+            {# Rich custom select with menu component #}
+            <c-ui.menu
+                name="{{ name }}"
+                placeholder="{{ placeholder }}"
+                value="{{ value }}"
+                :disabled="disabled"
+                size="{{ size }}"
+                :required="required"
+                {{ attrs }}
+            >
+                {{ slot }}
+            </c-ui.menu>
+        {% else %}
+            {# Native HTML select (default) #}
+            <c-ui.select.native
+                name="{{ name }}"
+                placeholder="{{ placeholder }}"
+                value="{{ value }}"
+                :disabled="disabled"
+                size="{{ size }}"
+                :required="required"
+                {{ attrs }}
+            >
+                {{ slot }}
+            </c-ui.select.native>
+        {% endif %}
+    </c-ui.field>
+{% else %}
+    {% if variant == "listbox" %}
+        {# Rich custom select with menu component #}
+        <c-ui.menu
+            name="{{ name }}"
+            placeholder="{{ placeholder }}"
+            value="{{ value }}"
+            :disabled="disabled"
+            size="{{ size }}"
+            :required="required"
+            {{ attrs }}
+        >
+            {{ slot }}
+        </c-ui.menu>
+    {% else %}
+        {# Native HTML select (default) #}
+        <c-ui.select.native
+            name="{{ name }}"
+            placeholder="{{ placeholder }}"
+            value="{{ value }}"
+            :disabled="disabled"
+            size="{{ size }}"
+            :required="required"
+            {{ attrs }}
+        >
+            {{ slot }}
+        </c-ui.select.native>
+    {% endif %}
+{% endif %}

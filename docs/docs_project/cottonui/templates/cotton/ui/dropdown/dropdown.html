@@ -5,20 +5,19 @@
     <button
         type="button"
         @click="isOpen = ! isOpen"
-        class="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-md border border-neutral-300 bg-neutral-50 px-4 py-2 text-sm font-medium tracking-wide transition
+        class="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-md border border-zinc-300 bg-zinc-50 px-4 py-2 text-sm font-medium tracking-wide transition
             hover:opacity-75
             focus-visible:outline
             focus-visible:outline-2
             focus-visible:outline-offset-2
-            focus-visible:outline-neutral-800
-            dark:border-neutral-700
-            dark:bg-gray-800
-            dark:focus-visible:outline-neutral-300"
+            focus-visible:outline-accent
+            dark:border-zinc-700
+            dark:bg-zinc-800"
         aria-haspopup="true"
         @keydown.space.prevent="openedWithKeyboard = true"
         @keydown.enter.prevent="openedWithKeyboard = true"
         @keydown.down.prevent="openedWithKeyboard = true"
-        :class="isOpen || openedWithKeyboard ? 'text-neutral-900 dark:text-white' : 'text-neutral-600 dark:text-neutral-300'"
+        :class="isOpen || openedWithKeyboard ? 'text-zinc-900 dark:text-white' : 'text-zinc-600 dark:text-zinc-300'"
         aria-expanded="isOpen || openedWithKeyboard">
             {% firstof trigger_text "Select" %}
         <svg aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4 totate-0">
@@ -32,9 +31,9 @@
          @click.outside="isOpen = false, openedWithKeyboard = false"
          @keydown.down.prevent="$focus.wrap().next()"
          @keydown.up.prevent="$focus.wrap().previous()"
-         class="absolute top-11 left-0 flex w-full min-w-[12rem] flex-col overflow-hidden rounded-md border border-neutral-300 bg-neutral-50 py-1.5
-            dark:border-neutral-700
-            dark:bg-gray-800"
+         class="absolute top-11 left-0 flex w-full min-w-[12rem] flex-col overflow-hidden rounded-md border border-zinc-300 bg-zinc-50 py-1.5
+            dark:border-zinc-700
+            dark:bg-zinc-800"
          role="menu">
         {{ slot }}
     </div>

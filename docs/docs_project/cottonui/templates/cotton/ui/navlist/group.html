@@ -1,0 +1,45 @@
+<c-vars
+    heading=""
+    :expandable="False"
+    :expanded="True"
+/>
+
+{% if expandable %}
+    <div x-data="{ expanded: {{ expanded|lower }} }" class="space-y-1">
+        <button
+            @click="expanded = !expanded"
+            class="w-full flex items-center justify-between px-3 py-2 font-semibold text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors"
+        >
+            <span>{{ heading }}</span>
+            <svg
+                x-bind:class="expanded ? 'rotate-0' : '-rotate-90'"
+                class="w-4 h-4 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+
+        <div
+            x-show="expanded"
+            x-collapse
+            class="space-y-1 pl-2"
+        >
+            {{ slot }}
+        </div>
+    </div>
+{% else %}
+    <div class="space-y-1">
+        {% if heading %}
+            <div class="px-3 py-2 font-semibold text-zinc-500 dark:text-zinc-400">
+                {{ heading }}
+            </div>
+        {% endif %}
+
+        <div class="space-y-1 pl-2">
+            {{ slot }}
+        </div>
+    </div>
+{% endif %}

@@ -1,7 +1,13 @@
 // courtesy of livewire
-let fs = require('fs')
-let brotliSize = require('brotli-size')
-let crypto = require('crypto')
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import brotliSize from 'brotli-size';
+import crypto from 'crypto';
+import esbuild from 'esbuild';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 build({
     entryPoints: [`js/cotton-ui.js`],
@@ -76,7 +82,7 @@ function build(options) {
     // options.define['LIVEWIRE_VERSION'] = `'${getFromPackageDotJson('alpinejs', 'version')}'`
     options.define['process.env.NODE_ENV'] = process.argv.includes('--watch') ? `'production'` : `'development'`
 
-    return require('esbuild').build({
+    return esbuild.build({
         watch: process.argv.includes('--watch'),
         // external: ['alpinejs'],
         ...options,

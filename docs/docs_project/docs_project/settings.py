@@ -30,6 +30,7 @@ DEBUG = os.getenv("DEBUG", False)
 
 ALLOWED_HOSTS = [
     "0.0.0.0",
+    "localhost",
     "django-cotton.com",
     "www.django-cotton.com",
 ]

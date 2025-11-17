@@ -1,111 +1,281 @@
 <c-layouts.ui>
-
-    <h1 id="components">Input
-        <span class="text-gray-500 text-opacity-50 text-lg font-medium">&lt;ui.input</span>
-    </h1>
+    <c-header>
+        Field
+        <c-slot name="subheading">
+            Wraps form inputs with labels, descriptions, and validation feedback.
+        </c-slot>
+    </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#api" class="no-underline">API</a></c-index-sublink>
+        <c-index-sublink><a href="#shorthand" class="no-underline">Shorthand Usage</a></c-index-sublink>
+        <c-index-sublink><a href="#with-label" class="no-underline">With Label</a></c-index-sublink>
+        <c-index-sublink><a href="#with-description" class="no-underline">With Description</a></c-index-sublink>
+        <c-index-sublink><a href="#with-error" class="no-underline">With Error</a></c-index-sublink>
+        <c-index-sublink><a href="#complete" class="no-underline">Complete Example</a></c-index-sublink>
+        <c-index-sublink><a href="#inline" class="no-underline">Inline Variant</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <div class="shadow-lg">
-        <div class="min-h-40 md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <c-ui.input placeholder="What's your name?" />
+    <c-sample>
+        <c-ui.field>
+            <c-ui.label>Email</c-ui.label>
+            <c-ui.input type="email" name="email" placeholder="you@example.com" />
+            <c-ui.error name="email" />
+        </c-ui.field>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.field>
+    <c-ui.label>Email</c-ui.label>
+    <c-ui.input type="email" name="email" placeholder="you@example.com" />
+    <c-ui.error name="email" />
+</c-ui.field>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="shorthand">Shorthand Usage</h2>
+
+    <p>To reduce repetitive markup, form controls like <code>input</code> and <code>textarea</code> can accept <code>label</code>, <code>description</code>, <code>error</code>, and <code>badge</code> props directly. When any of these props are provided, the control will automatically be wrapped in a field structure.</p>
+
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.input
+                label="Email Address"
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+            />
+
+            <c-ui.input
+                label="Password"
+                badge="Required"
+                description_trailing="Must be at least 8 characters"
+                type="password"
+                name="password"
+                placeholder="•••••••••"
+            />
+
+            <c-ui.textarea
+                label="Bio"
+                description="Tell us about yourself"
+                name="bio"
+                placeholder="Write something..."
+            />
         </div>
-        <div class="flex-1 pt-3 pb-1 px-3 rounded-b-lg m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-ui.input placeholder="What's your name?" />
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.input
+    label="Email Address"
+    type="email"
+    name="email"
+    placeholder="Enter your email"
+/>
+
+<c-ui.input
+    label="Password"
+    badge="Required"
+    description_trailing="Must be at least 8 characters"
+    type="password"
+    name="password"
+/>
+
+<c-ui.textarea
+    label="Bio"
+    description="Tell us about yourself"
+    name="bio"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="with-label">With Label Badge</h2>
+
+    <p>Add a badge to the label to indicate required or optional fields.</p>
+
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.field>
+                <c-ui.label badge="Required">Full Name</c-ui.label>
+                <c-ui.input type="text" name="name" placeholder="John Doe" />
+            </c-ui.field>
+
+            <c-ui.field>
+                <c-ui.label badge="Optional">Phone Number</c-ui.label>
+                <c-ui.input type="tel" name="phone" placeholder="+1 (555) 000-0000" />
+            </c-ui.field>
         </div>
-    </div>
 
-    <h3>Addons</h3>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.field>
+    <c-ui.label badge="Required">Full Name</c-ui.label>
+    <c-ui.input type="text" name="name" placeholder="John Doe" />
+</c-ui.field>
 
-    <h3>Types</h3>
+<c-ui.field>
+    <c-ui.label badge="Optional">Phone Number</c-ui.label>
+    <c-ui.input type="tel" name="phone" placeholder="+1 (555) 000-0000" />
+</c-ui.field>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
-    <h3>Field</h3>
+    <h2 id="with-description">With Description</h2>
 
-    <p>Input can be used in the Field component to display alongside label, info, help and validation.</p>
+    <p>Add helper text to provide context about the field. Descriptions can appear before or after the input.</p>
 
-    <div class="shadow-lg">
-        <div class="md:px-24 rounded-lg rounded-b-none border-b-transparent border p-5 min-h-80 mt-6 border-gray-400 border-opacity-30 px-8 py-5 ark:border dark:bg-transparent bg-white flex items-center">
-            <div class="space-y-3 w-full">
-                <div>
-                    <label class="font-semibold mb-3">Password:</label>
-                    <c-ui.input type="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
-                <div>
-                    <label class="font-semibold mb-3">Password with reveal:</label>
-                    <c-ui.input type="password" value="password" placeholder="•••••••••" autocomplete="off" />
-                </div>
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.field>
+                <c-ui.label>Username</c-ui.label>
+                <c-ui.description>This will be your public display name.</c-ui.description>
+                <c-ui.input type="text" name="username" placeholder="johndoe" />
+            </c-ui.field>
+
+            <c-ui.field>
+                <c-ui.label>Email</c-ui.label>
+                <c-ui.input type="email" name="email" placeholder="you@example.com" />
+                <c-ui.description>We'll send confirmation to this address.</c-ui.description>
+            </c-ui.field>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# Description before input #}
+<c-ui.field>
+    <c-ui.label>Username</c-ui.label>
+    <c-ui.description>This will be your public display name.</c-ui.description>
+    <c-ui.input type="text" name="username" placeholder="johndoe" />
+</c-ui.field>
+
+{# Description after input (trailing) #}
+<c-ui.field>
+    <c-ui.label>Email</c-ui.label>
+    <c-ui.input type="email" name="email" placeholder="you@example.com" />
+    <c-ui.description>We'll send confirmation to this address.</c-ui.description>
+</c-ui.field>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="with-error">With Error Message</h2>
+
+    <p>Display validation feedback with the error component. Supports Django form integration or explicit messages.</p>
+
+    <c-sample>
+        <c-ui.field>
+            <c-ui.label>Password</c-ui.label>
+            <c-ui.input type="password" name="password" placeholder="•••••••••" />
+            <c-ui.error message="Password must be at least 8 characters." />
+        </c-ui.field>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# With explicit message #}
+<c-ui.field>
+    <c-ui.label>Password</c-ui.label>
+    <c-ui.input type="password" name="password" placeholder="•••••••••" />
+    <c-ui.error message="Password must be at least 8 characters." />
+</c-ui.field>
+
+{# With Django form integration #}
+<c-ui.field>
+    <c-ui.label>Email</c-ui.label>
+    <c-ui.input type="email" name="email" />
+    <c-ui.error name="email" :form="form" />
+</c-ui.field>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="complete">Complete Example</h2>
+
+    <p>Combining all elements together with Django form integration.</p>
+
+    <c-sample>
+        <c-ui.field>
+            <c-ui.label badge="Required">Password</c-ui.label>
+            <c-ui.description>Must include at least 8 characters with uppercase, lowercase, and numbers.</c-ui.description>
+            <c-ui.input type="password" name="password" placeholder="•••••••••" />
+            <c-ui.error name="password" />
+        </c-ui.field>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.field>
+    <c-ui.label badge="Required">Password</c-ui.label>
+    <c-ui.description>
+        Must include at least 8 characters with uppercase, lowercase, and numbers.
+    </c-ui.description>
+    <c-ui.input type="password" name="password" placeholder="•••••••••" />
+    <c-ui.error name="password" />
+</c-ui.field>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="inline">Inline Variant</h2>
+
+    <p>Display the field in an inline layout with the label beside the input.</p>
+
+    <c-sample>
+        <c-ui.field variant="inline">
+            <c-ui.label class="w-32 pt-2">Email</c-ui.label>
+            <div class="flex-1">
+                <c-ui.input type="email" name="email" placeholder="you@example.com" />
+                <c-ui.description>We'll never share your email.</c-ui.description>
             </div>
-        </div>
-        <div class="flex-1 rounded-b-lg pb-4 pt-11 px-6 m-0 bg-gray-800 dark:bg-gray-800">
-            <c-snippet>{% cotton_verbatim %}{% verbatim %}
-                <c-textarea/>
-            {% endverbatim %}{% endcotton_verbatim %}</c-snippet>
-        </div>
+        </c-ui.field>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.field variant="inline">
+    <c-ui.label class="w-32 pt-2">Email</c-ui.label>
+    <div class="flex-1">
+        <c-ui.input type="email" name="email" placeholder="you@example.com" />
+        <c-ui.description>We'll never share your email.</c-ui.description>
     </div>
+</c-ui.field>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
+    <h4 id="reference">Field Props</h4>
 
-    <c-ui.input>
-        <c-slot name="left_addon">{% heroicon_outline 'user-circle' class="text-gray-300" %}</c-slot>
-    </c-ui.input>
+    <c-api-props>
+        <c-api-prop name="variant" type="str" :options="['block', 'inline']" default="block" description="Layout variant for the field." />
+    </c-api-props>
 
-    <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
-        inside standard Django templates.</p>
+    <h4 class="mt-6">Label Props</h4>
 
-    <h3>API</h3>
+    <c-api-props>
+        <c-api-prop name="badge" type="str" default="" description="Badge text like 'Required' or 'Optional'." />
+        <c-api-prop name="for" type="str" default="" description="ID of the associated input element." />
+    </c-api-props>
 
-    <div class="table w-full border dark:text-gray-500 rounded-lg border-gray-400 border-opacity-30  flex items-center">
-        <table class="text-base">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Values</th>
-                    <th>Default</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><code>type</code></td>
-                    <td>Input type</td>
-                    <td>string</td>
-                    <td>text, password, email, number, tel, url</td>
-                    <td>text</td>
-                </tr>
-                <tr>
-                    <td>class</td>
-                    <td>Additional classes</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>left_addon</td>
-                    <td>Left addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>right_addon</td>
-                    <td>Right addon</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>placeholder</td>
-                    <td>Placeholder text</td>
-                    <td>string</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-        </table>
-    </div>
+    <h4 class="mt-6">Description Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="" description="Helper text content - no props available." />
+    </c-api-props>
+
+    <h4 class="mt-6">Error Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="name" type="str" default="" description="Field name to lookup in form.errors. Use '__all__' for non-field errors." />
+        <c-api-prop name=":form" type="Form" default="None" description="Django form instance. When provided with name, automatically displays validation errors from form.errors." />
+        <c-api-prop name="message" type="str" default="" description="Explicit error message to display. Bypasses form integration." />
+    </c-api-props>
+
+    <h4 class="mt-6">Badge Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="color" type="str" :options="['zinc', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose']" default="zinc" description="Badge color variant." />
+        <c-api-prop name="size" type="str" :options="['sm', '', 'lg']" default="" description="Badge size." />
+        <c-api-prop name="variant" type="str" :options="['', 'pill', 'solid']" default="" description="Badge style variant." />
+        <c-api-prop name=":inset" type="bool" :options="['True', 'False']" default="False" description="Apply negative margins." />
+    </c-api-props>
 
 </c-layouts.ui>

@@ -1,0 +1,18 @@
+<c-vars
+    size="default"
+    :size_classes="{
+        'sm': 'p-4',
+        'default': 'p-6'
+    }"
+    class
+/>
+
+<div {{ attrs }} class="
+    bg-white dark:bg-zinc-900
+    border border-zinc-200 dark:border-zinc-800
+    rounded-lg shadow-sm
+    {{ size_classes|get_item:size }}
+    {{ class }}
+">
+    {{ slot }}
+</div>

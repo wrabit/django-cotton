@@ -1,15 +1,14 @@
-export default (defaultValue, activationMode) => ({
-    active: defaultValue,
+export default (initialTab = null, activationMode = "automatic") => ({
+    active: initialTab,
     activationMode: activationMode,
-    tabsList: {
-        ['x-id']() {
-            return ['tab'];
-        },
-        ['x-on:keydown.left.prevent']() {
-            return this.$focus.wrap().previous();
-        },
-        ['x-on:keydown.right.prevent']() {
-            return this.$focus.wrap().next();
-        },
+
+    init() {
+        if (this.active === null) {
+            // Get first tab value
+            const firstTab = this.$el.querySelector('[data-tab-value]');
+            if (firstTab) {
+                this.active = firstTab.dataset.tabValue;
+            }
+        }
     }
 })

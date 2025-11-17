@@ -1,19 +1,18 @@
 <c-vars
     variant="default"
     :variants="{
-        'default': 'bg-white text-gray-800 border dark:bg-gray-400/30 dark:text-neutral-300 dark:border-gray-300/20 shadow',
-        'primary': 'bg-zinc-800 text-white dark:bg-white dark:text-zinc-800',
-        'subtle': 'bg-neutral-100 text-gray-600 dark:bg-gray-300/10 dark:text-neutral-300',
-        'danger': 'bg-red-500 text-white',
-        'ghost': 'bg-transparent text-gray-800 dark:text-white',
+        'default': 'bg-white text-zinc-800 border border-zinc-200 dark:bg-zinc-400/30 dark:text-zinc-300 dark:border-zinc-300/20 shadow',
+        'primary': 'bg-accent text-accent-foreground hover:bg-accent-content',
+        'subtle': 'bg-zinc-100 text-zinc-600 dark:bg-zinc-300/10 dark:text-zinc-300',
+        'danger': 'bg-red-500 text-white hover:bg-red-600',
+        'ghost': 'bg-transparent text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800',
     }"
     :outlined_variants="{
-        'default': 'border border-neutral-50 text-gray-800',
-        'primary': 'border border-sky-500 text-sky-500',
-        'subtle': 'border border-neutral-50 text-gray-800',
-        'danger': 'border border-red-500 text-red-500',
-        'ghost': 'border border-yellow-500 text-yellow-500',
-        'subtle': 'border border-blue-500 text-blue-500',
+        'default': 'border border-zinc-200 text-zinc-800 dark:border-zinc-700 dark:text-zinc-300',
+        'primary': 'border border-accent text-accent hover:bg-accent/10',
+        'subtle': 'border border-zinc-200 text-zinc-800 dark:border-zinc-700 dark:text-zinc-300',
+        'danger': 'border border-red-500 text-red-500 hover:bg-red-500/10',
+        'ghost': 'border border-zinc-400 text-zinc-600 dark:border-zinc-600 dark:text-zinc-400',
     }"
     :outlined="False"
     class
@@ -27,12 +26,10 @@
     {% endif %}
     cursor-pointer whitespace-nowrap rounded-md theme(radius.button)
     px-4 py-2.5 font-medium tracking-wide transition text-center
-{#    hover:opacity-75#}
-    hover:bg-zinc-900/10
     focus-visible:outline
     focus-visible:outline-2
     focus-visible:outline-offset-2
-    focus-visible:outline-sky-500
+    focus-visible:outline-accent
     active:opacity-100
     active:outline-offset-0
     disabled:opacity-75

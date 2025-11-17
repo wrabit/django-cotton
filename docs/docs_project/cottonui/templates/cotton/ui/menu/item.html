@@ -1,0 +1,56 @@
+<c-vars
+    value
+    label
+    description
+    group
+    :disabled="False"
+/>
+
+<button
+    type="button"
+    data-select-option
+    data-value="{{ value }}"
+    data-label="{% if label %}{{ label }}{% else %}{{ slot|striptags }}{% endif %}"
+    data-description="{{ description }}"
+    data-group="{{ group }}"
+    @click.stop="selectOption({ value: '{{ value }}', label: '{% if label %}{{ label }}{% else %}{{ slot|striptags }}{% endif %}' })"
+    :data-highlighted="filteredOptions[highlightedIndex]?.value === '{{ value }}'"
+    {% if disabled %}disabled{% endif %}
+    {{ attrs }}
+    class="w-full px-3 py-2 text-left flex items-center justify-start gap-3 transition-colors
+           hover:bg-zinc-100 dark:hover:bg-zinc-800
+           disabled:opacity-50 disabled:cursor-not-allowed"
+    :class="{
+        'bg-zinc-100 dark:bg-zinc-800': filteredOptions[highlightedIndex]?.value === '{{ value }}',
+        'bg-accent/10 text-accent': selected === '{{ value }}'
+    }"
+>
+    {% if icon %}
+    <span class="flex-shrink-0 w-5 h-5 text-zinc-400 dark:text-zinc-500">
+        {{ icon }}
+    </span>
+    {% endif %}
+
+    <div class="flex-1 min-w-0">
+        <div class="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            {% if label %}{{ label }}{% else %}{{ slot }}{% endif %}
+        </div>
+        {% if description %}
+        <div class="text-xs text-zinc-500 dark:text-zinc-400 truncate">
+            {{ description }}
+        </div>
+        {% endif %}
+    </div>
+
+    {% comment %}Selected checkmark{% endcomment %}
+    <svg
+        x-show="selected === '{{ value }}'"
+        class="w-4 h-4 text-accent flex-shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        style="display: none;"
+    >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+</button>

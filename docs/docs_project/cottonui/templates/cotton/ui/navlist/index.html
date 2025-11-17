@@ -1,0 +1,10 @@
+<c-vars
+    class=""
+/>
+
+<nav
+    {{ attrs.dict|merge:'class:flex flex-col gap-1' }}
+    data-navlist
+>
+    {{ slot }}
+</nav>

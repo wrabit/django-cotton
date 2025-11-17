@@ -1,0 +1,67 @@
+<c-vars value="" icon="" :disabled="False" :accent="True" />
+
+<button
+    type="button"
+    data-tab-value="{{ value }}"
+    x-data="tabsTrigger('{{ value }}')"
+    x-bind="root"
+    x-init="variant = $el.closest('[data-variant]')?.dataset.variant || 'default'; size = $el.closest('[data-size]')?.dataset.size || 'md';"
+    role="tab"
+    {% if disabled %}disabled{% endif %}
+    class="flex items-center justify-center gap-2 whitespace-nowrap transition-colors {% if disabled %}opacity-50 cursor-not-allowed{% else %}cursor-pointer{% endif %}"
+    x-bind:class="$el.closest('[data-variant]')?.dataset.variant === 'segmented' ?
+        (() => {
+            const size = $el.closest('[data-size]')?.dataset.size || 'md';
+            const classes = ['font-medium', 'border-r', 'border-zinc-200', 'dark:border-zinc-700', 'last:border-r-0', 'first:rounded-l-lg', 'last:rounded-r-lg'];
+
+            if (size === 'xs') classes.push('px-2', 'py-1', 'text-xs');
+            else if (size === 'sm') classes.push('px-3', 'py-1.5', 'text-xs');
+            else if (size === 'md') classes.push('px-4', 'py-2', 'text-sm');
+            else if (size === 'lg') classes.push('px-5', 'py-2.5', 'text-base');
+            else if (size === 'xl') classes.push('px-6', 'py-3', 'text-lg');
+
+            if (value == $data.active) {
+                classes.push('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-900', 'dark:text-zinc-100');
+            } else {
+                classes.push('text-zinc-600', 'dark:text-zinc-400');
+                if (!{{ disabled|json_encode }}) {
+                    classes.push('hover:bg-zinc-50', 'dark:hover:bg-zinc-700/50');
+                }
+            }
+            return classes;
+        })() :
+        (() => {
+            const size = $el.closest('[data-size]')?.dataset.size || 'md';
+            const classes = ['border-b-2', 'font-medium'];
+
+            if (size === 'xs') classes.push('px-2', 'py-1.5', 'text-xs');
+            else if (size === 'sm') classes.push('px-3', 'py-2', 'text-sm');
+            else if (size === 'md') classes.push('px-4', 'py-2.5', 'text-sm');
+            else if (size === 'lg') classes.push('px-5', 'py-3', 'text-base');
+            else if (size === 'xl') classes.push('px-6', 'py-3.5', 'text-lg');
+
+            if (value == $data.active) {
+                {% if accent %}
+                classes.push('border-accent', 'text-accent');
+                {% else %}
+                classes.push('border-zinc-900', 'dark:border-zinc-100', 'text-zinc-900', 'dark:text-zinc-100');
+                {% endif %}
+            } else {
+                classes.push('border-transparent', 'text-zinc-600', 'dark:text-zinc-400');
+                if (!{{ disabled|json_encode }}) {
+                    classes.push('hover:text-zinc-900', 'dark:hover:text-zinc-100');
+                }
+            }
+            return classes;
+        })()"
+>
+    {% if icon %}
+    <span x-bind:class="value == $data.active ? '{% if accent %}text-accent{% else %}text-zinc-900 dark:text-zinc-100{% endif %}' : 'text-zinc-400 dark:text-zinc-500'">
+        {{ icon }}
+    </span>
+    {% endif %}
+
+    {% if slot %}
+        {{ slot }}
+    {% endif %}
+</button>

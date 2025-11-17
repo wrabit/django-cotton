@@ -1,0 +1,31 @@
+<c-vars
+    href=""
+    :current="False"
+    icon=""
+    icon_trailing=""
+    badge=""
+    badge_color="zinc"
+    badge_variant=""
+/>
+
+<a
+    href="{{ href }}"
+    class="
+        relative px-4 py-3 text-sm font-medium transition-colors
+        rounded-t-md
+        {% if current %}
+            text-zinc-900 dark:text-zinc-100 border-b-2 border-accent
+        {% else %}
+            text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100
+        {% endif %}
+    "
+    {{ attrs }}
+>
+    <span class="flex items-center gap-2">
+        {{ slot }}
+
+        {% if badge %}
+            <c-ui.badge color="{{ badge_color }}" variant="{{ badge_variant }}" size="sm">{{ badge }}</c-ui.badge>
+        {% endif %}
+    </span>
+</a>

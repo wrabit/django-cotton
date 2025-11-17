@@ -1,23 +1,58 @@
-<c-vars content trigger icon :expanded="False" :disabled="False" />
+<c-vars header="" icon_closed="" icon_open="" icon_position="trailing" :expanded="False" :disabled="False" :accent="True" />
 
 <div x-data="accordionItem({{ expanded|json_encode }})" x-bind="root" {{ attrs.dict|merge:'class:w-full' }}>
-    {% if slot %}
-    <button class="flex flex-1 text-left items-center justify-between px-2 py-4 font-medium transition-all w-full"
+    {% if header %}
+    <button class="flex flex-1 text-left items-center {% if icon_position == 'leading' %}gap-2{% else %}justify-between{% endif %} px-2 py-4 font-medium transition-all w-full {% if disabled %}opacity-50 cursor-not-allowed{% endif %}"
         x-bind="trigger">
-        {{ slot }}
-        <span x-bind="icon">
-            {% if icon %}
-                {{ icon }}
+        {% if icon_position == 'leading' %}
+        <span x-bind="icon" class="{% if accent %}text-accent{% else %}text-zinc-900 dark:text-zinc-100{% endif %}">
+            {% if icon_closed and icon_open %}
+                <span x-show="!$data.value.includes($id('accordion-item'))">
+                    {{ icon_closed }}
+                </span>
+                <span x-show="$data.value.includes($id('accordion-item'))">
+                    {{ icon_open }}
+                </span>
             {% else %}
-                <c-heroicon.chevron-down class="size-4" />
+                <span x-show="!$data.value.includes($id('accordion-item'))" x-html="(() => {
+                    const template = $el.closest('[x-data*=accordion]')?.querySelector('[data-accordion-icon-closed]');
+                    return template ? template.innerHTML : '<svg class=\'size-4\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'m19.5 8.25-7.5 7.5-7.5-7.5\' /></svg>';
+                })()"></span>
+                <span x-show="$data.value.includes($id('accordion-item'))" x-html="(() => {
+                    const template = $el.closest('[x-data*=accordion]')?.querySelector('[data-accordion-icon-open]');
+                    return template ? template.innerHTML : '<svg class=\'size-4\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'m19.5 8.25-7.5 7.5-7.5-7.5\' /></svg>';
+                })()"></span>
             {% endif %}
         </span>
+        <span>{{ header }}</span>
+        {% else %}
+        <span>{{ header }}</span>
+        <span x-bind="icon" class="{% if accent %}text-accent{% else %}text-zinc-900 dark:text-zinc-100{% endif %}">
+            {% if icon_closed and icon_open %}
+                <span x-show="!$data.value.includes($id('accordion-item'))">
+                    {{ icon_closed }}
+                </span>
+                <span x-show="$data.value.includes($id('accordion-item'))">
+                    {{ icon_open }}
+                </span>
+            {% else %}
+                <span x-show="!$data.value.includes($id('accordion-item'))" x-html="(() => {
+                    const template = $el.closest('[x-data*=accordion]')?.querySelector('[data-accordion-icon-closed]');
+                    return template ? template.innerHTML : '<svg class=\'size-4\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'m19.5 8.25-7.5 7.5-7.5-7.5\' /></svg>';
+                })()"></span>
+                <span x-show="$data.value.includes($id('accordion-item'))" x-html="(() => {
+                    const template = $el.closest('[x-data*=accordion]')?.querySelector('[data-accordion-icon-open]');
+                    return template ? template.innerHTML : '<svg class=\'size-4\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke-width=\'1.5\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'m19.5 8.25-7.5 7.5-7.5-7.5\' /></svg>';
+                })()"></span>
+            {% endif %}
+        </span>
+        {% endif %}
     </button>
     {% endif %}
-    {% if content %}
+    {% if slot %}
     <div x-bind="content" class="overflow-hidden" role="region" x-cloak>
         <div class="pb-4 pt-0 px-2 opacity-80">
-            {{ content }}
+            {{ slot }}
         </div>
     </div>
     {% endif %}

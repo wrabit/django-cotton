@@ -1,0 +1,20 @@
+<div 
+    role="tablist"
+    class="flex"
+    x-bind:class="(() => {
+        const variant = $el.closest('[data-variant]')?.dataset.variant || 'default';
+        const classes = [];
+        
+        if (variant === 'default') {
+            classes.push('border-b', 'border-zinc-200', 'dark:border-zinc-700');
+        } else if (variant === 'scrollable') {
+            classes.push('border-b', 'border-zinc-200', 'dark:border-zinc-700', 'overflow-x-auto');
+        } else if (variant === 'segmented') {
+            classes.push('inline-flex', 'rounded-lg', 'border', 'border-zinc-200', 'dark:border-zinc-700');
+        }
+        
+        return classes;
+    })()"
+>
+    {{ slot }}
+</div>

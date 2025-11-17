@@ -1,18 +1,406 @@
-<c-layouts.ui>
-    <div class="text-5xl mb-10">Modern UI Components for Django</div>
+<c-layouts.base>
+    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_auto] flex-1 px-5 h-full">
+        <div class="relative h-full pr-10 border-r-yellow-800 border-opacity-10 hidden sm:block">
+            <c-ui-docs.sidebar />
+        </div>
+        <div class="overflow-auto pb-10">
+            <c-layouts.prose-container>
+                <div class="text-center mb-20">
+        <div class="flex items-center justify-center gap-3 mb-6">
+            <h1 class="text-6xl font-bold">Modern UI Components for Django</h1>
+            <c-ui.badge color="lime" variant="pill" :inset="'top bottom'">
+                <c-slot name="icon_leading">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                    </svg>
+                </c-slot>
+                New
+            </c-ui.badge>
+        </div>
+        <p class="text-2xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto mb-8">
+            Beautiful, accessible components built with Alpine.js, Tailwind CSS, and Django Cotton.
+            Copy, paste, and customize to build stunning interfaces.
+        </p>
+        <div class="flex gap-4 justify-center">
+            <c-ui.button variant="primary" class="text-lg px-8 py-3">Get Started</c-ui.button>
+            <c-ui.button variant="default" class="text-lg px-8 py-3">View on GitHub</c-ui.button>
+        </div>
+    </div>
 
-    <div class="prose text-gray-800 ">
+    <h2 class="text-center text-4xl font-bold mb-3">Build anything</h2>
+    <p class="text-center text-xl text-zinc-600 dark:text-zinc-400 mb-12 max-w-2xl mx-auto">
+        From simple forms to complex dashboards. Every component you need to ship faster.
+    </p>
 
-        <h1>Slideover</h1>
-        <c-ui.slideover>
-            <button @click="slideOverOpen=true" class="inline-flex items-center justify-center h-10 px-4 py-2 text-sm font-medium transition-colors bg-white border rounded-md hover:bg-neutral-100 active:bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-neutral-200/60 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none">Open</button>
+    {# Application-style Mosaic Grid #}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 not-prose items-start">
 
-            <c-slot name="content">
-                <c-ui.input type="text" />
-                <c-ui.input type="text" />
-                <c-ui.input type="text" />
-            </c-slot>
-        </c-ui.slideover>
+        {# Column 1 #}
+        <div class="space-y-6">
+            {# Payment Method Card #}
+            <c-ui.card class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Payment Method</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">All transactions are secure and encrypted</p>
+                </div>
+                <div class="space-y-4">
+                    <c-ui.input
+                        label="Name on Card"
+                        type="text"
+                        placeholder="John Doe"
+                        value="John Doe"
+                    />
+                    <div class="grid grid-cols-3 gap-3">
+                        <div class="col-span-2">
+                            <c-ui.input
+                                label="Card Number"
+                                type="text"
+                                placeholder="1234 5678 9012 3456"
+                            />
+                        </div>
+                        <c-ui.input
+                            label="CVV"
+                            type="text"
+                            placeholder="123"
+                        />
+                    </div>
+                </div>
+            </c-ui.card>
+
+            {# Terms Checkbox - Not in card #}
+            <c-ui.checkbox.group name="terms" :values="['agreed']">
+                <c-ui.checkbox value="agreed" label="I agree to the terms and conditions" description="By checking this box, you accept our privacy policy and terms of service" />
+            </c-ui.checkbox.group>
+
+            {# Status Indicators #}
+            <c-ui.card size="sm" class="space-y-3">
+                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">System Status</h3>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-zinc-600 dark:text-zinc-400">API Server</span>
+                        <c-ui.badge color="green" size="sm">Operational</c-ui.badge>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-zinc-600 dark:text-zinc-400">Database</span>
+                        <c-ui.badge color="green" size="sm">Operational</c-ui.badge>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-zinc-600 dark:text-zinc-400">CDN</span>
+                        <c-ui.badge color="amber" size="sm">Degraded</c-ui.badge>
+                    </div>
+                </div>
+            </c-ui.card>
+
+            {# Project Selection #}
+            <c-ui.card size="sm" class="space-y-3">
+                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Active Project</h3>
+                <c-ui.select name="project" variant="listbox" placeholder="Select a project" value="api">
+                    <c-ui.menu.item value="website" label="Company Website">
+                        <c-slot name="icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                            </svg>
+                        </c-slot>
+                    </c-ui.menu.item>
+                    <c-ui.menu.item value="mobile" label="Mobile App">
+                        <c-slot name="icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                            </svg>
+                        </c-slot>
+                    </c-ui.menu.item>
+                    <c-ui.menu.item value="api" label="API Backend">
+                        <c-slot name="icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                            </svg>
+                        </c-slot>
+                    </c-ui.menu.item>
+                </c-ui.select>
+            </c-ui.card>
+
+            {# File Processing #}
+            <c-ui.card size="sm" class="space-y-3">
+                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Processing Status</h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm text-zinc-600 dark:text-zinc-400">report.pdf</span>
+                            <c-ui.badge color="blue" size="sm">
+                                <c-slot name="icon_leading">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                    </svg>
+                                </c-slot>
+                                Processing
+                            </c-ui.badge>
+                        </div>
+                        <div class="h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-500 rounded-full" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-sm text-zinc-600 dark:text-zinc-400">data.csv</span>
+                            <c-ui.badge color="green" size="sm">
+                                <c-slot name="icon_leading">
+                                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </c-slot>
+                                Complete
+                            </c-ui.badge>
+                        </div>
+                        <div class="h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </c-ui.card>
+
+            {# Tags/Categories - Clickable Badges #}
+            <c-ui.card size="sm" class="space-y-3">
+                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Article Tags</h3>
+                <div class="flex flex-wrap gap-2">
+                    <c-ui.badge href="javascript:void(0)" color="purple" variant="pill">
+                        <c-slot name="icon_leading">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                            </svg>
+                        </c-slot>
+                        Django
+                    </c-ui.badge>
+                    <c-ui.badge href="javascript:void(0)" color="blue" variant="pill">
+                        <c-slot name="icon_leading">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                            </svg>
+                        </c-slot>
+                        Python
+                    </c-ui.badge>
+                    <c-ui.badge href="javascript:void(0)" color="teal" variant="pill">Web Dev</c-ui.badge>
+                    <c-ui.badge href="javascript:void(0)" color="pink" variant="pill">Tutorial</c-ui.badge>
+                </div>
+            </c-ui.card>
+        </div>
+
+        {# Column 2 #}
+        <div class="space-y-6">
+            {# Team Collaboration #}
+            <c-ui.card class="space-y-4">
+                <div class="text-center py-4">
+                    <div class="flex justify-center -space-x-2 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-white font-semibold">S</div>
+                        <div class="w-10 h-10 rounded-full bg-purple-500 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-white font-semibold">M</div>
+                        <div class="w-10 h-10 rounded-full bg-teal-500 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-white font-semibold">A</div>
+                    </div>
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Team Members</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">3 members in this workspace</p>
+                    <c-ui.button variant="default" class="w-full">+ Invite Members</c-ui.button>
+                </div>
+            </c-ui.card>
+
+            {# Notification Preferences #}
+            <c-ui.card class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Notifications</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Choose how you want to be notified</p>
+                </div>
+                <c-ui.checkbox.group name="notifications" :values="['email', 'push']">
+                    <c-ui.checkbox value="email" label="Email notifications" description="Receive updates via email" />
+                    <c-ui.checkbox value="push" label="Push notifications" description="Get instant alerts" />
+                    <c-ui.checkbox value="sms" label="SMS notifications" description="Text message updates" />
+                </c-ui.checkbox.group>
+            </c-ui.card>
+
+            {# Hosting Plan Selection #}
+            <div>
+                <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Choose Your Plan</h3>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">Select the hosting plan that fits your needs</p>
+                <c-ui.radio.group name="hosting" variant="cards" class="flex-col" value="shared">
+                    <c-ui.radio value="shared">
+                        <div class="flex items-start gap-4 flex-1">
+                            <div class="flex items-center h-5">
+                                <div class="flex items-center justify-center w-4 h-4 border-2 rounded-full transition-all"
+                                     :class="$data.isSelected('shared') ? 'border-accent bg-accent' : 'border-zinc-300 dark:border-zinc-600'">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-white transition-transform"
+                                         :class="$data.isSelected('shared') ? 'scale-100' : 'scale-0'"></div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Shared Hosting</h4>
+                                    <span class="text-sm font-bold text-accent">$5/mo</span>
+                                </div>
+                                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Cost-effective for small websites</p>
+                                <ul class="mt-3 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                        10 GB storage
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                        Shared resources
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </c-ui.radio>
+
+                    <c-ui.radio value="vps">
+                        <div class="flex items-start gap-4 flex-1">
+                            <div class="flex items-center h-5">
+                                <div class="flex items-center justify-center w-4 h-4 border-2 rounded-full transition-all"
+                                     :class="$data.isSelected('vps') ? 'border-accent bg-accent' : 'border-zinc-300 dark:border-zinc-600'">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-white transition-transform"
+                                         :class="$data.isSelected('vps') ? 'scale-100' : 'scale-0'"></div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">VPS Hosting</h4>
+                                    <span class="text-sm font-bold text-accent">$25/mo</span>
+                                </div>
+                                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Dedicated resources and control</p>
+                                <ul class="mt-3 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                        100 GB SSD storage
+                                    </li>
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                        4 vCPU cores
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </c-ui.radio>
+                </c-ui.radio.group>
+            </div>
+        </div>
+
+        {# Column 3 #}
+        <div class="space-y-6">
+            {# Security Settings #}
+            <c-ui.card class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Security</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Manage your account security</p>
+                </div>
+                <div class="flex items-center justify-between py-2">
+                    <div>
+                        <div class="font-medium text-zinc-900 dark:text-zinc-100">Two-factor authentication</div>
+                        <div class="text-sm text-zinc-600 dark:text-zinc-400">Add an extra layer of security</div>
+                    </div>
+                    <c-ui.button variant="default" size="sm">Enable</c-ui.button>
+                </div>
+                <div class="flex items-center gap-2 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-sm text-green-700 dark:text-green-300">Your profile has been verified</span>
+                </div>
+            </c-ui.card>
+
+            {# Dashboard Tabs #}
+            <c-ui.card>
+                <c-ui.tabs>
+                    <c-ui.tabs.list>
+                        <c-ui.tabs.tab target="overview">Overview</c-ui.tabs.tab>
+                        <c-ui.tabs.tab target="analytics">Analytics</c-ui.tabs.tab>
+                        <c-ui.tabs.tab target="reports">Reports</c-ui.tabs.tab>
+                    </c-ui.tabs.list>
+                    <c-ui.tabs.panel name="overview">
+                        <div class="py-6 space-y-6">
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
+                                    <div class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">Revenue</div>
+                                    <div class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">$45K</div>
+                                    <div class="text-xs text-green-600 dark:text-green-400 mt-1">+20.1%</div>
+                                </div>
+                                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
+                                    <div class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">Users</div>
+                                    <div class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">2.3K</div>
+                                    <div class="text-xs text-green-600 dark:text-green-400 mt-1">+12.5%</div>
+                                </div>
+                                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
+                                    <div class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">CVR</div>
+                                    <div class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">3.2%</div>
+                                    <div class="text-xs text-red-600 dark:text-red-400 mt-1">-2.4%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </c-ui.tabs.panel>
+                    <c-ui.tabs.panel name="analytics">
+                        <p class="text-zinc-600 dark:text-zinc-400 py-6">Deep dive into user behavior and engagement metrics.</p>
+                    </c-ui.tabs.panel>
+                    <c-ui.tabs.panel name="reports">
+                        <p class="text-zinc-600 dark:text-zinc-400 py-6">Generate and export custom reports.</p>
+                    </c-ui.tabs.panel>
+                </c-ui.tabs>
+            </c-ui.card>
+
+            {# FAQ Accordion #}
+            <c-ui.card>
+                <h3 class="font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Frequently Asked Questions</h3>
+                <c-ui.accordion>
+                    <c-ui.accordion.item header="What payment methods do you accept?">
+                        We accept all major credit cards, PayPal, and bank transfers for enterprise accounts.
+                    </c-ui.accordion.item>
+                    <c-ui.accordion.item header="Can I upgrade or downgrade my plan?">
+                        Yes, you can change your plan at any time. Changes take effect immediately.
+                    </c-ui.accordion.item>
+                </c-ui.accordion>
+            </c-ui.card>
+
+            {# Activity Feed #}
+            <c-ui.card class="space-y-4">
+                <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Recent Activity</h3>
+                <div class="space-y-4">
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 mt-2 rounded-full bg-blue-500"></div>
+                        <div class="flex-1">
+                            <p class="text-sm text-zinc-900 dark:text-zinc-100 font-medium">New user registered</p>
+                            <p class="text-xs text-zinc-600 dark:text-zinc-400">2 minutes ago</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 mt-2 rounded-full bg-green-500"></div>
+                        <div class="flex-1">
+                            <p class="text-sm text-zinc-900 dark:text-zinc-100 font-medium">Payment received</p>
+                            <p class="text-xs text-zinc-600 dark:text-zinc-400">15 minutes ago</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-2 h-2 mt-2 rounded-full bg-purple-500"></div>
+                        <div class="flex-1">
+                            <p class="text-sm text-zinc-900 dark:text-zinc-100 font-medium">Report generated</p>
+                            <p class="text-xs text-zinc-600 dark:text-zinc-400">1 hour ago</p>
+                        </div>
+                    </div>
+                </div>
+            </c-ui.card>
+        </div>
 
     </div>
-</c-layouts.ui>
+
+    <div class="text-center py-16 border-t border-zinc-200 dark:border-zinc-800">
+        <h2 class="text-4xl font-bold mb-6">Ready to build?</h2>
+        <p class="text-xl text-zinc-600 dark:text-zinc-400 mb-8 max-w-2xl mx-auto">
+            Start using these components in your Django project today. No complex setup required.
+        </p>
+        <c-ui.button variant="primary" class="text-lg px-10 py-4">Browse All Components</c-ui.button>
+    </div>
+
+            </c-layouts.prose-container>
+        </div>
+    </div>
+</c-layouts.base>

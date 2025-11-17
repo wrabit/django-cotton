@@ -14,9 +14,9 @@
     x-data='datePicker({{ open|json_encode }}, {{ value|json_encode }}, {{ mode|json_encode }}, {{ format|json_encode }})'
     x-bind="root"
     {{ attrs.dict|merge:'class:relative' }}>
-    <c-ui.button class="justify-start min-h-10 w-full h-fit text-left flex-wrap font-normal" type="button"
-        x-bind="trigger" variant="outline">
-        <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <button type="button" x-bind="trigger"
+        class="inline-flex items-center justify-start w-full min-h-10 px-3 py-2 text-sm font-normal text-left border border-zinc-300 dark:border-zinc-600 rounded-md bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 transition-colors">
+        <svg class="mr-2 h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
@@ -59,8 +59,8 @@
                     :value="(new Date(value))?.to?.toISOString().split('T')[0]" />
             </span>
         </template>
-    </c-ui.button>
-    <div x-bind="calendar" x-cloak class="z-10">
+    </button>
+    <div x-bind="calendar" x-cloak class="absolute top-full left-0 mt-2 z-50">
         <c-ui.calendar
             :required="required"
             :mode="mode"

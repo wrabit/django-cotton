@@ -43,23 +43,17 @@
 
     <script>
         document.addEventListener('alpine:init', () => {
-            Alpine.data('tabs', () => ({
+            Alpine.data('snippetTabs', () => ({
                 tabs: [],
-                active: 0,
-                tabs_id: undefined,
-                updateTab(index) {
-                    this.active = index;
-                    this.$dispatch(`tab-change`, {
-                        tabs_id: this.tabs_id,
-                        index: index,
-                    });
+                currentTab: null,
+                isCurrent(tab) {
+                    return this.currentTab === tab
                 },
-                onTabChange(event) {
-                    if (event.detail.tabs_id === this.tabs_id) {
-                        console.log('true')
-                        this.active = event.detail.index;
+                register(name) {
+                    if (!this.tabs.includes(name)) {
+                        this.tabs.push(name)
                     }
-                },
+                }
             }))
 
             // Global syntax preference store

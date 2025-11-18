@@ -2891,8 +2891,8 @@
   });
 
   // js/switchInput.js
-  var switchInput_default = (disabled) => ({
-    switchOn: false,
+  var switchInput_default = (disabled = false, checked = false) => ({
+    switchOn: checked,
     disabled,
     root: {
       [":aria-checked"]() {

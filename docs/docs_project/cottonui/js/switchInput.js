@@ -1,5 +1,5 @@
-export default (disabled) => ({
-    switchOn: false,
+export default (disabled = false, checked = false) => ({
+    switchOn: checked,
     disabled: disabled,
     root: {
         [':aria-checked']() {

@@ -1,0 +1,237 @@
+<c-layouts.ui>
+    <c-header>
+        Switch
+        <c-slot name="subheading">
+            Toggle switches for immediate state changes and settings.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
+        <c-index-sublink><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
+        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink><a href="#standalone" class="no-underline">Standalone</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <c-ui.switch
+            name="notifications"
+            label="Enable Notifications"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="notifications"
+    label="Enable Notifications"
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="with-descriptions">With Descriptions</h2>
+
+    <p>Add contextual information with the <code>description</code> attribute.</p>
+
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.switch
+                name="email_notifications"
+                label="Email Notifications"
+                description="Receive updates and alerts via email"
+            />
+            <c-ui.switch
+                name="marketing_emails"
+                label="Marketing Emails"
+                description="Get the latest news and offers"
+            />
+            <c-ui.switch
+                name="security_alerts"
+                label="Security Alerts"
+                description="Important account security notifications"
+                :checked="True"
+            />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="email_notifications"
+    label="Email Notifications"
+    description="Receive updates and alerts via email"
+/>
+<c-ui.switch
+    name="marketing_emails"
+    label="Marketing Emails"
+    description="Get the latest news and offers"
+/>
+<c-ui.switch
+    name="security_alerts"
+    label="Security Alerts"
+    description="Important account security notifications"
+    :checked="True"
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="checked">Checked by Default</h2>
+
+    <p>Set the initial state to checked with <code>:checked="True"</code>.</p>
+
+    <c-sample>
+        <c-ui.switch
+            name="dark_mode"
+            label="Dark Mode"
+            description="Enable dark theme"
+            :checked="True"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="dark_mode"
+    label="Dark Mode"
+    description="Enable dark theme"
+    :checked="True"
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="disabled">Disabled</h2>
+
+    <p>Disable interaction with <code>:disabled="True"</code>.</p>
+
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.switch
+                name="feature_disabled_off"
+                label="Premium Feature"
+                description="Upgrade to enable this feature"
+                :disabled="True"
+            />
+            <c-ui.switch
+                name="feature_disabled_on"
+                label="Auto-save"
+                description="Automatically save your work"
+                :checked="True"
+                :disabled="True"
+            />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="feature_disabled_off"
+    label="Premium Feature"
+    description="Upgrade to enable this feature"
+    :disabled="True"
+/>
+<c-ui.switch
+    name="feature_disabled_on"
+    label="Auto-save"
+    description="Automatically save your work"
+    :checked="True"
+    :disabled="True"
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="sizes">Sizes</h2>
+
+    <p>Three size variants are available: <code>size="sm"</code>, default, and <code>size="lg"</code>.</p>
+
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.switch
+                name="small_switch"
+                label="Small Switch"
+                description="Compact size for dense layouts"
+                size="sm"
+            />
+            <c-ui.switch
+                name="default_switch"
+                label="Default Switch"
+                description="Standard size for most use cases"
+            />
+            <c-ui.switch
+                name="large_switch"
+                label="Large Switch"
+                description="Larger touch target for accessibility"
+                size="lg"
+            />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="small_switch"
+    label="Small Switch"
+    description="Compact size for dense layouts"
+    size="sm"
+/>
+<c-ui.switch
+    name="default_switch"
+    label="Default Switch"
+    description="Standard size for most use cases"
+/>
+<c-ui.switch
+    name="large_switch"
+    label="Large Switch"
+    description="Larger touch target for accessibility"
+    size="lg"
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="standalone">Standalone</h2>
+
+    <p>Use switches without labels for inline controls or custom layouts.</p>
+
+    <c-sample>
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-zinc-600 dark:text-zinc-400">Wi-Fi</span>
+            <c-ui.switch name="wifi" :checked="True" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<div class="flex items-center gap-4">
+    <span class="text-sm text-zinc-600 dark:text-zinc-400">Wi-Fi</span>
+    <c-ui.switch name="wifi" :checked="True" />
+</div>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="reference">Reference</h2>
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="name" type="str" default="" description="Form field name for submission"></c-api-prop>
+        <c-api-prop name="value" type="str" default="on" description="Value submitted when the switch is checked"></c-api-prop>
+        <c-api-prop name="label" type="str" default="" description="Label text displayed next to the switch"></c-api-prop>
+        <c-api-prop name="description" type="str" default="" description="Helper text displayed below the label"></c-api-prop>
+        <c-api-prop name="description_trailing" type="str" default="" description="Additional helper text displayed after the switch"></c-api-prop>
+        <c-api-prop name="error" type="str" default="" description="Error message to display"></c-api-prop>
+        <c-api-prop name="badge" type="str" default="" description="Badge text to display next to the label"></c-api-prop>
+        <c-api-prop name="form" type="Form" default="" description="Django form object for error handling"></c-api-prop>
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disables the switch and prevents interaction"></c-api-prop>
+        <c-api-prop name=":checked" type="bool" :options="['True', 'False']" default="False" description="Sets the initial checked state of the switch"></c-api-prop>
+        <c-api-prop name=":accent" type="bool" :options="['True', 'False']" default="True" description="Uses accent color when checked. Set to False for neutral colors"></c-api-prop>
+        <c-api-prop name="size" type="str" :options="['sm', '', 'lg']" default="" description="Size variant: 'sm' (small), '' (default), or 'lg' (large)"></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Events</h4>
+
+    <c-api-props>
+        <c-api-prop name="checkedChange" type="CustomEvent" default="" description="Dispatched when the switch state changes. Use @checkedChange to listen"></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Accessibility</h4>
+
+    <p>The switch component is built with accessibility in mind:</p>
+
+    <ul>
+        <li><strong>ARIA Roles:</strong> Uses <code>role="switch"</code> for proper screen reader support</li>
+        <li><strong>ARIA State:</strong> <code>aria-checked</code> automatically reflects the current state</li>
+        <li><strong>ARIA Labels:</strong> <code>aria-label</code> is automatically derived from the associated label</li>
+        <li><strong>Keyboard Support:</strong> Space and Enter keys toggle the switch, Tab for focus navigation</li>
+        <li><strong>Focus States:</strong> Clear visual focus indicators for keyboard navigation</li>
+    </ul>
+</c-layouts.ui>

@@ -1,0 +1,133 @@
+<c-vars
+    name=""
+    value="on"
+    label=""
+    description=""
+    description_trailing=""
+    error=""
+    badge=""
+    form
+    :disabled="False"
+    :checked="False"
+    :accent="True"
+    size=""
+    :size_classes="{
+        'sm': 'h-5 w-9',
+        '': 'h-6 w-11',
+        'lg': 'h-7 w-14'
+    }"
+    :indicator_classes="{
+        'sm': 'h-4 w-4',
+        '': 'h-5 w-5',
+        'lg': 'h-6 w-6'
+    }"
+/>
+
+{% if label or description or description_trailing or error %}
+    <c-ui.field
+        label="{{ label }}"
+        description="{{ description }}"
+        description_trailing="{{ description_trailing }}"
+        error="{{ error }}"
+        badge="{{ badge }}"
+        :form="form"
+        name="{{ name }}">
+        <div x-data='switchInput({{ disabled|lower }}, {{ checked|lower }})' class="inline-flex items-center">
+            {% comment %}Hidden checkbox input for form submission{% endcomment %}
+            <input
+                type="checkbox"
+                name="{{ name }}"
+                value="{{ value }}"
+                {% if disabled %}disabled{% endif %}
+                class="sr-only"
+                x-bind="input"
+            />
+
+            {% comment %}Switch toggle button{% endcomment %}
+            <button
+                type="button"
+                role="switch"
+                x-bind="root"
+                x-bind="trigger"
+                {{ attrs }}
+                class="relative inline-flex items-center rounded-full transition-colors
+                       {{ size_classes|get_item:size }}
+                       {% if disabled %}opacity-50 cursor-not-allowed{% else %}cursor-pointer{% endif %}"
+                :class="{
+                    {% if accent %}
+                    'bg-accent': switchOn,
+                    {% else %}
+                    'bg-zinc-900 dark:bg-zinc-100': switchOn,
+                    {% endif %}
+                    'bg-zinc-200 dark:bg-zinc-700': !switchOn
+                }"
+            >
+                <span
+                    class="inline-block transform rounded-full bg-white dark:bg-zinc-900 shadow-lg transition-transform
+                           {{ indicator_classes|get_item:size }}"
+                    :class="{
+                        {% if size == 'sm' %}
+                        'translate-x-4': switchOn,
+                        'translate-x-0.5': !switchOn
+                        {% elif size == 'lg' %}
+                        'translate-x-7': switchOn,
+                        'translate-x-0.5': !switchOn
+                        {% else %}
+                        'translate-x-5': switchOn,
+                        'translate-x-0.5': !switchOn
+                        {% endif %}
+                    }"
+                ></span>
+            </button>
+        </div>
+    </c-ui.field>
+{% else %}
+    <div x-data='switchInput({{ disabled|lower }}, {{ checked|lower }})' class="inline-flex items-center">
+        {% comment %}Hidden checkbox input for form submission{% endcomment %}
+        <input
+            type="checkbox"
+            name="{{ name }}"
+            value="{{ value }}"
+            {% if disabled %}disabled{% endif %}
+            class="sr-only"
+            x-bind="input"
+        />
+
+        {% comment %}Switch toggle button{% endcomment %}
+        <button
+            type="button"
+            role="switch"
+            x-bind="root"
+            x-bind="trigger"
+            {{ attrs }}
+            class="relative inline-flex items-center rounded-full transition-colors
+                   {{ size_classes|get_item:size }}
+                   {% if disabled %}opacity-50 cursor-not-allowed{% else %}cursor-pointer{% endif %}"
+            :class="{
+                {% if accent %}
+                'bg-accent': switchOn,
+                {% else %}
+                'bg-zinc-900 dark:bg-zinc-100': switchOn,
+                {% endif %}
+                'bg-zinc-200 dark:bg-zinc-700': !switchOn
+            }"
+        >
+            <span
+                class="inline-block transform rounded-full bg-white dark:bg-zinc-900 shadow-lg transition-transform
+                       {{ indicator_classes|get_item:size }}"
+                :class="{
+                    {% if size == 'sm' %}
+                    'translate-x-4': switchOn,
+                    'translate-x-0.5': !switchOn
+                    {% elif size == 'lg' %}
+                    'translate-x-7': switchOn,
+                    'translate-x-0.5': !switchOn
+                    {% else %}
+                    'translate-x-5': switchOn,
+                    'translate-x-0.5': !switchOn
+                    {% endif %}
+                }"
+            ></span>
+        </button>
+    </div>
+{% endif %}

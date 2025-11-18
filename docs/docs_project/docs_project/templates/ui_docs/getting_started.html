@@ -204,13 +204,27 @@
             <c-ui.card class="space-y-4">
                 <div>
                     <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Notifications</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Choose how you want to be notified</p>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Manage your notification preferences</p>
                 </div>
-                <c-ui.checkbox.group name="notifications" :values="['email', 'push']">
-                    <c-ui.checkbox value="email" label="Email notifications" description="Receive updates via email" />
-                    <c-ui.checkbox value="push" label="Push notifications" description="Get instant alerts" />
-                    <c-ui.checkbox value="sms" label="SMS notifications" description="Text message updates" />
-                </c-ui.checkbox.group>
+                <div class="space-y-3">
+                    <c-ui.switch
+                        name="email_notifications"
+                        label="Email Notifications"
+                        description="Receive updates via email"
+                        :checked="True"
+                    />
+                    <c-ui.switch
+                        name="push_notifications"
+                        label="Push Notifications"
+                        description="Get instant alerts on your device"
+                        :checked="True"
+                    />
+                    <c-ui.switch
+                        name="sms_notifications"
+                        label="SMS Notifications"
+                        description="Receive text messages for important updates"
+                    />
+                </div>
             </c-ui.card>
 
             {# Hosting Plan Selection #}

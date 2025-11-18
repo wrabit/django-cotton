@@ -48,6 +48,7 @@ urlpatterns = [
     path("ui/navbar", views.build_view("ui_docs/navbar"), name="ui-navbar"),
     path("ui/radio", views.build_view("ui_docs/radio"), name="ui-radio"),
     path("ui/select", views.build_view("ui_docs/select"), name="ui-select"),
+    path("ui/switch", views.build_view("ui_docs/switch"), name="ui-switch"),
     path("ui/tabs", views.build_view("ui_docs/tabs"), name="ui-tabs"),
     path("ui/textarea", views.build_view("ui_docs/textarea"), name="ui-textarea"),
     path("ui/tooltip", views.build_view("ui_docs/tooltip"), name="ui-tooltip"),

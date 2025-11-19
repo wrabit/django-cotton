@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dev/docker/bin/test.sh:*)",
+      "Bash(./dev/docker/bin/test.sh:*)",
+      "Bash(django_cotton/patcher.py)",
+      "WebSearch",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:bencardy.co.uk)",
+      "Bash(./build.sh:*)",
+      "Bash(docker logs:*)",
+      "Bash(curl:*)",
+      "Bash(docker compose:*)",
+      "Bash(docker restart:*)",
+      "Bash(docker exec:*)",
+      "Bash(echo:*)",
+      "WebFetch(domain:django-bird.readthedocs.io)",
+      "Bash(find:*)",
+      "Bash(git log:*)",
+      "Bash(python3:*)",
+      "Bash(python -m pytest django_cotton/tests/test_attributes.py::AttributeHandlingTests::test_nested_quotes_in_django_filters_double_quote_outer -xvs)",
+      "WebFetch(domain:pypistats.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:django-cotton.com)",
+      "WebFetch(domain:shadcn-django.com)",
+      "WebFetch(domain:pypi.org)",
+      "WebFetch(domain:ui.shadcn.com)",
+      "WebFetch(domain:components.basicmachines.co)",
+      "WebFetch(domain:www.sarthakjariwala.com)",
+      "WebFetch(domain:pepy.tech)",
+      "Bash(python -c:*)",
+      "Bash(git fetch:*)",
+      "Bash(git add:*)",
+      "WebFetch(domain:fluxui.dev)",
+      "WebFetch(domain:medium.com)",
+      "Bash(npm run build:*)",
+      "Bash(cat:*)",
+      "Bash(/tmp/select3.html)",
+      "Bash(select.html)"
+    ],
+    "deny": []
+  }
+}

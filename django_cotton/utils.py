@@ -26,42 +26,52 @@ def get_cotton_data(context):
     return context["cotton_data"]
 
 
-def render_component(component_path, context=None, request=None):
+def render_component(request, component_name, context=None, **kwargs):
     """
-    Render a Cotton component from a view with context values provided as attributes so component behaviour is normal.
+    Render a Cotton component from a view with context values passed as attributes.
+
+    This helper allows you to render Cotton components programmatically from views,
+    which is especially useful for HTMX partial responses. The signature matches
+    Django's render() convention: render_component(request, component_name, context).
+
+    Args:
+        request: HttpRequest object (required, like Django's render())
+        component_name: Component name in dotted notation (e.g., "ui.button" or "button")
+        context: Dictionary of data to pass to the component as attributes
+        **kwargs: Alternative way to pass component attributes
+
+    Returns:
+        Rendered HTML string
+
+    Example:
+        # Using context dict (matches Django's render pattern)
+        render_component(request, "button", {"pk": 123, "label": "Click me"})
+
+        # Using kwargs (most common HTMX pattern)
+        render_component(request, "button", pk=123, label="Click me")
+
+        # Mix dict and kwargs
+        render_component(request, "user_card", {"user": user}, extra_class="highlight")
     """
-    from django.template import Context, RequestContext, Template
+    from django.template import RequestContext, Template
 
-    context = context or {}
-
-    # Convert dotted notation to template path if needed
-    if not component_path.endswith(".html"):
-        # Convert "ui.button" to "cotton/ui/button.html"
-        component_path = f"cotton/{component_path.replace('.', '/')}.html"
-
-    # Extract component name for the wrapper (e.g., "cotton/ui/button.html" -> "ui.button")
-    component_name = component_path.replace("cotton/", "").replace(".html", "").replace("/", ".")
-
-    # Build attribute string with dynamic bindings for context values
-    attrs_parts = []
-    for key in context.keys():
-        # Skip special Django/request variables
-        if key in ("request", "csrf_token", "messages", "perms", "user"):
-            continue
-
-        # Use dynamic attribute syntax (:key="key") to provide context variables
-        attrs_parts.append(f':{key}="{key}"')
-
-    attrs_str = " ".join(attrs_parts)
-    template_str = f"""{{% cotton {component_name.replace(".", "-")} {attrs_str} / %}}"""
-    component_template = Template(template_str)
-
-    if request:
-        ctx = RequestContext(request, context)
+    # Merge context dict and kwargs
+    if context is None:
+        context = kwargs
+    elif kwargs:
+        context = {**context, **kwargs}
     else:
-        ctx = Context(context)
+        context = dict(context)  # Make a copy to avoid mutating original
 
-    # Initialize cotton_data
-    get_cotton_data(ctx)
+    # Build minimal template using :attrs to pass all attributes at once
+    tag_name = component_name.replace(".", "-")
+    template_str = f'{{% cotton {tag_name} :attrs="cotton_component_attrs" / %}}'
+    template = Template(template_str)
 
-    return component_template.render(ctx)
+    # Prepare render context (keep original context plus our attrs dict)
+    render_context = {**context, "cotton_component_attrs": context}
+
+    # Create RequestContext (request is now always provided)
+    ctx = RequestContext(request, render_context)
+
+    return template.render(ctx)

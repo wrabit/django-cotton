@@ -114,3 +114,5 @@ GitHub.sublime-settings
 .DS_Store
 node_modules/
 staticfiles/
+*.local
+*.local.*

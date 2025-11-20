@@ -7,420 +7,155 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
-        <c-index-sublink><a href="#scrollable" class="no-underline">Scrollable</a></c-index-sublink>
+        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
         <c-index-sublink><a href="#segmented" class="no-underline">Segmented</a></c-index-sublink>
-        <c-index-sublink><a href="#segmented-icons" class="no-underline">Segmented with Icons</a></c-index-sublink>
+        <c-index-sublink><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
         <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
         <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <c-sample>
-        <c-ui.tabs>
-            <c-ui.tabs.list>
-                <c-ui.tabs.tab value="account">Account</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="password">Password</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="notifications">Notifications</c-ui.tabs.tab>
-            </c-ui.tabs.list>
-
-            <c-ui.tabs.panel value="account">
-                <h3 class="text-lg font-semibold mb-2">Account Settings</h3>
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                    Manage your account settings and preferences here.
-                </p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="password">
-                <h3 class="text-lg font-semibold mb-2">Password</h3>
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                    Change your password and security settings.
-                </p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="notifications">
-                <h3 class="text-lg font-semibold mb-2">Notifications</h3>
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                    Configure how you receive notifications.
-                </p>
-            </c-ui.tabs.panel>
-        </c-ui.tabs>
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tabs>
-    <c-ui.tabs.list>
-        <c-ui.tabs.tab value="account">Account</c-ui.tabs.tab>
-        <c-ui.tabs.tab value="password">Password</c-ui.tabs.tab>
-        <c-ui.tabs.tab value="notifications">Notifications</c-ui.tabs.tab>
-    </c-ui.tabs.list>
-
-    <c-ui.tabs.panel value="account">
-        <h3>Account Settings</h3>
-        <p>Manage your account settings and preferences here.</p>
-    </c-ui.tabs.panel>
-
-    <c-ui.tabs.panel value="password">
-        <h3>Password</h3>
-        <p>Change your password and security settings.</p>
-    </c-ui.tabs.panel>
-
-    <c-ui.tabs.panel value="notifications">
-        <h3>Notifications</h3>
-        <p>Configure how you receive notifications.</p>
-    </c-ui.tabs.panel>
-</c-ui.tabs>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-
-    <h2 id="icons">Icons</h2>
-
-    <p>Add icons to tabs for better visual recognition.</p>
+    <h2 id="default">Default</h2>
+    <p>The default style is a clean underline design, common in many applications.</p>
 
     <c-sample>
         <c-ui.tabs>
-            <c-ui.tabs.list>
-                <c-ui.tabs.tab value="home">
-                    <c-slot name="icon">
-                        <c-heroicon.home class="size-4" />
-                    </c-slot>
-                    Home
-                </c-ui.tabs.tab>
-                <c-ui.tabs.tab value="search">
-                    <c-slot name="icon">
-                        <c-heroicon.magnifying-glass class="size-4" />
-                    </c-slot>
-                    Search
-                </c-ui.tabs.tab>
-                <c-ui.tabs.tab value="settings">
-                    <c-slot name="icon">
-                        <c-heroicon.cog-6-tooth class="size-4" />
-                    </c-slot>
-                    Settings
-                </c-ui.tabs.tab>
-            </c-ui.tabs.list>
-
-            <c-ui.tabs.panel value="home">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Welcome to your home dashboard.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="search">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Search through your content.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="settings">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Adjust your preferences.</p>
-            </c-ui.tabs.panel>
+            <c-ui.tabs.tab name="Account">
+                <div class="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 mt-4">
+                    <h3 class="text-lg font-semibold mb-2">Account Settings</h3>
+                    <p class="text-sm text-zinc-500">Make changes to your account here.</p>
+                </div>
+            </c-ui.tabs.tab>
+            
+            <c-ui.tabs.tab name="Password">
+                 <div class="p-4 rounded-lg border border-zinc-200 dark:border-zinc-800 mt-4">
+                    <h3 class="text-lg font-semibold mb-2">Password</h3>
+                    <p class="text-sm text-zinc-500">Change your password here.</p>
+                </div>
+            </c-ui.tabs.tab>
         </c-ui.tabs>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tabs>
-    <c-ui.tabs.list>
-        <c-ui.tabs.tab value="home">
-            <c-slot name="icon">
-                <c-heroicon.home class="size-4" />
-            </c-slot>
-            Home
-        </c-ui.tabs.tab>
-        <c-ui.tabs.tab value="search">
-            <c-slot name="icon">
-                <c-heroicon.magnifying-glass class="size-4" />
-            </c-slot>
-            Search
-        </c-ui.tabs.tab>
-    </c-ui.tabs.list>
-
-    <c-ui.tabs.panel value="home">
-        <p>Welcome to your home dashboard.</p>
-    </c-ui.tabs.panel>
-
-    <c-ui.tabs.panel value="search">
-        <p>Search through your content.</p>
-    </c-ui.tabs.panel>
-</c-ui.tabs>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-
-    <h2 id="scrollable">Scrollable</h2>
-
-    <p>Enable horizontal scrolling when tabs overflow the container width.</p>
-
-    <c-sample>
-        <c-ui.tabs variant="scrollable">
-            <c-ui.tabs.list>
-                <c-ui.tabs.tab value="overview">Overview</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="analytics">Analytics</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="reports">Reports</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="insights">Insights</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="performance">Performance</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="optimization">Optimization</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="configuration">Configuration</c-ui.tabs.tab>
-            </c-ui.tabs.list>
-
-            <c-ui.tabs.panel value="overview">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">High-level overview of your data.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="analytics">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Detailed analytics and metrics.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="reports">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Generated reports and summaries.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="insights">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Key insights from your data.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="performance">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Performance metrics and benchmarks.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="optimization">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Optimization recommendations.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="configuration">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">System configuration options.</p>
-            </c-ui.tabs.panel>
-        </c-ui.tabs>
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tabs variant="scrollable">
-    <c-ui.tabs.list>
-        <c-ui.tabs.tab value="overview">Overview</c-ui.tabs.tab>
-        <c-ui.tabs.tab value="analytics">Analytics</c-ui.tabs.tab>
-        <c-ui.tabs.tab value="reports">Reports</c-ui.tabs.tab>
-        <!-- More tabs... -->
-    </c-ui.tabs.list>
-
-    <c-ui.tabs.panel value="overview">
-        <p>High-level overview of your data.</p>
-    </c-ui.tabs.panel>
-    <!-- More panels... -->
-</c-ui.tabs>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.tabs>
+    <c-ui.tabs.tab name="Account">
+        <!-- Content -->
+    </c-ui.tabs.tab>
+    <c-ui.tabs.tab name="Password">
+        <!-- Content -->
+    </c-ui.tabs.tab>
+</c-ui.tabs>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
     <h2 id="segmented">Segmented</h2>
-
-    <p>Display tabs as a segmented control with a button-group appearance.</p>
+    <p>A segmented control style, often used for switching between views in a tighter context.</p>
 
     <c-sample>
         <c-ui.tabs variant="segmented">
-            <c-ui.tabs.list>
-                <c-ui.tabs.tab value="daily">Daily</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="weekly">Weekly</c-ui.tabs.tab>
-                <c-ui.tabs.tab value="monthly">Monthly</c-ui.tabs.tab>
-            </c-ui.tabs.list>
-
-            <c-ui.tabs.panel value="daily">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Daily statistics and trends.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="weekly">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Weekly performance overview.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="monthly">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Monthly summary and insights.</p>
-            </c-ui.tabs.panel>
+            <c-ui.tabs.tab name="Overview">
+                <div class="p-4">Overview content...</div>
+            </c-ui.tabs.tab>
+            <c-ui.tabs.tab name="Analytics">
+                <div class="p-4">Analytics content...</div>
+            </c-ui.tabs.tab>
+            <c-ui.tabs.tab name="Reports">
+                <div class="p-4">Reports content...</div>
+            </c-ui.tabs.tab>
         </c-ui.tabs>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tabs variant="segmented">
-    <c-ui.tabs.list>
-        <c-ui.tabs.tab value="daily">Daily</c-ui.tabs.tab>
-        <c-ui.tabs.tab value="weekly">Weekly</c-ui.tabs.tab>
-        <c-ui.tabs.tab value="monthly">Monthly</c-ui.tabs.tab>
-    </c-ui.tabs.list>
-
-    <c-ui.tabs.panel value="daily">
-        <p>Daily statistics and trends.</p>
-    </c-ui.tabs.panel>
-
-    <c-ui.tabs.panel value="weekly">
-        <p>Weekly performance overview.</p>
-    </c-ui.tabs.panel>
-
-    <c-ui.tabs.panel value="monthly">
-        <p>Monthly summary and insights.</p>
-    </c-ui.tabs.panel>
-</c-ui.tabs>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.tabs variant="segmented">
+    <c-ui.tabs.tab name="Overview">...</c-ui.tabs.tab>
+    <c-ui.tabs.tab name="Analytics">...</c-ui.tabs.tab>
+</c-ui.tabs>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
-    <h2 id="segmented-icons">Segmented with Icons</h2>
-
-    <p>Combine segmented style with icons for enhanced visual appeal.</p>
+    <h2 id="icons">Icons</h2>
+    <p>You can include icons in your tabs using the <code>icon</code> slot on the tab component.</p>
 
     <c-sample>
-        <c-ui.tabs variant="segmented">
-            <c-ui.tabs.list>
-                <c-ui.tabs.tab value="list">
-                    <c-slot name="icon">
-                        <c-heroicon.list-bullet class="size-4" />
-                    </c-slot>
-                    List
-                </c-ui.tabs.tab>
-                <c-ui.tabs.tab value="grid">
-                    <c-slot name="icon">
-                        <c-heroicon.squares-2x2 class="size-4" />
-                    </c-slot>
-                    Grid
-                </c-ui.tabs.tab>
-                <c-ui.tabs.tab value="calendar">
-                    <c-slot name="icon">
-                        <c-heroicon.calendar class="size-4" />
-                    </c-slot>
-                    Calendar
-                </c-ui.tabs.tab>
-            </c-ui.tabs.list>
-
-            <c-ui.tabs.panel value="list">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">View items in a list format.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="grid">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">View items in a grid layout.</p>
-            </c-ui.tabs.panel>
-
-            <c-ui.tabs.panel value="calendar">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">View items on a calendar.</p>
-            </c-ui.tabs.panel>
+        <c-ui.tabs>
+            <c-ui.tabs.tab name="Home">
+                <c-slot name="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4"><path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.635 8.635a.75.75 0 1 1-1.06 1.06l-.315-.315v6.695a3 3 0 0 1-3 3H7.39a3 3 0 0 1-3-3V13.22l-.315.315a.75.75 0 0 1-1.06-1.06l8.635-8.635Z" /></svg>
+                </c-slot>
+                <div class="p-4">Home Dashboard</div>
+            </c-ui.tabs.tab>
+            <c-ui.tabs.tab name="Settings">
+                <c-slot name="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4"><path d="M18.75 12.75h1.5a.75.75 0 0 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM12 6a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 6ZM12 18a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 12 18ZM3.75 6.75h1.5a.75.75 0 1 0 0-1.5h-1.5a.75.75 0 0 0 0 1.5ZM5.25 18.75h-1.5a.75.75 0 0 1 0-1.5h1.5a.75.75 0 0 1 0 1.5ZM3 12a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 3 12ZM9 3.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM12.75 12a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0ZM9 15.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" /></svg>
+                </c-slot>
+                <div class="p-4">Settings Page</div>
+            </c-ui.tabs.tab>
         </c-ui.tabs>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tabs variant="segmented">
-    <c-ui.tabs.list>
-        <c-ui.tabs.tab value="list">
-            <c-slot name="icon">
-                <c-heroicon.list-bullet class="size-4" />
-            </c-slot>
-            List
-        </c-ui.tabs.tab>
-        <c-ui.tabs.tab value="grid">
-            <c-slot name="icon">
-                <c-heroicon.squares-2x2 class="size-4" />
-            </c-slot>
-            Grid
-        </c-ui.tabs.tab>
-    </c-ui.tabs.list>
-
-    <c-ui.tabs.panel value="list">
-        <p>View items in a list format.</p>
-    </c-ui.tabs.panel>
-
-    <c-ui.tabs.panel value="grid">
-        <p>View items in a grid layout.</p>
-    </c-ui.tabs.panel>
-</c-ui.tabs>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.tabs>
+    <c-ui.tabs.tab name="Home">
+        <c-slot name="icon">
+             <!-- SVG Icon -->
+        </c-slot>
+        Content...
+    </c-ui.tabs.tab>
+</c-ui.tabs>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
     <h2 id="sizes">Sizes</h2>
-
-    <p>Tabs are available in five sizes: xs, sm, md (default), lg, and xl.</p>
+    <p>Tabs are available in sizes: <code>sm</code>, <code>md</code> (default), and <code>lg</code>.</p>
 
     <c-sample>
-        <div class="space-y-6">
+        <div class="space-y-8">
             <div>
-                <p class="text-xs text-zinc-500 mb-2">Extra Small (xs)</p>
-                <c-ui.tabs size="xs" variant="segmented">
-                    <c-ui.tabs.list>
-                        <c-ui.tabs.tab value="one">Tab 1</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="two">Tab 2</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="three">Tab 3</c-ui.tabs.tab>
-                    </c-ui.tabs.list>
-                </c-ui.tabs>
-            </div>
-
-            <div>
-                <p class="text-xs text-zinc-500 mb-2">Small (sm)</p>
+                <p class="text-xs text-zinc-500 mb-2">Small</p>
                 <c-ui.tabs size="sm" variant="segmented">
-                    <c-ui.tabs.list>
-                        <c-ui.tabs.tab value="one">Tab 1</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="two">Tab 2</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="three">Tab 3</c-ui.tabs.tab>
-                    </c-ui.tabs.list>
+                    <c-ui.tabs.tab name="Tab 1">Content 1</c-ui.tabs.tab>
+                    <c-ui.tabs.tab name="Tab 2">Content 2</c-ui.tabs.tab>
                 </c-ui.tabs>
             </div>
-
             <div>
-                <p class="text-xs text-zinc-500 mb-2">Medium (md) - Default</p>
-                <c-ui.tabs size="md" variant="segmented">
-                    <c-ui.tabs.list>
-                        <c-ui.tabs.tab value="one">Tab 1</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="two">Tab 2</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="three">Tab 3</c-ui.tabs.tab>
-                    </c-ui.tabs.list>
-                </c-ui.tabs>
-            </div>
-
-            <div>
-                <p class="text-xs text-zinc-500 mb-2">Large (lg)</p>
+                <p class="text-xs text-zinc-500 mb-2">Large</p>
                 <c-ui.tabs size="lg" variant="segmented">
-                    <c-ui.tabs.list>
-                        <c-ui.tabs.tab value="one">Tab 1</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="two">Tab 2</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="three">Tab 3</c-ui.tabs.tab>
-                    </c-ui.tabs.list>
-                </c-ui.tabs>
-            </div>
-
-            <div>
-                <p class="text-xs text-zinc-500 mb-2">Extra Large (xl)</p>
-                <c-ui.tabs size="xl" variant="segmented">
-                    <c-ui.tabs.list>
-                        <c-ui.tabs.tab value="one">Tab 1</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="two">Tab 2</c-ui.tabs.tab>
-                        <c-ui.tabs.tab value="three">Tab 3</c-ui.tabs.tab>
-                    </c-ui.tabs.list>
+                    <c-ui.tabs.tab name="Tab 1">Content 1</c-ui.tabs.tab>
+                    <c-ui.tabs.tab name="Tab 2">Content 2</c-ui.tabs.tab>
                 </c-ui.tabs>
             </div>
         </div>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tabs size="xs">...</c-ui.tabs>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.tabs size="sm">...</c-ui.tabs>
-<c-ui.tabs size="md">...</c-ui.tabs>
 <c-ui.tabs size="lg">...</c-ui.tabs>
-<c-ui.tabs size="xl">...</c-ui.tabs>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
     <h4 id="reference">Tabs Props</h4>
 
     <c-api-props>
-        <c-api-prop name="variant" type="str" :options="['default', 'scrollable', 'segmented']" default="default" description="Visual style of the tabs." />
-        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl']" default="md" description="Size of the tabs." />
-        <c-api-prop name=":value" type="str" default="None" description="Initially active tab value. If not set, the first tab will be active." />
-        <c-api-prop name=":accent" type="bool" :options="['True', 'False']" default="True" description="Whether to use accent colors for the active tab." />
+        <c-api-prop name=":default_tab" type="str" default="None" description="The name of the tab to show by default." />
+        <c-api-prop name="variant" type="str" :options="['default', 'segmented']" default="default" description="Visual style of the tabs." />
+        <c-api-prop name="size" type="str" :options="['sm', 'md', 'lg']" default="md" description="Size of the tabs." />
+        <c-api-prop name=":accent" type="bool" default="True" description="Whether to use accent colors for the active tab." />
     </c-api-props>
 
     <h4 class="mt-6">Tab Props</h4>
 
     <c-api-props>
-        <c-api-prop name="value" type="str" default="" description="Unique identifier for this tab. Must match a panel value." />
-        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Whether this tab is disabled and cannot be selected." />
+        <c-api-prop name="name" type="str" description="The unique name of the tab." />
     </c-api-props>
-
+    
     <h4 class="mt-6">Tab Slots</h4>
 
     <c-api-props>
-        <c-api-prop name="slot (default)" type="—" default="" description="The tab label text." />
-        <c-api-prop name="icon" type="—" default="" description="Icon to display before the tab label." />
-    </c-api-props>
-
-    <h4 class="mt-6">Panel Props</h4>
-
-    <c-api-props>
-        <c-api-prop name="value" type="str" default="" description="Unique identifier matching the corresponding tab value." />
-    </c-api-props>
-
-    <h4 class="mt-6">Panel Slots</h4>
-
-    <c-api-props>
-        <c-api-prop name="slot (default)" type="—" default="" description="The panel content to display when this tab is active." />
+        <c-api-prop name="icon" type="slot" description="Optional icon to display before the label." />
+        <c-api-prop name="default" type="slot" description="The panel content." />
     </c-api-props>
 
 </c-layouts.ui>

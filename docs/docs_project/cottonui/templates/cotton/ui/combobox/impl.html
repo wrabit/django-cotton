@@ -1,0 +1,283 @@
+<c-vars
+    name
+    :options="[]"
+    :selected="[]"
+    placeholder=""
+    :max_tags="-1"
+    :writable="False"
+    :enable_search="False"
+    :close_after_selecting="False"
+    :disabled="False"
+    :required="False"
+/>
+
+<div x-data="combobox({
+        name: '{{ name }}',
+        placeholder: '{{ placeholder }}',
+        maxTags: {{ max_tags }},
+        writable: {{ writable|lower }},
+        enableSearch: {{ enable_search|lower }},
+        closeAfterSelecting: {{ close_after_selecting|lower }},
+        disabled: {{ disabled|lower }}
+     })"
+     x-init="
+        initSelected('{{ selected|json_dumps }}');
+        initOptions('{{ options|json_dumps }}');
+     "
+     class="relative w-full group"
+     {{ attrs }}
+>
+    <!-- Trigger / Container -->
+    <div @click="openDropdown()"
+         @keydown.backspace.prevent="removeLastTag()"
+         @keydown.enter.prevent="openDropdown()"
+         @keydown.space.prevent="openDropdown()"
+         tabindex="0"
+         class="
+            flex flex-wrap items-center w-full min-h-[42px] py-1.5 px-2 gap-1.5
+            bg-white dark:bg-zinc-800
+            border border-zinc-300 dark:border-zinc-700
+            rounded-md shadow-sm
+            focus:ring-2 focus:ring-accent focus:border-accent focus:outline-none
+            transition-all duration-200 cursor-text
+         "
+         :class="{
+            'opacity-60 cursor-not-allowed bg-zinc-50 dark:bg-zinc-900': disabled,
+            'ring-2 ring-accent border-accent': isOpen
+         }">
+        
+        <!-- Tags -->
+        <template x-for="(tag, index) in tags" :key="index">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-zinc-100 dark:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-600">
+                <span x-text="tag"></span>
+                <button type="button" 
+                        @click.stop="removeTag(tag)" 
+                        class="ml-1.5 inline-flex items-center justify-center h-4 w-4 rounded-full text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-600 dark:hover:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-zinc-500"
+                        :disabled="disabled">
+                    <span class="sr-only">Remove tag</span>
+                    <svg class="h-3 w-3" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+                        <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7" />
+                    </svg>
+                </button>
+            </span>
+        </template>
+
+        <!-- Placeholder / Empty State -->
+        <span x-show="tags.length === 0" class="text-zinc-500 dark:text-zinc-400 text-sm px-1 select-none" x-text="getPlaceholder"></span>
+        
+        <!-- Trailing Icon -->
+        <div class="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none">
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z" clip-rule="evenodd" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Dropdown -->
+    <div x-show="isOpen"
+         x-transition:enter="transition ease-out duration-100"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-75"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         @click.outside="closeDropdown()"
+         class="absolute z-50 left-0 right-0 top-full mt-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md shadow-lg overflow-hidden"
+         style="display: none;">
+         
+        <!-- Search Input -->
+        <div class="p-2 border-b border-zinc-100 dark:border-zinc-700">
+            <input x-model="searchTerm"
+                   x-ref="searchInput"
+                   @keydown.enter.stop.prevent="handleEnter()"
+                   @keydown.escape.stop="closeDropdown()"
+                   @keydown.arrow-down.prevent="highlightNext()"
+                   @keydown.arrow-up.prevent="highlightPrev()"
+                   class="w-full px-3 py-2 text-sm border border-zinc-300 dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-200 rounded focus:ring-2 focus:ring-accent focus:border-accent outline-none"
+                   placeholder="Search..."
+                   type="text">
+        </div>
+
+        <!-- Options List -->
+        <div class="max-h-60 overflow-y-auto py-1" x-ref="optionsList">
+            <template x-for="(option, index) in filteredOptions" :key="index">
+                <div class="px-3 py-2 text-sm cursor-pointer select-none flex items-center justify-between"
+                     :class="{
+                        'bg-accent text-accent-foreground': index === highlightedIndex,
+                        'text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700': index !== highlightedIndex
+                     }"
+                     @click="selectOption(option)"
+                     @mouseover="highlightedIndex = index">
+                    <span x-text="option"></span>
+                    <span x-show="tags.includes(option)" class="flex items-center">
+                        <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </div>
+            </template>
+
+            <!-- Add Custom Tag Option -->
+            <div x-show="writable && searchTerm && !filteredOptions.includes(searchTerm) && !tags.includes(searchTerm)"
+                 class="px-3 py-2 text-sm cursor-pointer select-none text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                 :class="{'bg-zinc-100 dark:bg-zinc-700': filteredOptions.length === 0}"
+                 @click="addTag(searchTerm)">
+                Create "<span x-text="searchTerm" class="font-medium text-zinc-900 dark:text-zinc-100"></span>"
+            </div>
+
+            <div x-show="filteredOptions.length === 0 && (!writable || !searchTerm)" class="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400 text-center">
+                No options found
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden input for submission -->
+    <select x-ref="hiddenSelect" :name="name" multiple class="hidden">
+        <template x-for="tag in tags" :key="tag">
+            <option :value="tag" selected x-text="tag"></option>
+        </template>
+    </select>
+</div>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        if (Alpine.data('combobox')) return;
+        
+        Alpine.data('combobox', (config) => ({
+            isOpen: false,
+            highlightedIndex: 0,
+            searchTerm: '',
+            tags: [],
+            options: [],
+            
+            // Config
+            name: config.name,
+            maxTags: config.maxTags,
+            writable: config.writable,
+            enableSearch: config.enableSearch,
+            closeAfterSelecting: config.closeAfterSelecting,
+            disabled: config.disabled,
+            placeholder: config.placeholder,
+
+            initSelected(selected_encoded) {
+                let selected = JSON.parse(decodeURIComponent(selected_encoded));
+                this.tags = Array.isArray(selected) ? selected : (selected ? [selected] : []);
+                this.updateHiddenSelect();
+            },
+
+            initOptions(options_encoded) {
+                let options = JSON.parse(decodeURIComponent(options_encoded));
+                this.options = Array.isArray(options) ? options : [];
+            },
+
+            get filteredOptions() {
+                if (!this.searchTerm) return this.options;
+                return this.options.filter(option => 
+                    option.toLowerCase().includes(this.searchTerm.toLowerCase())
+                );
+            },
+
+            get hasTagsRemaining() {
+                return this.maxTags > 0 ? this.maxTags > this.tags.length : true
+            },
+
+            get getPlaceholder() {
+                if (this.isOpen && !this.hasTagsRemaining) return 'Maximum reached';
+                if (this.tags.length === 0) {
+                    if (this.placeholder) return this.placeholder;
+                    return this.writable ? 'Search or type new...' : 'Select options...';
+                }
+                return '';
+            },
+
+            openDropdown() {
+                if (this.disabled) return;
+                this.isOpen = true;
+                this.$nextTick(() => {
+                    this.$refs.searchInput.focus();
+                    this.highlightedIndex = 0;
+                });
+            },
+
+            closeDropdown() {
+                this.isOpen = false;
+                this.searchTerm = '';
+                this.$el.querySelector('[tabindex="0"]').focus();
+            },
+
+            selectOption(option) {
+                if (this.tags.includes(option)) {
+                    this.removeTag(option);
+                } else {
+                    this.addTag(option);
+                }
+            },
+
+            addTag(tag) {
+                if (this.disabled) return;
+                if (this.maxTags !== -1 && this.tags.length >= this.maxTags) return;
+                
+                if (!this.tags.includes(tag)) {
+                    this.tags.push(tag);
+                    this.updateHiddenSelect();
+                    
+                    if (this.closeAfterSelecting) {
+                        this.closeDropdown();
+                    } else {
+                        this.searchTerm = '';
+                        this.$refs.searchInput.focus();
+                    }
+                }
+            },
+
+            removeTag(tag) {
+                if (this.disabled) return;
+                this.tags = this.tags.filter(t => t !== tag);
+                this.updateHiddenSelect();
+            },
+
+            removeLastTag() {
+                if (this.tags.length > 0 && !this.searchTerm) {
+                    this.removeTag(this.tags[this.tags.length - 1]);
+                }
+            },
+
+            handleEnter() {
+                if (this.filteredOptions.length > 0) {
+                    this.selectOption(this.filteredOptions[this.highlightedIndex]);
+                } else if (this.writable && this.searchTerm) {
+                    this.addTag(this.searchTerm);
+                }
+            },
+
+            highlightNext() {
+                if (this.highlightedIndex < this.filteredOptions.length - 1) {
+                    this.highlightedIndex++;
+                    this.scrollToHighlighted();
+                }
+            },
+
+            highlightPrev() {
+                if (this.highlightedIndex > 0) {
+                    this.highlightedIndex--;
+                    this.scrollToHighlighted();
+                }
+            },
+
+            scrollToHighlighted() {
+                // Implementation for scrolling to highlighted item
+                // This would require refs on the items or querySelector
+            },
+
+            updateHiddenSelect() {
+                // Handled by Alpine's x-model on hidden select? 
+                // No, we are manually building options.
+                // Actually, x-ref="hiddenSelect" content is rebuilt by x-for.
+                // But we need to trigger change event for forms?
+                this.$nextTick(() => {
+                    this.$dispatch('change', this.tags);
+                });
+            }
+        }))
+    })
+</script>

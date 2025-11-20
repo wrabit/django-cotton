@@ -1,0 +1,176 @@
+<c-layouts.ui>
+    <c-header>
+        Combobox
+        <c-slot name="subheading">
+            A multi-select component with support for tagging and searching.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink><a href="#max-tags" class="no-underline">Max Tags</a></c-index-sublink>
+        <c-index-sublink><a href="#searchable" class="no-underline">Searchable</a></c-index-sublink>
+        <c-index-sublink><a href="#writable" class="no-underline">Writable (Tags)</a></c-index-sublink>
+        <c-index-sublink><a href="#single" class="no-underline">Single Select</a></c-index-sublink>
+        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <c-ui.combobox
+            name="skills"
+            placeholder="Select skills"
+            :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS']"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="skills"
+    placeholder="Select skills"
+    :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS']"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="max-tags">Max Tags</h2>
+
+    <p>Limit the number of items that can be selected.</p>
+
+    <c-sample>
+        <c-ui.combobox
+            name="top_3"
+            placeholder="Select up to 3 items"
+            :options="['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']"
+            :max_tags="3"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="top_3"
+    placeholder="Select up to 3 items"
+    :options="['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']"
+    :max_tags="3"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="searchable">Searchable</h2>
+
+    <p>Enable searching through options.</p>
+
+    <c-sample>
+        <c-ui.combobox
+            name="countries"
+            placeholder="Search countries..."
+            :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
+            :enable_search="True"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="countries"
+    placeholder="Search countries..."
+    :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
+    :enable_search="True"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="writable">Writable (Custom Tags)</h2>
+
+    <p>Allow users to enter custom values not in the list.</p>
+
+    <c-sample>
+        <c-ui.combobox
+            name="tags"
+            placeholder="Type and press Enter to add tags"
+            :options="['News', 'Updates', 'Alerts']"
+            :writable="True"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="tags"
+    placeholder="Type and press Enter to add tags"
+    :options="['News', 'Updates', 'Alerts']"
+    :writable="True"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="single">Single Select</h2>
+
+    <p>Restrict selection to a single item by setting <code>max_tags=1</code>. This behaves like a select but with the tag UI.</p>
+
+    <c-sample>
+        <c-ui.combobox
+            name="favorite_color"
+            placeholder="Pick one color"
+            :options="['Red', 'Green', 'Blue', 'Yellow']"
+            :max_tags="1"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="favorite_color"
+    placeholder="Pick one color"
+    :options="['Red', 'Green', 'Blue', 'Yellow']"
+    :max_tags="1"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="disabled">Disabled</h2>
+
+    <p>Prevent interaction with the combobox.</p>
+
+    <c-sample>
+        <c-ui.combobox
+            name="disabled_example"
+            placeholder="Cannot select"
+            :options="['One', 'Two']"
+            :selected="['One']"
+            :disabled="True"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="disabled_example"
+    placeholder="Cannot select"
+    :options="['One', 'Two']"
+    :selected="['One']"
+    :disabled="True"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h4 id="reference">Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="name" type="str" default="" description="Form input name." />
+        <c-api-prop name=":options" type="list" default="[]" description="List of string options to select from." />
+        <c-api-prop name=":selected" type="list" default="[]" description="List of initially selected values." />
+        <c-api-prop name="placeholder" type="str" default="" description="Placeholder text." />
+        <c-api-prop name=":max_tags" type="int" default="-1" description="Maximum number of items selectable. -1 for unlimited." />
+        <c-api-prop name=":writable" type="bool" :options="['True', 'False']" default="False" description="Allow users to add custom values not in the options list." />
+        <c-api-prop name=":enable_search" type="bool" :options="['True', 'False']" default="False" description="Enable searching through the dropdown options." />
+        <c-api-prop name=":close_after_selecting" type="bool" :options="['True', 'False']" default="False" description="Close the dropdown automatically after selecting an item." />
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disable the component." />
+        <c-api-prop name="label" type="str" default="" description="Shorthand: wraps with a label field." />
+        <c-api-prop name="description" type="str" default="" description="Shorthand: adds description text." />
+        <c-api-prop name="error" type="str" default="" description="Shorthand: displays error message." />
+    </c-api-props>
+
+</c-layouts.ui>

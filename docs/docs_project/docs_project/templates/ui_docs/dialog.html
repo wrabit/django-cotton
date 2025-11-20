@@ -1,0 +1,150 @@
+<c-layouts.ui>
+    <c-header>
+        Dialog
+        <c-slot name="subheading">
+            A modal dialog that interrupts the user with important content or a decision.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink><a href="#form" class="no-underline">Form</a></c-index-sublink>
+        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <c-ui.dialog>
+            <c-slot name="trigger">
+                <c-ui.button>Open Simple Dialog</c-ui.button>
+            </c-slot>
+            
+            <h3 class="text-lg font-semibold mb-2">Simple Content</h3>
+            <p class="text-zinc-600 dark:text-zinc-400">
+                This is a basic dialog with just content in the default slot.
+                No header or footer sections defined.
+            </p>
+        </c-ui.dialog>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dialog>
+    <c-slot name="trigger">
+        <c-ui.button>Open Simple Dialog</c-ui.button>
+    </c-slot>
+    
+    <h3 class="text-lg font-semibold mb-2">Simple Content</h3>
+    <p class="text-zinc-600 dark:text-zinc-400">
+        This is a basic dialog with just content in the default slot.
+    </p>
+</c-ui.dialog>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="form">With Header & Footer</h2>
+
+    <p>Use named slots for header and footer to structure complex dialogs.</p>
+
+    <c-sample>
+        <c-ui.dialog>
+            <c-slot name="trigger">
+                <c-ui.button variant="primary">Edit Profile</c-ui.button>
+            </c-slot>
+            
+            <c-slot name="header">
+                <c-ui.dialog.title>Edit Profile</c-ui.dialog.title>
+                <c-ui.dialog.description>
+                    Make changes to your profile here. Click save when you're done.
+                </c-ui.dialog.description>
+            </c-slot>
+            
+            <div class="space-y-4">
+               <c-ui.input label="Name" value="Pedro Duarte" />
+               <c-ui.input label="Username" value="@peduarte" />
+            </div>
+
+            <c-slot name="footer">
+                <c-ui.button variant="ghost" @click="close()">Cancel</c-ui.button>
+                <c-ui.button variant="primary" @click="close()">Save changes</c-ui.button>
+            </c-slot>
+        </c-ui.dialog>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dialog>
+    <c-slot name="trigger">
+        <c-ui.button>Edit Profile</c-ui.button>
+    </c-slot>
+    
+    <c-slot name="header">
+        <c-ui.dialog.title>Edit Profile</c-ui.dialog.title>
+        <c-ui.dialog.description>Make changes to your profile here.</c-ui.dialog.description>
+    </c-slot>
+    
+    <div class="space-y-4">
+       <c-ui.input label="Name" value="Pedro Duarte" />
+       <c-ui.input label="Username" value="@peduarte" />
+    </div>
+
+    <c-slot name="footer">
+        <c-ui.button variant="ghost" @click="close()">Cancel</c-ui.button>
+        <c-ui.button variant="primary" @click="close()">Save changes</c-ui.button>
+    </c-slot>
+</c-ui.dialog>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h2 id="sizes">Sizes</h2>
+    <p>Control the width of the dialog using the <code>size</code> prop on the dialog component.</p>
+
+    <c-sample>
+        <div class="flex gap-4">
+            <c-ui.dialog size="sm">
+                <c-slot name="trigger">
+                    <c-ui.button>Small</c-ui.button>
+                </c-slot>
+                <c-slot name="header">
+                    <c-ui.dialog.title>Small Dialog</c-ui.dialog.title>
+                </c-slot>
+                <p>This is a small dialog (max-w-sm).</p>
+            </c-ui.dialog>
+
+            <c-ui.dialog size="lg">
+                <c-slot name="trigger">
+                    <c-ui.button>Large</c-ui.button>
+                </c-slot>
+                <c-slot name="header">
+                    <c-ui.dialog.title>Large Dialog</c-ui.dialog.title>
+                </c-slot>
+                <p>This is a large dialog (max-w-2xl).</p>
+            </c-ui.dialog>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dialog size="sm">...</c-ui.dialog>
+<c-ui.dialog size="lg">...</c-ui.dialog>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h4 id="reference">Dialog Props</h4>
+
+    <c-api-props>
+        <c-api-prop name=":open" type="bool" default="False" description="Controlled open state." />
+        <c-api-prop name=":dismissable" type="bool" default="True" description="Whether the dialog can be closed by clicking outside or pressing escape." />
+        <c-api-prop name="size" type="str" :options="['sm', 'md', 'lg', 'xl']" default="md" description="Max width of the dialog." />
+    </c-api-props>
+
+    <h4 class="mt-6">Slots</h4>
+
+    <c-api-props>
+        <c-api-prop name="trigger" type="slot" description="The element that opens the dialog." />
+        <c-api-prop name="header" type="slot" description="Header content, typically title and description." />
+        <c-api-prop name="default" type="slot" description="Main content body." />
+        <c-api-prop name="footer" type="slot" description="Footer actions." />
+    </c-api-props>
+
+</c-layouts.ui>

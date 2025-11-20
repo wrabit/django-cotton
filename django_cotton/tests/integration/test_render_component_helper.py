@@ -1,5 +1,5 @@
 from django_cotton.tests.utils import CottonTestCase
-from django_cotton.utils import render_component
+from django_cotton import render_component
 from django.test import RequestFactory
 
 

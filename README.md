@@ -427,30 +427,53 @@ You can also provide a template expression, should the component be inside a sub
 
 ### An example with HTMX
 
-Cotton helps carve out re-usable components, here we show how to make a re-usable form, reducing code repetition and improving maintainability:
+Cotton helps you build re-usable HTMX-powered components. Define your styles and markup once, then pass different HTMX attributes via attributes:
 
 ```html
-<!-- cotton/form.html -->
-<div id="result" class="..."></div>
-
-<form {{ attrs }} hx-target="#result" hx-swap="outerHTML">
+<!-- cotton/button.html -->
+<button {{ attrs }} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
     {{ slot }}
-    <button type="submit">Submit</button>
-</form>
+</button>
 ```
 
 ```html
 <!-- in view -->
-<c-form hx-post="/contact">
-    <input type="text" name="name" placeholder="Name" />
-    <input type="text" name="email" placeholder="Email" />
-    <input type="checkbox" name="signup" />
-</c-form>
+<c-button hx-post="/users/1/follow" hx-swap="outerHTML">
+    Follow
+</c-button>
 
-<c-form hx-post="/buy">
-    <input type="text" name="type" />
-    <input type="text" name="quantity" />
-</c-form>
+<c-button hx-delete="/posts/1" hx-confirm="Are you sure?">
+    Delete Post
+</c-button>
+
+<c-button hx-get="/notifications" hx-target="#notifications">
+    Load More
+</c-button>
+```
+
+### Rendering Components from Views (HTMX Partials)
+
+When building HTMX-powered interfaces, you often need to return partial HTML from view functions. Cotton provides `render_component()` to programmatically render components from views:
+
+```html
+<!-- cotton/notification.html -->
+<div class="alert alert-{{ type }}">{{ message }}</div>
+```
+
+```python
+# views.py
+from django.http import HttpResponse
+from django_cotton import render_component
+
+def user_deleted(request, id):
+    user = User.objects.get(id=id)
+    user.delete()
+    return HttpResponse(
+        render_component(request, "notification",
+            message=f"{user.name} deleted",
+            type="success"
+        )
+    )
 ```
 
 <hr>

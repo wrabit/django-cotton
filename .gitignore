@@ -115,5 +115,5 @@ GitHub.sublime-settings
 node_modules/
 staticfiles/
 
-*.local.*
 *.local
+*.local.*

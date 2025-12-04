@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "django-cotton"
-version = "2.4.0"
+version = "2.5.0"
 description = "Enabling Modern UI Composition in Django."
 authors = [ "Will Abbott <willabb83@gmail.com>",]
 license = "MIT"

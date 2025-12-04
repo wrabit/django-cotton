@@ -114,26 +114,67 @@ def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokeniz
             # Now find the end %}, respecting quotes
             in_quotes = False
             quote_char = None
+            # Track when we're inside Django template syntax to ignore quotes within them
+            django_var_depth = 0  # Tracks {{ }} blocks
+            django_tag_depth = 0  # Tracks {% %} blocks
 
             while position < len(template_string) - 1:
                 char = template_string[position]
 
-                # Handle quotes
-                if not in_quotes and char in ('"', "'"):
+                # Track Django variable blocks {{ }}
+                if template_string[position : position + 2] == "{{":
+                    django_var_depth += 1
+                    position += 2
+                    continue
+                elif template_string[position : position + 2] == "}}":
+                    django_var_depth = max(0, django_var_depth - 1)
+                    position += 2
+                    continue
+                
+                # Track Django tag blocks {% %} (but not the outer Cotton tag we're parsing)
+                # We need to be careful: we're already inside the outer {% cotton ... %} tag
+                # So we only track NESTED {% %} blocks
+                elif template_string[position : position + 2] == "{%":
+                    django_tag_depth += 1
+                    position += 2
+                    continue
+                elif template_string[position : position + 2] == "%}":
+                    # This could be the end of the outer Cotton tag OR a nested {% %} block
+                    if django_tag_depth > 0:
+                        # It's closing a nested tag block
+                        django_tag_depth = max(0, django_tag_depth - 1)
+                        position += 2
+                        continue
+                    elif not in_quotes:
+                        # It's the end of the outer Cotton tag
+                        position += 2  # Include %}
+                        break
+                    else:
+                        # We're in quotes, so this %} is part of the quoted value
+                        position += 1
+                        continue
+
+                # Handle quotes (only when not inside Django template syntax)
+                if (
+                    not in_quotes
+                    and char in ('"', "'")
+                    and django_var_depth == 0
+                    and django_tag_depth == 0
+                ):
                     in_quotes = True
                     quote_char = char
-                elif in_quotes and char == quote_char:
+                elif (
+                    in_quotes
+                    and char == quote_char
+                    and django_var_depth == 0
+                    and django_tag_depth == 0
+                ):
                     # Check if escaped
                     if position > 0 and template_string[position - 1] == "\\":
                         pass  # Escaped quote, continue
                     else:
                         in_quotes = False
                         quote_char = None
-
-                # Look for %} only when not in quotes
-                elif not in_quotes and template_string[position : position + 2] == "%}":
-                    position += 2  # Include %}
-                    break
 
                 position += 1
             else:

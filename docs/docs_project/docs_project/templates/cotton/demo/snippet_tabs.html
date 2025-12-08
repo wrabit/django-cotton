@@ -1,9 +1,18 @@
-<div class="flex flex-col w-full rounded-xl overflow-hidden" x-data="snippetTabs" x-init="$watch('tabs', () => currentTab = tabs[0])">
+<c-vars preview preview_label="Preview" />
+
+<div class="flex flex-col w-full rounded-xl border overflow-hidden" x-data="snippetTabs" x-init="$watch('tabs', () => currentTab = tabs[0])">
+    {% if preview %}
+        <div class="px-6 py-6 prose-headings:text-gray-800 shadow bg-white dark:bg-gray-50 dark:!text-gray-800">
+            <div class="text-sm text-gray-400 font-medium uppercase tracking-widest pb-5">{{ preview_label }}</div>
+            {{ preview }}
+        </div>
+    {% endif %}
+
     <div class="flex border-b bg-gray-800 border-b-gray-700 space-x-1 w-full text-sm px-2 py-0 dark:bg-gray-800 text-gray-400">
         <template x-for="tab in tabs">
             <div
                 class="pt-2.5 pb-2 px-3 cursor-pointer border-b-2 border-transparent"
-                :class="currentTab === tab ? 'text-gray-200 border-b-teal-500 shadow-[0px_-2px_3px_0px_rgba(0,0,0,0.1)]' : 'text-gray-400'"
+                :class="currentTab === tab ? 'text-gray-200 font-semibold border-b-teal-500 shadow-[0px_-2px_3px_0px_rgba(0,0,0,0.1)]' : 'text-gray-400'"
                 @click="currentTab = tab"
                 x-text="tab"
             ></div>

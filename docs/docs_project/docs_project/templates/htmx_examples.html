@@ -8,22 +8,46 @@
         <c-index-link><a href="#search-debounce" class="no-underline">Search with Debounce</a></c-index-link>
     </c-slot>
 
-    <h1 id="introduction">Working with HTMX</h1>
+    <h1 id="introduction">HTMX Examples</h1>
 
-    <p>Cotton components work seamlessly with HTMX, serving a dual purpose: they can be used as reusable components in your templates AND as HTMX partial responses from your views.</p>
+    <p>Cotton helps you build re-usable HTMX-powered components. Define your styles and markup once, then pass different HTMX attributes via <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>:</p>
 
-    <c-note>
-        This approach follows the "pure Cotton" pattern - no need for django-template-partials or other libraries. Simply render your Cotton components directly from your views.
-    </c-note>
+    <c-demo.snippet-tabs preview-label="demo">
+        <c-demo.snippet-tab name="view.html">
+            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+<c-button hx-post="/follow" hx-swap="outerHTML">Follow</c-button>
 
-    <h3 class="mt-0 pt-2 mb-5">The Pure Cotton Pattern:</h3>
+<c-button hx-delete="/posts/1" hx-confirm="Delete?">Delete</c-button>
+
+<c-button hx-get="/load-more" hx-target="#results">Load More</c-button>
+{% endcotton:verbatim %}{% endverbatim %}
+            </c-snippet>
+        </c-demo.snippet-tab>
+
+        <c-demo.snippet-tab name="cotton/button.html">
+            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+<button {{ attrs }} class="btn btn-primary">
+    {{ slot }}
+</button>
+{% endcotton:verbatim %}{% endverbatim %}
+            </c-snippet>
+        </c-demo.snippet-tab>
+    </c-demo.snippet-tabs>
+
+    <h3 class="mt-6 pt-2 mb-5">Returning Components from Views</h3>
+
+    <p>For HTMX partial responses, use <code>render_component()</code> to render components directly from your views:</p>
 
     <c-ul>
-        <li>Create a Cotton component in <code>cotton/component-name.html</code></li>
-        <li>Use it in templates with Cotton syntax</li>
-        <li>Return it from views: <code>render(request, 'cotton/component-name.html', context)</code></li>
+        <li>Create a Cotton component in <code>cotton/component_name.html</code></li>
+        <li>Use it in templates: <code>&lt;c-component-name /&gt;</code></li>
+        <li>Return it from views: <code>render_component(request, "component-name", context)</code></li>
         <li>HTMX swaps it into the DOM seamlessly</li>
     </c-ul>
+
+    <c-note>
+        No need for django-template-partials or other libraries - Cotton components work directly as HTMX partials.
+    </c-note>
 
     <script src="https://unpkg.com/htmx.org@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
@@ -39,27 +63,24 @@
 
     <p>Common CRUD patterns: edit tasks in-place and delete with confirmation. Try clicking "Edit" or "Delete":</p>
 
-    <h3 id="inline-usage">Live Demo</h3>
+    <c-demo.snippet-tabs preview-label="demo">
+        <c-slot name="preview">
+            <div class="not-prose">
+                {% for task in demo_tasks %}
+                    <c-examples.htmx.task_display :id="task.id" :title="task.title" :description="task.description" />
+                {% endfor %}
+            </div>
+        </c-slot>
 
-    <c-snippet label="Live Demo">{% cotton:verbatim %}{% verbatim %}
+        <c-demo.snippet-tab name="view.html">
+            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
 {% for task in tasks %}
     <c-task :id="task.id" :title="task.title" :description="task.description" />
 {% endfor %}
 {% endcotton:verbatim %}{% endverbatim %}
-    <c-slot name="preview">
-        <div class="not-prose">
-            {% for task in demo_tasks %}
-                <c-examples.htmx.task_display :id="task.id" :title="task.title" :description="task.description" />
-            {% endfor %}
-        </div>
-    </c-slot>
-    </c-snippet>
+            </c-snippet>
+        </c-demo.snippet-tab>
 
-    <p><strong>Key Insight:</strong> The same Cotton component serves both purposes. When used in templates, it's a reusable component. When returned from views, it's an HTMX partial response.</p>
-
-    <h3 id="inline-component">Implementation</h3>
-
-    <c-demo.snippet-tabs>
         <c-demo.snippet-tab name="cotton/task.html">
             <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
 <div id="task-{{ id }}">
@@ -110,42 +131,48 @@
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="views.py">
-            <c-snippet language="python" rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
-from django.shortcuts import render, get_object_or_404
+            <c-snippet language="python" rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django_cotton import render_component
 from .models import Task
 
 def task_detail(request, id):
     task = get_object_or_404(Task, id=id)
-    return render(request, 'cotton/task_display.html', {
-        'id': task.id,
-        'title': task.title,
-        'description': task.description,
-    })
+    return HttpResponse(
+        render_component(request, "task-display",
+            id=task.id,
+            title=task.title,
+            description=task.description,
+        )
+    )
 
 def task_edit(request, id):
     task = get_object_or_404(Task, id=id)
-    return render(request, 'cotton/task_edit.html', {
-        'id': task.id,
-        'title': task.title,
-        'description': task.description,
-    })
+    return HttpResponse(
+        render_component(request, "task-edit",
+            id=task.id,
+            title=task.title,
+            description=task.description,
+        )
+    )
 
 def task_update(request, id):
     task = get_object_or_404(Task, id=id)
     task.title = request.POST.get('title')
     task.description = request.POST.get('description')
     task.save()
-    return render(request, 'cotton/task_display.html', {
-        'id': task.id,
-        'title': task.title,
-        'description': task.description,
-    })
+    return HttpResponse(
+        render_component(request, "task-display",
+            id=task.id,
+            title=task.title,
+            description=task.description,
+        )
+    )
 
 def task_delete(request, id):
     task = get_object_or_404(Task, id=id)
     task.delete()
-    return HttpResponse('')  # Empty response removes element
+    return HttpResponse('')
 {% endcotton:verbatim %}{% endverbatim %}
             </c-snippet>
         </c-demo.snippet-tab>
@@ -155,96 +182,58 @@ def task_delete(request, id):
 
     <h2 id="form-validation">2. Form Validation</h2>
 
-    <p>Show per-field validation errors inline without a full page reload. Try entering invalid data:</p>
+    <p>Validate fields inline on blur without a full page reload:</p>
 
-    <h3 id="form-demo">Live Demo</h3>
+    <c-demo.snippet-tabs preview-label="demo">
+        <c-slot name="preview">
+            <form class="not-prose" id="validation-form">
+                {% csrf_token %}
+                <c-examples.htmx.form_field name="email" label="Email" type="email" />
+            </form>
+        </c-slot>
 
-    <c-snippet label="Live Demo">{% cotton:verbatim %}{% verbatim %}
-<form>
-    {% csrf_token %}
-    <c-form-field
-        name="username"
-        label="Username"
-        hx-post="/validate-field"
-        hx-trigger="blur"
-        hx-target="this"
-        hx-swap="outerHTML"
-        hx-include="this"
-    >
-        <input type="hidden" name="field_name" value="username">
-    </c-form-field>
-
-    <c-form-field
-        name="email"
-        label="Email"
-        type="email"
-        hx-post="/validate-field"
-        hx-trigger="blur"
-        hx-target="this"
-        hx-swap="outerHTML"
-        hx-include="this"
-    >
-        <input type="hidden" name="field_name" value="email">
-    </c-form-field>
-</form>
+        <c-demo.snippet-tab name="view.html">
+            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+<c-email-field
+    hx-post="/validate-email"
+    hx-trigger="blur from:find input"
+    hx-target="this"
+    hx-swap="outerHTML"
+/>
 {% endcotton:verbatim %}{% endverbatim %}
-    <c-slot name="preview">
-        <form class="not-prose" id="validation-form">
-            {% csrf_token %}
-            <c-examples.htmx.form_field name="username" label="Username" />
-            <c-examples.htmx.form_field name="email" label="Email" type="email" />
-        </form>
-    </c-slot>
-    </c-snippet>
+            </c-snippet>
+        </c-demo.snippet-tab>
 
-    <h3 id="form-component">Implementation</h3>
-
-    <c-demo.snippet-tabs>
-        <c-demo.snippet-tab name="form_field.html">
+        <c-demo.snippet-tab name="email_field.html">
             <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
 <div {{ attrs }}>
-    <label for="{{ name }}">{{ label }}</label>
-    <input
-        type="{{ type|default:'text' }}"
-        id="{{ name }}"
-        name="{{ name }}"
-        value="{{ value }}"
-    >
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" value="{{ value }}">
+    {% if error %}<p>{{ error }}</p>{% endif %}
 </div>
 {% endcotton:verbatim %}{% endverbatim %}
             </c-snippet>
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="views.py">
-            <c-snippet language="python" rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
-from django.shortcuts import render
+            <c-snippet language="python" rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}from django.http import HttpResponse
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from django_cotton import render_component
 
-def validate_field(request):
-    field_name = request.POST.get('field_name')
-    field_value = request.POST.get(field_name)
+def validate_email_field(request):
+    value = request.POST.get('email', '')
     error = None
 
-    if field_name == 'email':
+    if value:
         try:
-            validate_email(field_value)
+            validate_email(value)
         except ValidationError:
             error = 'Invalid email address'
 
-    elif field_name == 'username' and len(field_value) < 3:
-        error = 'Username must be at least 3 characters'
-
-    return render(request, 'cotton/form-field.html', {
-        'name': field_name,
-        'label': field_name.title(),
-        'value': field_value,
-        'error': error,
-        'type': 'email' if field_name == 'email' else 'text',
-    })
+    return HttpResponse(
+        render_component(request, "email-field", value=value, error=error)
+    )
 {% endcotton:verbatim %}{% endverbatim %}
             </c-snippet>
         </c-demo.snippet-tab>
@@ -256,9 +245,51 @@ def validate_field(request):
 
     <p>Combine Cotton, HTMX, and Alpine.js to load dynamic content into modals. Click "View Details" on any user:</p>
 
-    <h3 id="modal-demo">Live Demo</h3>
+    <c-demo.snippet-tabs preview-label="demo">
+        <c-slot name="preview">
+            <div class="not-prose">
+                <c-examples.htmx.modal />
 
-    <c-snippet label="Live Demo">{% cotton:verbatim %}{% verbatim %}
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
+                        <span class="text-gray-900 dark:text-gray-100">Alice Johnson</span>
+                        <button
+                            hx-get="/demo/users/1/details"
+                            hx-target="#modal-content"
+                            @click="$dispatch('open-modal')"
+                            class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
+                        >
+                            View Details
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
+                        <span class="text-gray-900 dark:text-gray-100">Bob Smith</span>
+                        <button
+                            hx-get="/demo/users/2/details"
+                            hx-target="#modal-content"
+                            @click="$dispatch('open-modal')"
+                            class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
+                        >
+                            View Details
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
+                        <span class="text-gray-900 dark:text-gray-100">Carol White</span>
+                        <button
+                            hx-get="/demo/users/3/details"
+                            hx-target="#modal-content"
+                            @click="$dispatch('open-modal')"
+                            class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
+                        >
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </c-slot>
+
+        <c-demo.snippet-tab name="view.html">
+            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
 <c-modal />
 
 {% for user in users %}
@@ -274,52 +305,9 @@ def validate_field(request):
     </div>
 {% endfor %}
 {% endcotton:verbatim %}{% endverbatim %}
-    <c-slot name="preview">
-        <div class="not-prose">
-            <c-examples.htmx.modal />
+            </c-snippet>
+        </c-demo.snippet-tab>
 
-            <div class="space-y-2">
-                <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
-                    <span class="text-gray-900 dark:text-gray-100">Alice Johnson</span>
-                    <button
-                        hx-get="/demo/users/1/details"
-                        hx-target="#modal-content"
-                        @click="$dispatch('open-modal')"
-                        class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
-                    >
-                        View Details
-                    </button>
-                </div>
-                <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
-                    <span class="text-gray-900 dark:text-gray-100">Bob Smith</span>
-                    <button
-                        hx-get="/demo/users/2/details"
-                        hx-target="#modal-content"
-                        @click="$dispatch('open-modal')"
-                        class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
-                    >
-                        View Details
-                    </button>
-                </div>
-                <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
-                    <span class="text-gray-900 dark:text-gray-100">Carol White</span>
-                    <button
-                        hx-get="/demo/users/3/details"
-                        hx-target="#modal-content"
-                        @click="$dispatch('open-modal')"
-                        class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
-                    >
-                        View Details
-                    </button>
-                </div>
-            </div>
-        </div>
-    </c-slot>
-    </c-snippet>
-
-    <h3>Implementation</h3>
-
-    <c-demo.snippet-tabs>
         <c-demo.snippet-tab name="modal.html">
             <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
 <div x-data="{ open: false }"
@@ -346,13 +334,17 @@ def validate_field(request):
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="views.py">
-            <c-snippet language="python" rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet language="python" rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}from django.http import HttpResponse
+from django_cotton import render_component
+
 def user_details(request, id):
     user = get_object_or_404(User, id=id)
-    return render(request, 'cotton/user-details.html', {
-        'name': user.get_full_name(),
-        'email': user.email,
-    })
+    return HttpResponse(
+        render_component(request, "user-details",
+            name=user.get_full_name(),
+            email=user.email,
+        )
+    )
 {% endcotton:verbatim %}{% endverbatim %}
             </c-snippet>
         </c-demo.snippet-tab>
@@ -364,9 +356,26 @@ def user_details(request, id):
 
     <p>Live search results with debouncing (<code>delay:500ms</code>) to avoid excessive requests. Try searching:</p>
 
-    <h3 id="search-demo">Live Demo</h3>
+    <c-demo.snippet-tabs preview-label="demo">
+        <c-slot name="preview">
+            <div class="not-prose">
+                <input
+                    type="search"
+                    name="q"
+                    placeholder="Search articles..."
+                    hx-get="/demo/search"
+                    hx-trigger="keyup changed delay:500ms"
+                    hx-target="#search-results"
+                    hx-include="this"
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                >
 
-    <c-snippet label="Live Demo">{% cotton:verbatim %}{% verbatim %}
+                <c-examples.htmx.search_results />
+            </div>
+        </c-slot>
+
+        <c-demo.snippet-tab name="view.html">
+            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
 <input
     type="search"
     name="q"
@@ -379,27 +388,9 @@ def user_details(request, id):
 
 <c-search-results />
 {% endcotton:verbatim %}{% endverbatim %}
-    <c-slot name="preview">
-        <div class="not-prose">
-            <input
-                type="search"
-                name="q"
-                placeholder="Search articles..."
-                hx-get="/demo/search"
-                hx-trigger="keyup changed delay:500ms"
-                hx-target="#search-results"
-                hx-include="this"
-                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
-            >
+            </c-snippet>
+        </c-demo.snippet-tab>
 
-            <c-examples.htmx.search_results />
-        </div>
-    </c-slot>
-    </c-snippet>
-
-    <h3>Implementation</h3>
-
-    <c-demo.snippet-tabs>
         <c-demo.snippet-tab name="search_results.html">
             <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
 <div id="search-results">
@@ -421,15 +412,19 @@ def user_details(request, id):
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="views.py">
-            <c-snippet language="python" rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet language="python" rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}from django.http import HttpResponse
+from django_cotton import render_component
+
 def search(request):
     query = request.GET.get('q', '')
     results = Article.objects.filter(title__icontains=query)[:10] if query else []
 
-    return render(request, 'cotton/search-results.html', {
-        'results': results,
-        'query': query,
-    })
+    return HttpResponse(
+        render_component(request, "search-results",
+            results=results,
+            query=query,
+        )
+    )
 {% endcotton:verbatim %}{% endverbatim %}
             </c-snippet>
         </c-demo.snippet-tab>
@@ -440,9 +435,9 @@ def search(request):
     <h3>Key Takeaways</h3>
 
     <c-ul>
-        <li>Cotton components work seamlessly as HTMX partial responses</li>
+        <li>Use <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> to pass HTMX attributes to styled components</li>
+        <li>Use <code>render_component()</code> to return Cotton components as HTMX partial responses</li>
         <li>No need for django-template-partials or special configuration</li>
-        <li>Use <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> to preserve HTMX attributes</li>
         <li>Components maintain their reusability while serving dynamic content</li>
         <li>Combine with Alpine.js for enhanced interactivity</li>
     </c-ul>

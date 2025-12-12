@@ -1,2 +1,0 @@
-@tailwind base;@tailwind components;@tailwind utilities;@layer base{:root{--color-accent: #14b8a6;--color-accent-content: #0d9488;--color-accent-foreground: #ffffff;--radius: .5rem}.dark :root{--color-accent: #2dd4bf;--color-accent-content: #5eead4;--color-accent-foreground: #042f2e}html{scroll-behavior:smooth}body{font-synthesis-weight:none;text-rendering:optimizeLegibility}}
-/*# sourceMappingURL=cotton-ui.min.css.map */

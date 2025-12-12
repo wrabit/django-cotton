@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "django_cotton",
     "cotton_icons",
     "heroicons",
-    "cottonui",
+    "cotton_ui",
     "docs_project",
 ]
 
@@ -148,7 +148,10 @@ STORAGES = {
 }
 
 STATIC_URL = "staticfiles/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "docs_project", "static")]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "docs_project", "static"),
+    os.path.join(BASE_DIR, "cotton_ui", "src", "dist"),  # Cotton UI built assets
+]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../css/cotton-ui.css"],
-  "sourcesContent": ["@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n@layer base {\n    :root {\n        /* Accent colors - Teal by default (Flux-style) */\n        --color-accent: #14b8a6; /* teal-500 */\n        --color-accent-content: #0d9488; /* teal-600 */\n        --color-accent-foreground: #ffffff; /* white */\n\n        /* Border radius */\n        --radius: 0.5rem;\n    }\n\n    .dark :root {\n        /* Accent colors in dark mode */\n        --color-accent: #2dd4bf; /* teal-400 */\n        --color-accent-content: #5eead4; /* teal-300 */\n        --color-accent-foreground: #042f2e; /* teal-950 */\n    }\n\n    html {\n        scroll-behavior: smooth;\n    }\n\n    body {\n        font-synthesis-weight: none;\n        text-rendering: optimizeLegibility;\n    }\n}\n"],
-  "mappings": "AAAA,eACA,qBACA,oBAEA,YACI,MAEI,wBACA,gCACA,mCAGA,gBAGJ,YAEI,wBACA,gCACA,mCAGJ,KACI,uBAGJ,KACI,2BACA",
-  "names": []
-}

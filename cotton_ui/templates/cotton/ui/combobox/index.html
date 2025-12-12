@@ -5,8 +5,9 @@
     placeholder=""
     :max_tags="-1"
     :writable="False"
-    :enable_search="False"
+    :searchable="False"
     :close_after_selecting="False"
+    :autoclose="False"
     label
     description
     description_trailing
@@ -27,30 +28,32 @@
         :form="form"
         name="{{ name }}">
         
-        <c-ui.combobox.impl 
+        <c-ui.combobox.impl
             name="{{ name }}"
             :options="options"
             :selected="selected"
             placeholder="{{ placeholder }}"
             :max_tags="max_tags"
             :writable="writable"
-            :enable_search="enable_search"
+            :searchable="searchable"
             :close_after_selecting="close_after_selecting"
+            :autoclose="autoclose"
             :disabled="disabled"
             :required="required"
             {{ attrs }}
         />
     </c-ui.field>
 {% else %}
-    <c-ui.combobox.impl 
+    <c-ui.combobox.impl
         name="{{ name }}"
         :options="options"
         :selected="selected"
         placeholder="{{ placeholder }}"
         :max_tags="max_tags"
         :writable="writable"
-        :enable_search="enable_search"
+        :searchable="searchable"
         :close_after_selecting="close_after_selecting"
+        :autoclose="autoclose"
         :disabled="disabled"
         :required="required"
         {{ attrs }}

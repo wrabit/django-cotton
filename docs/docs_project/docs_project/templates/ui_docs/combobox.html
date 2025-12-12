@@ -12,6 +12,7 @@
         <c-index-sublink><a href="#searchable" class="no-underline">Searchable</a></c-index-sublink>
         <c-index-sublink><a href="#writable" class="no-underline">Writable (Tags)</a></c-index-sublink>
         <c-index-sublink><a href="#single" class="no-underline">Single Select</a></c-index-sublink>
+        <c-index-sublink><a href="#autoclose" class="no-underline">Autoclose</a></c-index-sublink>
         <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
         <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
@@ -67,7 +68,7 @@
             name="countries"
             placeholder="Search countries..."
             :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
-            :enable_search="True"
+            :searchable="True"
         />
 
         <c-slot name="code">
@@ -76,7 +77,7 @@
     name="countries"
     placeholder="Search countries..."
     :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
-    :enable_search="True"
+    :searchable="True"
 />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -130,6 +131,32 @@
         </c-slot>
     </c-sample>
 
+    <h2 id="autoclose">Autoclose</h2>
+
+    <p>Automatically close the dropdown when the maximum number of tags is reached. This is useful when combined with <code>max_tags</code> to provide a smoother user experience - once the user has selected all allowed items, the dropdown closes automatically.</p>
+
+    <c-sample>
+        <c-ui.combobox
+            name="top_skills"
+            placeholder="Pick your top 2 skills"
+            :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS', 'TypeScript']"
+            :max_tags="2"
+            :autoclose="True"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="top_skills"
+    placeholder="Pick your top 2 skills"
+    :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS', 'TypeScript']"
+    :max_tags="2"
+    :autoclose="True"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
     <h2 id="disabled">Disabled</h2>
 
     <p>Prevent interaction with the combobox.</p>
@@ -165,8 +192,9 @@
         <c-api-prop name="placeholder" type="str" default="" description="Placeholder text." />
         <c-api-prop name=":max_tags" type="int" default="-1" description="Maximum number of items selectable. -1 for unlimited." />
         <c-api-prop name=":writable" type="bool" :options="['True', 'False']" default="False" description="Allow users to add custom values not in the options list." />
-        <c-api-prop name=":enable_search" type="bool" :options="['True', 'False']" default="False" description="Enable searching through the dropdown options." />
+        <c-api-prop name=":searchable" type="bool" :options="['True', 'False']" default="False" description="Enable searching through the dropdown options." />
         <c-api-prop name=":close_after_selecting" type="bool" :options="['True', 'False']" default="False" description="Close the dropdown automatically after selecting an item." />
+        <c-api-prop name=":autoclose" type="bool" :options="['True', 'False']" default="False" description="Automatically close the dropdown when the maximum number of tags is reached." />
         <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disable the component." />
         <c-api-prop name="label" type="str" default="" description="Shorthand: wraps with a label field." />
         <c-api-prop name="description" type="str" default="" description="Shorthand: adds description text." />

@@ -16,6 +16,7 @@ services:
     volumes:
       - ../docs_project:/app
       - ../../django_cotton:/app/django_cotton
+      - ../../cotton_ui:/app/cotton_ui
     ports:
       - 8002:8000
 
@@ -27,6 +28,7 @@ services:
     tty: true
     volumes:
       - ../docs_project:/app
+      - ../../cotton_ui:/app/cotton_ui
     command: /bin/sh -c "trap 'exit' INT; npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css --watch"
 
   cotton-docs-redis:

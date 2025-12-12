@@ -9,72 +9,76 @@ import esbuild from 'esbuild';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+// Output to dist directory
+const outDir = `dist/cotton-ui`;
+
 build({
     entryPoints: [`js/cotton-ui.js`],
-    outfile: `static/cotton-ui/cotton-ui.js`,
+    outfile: `${outDir}/cotton-ui.js`,
     bundle: true,
     platform: 'browser',
     define: { CDN: true },
 })
 
-build({
-    entryPoints: [`css/cotton-ui.css`],
-    outfile: `static/cotton-ui/cotton-ui.css`,
-    bundle: true,
-    platform: 'browser',
-    define: { CDN: true },
-})
+// CSS is built by Tailwind CLI, not esbuild
+// build({
+//     entryPoints: [`css/cotton-ui.css`],
+//     outfile: `${outDir}/cotton-ui.css`,
+//     bundle: true,
+//     platform: 'browser',
+//     define: { CDN: true },
+// })
 
 build({
     format: 'esm',
     entryPoints: [`js/cotton-ui.js`],
-    outfile: `static/cotton-ui/cotton-ui.esm.js`,
+    outfile: `${outDir}/cotton-ui.esm.js`,
     bundle: true,
     platform: 'node',
     define: { CDN: true },
 })
 
-build({
-    format: 'esm',
-    entryPoints: [`css/cotton-ui.css`],
-    outfile: `static/cotton-ui/cotton-ui.esm.css`,
-    bundle: true,
-    platform: 'node',
-    define: { CDN: true },
-})
+// build({
+//     format: 'esm',
+//     entryPoints: [`css/cotton-ui.css`],
+//     outfile: `${outDir}/cotton-ui.esm.css`,
+//     bundle: true,
+//     platform: 'node',
+//     define: { CDN: true },
+// })
 
 let jsHash = crypto.randomBytes(4).toString('hex');
 let cssHash = crypto.randomBytes(4).toString('hex');
 
-fs.writeFileSync(__dirname+'/static/cotton-ui/manifest.json', `
+fs.writeFileSync(`${outDir}/manifest.json`, `
 {"/cotton-ui.js":"${jsHash}", "/cotton-ui.css":"${cssHash}"}
 `)
 
 // Build a minified version.
 build({
     entryPoints: [`js/cotton-ui.js`],
-    outfile: `static/cotton-ui/cotton-ui.min.js`,
+    outfile: `${outDir}/cotton-ui.min.js`,
     sourcemap: 'linked',
     bundle: true,
     minify: true,
     platform: 'browser',
     define: { CDN: true },
 }).then(() => {
-    outputSize(`static/cotton-ui/cotton-ui.min.js`)
+    outputSize(`${outDir}/cotton-ui.min.js`)
 })
 
 
-build({
-    entryPoints: [`css/cotton-ui.css`],
-    outfile: `static/cotton-ui/cotton-ui.min.css`,
-    sourcemap: 'linked',
-    bundle: true,
-    minify: true,
-    platform: 'browser',
-    define: { CDN: true },
-}).then(() => {
-    outputSize(`static/cotton-ui/cotton-ui.min.css`)
-})
+// build({
+//     entryPoints: [`css/cotton-ui.css`],
+//     outfile: `${outDir}/cotton-ui.min.css`,
+//     sourcemap: 'linked',
+//     bundle: true,
+//     minify: true,
+//     platform: 'browser',
+//     define: { CDN: true },
+// }).then(() => {
+//     outputSize(`${outDir}/cotton-ui.min.css`)
+// })
 
 function build(options) {
     options.define || (options.define = {})

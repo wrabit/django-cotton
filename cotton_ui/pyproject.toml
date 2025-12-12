@@ -1,0 +1,38 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "django-cotton-ui"
+version = "0.1.0"
+description = "UI component library for Django Cotton"
+authors = ["Will Abbott <willabb83@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "cotton_ui", from = ".."}]
+exclude = ["cotton_ui/src", "cotton_ui/src/**/*"]
+homepage = "https://github.com/wrabit/django-cotton"
+repository = "https://github.com/wrabit/django-cotton"
+keywords = ["django", "components", "ui", "tailwind", "alpine"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4"
+django = ">=4.2,<6.0"
+django-cotton = ">=2.5.0"

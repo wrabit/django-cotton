@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="{% static 'app.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400..800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="{% static 'favicon/favicon.svg' %}">
     <link rel="icon" type="image/png" href="{% static 'favicon/favicon.png' %}">
 
     <script src="{% static 'highlight/highlight.min.js' %}"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <script defer src="{% static 'alpine3.min.js' %}"></script>
 
     <script src="{% static 'cotton-ui/cotton-ui.js' %}"></script>
@@ -38,10 +39,10 @@
         div[data-lastpass-icon-root] { display: none !important }
     </style>
 </head>
-<body class="bg-amber-10/60 dark:bg-zinc-900 flex flex-col min-h-screen bg-fixed">
+<body class="font-sans bg-amber-10/60 dark:bg-zinc-900 min-h-screen bg-fixed">
     <c-navbar />
 
-    <div class="flex-1">
+    <div class="pt-[73px]">
         {{ slot }}
     </div>
 
@@ -64,6 +65,90 @@
                         this.active = event.detail.index;
                     }
                 },
+            }))
+
+            Alpine.data('scrollspy', () => ({
+                activeSection: null,
+                sections: [],
+                observer: null,
+
+                init() {
+                    this.sections = Array.from(
+                        this.$el.querySelectorAll('[data-section-id]')
+                    ).map(section => ({
+                        id: section.dataset.sectionId,
+                        element: section
+                    }));
+
+                    // Set initial active section (hash or first)
+                    if (window.location.hash) {
+                        const hashId = window.location.hash.substring(1);
+                        if (this.sections.some(s => s.id === hashId)) {
+                            this.activeSection = hashId;
+                        }
+                    }
+                    if (!this.activeSection && this.sections.length > 0) {
+                        this.activeSection = this.sections[0].id;
+                    }
+
+                    this.setupObserver();
+                    this.handleHashChange();
+                },
+
+                destroy() {
+                    if (this.observer) {
+                        this.observer.disconnect();
+                    }
+                },
+
+                setupObserver() {
+                    const options = {
+                        root: null,
+                        rootMargin: '-120px 0px -40% 0px',
+                        threshold: [0, 0.25, 0.5, 0.75, 1]
+                    };
+
+                    this.observer = new IntersectionObserver((entries) => {
+                        const visibleSections = entries
+                            .filter(entry => entry.isIntersecting)
+                            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+                        if (visibleSections.length > 0) {
+                            const topSection = visibleSections[0];
+                            const newActiveId = topSection.target.dataset.sectionId;
+
+                            if (newActiveId !== this.activeSection) {
+                                this.activeSection = newActiveId;
+                                this.updateHash(newActiveId);
+                            }
+                        }
+                    }, options);
+
+                    this.sections.forEach(section => {
+                        this.observer.observe(section.element);
+                    });
+                },
+
+                handleHashChange() {
+                    window.addEventListener('hashchange', () => {
+                        const hashId = window.location.hash.substring(1);
+                        if (hashId && this.sections.some(s => s.id === hashId)) {
+                            this.activeSection = hashId;
+                        }
+                    });
+                },
+
+                updateHash(sectionId) {
+                    if (history.replaceState) {
+                        history.replaceState(null, null, `#${sectionId}`);
+                    } else {
+                        window.location.hash = sectionId;
+                    }
+                },
+
+                isActive(sectionId) {
+                    return this.activeSection === sectionId;
+                }
             }))
 
             // Global syntax preference store

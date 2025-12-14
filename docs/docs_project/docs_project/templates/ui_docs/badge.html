@@ -7,16 +7,18 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#colors" class="no-underline">Colors</a></c-index-sublink>
-        <c-index-sublink><a href="#pill" class="no-underline">Pill Variant</a></c-index-sublink>
-        <c-index-sublink><a href="#solid" class="no-underline">Solid Variant</a></c-index-sublink>
-        <c-index-sublink><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
-        <c-index-sublink><a href="#clickable" class="no-underline">Clickable</a></c-index-sublink>
-        <c-index-sublink><a href="#inset" class="no-underline">Inset</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="colors"><a href="#colors" class="no-underline">Colors</a></c-index-sublink>
+        <c-index-sublink section-id="pill"><a href="#pill" class="no-underline">Pill Variant</a></c-index-sublink>
+        <c-index-sublink section-id="solid"><a href="#solid" class="no-underline">Solid Variant</a></c-index-sublink>
+        <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
+        <c-index-sublink section-id="clickable"><a href="#clickable" class="no-underline">Clickable</a></c-index-sublink>
+        <c-index-sublink section-id="inset"><a href="#inset" class="no-underline">Inset</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="basic" title="Basic Usage">
     <c-sample>
         <div class="flex items-center justify-center">
             <c-ui.badge color="lime">New</c-ui.badge>
@@ -28,8 +30,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="sizes">Sizes</h2>
+    <c-section id="sizes" title="Sizes">
 
     <p>Choose between three different sizes for your badges with the size prop.</p>
 
@@ -48,8 +51,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="colors">Colors</h2>
+    <c-section id="colors" title="Colors">
 
     <p>Choose from an array of colors to differentiate between badges and convey meaning.</p>
 
@@ -85,8 +89,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="pill">Pill Variant</h2>
+    <c-section id="pill" title="Pill Variant">
 
     <p>Display badges with a fully rounded border radius using the <code>variant="pill"</code> prop.</p>
 
@@ -105,8 +110,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="solid">Solid Variant</h2>
+    <c-section id="solid" title="Solid Variant">
 
     <p>Bold, high-contrast badges for more important status indicators or alerts.</p>
 
@@ -140,8 +146,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="icons">Icons</h2>
+    <c-section id="icons" title="Icons">
 
     <p>Add icons to badges using the <code>icon_leading</code> and <code>icon_trailing</code> slots.</p>
 
@@ -193,8 +200,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="clickable">Clickable Badges</h2>
+    <c-section id="clickable" title="Clickable Badges">
 
     <p>Make badges clickable by providing an <code>href</code> prop. The badge will render as a link with hover effects.</p>
 
@@ -228,8 +236,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="inset">Inset Positioning</h2>
+    <c-section id="inset" title="Inset Positioning">
 
     <p>When using badges alongside inline text, use the <code>inset</code> prop to add negative margins for better alignment.</p>
 
@@ -253,7 +262,7 @@
         </c-slot>
     </c-sample>
 
-    <h2>Real-World Examples</h2>
+    <h3 class="text-lg font-semibold mb-4">Real-World Examples</h3>
 
     <p>Badges work great for status indicators, categories, counts, and labels.</p>
 
@@ -317,8 +326,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
 
     <c-api-props>
         <c-api-prop
@@ -378,5 +390,6 @@
             description="Optional icon to display after the badge text. Provide an SVG element."
         />
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

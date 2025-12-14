@@ -1,51 +1,6 @@
-<c-layouts.base>
-    <div class="max-w-7xl mx-auto grid sm:grid-cols-[200px_auto] lg:grid-cols-[230px_auto_250px] flex-1 px-5">
-        <div class="relative h-full pr-10 border-r-yellow-800 border-opacity-10 hidden sm:block">
-            <c-sidebar />
-        </div>
-        <div class="overflow-auto flex-1 pb-10">
-            <c-layouts.prose-container>
-                {% if page_index %}
-                    <div class="lg:hidden not-prose mb-6">
-
-                        <c-ui.collapse>
-                            <c-slot name="trigger">
-
-                                <c-ui.button theme="subtle" class="w-full">
-                                    <span class="flex w-full justify-between items-center">
-                                        <span>On this page</span>
-                                        <template x-if="!expanded">
-                                            <c-icons.chevron-down class="size-5" />
-                                        </template>
-                                        <template x-if="expanded">
-                                            <c-icons.chevron-up class="size-5" />
-                                        </template>
-                                    </span>
-                                </c-ui.button>
-                            </c-slot>
-
-                            <div class="mt-5">
-                                {{ page_index }}
-                            </div>
-
-                            <c-hr />
-                        </c-ui.collapse>
-
-                    </div>
-                {% endif %}
-
-                {{ slot }}
-            </c-layouts.prose-container>
-        </div>
-        <div class="relative h-full pl-10 border-opacity-10 hidden lg:block text-[15px]">
-            {% if page_index %}
-                <div class="sticky top-[68px] pt-0 pb-10">
-                    <c-sidebar.heading>On this page</c-sidebar.heading>
-                    <ul class="ml-0 pl-0 mt-4 ">
-                        {{ page_index }}
-                    </ul>
-                </div>
-            {% endif %}
-        </div>
-    </div>
-</c-layouts.base>
+<c-layouts.docs>
+    <c-slot name="sidebar">
+        <c-sidebar />
+    </c-slot>
+    {{ slot }}
+</c-layouts.docs>

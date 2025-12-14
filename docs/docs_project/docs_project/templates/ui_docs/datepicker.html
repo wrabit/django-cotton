@@ -7,11 +7,12 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#single-date" class="no-underline">Single Date</a></c-index-sublink>
-        <c-index-sublink><a href="#date-range" class="no-underline">Date Range</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="single-date"><a href="#single-date" class="no-underline">Single Date</a></c-index-sublink>
+        <c-index-sublink section-id="date-range"><a href="#date-range" class="no-underline">Date Range</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="single-date" title="Single Date">
     <c-sample>
         <c-ui.datepicker mode="single" />
 
@@ -21,8 +22,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="date-range">Date Range</h2>
+    <c-section id="date-range" title="Date Range">
 
     <p>Select a range of dates with a start and end date.</p>
 
@@ -35,8 +37,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
 
     <c-api-props>
         <c-api-prop name="mode" type="str" :options="['single', 'range', 'multiple']" default="single" description="Selection mode for single date, date range, or multiple dates."></c-api-prop>
@@ -48,5 +53,6 @@
             <c-slot name="options_content">Any valid date format string</c-slot>
         </c-api-prop>
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

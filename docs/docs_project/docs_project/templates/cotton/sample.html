@@ -2,13 +2,13 @@
 
 <div class="not-prose">
     {% if not code_only %}
-        <div class="min-h-40 md:px-24 rounded-md rounded-b-none border-b-transparent border mt-6 border-gray-400 border-opacity-30 px-8 py-20 flex items-center">
+        <div class="min-h-40 md:px-24 rounded-md rounded-b-none border-b-transparent border mt-6 border-zinc-200 dark:border-zinc-700 px-8 py-20 flex items-center">
             <div class="w-full flex items-center justify-center space-x-4">
                 {{ slot }}
             </div>
         </div>
     {% endif %}
-    <div class="{% if code_only %}rounded-t{% else %}border-t-0{% endif %} max-h-[400px] overflow-y-auto flex-1 rounded-b m-0 border border-gray-400 border-opacity-30 w-full">
+    <div class="{% if code_only %}rounded-t{% else %}border-t-0{% endif %} max-h-[400px] overflow-y-auto flex-1 rounded-b m-0 border border-zinc-200 dark:border-zinc-700 w-full">
         {{ code }}
     </div>
 </div>

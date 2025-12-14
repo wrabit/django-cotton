@@ -1,7 +1,10 @@
 export default (disabled = false, checked = false) => ({
     switchOn: checked,
     disabled: disabled,
-    root: {
+    trigger: {
+        ['@click']() {
+            this.toggle()
+        },
         [':aria-checked']() {
             return this.switchOn;
         },
@@ -27,21 +30,12 @@ export default (disabled = false, checked = false) => ({
             return this.disabled;
         },
     },
-    trigger: {
-        ['@click']() {
-            return this.toggle()
-        },
-        ['x-cloak']() {
-            return true;
-        },
-    },
     setSwitchState(value) {
         if (this.disabled) {
             return;
         }
 
         this.switchOn = value;
-        this.$refs.input.checked = value;
         this.$dispatch('checkedChange');
     },
     toggle() {

@@ -150,7 +150,7 @@ STORAGES = {
 STATIC_URL = "staticfiles/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "docs_project", "static"),
-    os.path.join(BASE_DIR, "cotton_ui", "src", "dist"),  # Cotton UI built assets
+    # Cotton UI static files are served from the installed cotton_ui app
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 

@@ -1,6 +1,6 @@
 /*!
-  Highlight.js v11.9.0 (git: b7ec4bfafc)
-  (c) 2006-2023 undefined and other contributors
+  Highlight.js v11.11.1 (git: 08cb242e7d)
+  (c) 2006-2025 Josh Goebel <hello@joshgoebel.com> and other contributors
   License: BSD-3-Clause
  */
 /* eslint-disable no-multi-assign */
@@ -1555,7 +1555,7 @@ function expandOrCloneMode(mode) {
   return mode;
 }
 
-var version = "11.9.0";
+var version = "11.11.1";
 
 class HTMLInjectionError extends Error {
   constructor(reason, html) {
@@ -2082,6 +2082,7 @@ const HLJS = function(hljs) {
       // first handler (when ignoreIllegals is true)
       if (match.type === "illegal" && lexeme === "") {
         // advance so we aren't stuck in an infinite loop
+        modeBuffer += "\n";
         return 1;
       }
 
@@ -2375,24 +2376,23 @@ const HLJS = function(hljs) {
    * auto-highlights all pre>code elements on the page
    */
   function highlightAll() {
+    function boot() {
+      // if a highlight was requested before DOM was loaded, do now
+      highlightAll();
+    }
+
     // if we are called too early in the loading process
     if (document.readyState === "loading") {
+      // make sure the event listener is only added once
+      if (!wantsHighlight) {
+        window.addEventListener('DOMContentLoaded', boot, false);
+      }
       wantsHighlight = true;
       return;
     }
 
     const blocks = document.querySelectorAll(options.cssSelector);
     blocks.forEach(highlightElement);
-  }
-
-  function boot() {
-    // if a highlight was requested before DOM was loaded, do now
-    if (wantsHighlight) highlightAll();
-  }
-
-  // make sure we are in the browser environment
-  if (typeof window !== 'undefined' && window.addEventListener) {
-    window.addEventListener('DOMContentLoaded', boot, false);
   }
 
   /**

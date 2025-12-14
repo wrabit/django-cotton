@@ -7,19 +7,20 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
-        <c-index-sublink><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
-        <c-index-sublink><a href="#horizontal" class="no-underline">Horizontal</a></c-index-sublink>
-        <c-index-sublink><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
-        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
-        <c-index-sublink><a href="#buttons" class="no-underline">Button Style</a></c-index-sublink>
-        <c-index-sublink><a href="#cards" class="no-underline">Checkbox Cards</a></c-index-sublink>
-        <c-index-sublink><a href="#vertical-cards" class="no-underline">Vertical Cards</a></c-index-sublink>
-        <c-index-sublink><a href="#cards-with-icons" class="no-underline">Cards With Icons</a></c-index-sublink>
-        <c-index-sublink><a href="#custom-content" class="no-underline">Custom Content</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink section-id="with-descriptions"><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
+        <c-index-sublink section-id="horizontal"><a href="#horizontal" class="no-underline">Horizontal</a></c-index-sublink>
+        <c-index-sublink section-id="checked"><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="buttons"><a href="#buttons" class="no-underline">Button Style</a></c-index-sublink>
+        <c-index-sublink section-id="cards"><a href="#cards" class="no-underline">Checkbox Cards</a></c-index-sublink>
+        <c-index-sublink section-id="vertical-cards"><a href="#vertical-cards" class="no-underline">Vertical Cards</a></c-index-sublink>
+        <c-index-sublink section-id="cards-with-icons"><a href="#cards-with-icons" class="no-underline">Cards With Icons</a></c-index-sublink>
+        <c-index-sublink section-id="custom-content"><a href="#custom-content" class="no-underline">Custom Content</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="default" title="Default">
     <c-sample>
         <c-ui.checkbox.group name="features" label="Select features">
             <c-ui.checkbox value="analytics" label="Analytics dashboard" />
@@ -35,8 +36,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="with-descriptions">With Descriptions</h2>
+    <c-section id="with-descriptions" title="With Descriptions">
 
     <p>Add contextual information to each option with the <code>description</code> attribute.</p>
 
@@ -73,8 +75,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="horizontal">Horizontal Layout</h2>
+    <c-section id="horizontal" title="Horizontal Layout">
 
     <p>Arrange checkboxes horizontally by adding flexbox classes to the group.</p>
 
@@ -97,8 +100,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="checked">Checked by Default</h2>
+    <c-section id="checked" title="Checked by Default">
 
     <p>Set initial checked values using the <code>:values</code> prop on the group.</p>
 
@@ -119,8 +123,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="disabled">Disabled</h2>
+    <c-section id="disabled" title="Disabled">
 
     <p>Disable individual checkboxes with the <code>:disabled="True"</code> attribute.</p>
 
@@ -141,8 +146,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="buttons">Button Style</h2>
+    <c-section id="buttons" title="Button Style">
 
     <p>Display checkboxes as a horizontal button group with <code>variant="buttons"</code>.</p>
 
@@ -161,8 +167,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="cards">Checkbox Cards</h2>
+    <c-section id="cards" title="Checkbox Cards">
 
     <p>Display options as interactive cards with <code>variant="cards"</code>. Perfect for visually distinct choices.</p>
 
@@ -199,8 +206,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="vertical-cards">Vertical Cards</h2>
+    <c-section id="vertical-cards" title="Vertical Cards">
 
     <p>Stack cards vertically by adding <code>class="flex-col"</code> to the group.</p>
 
@@ -237,8 +245,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="cards-with-icons">Cards With Icons</h2>
+    <c-section id="cards-with-icons" title="Cards With Icons">
 
     <p>Enhance cards with icons for better visual recognition.</p>
 
@@ -281,8 +290,9 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="custom-content">Custom Content</h2>
+    <c-section id="custom-content" title="Custom Content">
 
     <p>Use slots to create fully custom checkbox content with any HTML structure.</p>
 
@@ -391,8 +401,11 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Checkbox Group Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Checkbox Group Props</h4>
 
     <c-api-props>
         <c-api-prop name="name" type="str" default="" description="Form input name for the checkbox group"></c-api-prop>
@@ -421,5 +434,6 @@
     <c-api-props>
         <c-api-prop name="slot (default)" type="—" default="" description="Custom content for the checkbox. When used, you have full control over the markup."></c-api-prop>
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

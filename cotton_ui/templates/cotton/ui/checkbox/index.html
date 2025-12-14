@@ -64,7 +64,7 @@
         {{ slot }}
     {% else %}
         {% comment %}Checkbox indicator (default and cards variants only, hidden for buttons){% endcomment %}
-        <div x-show="{% if show_indicator %}(() => { const v = $el.closest('[data-variant]')?.dataset.variant || 'default'; return v !== 'buttons'; })(){% else %}false{% endif %}" class="flex items-center h-5">
+        <div x-show="{% if show_indicator %}(() => { const v = $el.closest('[data-variant]')?.dataset.variant || 'default'; return v !== 'buttons'; })(){% else %}false{% endif %}" class="flex items-center mt-0.5 h-5">
             <div class="flex items-center justify-center w-4 h-4 border-2 border-zinc-300 dark:border-zinc-600 rounded transition-all"
                  :class="{
                      {% if accent %}

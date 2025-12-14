@@ -8,15 +8,17 @@
 
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#multiple" class="no-underline">Multiple</a></c-index-sublink>
-        <c-index-sublink><a href="#expanded" class="no-underline">Expanded</a></c-index-sublink>
-        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
-        <c-index-sublink><a href="#icon-position" class="no-underline">Icon Position</a></c-index-sublink>
-        <c-index-sublink><a href="#custom-icon" class="no-underline">Custom Icon</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="multiple"><a href="#multiple" class="no-underline">Multiple</a></c-index-sublink>
+        <c-index-sublink section-id="expanded"><a href="#expanded" class="no-underline">Expanded</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="icon-position"><a href="#icon-position" class="no-underline">Icon Position</a></c-index-sublink>
+        <c-index-sublink section-id="custom-icon"><a href="#custom-icon" class="no-underline">Custom Icon</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <c-sample>
+    <c-section id="basic" title="Basic Usage">
+        <c-sample>
         <c-ui.accordion>
             <c-ui.accordion.item header="Do you offer bulk discounts?">
                 Yes! We provide special pricing for large orders.
@@ -30,7 +32,7 @@
         </c-ui.accordion>
 
         <c-slot name="code">
-<c-snippet language="django">{% cotton:verbatim %}{% verbatim %}
+<c-snippet language="html">{% cotton:verbatim %}{% verbatim %}
 <c-ui.accordion>
     <c-ui.accordion.item header="Do you offer bulk discounts?">
         Yes! We provide special pricing for large orders.
@@ -45,10 +47,10 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="multiple">Multiple</h2>
-
-    <p>Permit more than one item to be open at the same time.</p>
+    <c-section id="multiple" title="Multiple">
+        <p>Permit more than one item to be open at the same time.</p>
 
     <c-sample>
         <c-ui.accordion type="multiple">
@@ -77,8 +79,9 @@
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="expanded">Expanded</h2>
+    <c-section id="expanded" title="Expanded">
 
     <p>Define which items are initially open using the <code>:expanded="True"</code> attribute.</p>
 
@@ -105,8 +108,9 @@
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="disabled">Disabled</h2>
+    <c-section id="disabled" title="Disabled">
 
     <p>Disable individual accordion items with <code>:disabled="True"</code>.</p>
 
@@ -137,8 +141,9 @@
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="icon-position">Icon Position</h2>
+    <c-section id="icon-position" title="Icon Position">
 
     <p>Control where the chevron appears using <code>icon_position="leading"</code> to place it before the header text.</p>
 
@@ -166,8 +171,9 @@
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="custom-icon">Custom Icon</h2>
+    <c-section id="custom-icon" title="Custom Icon">
 
     <p>Use different icons for closed and open states with <code>icon_closed</code> and <code>icon_open</code> slots.</p>
 
@@ -216,8 +222,11 @@
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Accordion Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Accordion Props</h4>
 
     <c-api-props>
         <c-api-prop name="type" type="str" :options="['single', 'multiple']" default="single" description="Whether one or more items can be expanded at the same time." />
@@ -242,5 +251,6 @@
         <c-api-prop name="icon_closed" type="—" default="" description="Custom icon to display when the accordion item is closed. Overrides the default chevron." />
         <c-api-prop name="icon_open" type="—" default="" description="Custom icon to display when the accordion item is open. Overrides the default chevron." />
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

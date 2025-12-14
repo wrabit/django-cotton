@@ -2,66 +2,60 @@
     <c-header>
         Theming
         <c-slot name="subheading">
-            Customize Cotton UI colors using CSS variables.
+            Customize Cotton UI colors using Tailwind CSS v4's theming system.
         </c-slot>
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#overview" class="no-underline">Overview</a></c-index-sublink>
         <c-index-sublink><a href="#accent-color" class="no-underline">Accent Color</a></c-index-sublink>
         <c-index-sublink><a href="#accent-props" class="no-underline">Accent Props</a></c-index-sublink>
-        <c-index-sublink><a href="#base-color" class="no-underline">Base Color</a></c-index-sublink>
         <c-index-sublink><a href="#examples" class="no-underline">Examples</a></c-index-sublink>
+        <c-index-sublink><a href="#advanced" class="no-underline">Advanced</a></c-index-sublink>
     </c-slot>
 
-    <p>Cotton UI uses a Flux-inspired theming approach with two primary colors:</p>
-
-    <ul>
-        <li><strong>Base Color</strong> (zinc) - Used for backgrounds, borders, and text throughout the UI</li>
-        <li><strong>Accent Color</strong> (teal) - Used for primary buttons, active states, and focus rings</li>
-    </ul>
-
-    <p>Both colors are fully customizable using CSS variables, with no Tailwind rebuild required.</p>
+    <p>Cotton UI uses Tailwind's built-in <code>zinc</code> for grays (works out of the box) and a customizable <strong>accent color</strong> (teal by default) for primary buttons, active states, and focus rings.</p>
 
     <h2 id="accent-color">Changing the Accent Color</h2>
 
-    <p>The accent color is used for primary interactive elements like buttons, tabs, and focus states. Cotton UI provides a 3-value accent system:</p>
+    <p>The accent color is defined in your <code>app.css</code> using Tailwind v4's <code>@theme</code> directive. Cotton UI uses a 3-value accent system:</p>
 
     <ul>
-        <li><code>accent</code> - Base accent color</li>
-        <li><code>accent-content</code> - Stronger variant for hover states</li>
-        <li><code>accent-foreground</code> - Text color on accent backgrounds</li>
+        <li><code>--color-accent</code> - Primary button backgrounds</li>
+        <li><code>--color-accent-content</code> - Hover states and readable text</li>
+        <li><code>--color-accent-foreground</code> - Text on accent backgrounds</li>
     </ul>
 
     <c-sample>
         <c-slot name="code">
-<c-snippet language="css">{% cotton:verbatim %}{% verbatim %}
-/* In your CSS file */
-@layer base {
-    :root {
-        /* Change accent from teal to blue */
-        --color-accent-base: var(--color-blue-500);
-        --color-accent-content-base: var(--color-blue-600);
-        --color-accent-foreground-base: var(--color-white);
-    }
+<c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
+@import "tailwindcss";
 
+@theme {
+    --color-accent: var(--color-blue-500);
+    --color-accent-content: var(--color-blue-600);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer theme {
     .dark {
-        --color-accent-base: var(--color-blue-400);
-        --color-accent-content-base: var(--color-blue-300);
-        --color-accent-foreground-base: var(--color-blue-950);
+        --color-accent: var(--color-blue-400);
+        --color-accent-content: var(--color-blue-300);
+        --color-accent-foreground: var(--color-blue-950);
     }
 }
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
+    <p class="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
+        <code>@theme</code> registers colors with Tailwind, enabling utilities like <code>bg-accent</code>. Dark mode uses <code>@layer theme</code> for proper specificity.
+    </p>
+
     <h2 id="accent-props">Accent Props</h2>
 
-    <p>Cotton UI components support an <code>:accent</code> prop to opt out of accent colors for a monochrome style. By default, components use accent colors (<code>:accent="True"</code>), but you can set <code>:accent="False"</code> to use zinc-based colors instead.</p>
+    <p>Components support an <code>:accent</code> prop to opt out of accent colors for a monochrome style. Set <code>:accent="False"</code> to use zinc-based colors instead.</p>
 
     <h3>Radio Button Comparison</h3>
-
-    <p>Here's the same radio group with and without accent colors:</p>
 
     <c-sample>
         <div class="grid md:grid-cols-2 gap-8">
@@ -85,24 +79,14 @@
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}{# With accent (default) #}
-<c-ui.radio.group name="notifications" value="all">
-    <c-ui.radio value="all" label="All notifications" />
-    <c-ui.radio value="important" label="Important only" />
-    <c-ui.radio value="none" label="None" />
-</c-ui.radio.group>
+<c-ui.radio value="all" label="All notifications" />
 
 {# Without accent #}
-<c-ui.radio.group name="notifications" value="all">
-    <c-ui.radio value="all" label="All notifications" :accent="False" />
-    <c-ui.radio value="important" label="Important only" :accent="False" />
-    <c-ui.radio value="none" label="None" :accent="False" />
-</c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-ui.radio value="all" label="All notifications" :accent="False" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
     <h3>Card Variant Comparison</h3>
-
-    <p>The accent prop also affects card-style radios:</p>
 
     <c-sample>
         <div class="grid md:grid-cols-2 gap-8">
@@ -125,23 +109,14 @@
         </div>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}{# With accent (default) #}
-<c-ui.radio.group name="plan" variant="cards" class="flex-col" value="pro">
-    <c-ui.radio value="starter" label="Starter" description="$10/month" />
-    <c-ui.radio value="pro" label="Pro" description="$25/month" />
-</c-ui.radio.group>
-
-{# Without accent #}
-<c-ui.radio.group name="plan" variant="cards" class="flex-col" value="pro">
-    <c-ui.radio value="starter" label="Starter" description="$10/month" :accent="False" />
-    <c-ui.radio value="pro" label="Pro" description="$25/month" :accent="False" />
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.radio.group name="plan" variant="cards" value="pro">
+    <c-ui.radio value="starter" label="Starter" :accent="False" />
+    <c-ui.radio value="pro" label="Pro" :accent="False" />
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
     <h3>Checkbox Comparison</h3>
-
-    <p>The accent prop works across all form components, including checkboxes:</p>
 
     <c-sample>
         <div class="grid md:grid-cols-2 gap-8">
@@ -164,31 +139,81 @@
         </div>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}{# With accent (default) #}
-<c-ui.checkbox.group name="features" :values="['analytics', 'api']">
-    <c-ui.checkbox value="analytics" label="Analytics" />
-    <c-ui.checkbox value="api" label="API Access" />
-</c-ui.checkbox.group>
-
-{# Without accent #}
-<c-ui.checkbox.group name="features" :values="['analytics', 'api']">
-    <c-ui.checkbox value="analytics" label="Analytics" :accent="False" />
-    <c-ui.checkbox value="api" label="API Access" :accent="False" />
-</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox value="analytics" label="Analytics" :accent="False" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
-    <p class="mt-6 text-sm text-zinc-600 dark:text-zinc-400">
-        When <code>:accent="False"</code>, selected states use <code>zinc-900</code> (light mode) or <code>zinc-100</code> (dark mode) instead of the accent color. This creates a subtle, monochrome aesthetic that works across radios, checkboxes, and other interactive components.
-    </p>
+    <h2 id="examples">Examples</h2>
 
-    <h2 id="base-color">Changing the Base Color</h2>
-
-    <p>Cotton UI uses <code>zinc</code> as the default base color for grays. You can swap it for another gray family like slate, gray, or neutral by remapping all zinc shades:</p>
+    <h3>Popular Accent Colors</h3>
 
     <c-sample>
         <c-slot name="code">
-<c-snippet language="css">{% cotton:verbatim %}{% verbatim %}
+<c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
+/* Teal (default) */
+@theme {
+    --color-accent: var(--color-teal-500);
+    --color-accent-content: var(--color-teal-600);
+    --color-accent-foreground: var(--color-white);
+}
+@layer theme {
+    .dark {
+        --color-accent: var(--color-teal-400);
+        --color-accent-content: var(--color-teal-300);
+        --color-accent-foreground: var(--color-teal-950);
+    }
+}
+
+/* Indigo */
+@theme {
+    --color-accent: var(--color-indigo-500);
+    --color-accent-content: var(--color-indigo-600);
+    --color-accent-foreground: var(--color-white);
+}
+@layer theme {
+    .dark {
+        --color-accent: var(--color-indigo-400);
+        --color-accent-content: var(--color-indigo-300);
+        --color-accent-foreground: var(--color-white);
+    }
+}
+
+/* Rose */
+@theme {
+    --color-accent: var(--color-rose-500);
+    --color-accent-content: var(--color-rose-600);
+    --color-accent-foreground: var(--color-white);
+}
+@layer theme {
+    .dark {
+        --color-accent: var(--color-rose-400);
+        --color-accent-content: var(--color-rose-300);
+        --color-accent-foreground: var(--color-white);
+    }
+}
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <h3>How Components Use Colors</h3>
+
+    <p>Components use these utility classes that reference your theme:</p>
+
+    <ul>
+        <li><code>bg-accent</code> - Accent background (primary buttons)</li>
+        <li><code>hover:bg-accent-content</code> - Accent hover state</li>
+        <li><code>text-accent-foreground</code> - Text on accent backgrounds</li>
+        <li><code>ring-accent</code> - Focus rings</li>
+        <li><code>bg-zinc-*</code>, <code>text-zinc-*</code>, <code>border-zinc-*</code> - Base grays (Tailwind built-in)</li>
+    </ul>
+
+    <h2 id="advanced">Advanced: Changing the Base Gray</h2>
+
+    <p>Cotton UI uses Tailwind's built-in <code>zinc</code> for grays, which works with zero configuration. If you prefer a different gray family, you can remap zinc to another palette:</p>
+
+    <c-sample>
+        <c-slot name="code">
+<c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
 /* Remap zinc to slate */
 @theme {
     --color-zinc-50: var(--color-slate-50);
@@ -207,100 +232,8 @@
         </c-slot>
     </c-sample>
 
-    <h2 id="examples">Color Examples</h2>
-
-    <h3>Popular Accent Colors</h3>
-
-    <c-sample>
-        <c-slot name="code">
-<c-snippet language="css">{% cotton:verbatim %}{% verbatim %}
-/* Red */
-:root {
-    --color-accent-base: var(--color-red-500);
-    --color-accent-content-base: var(--color-red-600);
-    --color-accent-foreground-base: var(--color-white);
-}
-
-/* Indigo */
-:root {
-    --color-accent-base: var(--color-indigo-500);
-    --color-accent-content-base: var(--color-indigo-600);
-    --color-accent-foreground-base: var(--color-white);
-}
-
-/* Emerald */
-:root {
-    --color-accent-base: var(--color-emerald-500);
-    --color-accent-content-base: var(--color-emerald-600);
-    --color-accent-foreground-base: var(--color-white);
-}
-
-/* Violet */
-:root {
-    --color-accent-base: var(--color-violet-500);
-    --color-accent-content-base: var(--color-violet-600);
-    --color-accent-foreground-base: var(--color-white);
-}
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-
-    <h3>Complete Theme Example</h3>
-
-    <p>Here's a complete example changing both base and accent colors:</p>
-
-    <c-sample>
-        <c-slot name="code">
-<c-snippet language="css">{% cotton:verbatim %}{% verbatim %}
-/* Slate base + Purple accent theme */
-@theme {
-    /* Remap zinc to slate */
-    --color-zinc-50: var(--color-slate-50);
-    --color-zinc-100: var(--color-slate-100);
-    --color-zinc-200: var(--color-slate-200);
-    --color-zinc-300: var(--color-slate-300);
-    --color-zinc-400: var(--color-slate-400);
-    --color-zinc-500: var(--color-slate-500);
-    --color-zinc-600: var(--color-slate-600);
-    --color-zinc-700: var(--color-slate-700);
-    --color-zinc-800: var(--color-slate-800);
-    --color-zinc-900: var(--color-slate-900);
-    --color-zinc-950: var(--color-slate-950);
-}
-
-@layer base {
-    :root {
-        --color-accent-base: var(--color-purple-500);
-        --color-accent-content-base: var(--color-purple-600);
-        --color-accent-foreground-base: var(--color-white);
-    }
-
-    .dark {
-        --color-accent-base: var(--color-purple-400);
-        --color-accent-content-base: var(--color-purple-300);
-        --color-accent-foreground-base: var(--color-purple-950);
-    }
-}
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-
-    <h3>How Components Use Colors</h3>
-
-    <p>Components use semantic color utilities that automatically reference your theme:</p>
-
-    <ul>
-        <li><code>bg-accent</code> - Accent background (e.g., primary buttons)</li>
-        <li><code>text-accent-foreground</code> - Text on accent backgrounds</li>
-        <li><code>hover:bg-accent-content</code> - Accent hover state</li>
-        <li><code>ring-accent</code> - Focus rings use accent color</li>
-        <li><code>bg-zinc-100</code> - Base gray backgrounds (full 50-950 range available)</li>
-        <li><code>border-zinc-300</code> - Base gray borders</li>
-        <li><code>text-zinc-700</code> - Base gray text</li>
-    </ul>
-
     <p class="mt-6 text-sm opacity-70">
-        Based on <a href="https://fluxui.dev/docs/theming" target="_blank" class="text-accent">Flux UI's theming approach</a> — simple, flexible, and no rebuild required.
+        Theming approach inspired by <a href="https://fluxui.dev/docs/theming" target="_blank" class="text-accent">Flux UI</a>.
     </p>
 
 </c-layouts.ui>

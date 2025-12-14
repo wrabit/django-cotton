@@ -1,1 +1,12 @@
-<li class="py-0.5 pl-1 ml-5 list-disc marker:text-teal-600 text-[#1a384a] dark:text-gray-400">{{ slot }}</li>
+<c-vars :section_id="" />
+
+<li
+    class="py-0.5 pl-4 border-l-[3px] list-none relative transition-all duration-200"
+    :class="{
+        '!text-white dark:text-teal-400 font-semibold border-teal-600': isActive('{{ section_id }}'),
+        'text-[#1a384a] dark:text-zinc-400 border-zinc-200 dark:border-zinc-700': !isActive('{{ section_id }}')
+    }"
+    :aria-current="isActive('{{ section_id }}') ? 'location' : false"
+>
+    {{ slot }}
+</li>

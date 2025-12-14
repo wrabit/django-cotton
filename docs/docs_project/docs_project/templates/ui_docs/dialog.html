@@ -7,18 +7,19 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#form" class="no-underline">Form</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="form"><a href="#form" class="no-underline">Form</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="default" title="Default">
     <c-sample>
         <c-ui.dialog>
             <c-slot name="trigger">
                 <c-ui.button>Open Simple Dialog</c-ui.button>
             </c-slot>
-            
+
             <h3 class="text-lg font-semibold mb-2">Simple Content</h3>
             <p class="text-zinc-600 dark:text-zinc-400">
                 This is a basic dialog with just content in the default slot.
@@ -32,7 +33,7 @@
     <c-slot name="trigger">
         <c-ui.button>Open Simple Dialog</c-ui.button>
     </c-slot>
-    
+
     <h3 class="text-lg font-semibold mb-2">Simple Content</h3>
     <p class="text-zinc-600 dark:text-zinc-400">
         This is a basic dialog with just content in the default slot.
@@ -41,8 +42,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="form">With Header & Footer</h2>
+    <c-section id="form" title="With Header & Footer">
 
     <p>Use named slots for header and footer to structure complex dialogs.</p>
 
@@ -51,14 +53,14 @@
             <c-slot name="trigger">
                 <c-ui.button variant="primary">Edit Profile</c-ui.button>
             </c-slot>
-            
+
             <c-slot name="header">
                 <c-ui.dialog.title>Edit Profile</c-ui.dialog.title>
                 <c-ui.dialog.description>
                     Make changes to your profile here. Click save when you're done.
                 </c-ui.dialog.description>
             </c-slot>
-            
+
             <div class="space-y-4">
                <c-ui.input label="Name" value="Pedro Duarte" />
                <c-ui.input label="Username" value="@peduarte" />
@@ -76,12 +78,12 @@
     <c-slot name="trigger">
         <c-ui.button>Edit Profile</c-ui.button>
     </c-slot>
-    
+
     <c-slot name="header">
         <c-ui.dialog.title>Edit Profile</c-ui.dialog.title>
         <c-ui.dialog.description>Make changes to your profile here.</c-ui.dialog.description>
     </c-slot>
-    
+
     <div class="space-y-4">
        <c-ui.input label="Name" value="Pedro Duarte" />
        <c-ui.input label="Username" value="@peduarte" />
@@ -95,8 +97,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="sizes">Sizes</h2>
+    <c-section id="sizes" title="Sizes">
     <p>Control the width of the dialog using the <code>size</code> prop on the dialog component.</p>
 
     <c-sample>
@@ -129,8 +132,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Dialog Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Dialog Props</h4>
 
     <c-api-props>
         <c-api-prop name=":open" type="bool" default="False" description="Controlled open state." />
@@ -146,5 +152,6 @@
         <c-api-prop name="default" type="slot" description="Main content body." />
         <c-api-prop name="footer" type="slot" description="Footer actions." />
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

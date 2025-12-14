@@ -1,5 +1,6 @@
-export default (expanded) => ({
+export default (expanded, disabled = false) => ({
     expanded: expanded,
+    disabled: disabled,
     root: {
         ['x-id']() {
             return ['accordion-item'];

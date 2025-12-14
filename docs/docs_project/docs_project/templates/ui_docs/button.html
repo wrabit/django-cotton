@@ -7,10 +7,12 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="basic" title="Basic Usage">
     <c-sample>
         <div class="w-full flex items-center justify-center space-x-4">
             <c-ui.button>button</c-ui.button>
@@ -43,6 +45,9 @@
             {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
+
+    <c-section id="sizes" title="Sizes">
 
     <h3>Outlined</h3>
 
@@ -69,8 +74,11 @@
     <h3>Addons</h3>
 
     <h3>Types</h3>
+    </c-section>
 
-    <h4 id="reference">Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
 
     <c-api-props>
         <c-api-prop name="variant"
@@ -98,5 +106,6 @@
                     default="False"
                     description="Prevents interaction with the button." />
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

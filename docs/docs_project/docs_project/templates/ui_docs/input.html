@@ -7,11 +7,12 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
-        <c-index-sublink><a href="#types" class="no-underline">Types</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink section-id="types"><a href="#types" class="no-underline">Types</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="default" title="Default">
     <c-sample>
         <c-ui.input placeholder="What's your name?" />
 
@@ -21,8 +22,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="types">Types</h2>
+    <c-section id="types" title="Types">
 
     <p>Use the <code>type</code> attribute to change the input type.</p>
 
@@ -47,8 +49,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
 
     <c-api-props>
         <c-api-prop name="type" type="str" :options="['text', 'password', 'email', 'number', 'tel', 'url']" default="text" description="The HTML input type." />
@@ -75,5 +80,6 @@
             <c-slot name="options_content">Django form object</c-slot>
         </c-api-prop>
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

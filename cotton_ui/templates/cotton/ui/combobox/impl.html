@@ -221,8 +221,16 @@
 
             selectOption(option) {
                 if (this.tags.includes(option)) {
+                    // Option already selected - toggle OFF
                     this.removeTag(option);
                 } else {
+                    // Option not selected - prepare to add
+
+                    // Single-select mode: auto-replace existing selection
+                    if (this.maxTags === 1 && this.tags.length > 0) {
+                        this.removeTag(this.tags[0]);
+                    }
+
                     this.addTag(option);
                 }
             },

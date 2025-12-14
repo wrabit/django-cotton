@@ -23,13 +23,13 @@ services:
   cotton-docs-tailwind:
     container_name: cotton-docs-tailwind
     stop_signal: SIGINT
-    image: node:16
+    image: node:20
     working_dir: /app
     tty: true
     volumes:
       - ../docs_project:/app
       - ../../cotton_ui:/app/cotton_ui
-    command: /bin/sh -c "trap 'exit' INT; npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css --watch"
+    command: /bin/sh -c "trap 'exit' INT; npm install && npm run build && npm run watch"
 
   cotton-docs-redis:
     container_name: cotton-docs-redis

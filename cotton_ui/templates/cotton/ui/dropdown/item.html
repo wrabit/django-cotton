@@ -1,8 +1,87 @@
-<a href="#" class="bg-zinc-50 px-4 py-2 text-sm text-zinc-600
-    hover:bg-zinc-900/5
-    hover:text-zinc-900 focus-visible:bg-zinc-900/10 focus-visible:text-zinc-900 focus-visible:outline-none
-    dark:bg-black/10
-    dark:text-zinc-300
-    dark:hover:bg-zinc-50/5 dark:hover:text-white
-    dark:focus-visible:bg-zinc-50/10
-    dark:focus-visible:text-white" role="menuitem">{{ slot }}</a>
+<c-vars
+  icon=""
+  kbd=""
+  variant=""
+  :disabled="False"
+  href=""
+/>
+
+{% if href %}
+  <a
+    href="{{ href }}"
+    {% if disabled %}aria-disabled="true"{% endif %}
+    @click="$dispatch('dropdown-close')"
+    @mouseover="$focus.focus($el)"
+    @focus="$el.setAttribute('tabindex', 0)"
+    @focusout="$el.setAttribute('tabindex', -1)"
+    @keydown.tab="$dispatch('dropdown-close')"
+    {{ attrs }}
+    class="flex items-center gap-3 px-4 py-2 text-sm rounded-md transition-colors
+           {% if variant == 'danger' %}
+             text-red-600 dark:text-red-400
+             hover:bg-red-50 dark:hover:bg-red-950/30
+             focus-visible:bg-red-50 dark:focus-visible:bg-red-950/30
+           {% else %}
+             text-zinc-700 dark:text-zinc-300
+             hover:bg-zinc-100 dark:hover:bg-zinc-800
+             focus-visible:bg-zinc-100 dark:focus-visible:bg-zinc-800
+           {% endif %}
+           focus-visible:outline-none
+           {% if disabled %}opacity-50 cursor-not-allowed pointer-events-none{% endif %}"
+    role="menuitem"
+    tabindex="-1">
+
+    {% if icon %}
+      <span class="flex-shrink-0 w-4 h-4">
+        {{ icon }}
+      </span>
+    {% endif %}
+
+    <span class="flex-1">{{ slot }}</span>
+
+    {% if kbd %}
+      <span class="ml-auto text-xs text-zinc-500 dark:text-zinc-400 font-mono tracking-wider">
+        {{ kbd }}
+      </span>
+    {% endif %}
+  </a>
+{% else %}
+  <button
+    type="button"
+    {% if disabled %}disabled{% endif %}
+    @click="$dispatch('dropdown-close')"
+    @mouseover="$focus.focus($el)"
+    @focus="$el.setAttribute('tabindex', 0)"
+    @focusout="$el.setAttribute('tabindex', -1)"
+    @keydown.tab="$dispatch('dropdown-close')"
+    {{ attrs }}
+    class="flex items-center gap-3 w-full px-4 py-2 text-sm text-left rounded-md transition-colors
+           {% if variant == 'danger' %}
+             text-red-600 dark:text-red-400
+             hover:bg-red-50 dark:hover:bg-red-950/30
+             focus-visible:bg-red-50 dark:focus-visible:bg-red-950/30
+           {% else %}
+             text-zinc-700 dark:text-zinc-300
+             hover:bg-zinc-100 dark:hover:bg-zinc-800
+             focus-visible:bg-zinc-100 dark:focus-visible:bg-zinc-800
+           {% endif %}
+           focus-visible:outline-none
+           disabled:opacity-50 disabled:cursor-not-allowed"
+    role="menuitem"
+    tabindex="-1">
+
+    {% if icon %}
+      <span class="flex-shrink-0 w-4 h-4">
+        {{ icon }}
+      </span>
+    {% endif %}
+
+    <span class="flex-1">{{ slot }}</span>
+
+    {% if kbd %}
+      <span class="ml-auto text-xs text-zinc-500 dark:text-zinc-400 font-mono tracking-wider">
+        {{ kbd }}
+      </span>
+    {% endif %}
+  </button>
+{% endif %}

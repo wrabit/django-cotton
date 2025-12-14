@@ -47,7 +47,7 @@
     </c-sample>
 
     <h2 id="height">Height</h2>
-    <p>Control the initial height using the <code>height</code> attribute. This sets a fixed height, which will be overridden if <code>:autoresize="True"</code> is used and the content grows.</p>
+    <p>Control the initial height using the <code>height</code> attribute. This sets a fixed height, which will be overridden if <code>autoresize</code> is used and the content grows.</p>
     <c-sample>
         <div class="space-y-4">
             <c-ui.textarea height="xs" placeholder="Extra Small Height" />
@@ -68,13 +68,13 @@
     </c-sample>
 
     <h2 id="autoresize">Autoresize</h2>
-    <p>Use the <code>:autoresize="True"</code> attribute to make the textarea automatically adjust its height based on the content. Requires Alpine.js.</p>
+    <p>Use the <code>autoresize</code> attribute to make the textarea automatically adjust its height based on the content. Requires Alpine.js.</p>
     <c-sample>
-        <c-ui.textarea :autoresize="True" placeholder="Type something long here and the textarea will grow..." />
+        <c-ui.textarea autoresize placeholder="Type something long here and the textarea will grow..." />
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
-<c-ui.textarea :autoresize="True" placeholder="Type something long here..." />
+<c-ui.textarea autoresize placeholder="Type something long here..." />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>

@@ -1,0 +1,48 @@
+<c-layouts.base>
+    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_minmax(0,1fr)] lg:grid-cols-[230px_minmax(0,1fr)_250px] px-5" x-data="scrollspy">
+        <!-- Left sidebar: sticky with independent scroll -->
+        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block py-6">
+            {{ sidebar }}
+        </div>
+        <!-- Main content: scrolls with page -->
+        <div class="min-w-0 pb-10 py-6">
+            <c-layouts.prose-container>
+                {% if page_index %}
+                    <div class="lg:hidden not-prose mb-6">
+                        <c-ui.collapse>
+                            <c-slot name="trigger">
+                                <c-ui.button theme="subtle" class="w-full">
+                                    <span class="flex w-full justify-between items-center">
+                                        <span>On this page</span>
+                                        <template x-if="!expanded">
+                                            <c-icons.chevron-down class="size-5" />
+                                        </template>
+                                        <template x-if="expanded">
+                                            <c-icons.chevron-up class="size-5" />
+                                        </template>
+                                    </span>
+                                </c-ui.button>
+                            </c-slot>
+                            <div class="mt-5">
+                                {{ page_index }}
+                            </div>
+                            <c-hr />
+                        </c-ui.collapse>
+                    </div>
+                {% endif %}
+                {{ slot }}
+            </c-layouts.prose-container>
+        </div>
+        <!-- Right sidebar: sticky with independent scroll -->
+        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pl-10 hidden lg:block text-sm py-6">
+            {% if page_index %}
+                <div>
+                    <c-sidebar.heading>On this page</c-sidebar.heading>
+                    <ul class="ml-0 pl-0 mt-4">
+                        {{ page_index }}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</c-layouts.base>

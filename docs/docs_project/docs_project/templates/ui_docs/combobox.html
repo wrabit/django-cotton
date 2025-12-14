@@ -7,16 +7,17 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
-        <c-index-sublink><a href="#max-tags" class="no-underline">Max Tags</a></c-index-sublink>
-        <c-index-sublink><a href="#searchable" class="no-underline">Searchable</a></c-index-sublink>
-        <c-index-sublink><a href="#writable" class="no-underline">Writable (Tags)</a></c-index-sublink>
-        <c-index-sublink><a href="#single" class="no-underline">Single Select</a></c-index-sublink>
-        <c-index-sublink><a href="#autoclose" class="no-underline">Autoclose</a></c-index-sublink>
-        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink section-id="max-tags"><a href="#max-tags" class="no-underline">Max Tags</a></c-index-sublink>
+        <c-index-sublink section-id="searchable"><a href="#searchable" class="no-underline">Searchable</a></c-index-sublink>
+        <c-index-sublink section-id="writable"><a href="#writable" class="no-underline">Writable (Tags)</a></c-index-sublink>
+        <c-index-sublink section-id="single"><a href="#single" class="no-underline">Single Select</a></c-index-sublink>
+        <c-index-sublink section-id="autoclose"><a href="#autoclose" class="no-underline">Autoclose</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="default" title="Default">
     <c-sample>
         <c-ui.combobox
             name="skills"
@@ -34,8 +35,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="max-tags">Max Tags</h2>
+    <c-section id="max-tags" title="Max Tags">
 
     <p>Limit the number of items that can be selected.</p>
 
@@ -58,8 +60,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="searchable">Searchable</h2>
+    <c-section id="searchable" title="Searchable">
 
     <p>Enable searching through options.</p>
 
@@ -82,8 +85,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="writable">Writable (Custom Tags)</h2>
+    <c-section id="writable" title="Writable (Custom Tags)">
 
     <p>Allow users to enter custom values not in the list.</p>
 
@@ -106,8 +110,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="single">Single Select</h2>
+    <c-section id="single" title="Single Select">
 
     <p>Restrict selection to a single item by setting <code>max_tags=1</code>. This behaves like a select but with the tag UI.</p>
 
@@ -130,8 +135,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="autoclose">Autoclose</h2>
+    <c-section id="autoclose" title="Autoclose">
 
     <p>Automatically close the dropdown when the maximum number of tags is reached. This is useful when combined with <code>max_tags</code> to provide a smoother user experience - once the user has selected all allowed items, the dropdown closes automatically.</p>
 
@@ -156,8 +162,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="disabled">Disabled</h2>
+    <c-section id="disabled" title="Disabled">
 
     <p>Prevent interaction with the combobox.</p>
 
@@ -182,8 +189,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
 
     <c-api-props>
         <c-api-prop name="name" type="str" default="" description="Form input name." />
@@ -200,5 +210,6 @@
         <c-api-prop name="description" type="str" default="" description="Shorthand: adds description text." />
         <c-api-prop name="error" type="str" default="" description="Shorthand: displays error message." />
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

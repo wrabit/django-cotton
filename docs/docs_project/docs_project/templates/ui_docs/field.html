@@ -7,15 +7,17 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#shorthand" class="no-underline">Shorthand Usage</a></c-index-sublink>
-        <c-index-sublink><a href="#with-label" class="no-underline">With Label</a></c-index-sublink>
-        <c-index-sublink><a href="#with-description" class="no-underline">With Description</a></c-index-sublink>
-        <c-index-sublink><a href="#with-error" class="no-underline">With Error</a></c-index-sublink>
-        <c-index-sublink><a href="#complete" class="no-underline">Complete Example</a></c-index-sublink>
-        <c-index-sublink><a href="#inline" class="no-underline">Inline Variant</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="shorthand"><a href="#shorthand" class="no-underline">Shorthand Usage</a></c-index-sublink>
+        <c-index-sublink section-id="with-label"><a href="#with-label" class="no-underline">With Label</a></c-index-sublink>
+        <c-index-sublink section-id="with-description"><a href="#with-description" class="no-underline">With Description</a></c-index-sublink>
+        <c-index-sublink section-id="with-error"><a href="#with-error" class="no-underline">With Error</a></c-index-sublink>
+        <c-index-sublink section-id="complete"><a href="#complete" class="no-underline">Complete Example</a></c-index-sublink>
+        <c-index-sublink section-id="inline"><a href="#inline" class="no-underline">Inline Variant</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="basic" title="Basic Usage">
     <c-sample>
         <c-ui.field>
             <c-ui.label>Email</c-ui.label>
@@ -33,8 +35,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="shorthand">Shorthand Usage</h2>
+    <c-section id="shorthand" title="Shorthand Usage">
 
     <p>To reduce repetitive markup, form controls like <code>input</code> and <code>textarea</code> can accept <code>label</code>, <code>description</code>, <code>error</code>, and <code>badge</code> props directly. When any of these props are provided, the control will automatically be wrapped in a field structure.</p>
 
@@ -89,8 +92,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="with-label">With Label Badge</h2>
+    <c-section id="with-label" title="With Label Badge">
 
     <p>Add a badge to the label to indicate required or optional fields.</p>
 
@@ -121,8 +125,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="with-description">With Description</h2>
+    <c-section id="with-description" title="With Description">
 
     <p>Add helper text to provide context about the field. Descriptions can appear before or after the input.</p>
 
@@ -159,8 +164,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="with-error">With Error Message</h2>
+    <c-section id="with-error" title="With Error Message">
 
     <p>Display validation feedback with the error component. Supports Django form integration or explicit messages.</p>
 
@@ -189,8 +195,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="complete">Complete Example</h2>
+    <c-section id="complete" title="Complete Example">
 
     <p>Combining all elements together with Django form integration.</p>
 
@@ -215,8 +222,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="inline">Inline Variant</h2>
+    <c-section id="inline" title="Inline Variant">
 
     <p>Display the field in an inline layout with the label beside the input.</p>
 
@@ -241,8 +249,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Field Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Field Props</h4>
 
     <c-api-props>
         <c-api-prop name="variant" type="str" :options="['block', 'inline']" default="block" description="Layout variant for the field." />
@@ -277,5 +288,6 @@
         <c-api-prop name="variant" type="str" :options="['', 'pill', 'solid']" default="" description="Badge style variant." />
         <c-api-prop name=":inset" type="bool" :options="['True', 'False']" default="False" description="Apply negative margins." />
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

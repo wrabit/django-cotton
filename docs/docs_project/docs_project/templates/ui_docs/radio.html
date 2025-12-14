@@ -7,17 +7,18 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
-        <c-index-sublink><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
-        <c-index-sublink><a href="#segmented" class="no-underline">Segmented</a></c-index-sublink>
-        <c-index-sublink><a href="#segmented-icons" class="no-underline">Segmented with Icons</a></c-index-sublink>
-        <c-index-sublink><a href="#cards" class="no-underline">Radio Cards</a></c-index-sublink>
-        <c-index-sublink><a href="#vertical-cards" class="no-underline">Vertical Cards</a></c-index-sublink>
-        <c-index-sublink><a href="#cards-no-indicator" class="no-underline">Cards Without Indicators</a></c-index-sublink>
-        <c-index-sublink><a href="#custom-content" class="no-underline">Custom Content</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink section-id="with-descriptions"><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
+        <c-index-sublink section-id="segmented"><a href="#segmented" class="no-underline">Segmented</a></c-index-sublink>
+        <c-index-sublink section-id="segmented-icons"><a href="#segmented-icons" class="no-underline">Segmented with Icons</a></c-index-sublink>
+        <c-index-sublink section-id="cards"><a href="#cards" class="no-underline">Radio Cards</a></c-index-sublink>
+        <c-index-sublink section-id="vertical-cards"><a href="#vertical-cards" class="no-underline">Vertical Cards</a></c-index-sublink>
+        <c-index-sublink section-id="cards-no-indicator"><a href="#cards-no-indicator" class="no-underline">Cards Without Indicators</a></c-index-sublink>
+        <c-index-sublink section-id="custom-content"><a href="#custom-content" class="no-underline">Custom Content</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="default" title="Default">
     <c-sample>
         <c-ui.radio.group name="payment" label="Payment method" value="cc">
             <c-ui.radio value="cc" label="Credit card" />
@@ -33,8 +34,9 @@
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="with-descriptions">With Descriptions</h2>
+    <c-section id="with-descriptions" title="With Descriptions">
 
     <p>Add contextual information to each option with the <code>description</code> attribute.</p>
 
@@ -71,8 +73,9 @@
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="segmented">Segmented</h2>
+    <c-section id="segmented" title="Segmented">
 
     <p>Display options as a horizontal button group with the <code>variant="segmented"</code> attribute.</p>
 
@@ -91,8 +94,9 @@
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="segmented-icons">Segmented with Icons</h2>
+    <c-section id="segmented-icons" title="Segmented with Icons">
 
     <p>Enhance segmented buttons with icons using the <code>icon</code> attribute.</p>
 
@@ -111,8 +115,9 @@
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="cards">Radio Cards</h2>
+    <c-section id="cards" title="Radio Cards">
 
     <p>Display options as interactive cards with <code>variant="cards"</code>. Perfect for visually distinct choices.</p>
 
@@ -146,8 +151,9 @@
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="vertical-cards">Vertical Cards</h2>
+    <c-section id="vertical-cards" title="Vertical Cards">
 
     <p>Stack cards vertically by adding a class to the group.</p>
 
@@ -184,8 +190,9 @@
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="cards-no-indicator">Cards Without Indicators</h2>
+    <c-section id="cards-no-indicator" title="Cards Without Indicators">
 
     <p>Hide the radio indicator for a cleaner card design with <code>:show_indicator="False"</code>.</p>
 
@@ -228,8 +235,9 @@
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="custom-content">Custom Content Card</h2>
+    <c-section id="custom-content" title="Custom Content Card">
 
     <p>Use slots to create fully custom card content with any HTML structure.</p>
 
@@ -332,8 +340,11 @@
 </c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Radio Group Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Radio Group Props</h4>
 
     <c-api-props>
         <c-api-prop name="name" type="str" default="" description="Form input name for the radio group"></c-api-prop>
@@ -362,5 +373,6 @@
     <c-api-props>
         <c-api-prop name="slot (default)" type="—" default="" description="Custom content for the radio option. When used, you have full control over the markup."></c-api-prop>
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

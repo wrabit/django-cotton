@@ -7,14 +7,14 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
-        <c-index-sublink><a href="#segmented" class="no-underline">Segmented</a></c-index-sublink>
-        <c-index-sublink><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink section-id="segmented"><a href="#segmented" class="no-underline">Segmented</a></c-index-sublink>
+        <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <h2 id="default">Default</h2>
+    <c-section id="default" title="Default">
     <p>The default style is a clean underline design, common in many applications.</p>
 
     <c-sample>
@@ -47,8 +47,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="segmented">Segmented</h2>
+    <c-section id="segmented" title="Segmented">
     <p>A segmented control style, often used for switching between views in a tighter context.</p>
 
     <c-sample>
@@ -73,8 +74,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="icons">Icons</h2>
+    <c-section id="icons" title="Icons">
     <p>You can include icons in your tabs using the <code>icon</code> slot on the tab component.</p>
 
     <c-sample>
@@ -106,8 +108,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="sizes">Sizes</h2>
+    <c-section id="sizes" title="Sizes">
     <p>Tabs are available in sizes: <code>sm</code>, <code>md</code> (default), and <code>lg</code>.</p>
 
     <c-sample>
@@ -135,8 +138,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Tabs Props</h4>
+    <c-section id="reference" title="Reference">
+
+    <h4>Tabs Props</h4>
 
     <c-api-props>
         <c-api-prop name=":default_tab" type="str" default="None" description="The name of the tab to show by default." />
@@ -157,5 +163,6 @@
         <c-api-prop name="icon" type="slot" description="Optional icon to display before the label." />
         <c-api-prop name="default" type="slot" description="The panel content." />
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

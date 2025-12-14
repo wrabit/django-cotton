@@ -7,13 +7,14 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Tooltip</a></c-index-sublink>
-        <c-index-sublink><a href="#positions" class="no-underline">Positions</a></c-index-sublink>
-        <c-index-sublink><a href="#offset" class="no-underline">Offset</a></c-index-sublink>
-        <c-index-sublink><a href="#html-content" class="no-underline">HTML Content</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Tooltip</a></c-index-sublink>
+        <c-index-sublink section-id="positions"><a href="#positions" class="no-underline">Positions</a></c-index-sublink>
+        <c-index-sublink section-id="offset"><a href="#offset" class="no-underline">Offset</a></c-index-sublink>
+        <c-index-sublink section-id="html-content"><a href="#html-content" class="no-underline">HTML Content</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="default" title="Default">
     <c-sample>
         <div class="p-8 flex justify-center"> {# Added padding for visibility #}
             <c-ui.tooltip>
@@ -34,8 +35,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="positions">Positions</h2>
+    <c-section id="positions" title="Positions">
     <p>Control the tooltip position using the <code>position</code> attribute.</p>
     <c-sample>
         <div class="p-16 flex justify-center items-center gap-4"> {# Added padding for visibility #}
@@ -80,8 +82,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="offset">Offset</h2>
+    <c-section id="offset" title="Offset">
     <p>Adjust the spacing between the trigger and the tooltip using the <code>:offset</code> dynamic attribute (value in pixels).</p>
     <c-sample>
         <div class="p-8 flex justify-center gap-4"> {# Added padding for visibility #}
@@ -108,8 +111,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="html-content">HTML Content</h2>
+    <c-section id="html-content" title="HTML Content">
     <p>You can include HTML markup within the <code>content</code> slot.</p>
     <c-sample>
         <div class="p-8 flex justify-center"> {# Added padding for visibility #}
@@ -131,8 +135,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="reference">Reference</h2>
+    <c-section id="reference" title="Reference">
 
     <h4>Props</h4>
 
@@ -149,5 +154,6 @@
         <c-api-prop name="slot (default)" type="—" description="The element that triggers the tooltip (e.g., a button, icon, or text)." default="Required"></c-api-prop>
         <c-api-prop name="content" type="—" description="The content (text or HTML) to display inside the tooltip." default="Required"></c-api-prop>
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

@@ -7,15 +7,17 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#horizontal" class="no-underline">Horizontal Navbar</a></c-index-sublink>
-        <c-index-sublink><a href="#current" class="no-underline">Current Page</a></c-index-sublink>
-        <c-index-sublink><a href="#badges" class="no-underline">With Badges</a></c-index-sublink>
-        <c-index-sublink><a href="#navlist" class="no-underline">Navlist (Sidebar)</a></c-index-sublink>
-        <c-index-sublink><a href="#navlist-groups" class="no-underline">Navlist Groups</a></c-index-sublink>
-        <c-index-sublink><a href="#expandable" class="no-underline">Expandable Groups</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="horizontal"><a href="#horizontal" class="no-underline">Horizontal Navbar</a></c-index-sublink>
+        <c-index-sublink section-id="current"><a href="#current" class="no-underline">Current Page</a></c-index-sublink>
+        <c-index-sublink section-id="badges"><a href="#badges" class="no-underline">With Badges</a></c-index-sublink>
+        <c-index-sublink section-id="navlist"><a href="#navlist" class="no-underline">Navlist (Sidebar)</a></c-index-sublink>
+        <c-index-sublink section-id="navlist-groups"><a href="#navlist-groups" class="no-underline">Navlist Groups</a></c-index-sublink>
+        <c-index-sublink section-id="expandable"><a href="#expandable" class="no-underline">Expandable Groups</a></c-index-sublink>
+        <c-index-sublink section-id="navlist-badges"><a href="#navlist-badges" class="no-underline">Navlist with Badges</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="horizontal" title="Horizontal Navbar">
     <c-sample>
         <c-ui.navbar>
             <c-ui.navbar.item href="javascript:void(0)" :current="True">Home</c-ui.navbar.item>
@@ -35,8 +37,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="current">Detecting the Current Page</h2>
+    <c-section id="current" title="Detecting the Current Page">
 
     <p>Use the <code>:current</code> prop to manually mark the active navigation item. This applies accent styling to indicate the current page.</p>
 
@@ -51,8 +54,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="badges">With Badges</h2>
+    <c-section id="badges" title="With Badges">
 
     <p>Add a trailing badge to a navbar item using the <code>badge</code> prop. Customize the badge color with <code>badge_color</code>.</p>
 
@@ -75,8 +79,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="navlist">Navlist (Sidebar)</h2>
+    <c-section id="navlist" title="Navlist (Sidebar)">
 
     <p>Arrange your navbar vertically using the <code>navlist</code> component for sidebar navigation.</p>
 
@@ -99,8 +104,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="navlist-groups">Navlist Groups</h2>
+    <c-section id="navlist-groups" title="Navlist Groups">
 
     <p>Group related navigation items using <code>navlist.group</code> with a heading.</p>
 
@@ -131,8 +137,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="expandable">Expandable Groups</h2>
+    <c-section id="expandable" title="Expandable Groups">
 
     <p>Create collapsible navigation groups using the <code>:expandable</code> prop. Control the initial state with <code>:expanded</code>.</p>
 
@@ -175,8 +182,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="navlist-badges">Navlist with Badges</h2>
+    <c-section id="navlist-badges" title="Navlist with Badges">
 
     <p>Show additional information with badges on navlist items.</p>
 
@@ -199,8 +207,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Navbar Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Navbar Props</h4>
 
     <c-api-props>
         <c-api-prop name="slot (default)" type="—" default="" description="The navigation items."></c-api-prop>
@@ -250,5 +261,6 @@
         <c-api-prop name=":expanded" type="bool" :options="['True', 'False']" default="True" description="If true, expands the group by default when expandable is enabled." />
         <c-api-prop name="slot (default)" type="—" default="" description="The group's navigation items."></c-api-prop>
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

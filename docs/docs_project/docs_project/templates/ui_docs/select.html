@@ -7,17 +7,19 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#native" class="no-underline">Native (Default)</a></c-index-sublink>
-        <c-index-sublink><a href="#listbox" class="no-underline">Listbox Variant</a></c-index-sublink>
-        <c-index-sublink><a href="#grouped" class="no-underline">Grouped Options</a></c-index-sublink>
-        <c-index-sublink><a href="#icons" class="no-underline">With Icons</a></c-index-sublink>
-        <c-index-sublink><a href="#descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
-        <c-index-sublink><a href="#rich" class="no-underline">Rich Options</a></c-index-sublink>
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="native"><a href="#native" class="no-underline">Native (Default)</a></c-index-sublink>
+        <c-index-sublink section-id="listbox"><a href="#listbox" class="no-underline">Listbox Variant</a></c-index-sublink>
+        <c-index-sublink section-id="grouped"><a href="#grouped" class="no-underline">Grouped Options</a></c-index-sublink>
+        <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">With Icons</a></c-index-sublink>
+        <c-index-sublink section-id="descriptions"><a href="#descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
+        <c-index-sublink section-id="rich"><a href="#rich" class="no-underline">Rich Options</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="basic" title="Basic Usage">
     <c-sample>
         <div class="flex items-center justify-center w-full ">
             <div class="w-full max-w-64">
@@ -43,8 +45,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="native">Native Select (Default)</h2>
+    <c-section id="native" title="Native Select (Default)">
     <p>By default, select uses the native HTML <code>&lt;select&gt;</code> element. This is perfect for most use cases - it works great on mobile, has built-in accessibility, and requires no JavaScript.</p>
 
     <c-sample>
@@ -73,8 +76,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="listbox">Listbox Variant</h2>
+    <c-section id="listbox" title="Listbox Variant">
     <p>Use <code>variant="listbox"</code> when you need custom styling, icons, descriptions, or search functionality. This provides a rich, fully customizable dropdown experience.</p>
 
     <c-sample>
@@ -102,8 +106,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="grouped">Grouped Options</h2>
+    <c-section id="grouped" title="Grouped Options">
     <p>Organize options into logical groups with labels.</p>
 
     <c-sample>
@@ -146,8 +151,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="icons">Options with Icons</h2>
+    <c-section id="icons" title="Options with Icons">
     <p>Add icons to options for better visual context.</p>
 
     <c-sample>
@@ -193,8 +199,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="descriptions">Options with Descriptions</h2>
+    <c-section id="descriptions" title="Options with Descriptions">
     <p>Add descriptions to provide additional context for each option.</p>
 
     <c-sample>
@@ -220,8 +227,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="rich">Options with Icons and Descriptions</h2>
+    <c-section id="rich" title="Options with Icons and Descriptions">
     <p>Combine icons and descriptions for maximum context.</p>
 
     <c-sample>
@@ -273,8 +281,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="sizes">Sizes</h2>
+    <c-section id="sizes" title="Sizes">
     <p>Select components come in three sizes.</p>
 
     <c-sample>
@@ -315,8 +324,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="disabled">Disabled State</h2>
+    <c-section id="disabled" title="Disabled State">
     <p>Disable the select to prevent interaction, or disable specific options.</p>
 
     <c-sample>
@@ -353,8 +363,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
 
     <h4>Select (Main Component)</h4>
     <c-api-props>
@@ -474,5 +487,6 @@
             description="Fired when selection changes. Detail: { value, label }"
         />
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui>

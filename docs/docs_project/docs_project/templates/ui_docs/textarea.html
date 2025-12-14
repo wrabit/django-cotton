@@ -7,14 +7,15 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#height" class="no-underline">Height</a></c-index-sublink>
-        <c-index-sublink><a href="#autoresize" class="no-underline">Autoresize</a></c-index-sublink>
-        <c-index-sublink><a href="#non-resizable" class="no-underline">Non-resizable</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="height"><a href="#height" class="no-underline">Height</a></c-index-sublink>
+        <c-index-sublink section-id="autoresize"><a href="#autoresize" class="no-underline">Autoresize</a></c-index-sublink>
+        <c-index-sublink section-id="non-resizable"><a href="#non-resizable" class="no-underline">Non-resizable</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="default" title="Default">
     <c-sample>
         <c-ui.textarea placeholder="Enter your text here..." />
 
@@ -24,8 +25,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="sizes">Sizes</h2>
+    <c-section id="sizes" title="Sizes">
     <p>Control the font size and padding using the <code>size</code> attribute.</p>
     <c-sample>
         <div class="space-y-4">
@@ -45,8 +47,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="height">Height</h2>
+    <c-section id="height" title="Height">
     <p>Control the initial height using the <code>height</code> attribute. This sets a fixed height, which will be overridden if <code>autoresize</code> is used and the content grows.</p>
     <c-sample>
         <div class="space-y-4">
@@ -66,8 +69,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="autoresize">Autoresize</h2>
+    <c-section id="autoresize" title="Autoresize">
     <p>Use the <code>autoresize</code> attribute to make the textarea automatically adjust its height based on the content. Requires Alpine.js.</p>
     <c-sample>
         <c-ui.textarea autoresize placeholder="Type something long here and the textarea will grow..." />
@@ -78,8 +82,9 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="non-resizable">Non-resizable</h2>
+    <c-section id="non-resizable" title="Non-resizable">
     <p>Prevent the user from manually resizing the textarea using <code>:resizable="False"</code>.</p>
     <c-sample>
         <c-ui.textarea :resizable="False" placeholder="You cannot resize me." />
@@ -90,8 +95,11 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h4 id="reference">Props</h4>
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
 
     <c-api-props>
         <c-api-prop name=":autoresize" type="bool" :options="['True', 'False']" default="False" description="Automatically adjusts height to fit content. Requires Alpine.js." />
@@ -123,5 +131,6 @@
     <c-api-props>
         <c-api-prop name="slot (default)" type="—" default="" description="The initial content/value of the textarea."></c-api-prop>
     </c-api-props>
+    </c-section>
 
 </c-layouts.ui> 

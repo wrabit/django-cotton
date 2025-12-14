@@ -7,15 +7,16 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#default" class="no-underline">Default</a></c-index-sublink>
-        <c-index-sublink><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
-        <c-index-sublink><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
-        <c-index-sublink><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
-        <c-index-sublink><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink><a href="#standalone" class="no-underline">Standalone</a></c-index-sublink>
-        <c-index-sublink><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
+        <c-index-sublink section-id="with-descriptions"><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
+        <c-index-sublink section-id="checked"><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="standalone"><a href="#standalone" class="no-underline">Standalone</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <c-section id="default" title="Default">
     <c-sample>
         <c-ui.switch
             name="notifications"
@@ -29,8 +30,9 @@
 />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="with-descriptions">With Descriptions</h2>
+    <c-section id="with-descriptions" title="With Descriptions">
 
     <p>Add contextual information with the <code>description</code> attribute.</p>
 
@@ -73,8 +75,9 @@
 />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="checked">Checked by Default</h2>
+    <c-section id="checked" title="Checked by Default">
 
     <p>Set the initial state to checked with <code>:checked="True"</code>.</p>
 
@@ -95,8 +98,9 @@
 />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="disabled">Disabled</h2>
+    <c-section id="disabled" title="Disabled">
 
     <p>Disable interaction with <code>:disabled="True"</code>.</p>
 
@@ -133,8 +137,9 @@
 />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="sizes">Sizes</h2>
+    <c-section id="sizes" title="Sizes">
 
     <p>Three size variants are available: <code>size="sm"</code>, default, and <code>size="lg"</code>.</p>
 
@@ -179,8 +184,9 @@
 />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="standalone">Standalone</h2>
+    <c-section id="standalone" title="Standalone">
 
     <p>Use switches without labels for inline controls or custom layouts.</p>
 
@@ -197,8 +203,9 @@
 </div>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="reference">Reference</h2>
+    <c-section id="reference" title="Reference">
 
     <h4>Props</h4>
 
@@ -234,4 +241,6 @@
         <li><strong>Keyboard Support:</strong> Space and Enter keys toggle the switch, Tab for focus navigation</li>
         <li><strong>Focus States:</strong> Clear visual focus indicators for keyboard navigation</li>
     </ul>
+    </c-section>
+
 </c-layouts.ui>

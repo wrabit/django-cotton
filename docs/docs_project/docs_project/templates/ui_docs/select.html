@@ -7,7 +7,6 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
         <c-index-sublink section-id="native"><a href="#native" class="no-underline">Native (Default)</a></c-index-sublink>
         <c-index-sublink section-id="listbox"><a href="#listbox" class="no-underline">Listbox Variant</a></c-index-sublink>
         <c-index-sublink section-id="grouped"><a href="#grouped" class="no-underline">Grouped Options</a></c-index-sublink>
@@ -18,34 +17,6 @@
         <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
-
-    <c-section id="basic" title="Basic Usage">
-    <c-sample>
-        <div class="flex items-center justify-center w-full ">
-            <div class="w-full max-w-64">
-                <c-ui.select name="fruit" placeholder="Choose a fruit">
-                    <c-ui.select.option value="apple">Apple</c-ui.select.option>
-                    <c-ui.select.option value="banana">Banana</c-ui.select.option>
-                    <c-ui.select.option value="orange">Orange</c-ui.select.option>
-                    <c-ui.select.option value="grape">Grape</c-ui.select.option>
-                    <c-ui.select.option value="mango">Mango</c-ui.select.option>
-                </c-ui.select>
-            </div>
-        </div>
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}
-<div class="w-full max-w-64">
-    <c-ui.select name="fruit" placeholder="Choose a fruit">
-        <c-ui.select.option value="apple">Apple</c-ui.select.option>
-        <c-ui.select.option value="banana">Banana</c-ui.select.option>
-        <c-ui.select.option value="orange">Orange</c-ui.select.option>
-    </c-ui.select>
-</div>
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-    </c-section>
 
     <c-section id="native" title="Native Select (Default)">
     <p>By default, select uses the native HTML <code>&lt;select&gt;</code> element. This is perfect for most use cases - it works great on mobile, has built-in accessibility, and requires no JavaScript.</p>

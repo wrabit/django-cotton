@@ -1,16 +1,16 @@
 <c-vars
     variant="block"
-    label=""
-    description=""
-    description_trailing=""
-    error=""
-    badge=""
+    label
+    description
+    description_trailing
+    error
+    badge
     form
-    name=""
+    name
     :for="None"
 />
 
-<div {{ attrs.dict|merge:'class:' }} class="{% if variant == 'inline' %}flex items-start gap-4{% else %}space-y-1.5{% endif %}">
+<div {{ attrs }} class="{% if variant == 'inline' %}flex items-start gap-4{% else %}space-y-1.5{% endif %}">
     {% if label %}
         <c-ui.label badge="{{ badge }}" :for="for">{{ label }}</c-ui.label>
     {% endif %}

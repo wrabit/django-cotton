@@ -12,7 +12,7 @@ from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
 from django_cotton.exceptions import CottonIncompleteDynamicComponentError
-from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr, strip_quotes_safely
+from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr, strip_quotes_with_status
 
 register = Library()
 
@@ -39,13 +39,13 @@ class CottonComponentNode(Node):
 
         # Process simple attributes and boolean attributes
         for key, value in self.attrs.items():
-            value = strip_quotes_safely(value)
-            if value is True:  # Boolean attribute
+            value, was_quoted = strip_quotes_with_status(value)
+            if value is True:  # Boolean attribute (no value, e.g. `disabled`)
                 component_data["attrs"][key] = True
             elif key.startswith("::"):  # Escaping 1 colon e.g for shorthand alpine
                 key = key[1:]
                 component_data["attrs"][key] = value
-            elif key.startswith(":"):
+            elif key.startswith(":"):  # Explicit dynamic attribute with colon prefix
                 key = key[1:]
                 try:
                     resolved_value = DynamicAttr(value).resolve(context)
@@ -57,8 +57,16 @@ class CottonComponentNode(Node):
                         component_data["attrs"].dict.update(resolved_value)
                     else:
                         component_data["attrs"][key] = resolved_value
+            elif not was_quoted and isinstance(value, str) and value:
+                # Unquoted value - treat as dynamic (like native DTL behavior)
+                try:
+                    resolved_value = DynamicAttr(value).resolve(context)
+                    component_data["attrs"][key] = resolved_value
+                except UnprocessableDynamicAttr:
+                    # Fall back to string literal (Django's permissive behavior)
+                    component_data["attrs"][key] = value
             else:
-                # Static attribute - check if it contains template syntax
+                # Static attribute (quoted) - check if it contains template syntax
                 if isinstance(value, str) and ("{{" in value or "{%" in value):
                     try:
                         # Evaluate template tags at render time (same as c-vars)

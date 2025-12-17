@@ -685,3 +685,56 @@ class AttributeHandlingTests(CottonTestCase):
 
         self.assertIn("{% translate", compiled)
         self.assertIn("Profile", compiled)
+
+    def test_quoteless_dynamic_attributes_on_components(self):
+        """Unquoted values should be treated as dynamic (like :attr="value")"""
+        self.create_template(
+            "cotton/quoteless_test.html",
+            """
+            {% if none is None %}<p>none is None</p>{% endif %}
+            {% if number == 1 %}<p>number is 1</p>{% endif %}
+            {% if boolean_true is True %}<p>boolean_true is True</p>{% endif %}
+            {% if boolean_false is False %}<p>boolean_false is False</p>{% endif %}
+            {% if variable == 111 %}<p>variable is 111</p>{% endif %}
+            """,
+        )
+
+        self.create_template(
+            "quoteless_view.html",
+            """
+            <c-quoteless-test
+                none=None
+                number=1
+                boolean_true=True
+                boolean_false=False
+                variable=variable
+            />
+            """,
+            "view/",
+            context={"variable": 111},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "none is None")
+            self.assertContains(response, "number is 1")
+            self.assertContains(response, "boolean_true is True")
+            self.assertContains(response, "boolean_false is False")
+            self.assertContains(response, "variable is 111")
+
+    def test_quoteless_fallback_to_string(self):
+        """Unquoted values that can't be resolved should fall back to string"""
+        self.create_template(
+            "cotton/fallback_test.html",
+            """{{ unknown_var }}""",
+        )
+
+        self.create_template(
+            "fallback_view.html",
+            '<c-fallback-test unknown_var=some_undefined_thing />',
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "some_undefined_thing")

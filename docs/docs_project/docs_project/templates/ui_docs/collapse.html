@@ -1,0 +1,136 @@
+<c-layouts.ui>
+    <c-header>
+        Collapse
+        <c-slot name="subheading">
+            Toggle content visibility with smooth animations using Alpine.js collapse.
+        </c-slot>
+    </c-header>
+
+    <c-note>
+        Requires the Alpine.js <a href="https://alpinejs.dev/plugins/collapse" target="_blank">collapse</a> plugin.
+    </c-note>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="custom-trigger"><a href="#custom-trigger" class="no-underline">Custom Trigger</a></c-index-sublink>
+        <c-index-sublink section-id="open-default"><a href="#open-default" class="no-underline">Open by Default</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <div class="w-full max-w-xs">
+            <c-ui.collapse trigger-text="Show Details">
+                <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md">
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                        This content is hidden by default and smoothly expands when the trigger is clicked.
+                    </p>
+                </div>
+            </c-ui.collapse>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse trigger-text="Show Details">
+    <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md">
+        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+            This content is hidden by default and smoothly expands when clicked.
+        </p>
+    </div>
+</c-ui.collapse>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <c-section id="custom-trigger" title="Custom Trigger">
+        <p>Provide a custom trigger element using the <code>trigger</code> slot for complete control over the appearance.</p>
+
+        <c-sample>
+            <div class="w-full max-w-xs">
+                <c-ui.collapse>
+                    <c-slot name="trigger">
+                        <div class="inline-flex items-center gap-2 text-accent hover:text-accent/80 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                <path fill-rule="evenodd" d="M2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8Zm6-4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-sm font-medium">Read More</span>
+                        </div>
+                    </c-slot>
+
+                    <div class="mt-2 p-4 border border-zinc-200 dark:border-zinc-700 rounded-md">
+                        <h4 class="font-semibold mb-2">Additional Information</h4>
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                            You can use any HTML element as a trigger - links, custom buttons, icons, or complex layouts.
+                        </p>
+                    </div>
+                </c-ui.collapse>
+            </div>
+
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse>
+    <c-slot name="trigger">
+        <div class="inline-flex items-center gap-2 text-accent">
+            <svg><!-- info icon --></svg>
+            <span class="text-sm font-medium">Read More</span>
+        </div>
+    </c-slot>
+
+    <div class="mt-2 p-4 border rounded-md">
+        <h4 class="font-semibold mb-2">Additional Information</h4>
+        <p class="text-sm">
+            You can use any HTML element as a trigger.
+        </p>
+    </div>
+</c-ui.collapse>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="open-default" title="Open by Default">
+        <p>Use <code>expanded</code> to show the content by default.</p>
+
+        <c-sample>
+            <div class="w-full max-w-xs">
+                <c-ui.collapse trigger-text="Hide Details" expanded>
+                    <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md">
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                            This content is visible by default and can be collapsed by clicking the trigger.
+                        </p>
+                    </div>
+                </c-ui.collapse>
+            </div>
+
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse trigger-text="Hide Details" expanded>
+    <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md">
+        <p class="text-sm">
+            This content is visible by default and can be collapsed.
+        </p>
+    </div>
+</c-ui.collapse>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="Reference">
+        <h4>Props</h4>
+
+        <c-api-props>
+            <c-api-prop name="trigger-text" type="str" default="Toggle" description="Text to display on the default button trigger. Only used when trigger slot is not provided."></c-api-prop>
+            <c-api-prop name=":expanded" type="bool" :options="['True', 'False']" default="False" description="Set to True to show content by default."></c-api-prop>
+        </c-api-props>
+
+        <h4 class="mt-6">Slots</h4>
+
+        <c-api-props>
+            <c-api-prop name="trigger" type="slot" default="" description="Custom trigger element. When provided, overrides the default button. The trigger will automatically toggle the collapsed content on click."></c-api-prop>
+            <c-api-prop name="default" type="slot" default="" description="The content to show/hide with collapse animation."></c-api-prop>
+        </c-api-props>
+
+        <h4 class="mt-6">Behavior</h4>
+
+        <ul>
+            <li><strong>Animation:</strong> Uses Alpine.js <code>x-collapse</code> for smooth height transitions</li>
+            <li><strong>Initial State:</strong> Content is hidden by default</li>
+            <li><strong>Toggle:</strong> Clicking the trigger toggles visibility</li>
+            <li><strong>Multiple Instances:</strong> Each collapse component manages its own state independently</li>
+        </ul>
+    </c-section>
+
+</c-layouts.ui>

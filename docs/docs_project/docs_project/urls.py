@@ -41,6 +41,7 @@ urlpatterns = [
     path("ui/button", views.build_view("ui_docs/button"), name="ui-button"),
     path("ui/card", views.build_view("ui_docs/card"), name="ui-card"),
     path("ui/checkbox", views.build_view("ui_docs/checkbox"), name="ui-checkbox"),
+    path("ui/collapse", views.build_view("ui_docs/collapse"), name="ui-collapse"),
     path("ui/combobox", views.build_view("ui_docs/combobox"), name="ui-combobox"),
     path("ui/datepicker", views.build_view("ui_docs/datepicker"), name="ui-datepicker"),
     path("ui/dialog", views.build_view("ui_docs/dialog"), name="ui-dialog"),

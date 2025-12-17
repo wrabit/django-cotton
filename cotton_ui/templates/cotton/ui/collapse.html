@@ -1,6 +1,6 @@
-<c-vars trigger_text trigger />
+<c-vars trigger_text trigger :expanded="False" />
 
-<div x-data="{ expanded: false }">
+<div x-data="{ expanded: {{ expanded|lower }} }">
     {% if trigger %}
         <span @click="expanded = ! expanded" class="cursor-pointer">{{ trigger }}</span>
     {% else %}

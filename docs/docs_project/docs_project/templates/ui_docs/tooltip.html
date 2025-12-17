@@ -7,14 +7,12 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Tooltip</a></c-index-sublink>
         <c-index-sublink section-id="positions"><a href="#positions" class="no-underline">Positions</a></c-index-sublink>
         <c-index-sublink section-id="offset"><a href="#offset" class="no-underline">Offset</a></c-index-sublink>
         <c-index-sublink section-id="html-content"><a href="#html-content" class="no-underline">HTML Content</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <c-section id="default" title="Default">
     <c-sample>
         <div class="p-8 flex justify-center"> {# Added padding for visibility #}
             <c-ui.tooltip>
@@ -35,7 +33,6 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
-    </c-section>
 
     <c-section id="positions" title="Positions">
     <p>Control the tooltip position using the <code>position</code> attribute.</p>

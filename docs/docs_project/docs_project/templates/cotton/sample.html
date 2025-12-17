@@ -1,9 +1,9 @@
-<c-vars :code_only="False" />
+<c-vars :code_only="False" :slim="False" />
 
-<div class="not-prose">
+<div class="not-prose" {{ attrs }}>
     {% if not code_only %}
         <div class="min-h-40 md:px-24 rounded-md rounded-b-none border-b-transparent border mt-6 border-zinc-200 dark:border-zinc-700 px-8 py-20 flex items-center">
-            <div class="w-full flex items-center justify-center space-x-4">
+            <div class="w-full flex items-center justify-center space-x-4 mx-auto {% if slim %}max-w-xs{% endif %}">
                 {{ slot }}
             </div>
         </div>

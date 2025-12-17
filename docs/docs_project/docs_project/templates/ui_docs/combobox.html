@@ -7,7 +7,6 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default</a></c-index-sublink>
         <c-index-sublink section-id="max-tags"><a href="#max-tags" class="no-underline">Max Tags</a></c-index-sublink>
         <c-index-sublink section-id="searchable"><a href="#searchable" class="no-underline">Searchable</a></c-index-sublink>
         <c-index-sublink section-id="writable"><a href="#writable" class="no-underline">Writable (Tags)</a></c-index-sublink>
@@ -17,8 +16,7 @@
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <c-section id="default" title="Default">
-    <c-sample>
+    <c-sample slim>
         <c-ui.combobox
             name="skills"
             placeholder="Select skills"
@@ -35,63 +33,60 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
-    </c-section>
 
     <c-section id="max-tags" title="Max Tags">
+        <p>Limit the number of items that can be selected.</p>
 
-    <p>Limit the number of items that can be selected.</p>
+        <c-sample slim>
+            <c-ui.combobox
+                name="top_3"
+                placeholder="Select up to 3 items"
+                :options="['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']"
+                :max_tags="3"
+            />
 
-    <c-sample>
-        <c-ui.combobox
-            name="top_3"
-            placeholder="Select up to 3 items"
-            :options="['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']"
-            :max_tags="3"
-        />
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}
-<c-ui.combobox
-    name="top_3"
-    placeholder="Select up to 3 items"
-    :options="['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']"
-    :max_tags="3"
-/>
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
+            <c-slot name="code">
+    <c-snippet>{% cotton:verbatim %}{% verbatim %}
+    <c-ui.combobox
+        name="top_3"
+        placeholder="Select up to 3 items"
+        :options="['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']"
+        :max_tags="3"
+    />
+    {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
     </c-section>
 
     <c-section id="searchable" title="Searchable">
+        <p>Enable searching through options.</p>
 
-    <p>Enable searching through options.</p>
+        <c-sample slim>
+            <c-ui.combobox
+                name="countries"
+                placeholder="Search countries..."
+                :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
+                :searchable="True"
+            />
 
-    <c-sample>
-        <c-ui.combobox
-            name="countries"
-            placeholder="Search countries..."
-            :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
-            :searchable="True"
-        />
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}
-<c-ui.combobox
-    name="countries"
-    placeholder="Search countries..."
-    :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
-    :searchable="True"
-/>
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
+            <c-slot name="code">
+    <c-snippet>{% cotton:verbatim %}{% verbatim %}
+    <c-ui.combobox
+        name="countries"
+        placeholder="Search countries..."
+        :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
+        :searchable="True"
+    />
+    {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
     </c-section>
 
     <c-section id="writable" title="Writable (Custom Tags)">
 
     <p>Allow users to enter custom values not in the list.</p>
 
-    <c-sample>
+    <c-sample slim>
         <c-ui.combobox
             name="tags"
             placeholder="Type and press Enter to add tags"
@@ -116,7 +111,7 @@
 
     <p>Restrict selection to a single item by setting <code>max_tags=1</code>. This behaves like a select but with the tag UI.</p>
 
-    <c-sample>
+    <c-sample slim>
         <c-ui.combobox
             name="favorite_color"
             placeholder="Pick one color"
@@ -141,7 +136,7 @@
 
     <p>Automatically close the dropdown when the maximum number of tags is reached. This is useful when combined with <code>max_tags</code> to provide a smoother user experience - once the user has selected all allowed items, the dropdown closes automatically.</p>
 
-    <c-sample>
+    <c-sample slim>
         <c-ui.combobox
             name="top_skills"
             placeholder="Pick your top 2 skills"
@@ -168,7 +163,7 @@
 
     <p>Prevent interaction with the combobox.</p>
 
-    <c-sample>
+    <c-sample slim>
         <c-ui.combobox
             name="disabled_example"
             placeholder="Cannot select"

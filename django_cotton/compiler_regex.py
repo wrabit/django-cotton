@@ -56,13 +56,15 @@ class Tag:
         for match in self.attr_pattern.finditer(self.attrs):
             key, quote, value, unquoted_value = match.groups()
             if value is None and unquoted_value is None:
+                # Boolean attribute (no value)
                 processed_attrs.append(key)
-            else:
-                actual_value = value if value is not None else unquoted_value
-                # Preserve the original quote character to avoid escaping issues
+            elif value is not None:
+                # Quoted value - preserve quotes
                 quote_char = quote if quote else '"'
-                # With nested tag support, all attributes can be passed directly
-                processed_attrs.append(f'{key}={quote_char}{actual_value}{quote_char}')
+                processed_attrs.append(f'{key}={quote_char}{value}{quote_char}')
+            else:
+                # Unquoted value - pass through WITHOUT quotes to preserve dynamic status
+                processed_attrs.append(f'{key}={unquoted_value}')
 
         attrs_str = " ".join(processed_attrs)
         return " " + attrs_str if attrs_str else "", "".join(extracted_attrs)

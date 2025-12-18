@@ -11,7 +11,7 @@ from django_cotton.templatetags import (
     DynamicAttr,
     UnprocessableDynamicAttr,
     Attrs,
-    strip_quotes_safely,
+    strip_quotes_with_status,
 )
 from django_cotton.utils import get_cotton_data
 
@@ -26,10 +26,13 @@ class CottonVarsNode(Node):
         """Extract and process vars, returning a dict of resolved values."""
         vars = {}
 
-        for key, value in self.var_dict.items():
+        for key, raw_value in self.var_dict.items():
             key_to_exclude = key
+            value, was_quoted = strip_quotes_with_status(raw_value)
+
             if key not in attrs.exclude_unprocessable():
                 if key.startswith(":"):
+                    # Explicit dynamic attribute with colon prefix
                     key_to_exclude = key[1:]
                     if key_to_exclude not in slots:
                         try:
@@ -38,11 +41,20 @@ class CottonVarsNode(Node):
                             vars[accessible_key] = DynamicAttr(value, is_cvar=True).resolve(context)
                         except UnprocessableDynamicAttr:
                             pass
+                elif not was_quoted and isinstance(value, str) and value:
+                    # Unquoted value - treat as dynamic (like native DTL behavior)
+                    if key not in slots:
+                        try:
+                            accessible_key = key.replace("-", "_")
+                            vars[accessible_key] = DynamicAttr(value, is_cvar=True).resolve(context)
+                        except UnprocessableDynamicAttr:
+                            # Fall back to string literal (Django's permissive behavior)
+                            vars[accessible_key] = value
                 else:
-                    # Static attribute - check if it contains template syntax
+                    # Static attribute (quoted) - check if it contains template syntax
                     if key not in slots:
                         # If value contains template tags or variables, evaluate it at render time
-                        if "{{" in value or "{%" in value:
+                        if isinstance(value, str) and ("{{" in value or "{%" in value):
                             try:
                                 # Prepend {% load %} tags for libraries that were loaded at parse time
                                 load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
@@ -104,8 +116,9 @@ def cotton_cvars(parser, token):
     # Use the custom parser that handles quoted strings properly
     result = parse_vars_tag(token.contents)
 
-    # Strip quotes from all values (parser returns them with quotes)
-    var_dict = {k: strip_quotes_safely(v) for k, v in result.attrs.items()}
+    # Keep raw values with quotes - we need to detect quote status in extract_vars()
+    # to support quoteless dynamic attributes (e.g., default=True vs default="True")
+    var_dict = result.attrs
 
     # Capture which template libraries were loaded at parse time
     loaded_libraries = []

@@ -204,12 +204,29 @@ By passing just the attribute name without a value, it will automatically be pro
 
 ### Passing Python data types
 
-Using the ':' to prefix an attribute tells Cotton we're passing a dynamic type down. We already know we can use this to send a variable, but you can also send basic python types, namely:
+Cotton supports two syntaxes for passing dynamic values:
+
+1. **Quoteless values**: `attr=value` - for simple values without spaces (like native Django)
+2. **Colon prefix**: `:attr="value"` - works for any expression
+
+```html
+<!-- Quoteless: for simple literals and variables -->
+<c-button enabled=True />
+<c-button enabled=False />
+<c-input value=my_variable />
+<c-counter start=42 />
+
+<!-- Colon prefix: required for complex expressions with spaces/quotes -->
+<c-select :options="['yes', 'no', 'maybe']" />
+<c-card :config="{'open': True}" />
+```
+
+Both approaches support:
 
 - Integers and Floats
 - None, True and False
-- Lists
-- Dictionaries
+- Lists and Dictionaries (colon prefix required)
+- Context variables
 
 This benefits a number of use-cases, for example if you have a select component that you want to provide the possible options from the parent:
 

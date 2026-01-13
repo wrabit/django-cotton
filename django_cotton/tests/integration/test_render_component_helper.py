@@ -137,3 +137,49 @@ class TestRenderComponentHelper(CottonTestCase):
         self.assertIn('hx-target="#result"', rendered)
 
         self.assertNotIn("label=", rendered)
+
+    def test_render_component_with_nested_folder_path(self):
+        """Test that dots in component name create folder nesting (e.g., settings.user-row -> cotton/settings/user_row.html)"""
+        self.create_template(
+            "cotton/settings/user_row.html",
+            """
+            <c-vars user_id username is_active />
+            <tr id="user-{{ user_id }}">
+                <td>{{ username }}</td>
+                <td>{% if is_active %}Active{% else %}Inactive{% endif %}</td>
+            </tr>
+            """,
+        )
+
+        rendered = render_component(
+            self.request,
+            "settings.user-row",
+            {"user_id": 42, "username": "johndoe", "is_active": True},
+        )
+
+        self.assertIn('id="user-42"', rendered)
+        self.assertIn("johndoe", rendered)
+        self.assertIn("Active", rendered)
+
+    def test_render_component_with_deeply_nested_path(self):
+        """Test deeply nested component paths (e.g., ui.forms.text-input -> cotton/ui/forms/text_input.html)"""
+        self.create_template(
+            "cotton/ui/forms/text_input.html",
+            """
+            <c-vars name label value="" />
+            <div class="form-group">
+                <label for="{{ name }}">{{ label }}</label>
+                <input type="text" id="{{ name }}" name="{{ name }}" value="{{ value }}" />
+            </div>
+            """,
+        )
+
+        rendered = render_component(
+            self.request,
+            "ui.forms.text-input",
+            {"name": "email", "label": "Email Address", "value": "test@example.com"},
+        )
+
+        self.assertIn('id="email"', rendered)
+        self.assertIn("Email Address", rendered)
+        self.assertIn('value="test@example.com"', rendered)

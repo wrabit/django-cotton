@@ -1,6 +1,6 @@
 import ast
 from collections.abc import Mapping
-from typing import Set, Any, Dict, List
+from typing import Set, Any, Dict, List, Tuple
 
 from django.template import Variable, TemplateSyntaxError, Context
 from django.template.base import VariableDoesNotExist, Template
@@ -86,6 +86,27 @@ def strip_quotes_safely(value: Any) -> Any:
         elif value.startswith("'") and value.endswith("'") and len(value) >= 2:
             return value[1:-1]
     return value
+
+
+def strip_quotes_with_status(value: Any) -> Tuple[Any, bool]:
+    """
+    Strip surrounding quotes and return whether the value was originally quoted.
+
+    More efficient than calling a separate check then strip_quotes_safely(),
+    as it only checks the string once.
+
+    Args:
+        value: The value to strip quotes from
+
+    Returns:
+        Tuple of (stripped_value, was_quoted)
+    """
+    if type(value) is str:
+        if value.startswith('"') and value.endswith('"') and len(value) >= 2:
+            return value[1:-1], True
+        elif value.startswith("'") and value.endswith("'") and len(value) >= 2:
+            return value[1:-1], True
+    return value, False
 
 
 class UnprocessableDynamicAttr(Exception):

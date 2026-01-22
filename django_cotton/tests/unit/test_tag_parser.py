@@ -110,3 +110,34 @@ class TagParserTests(unittest.TestCase):
         self.assertIn("active", result.empty_attrs)
         self.assertIn("disabled", result.empty_attrs)
 
+    def test_parse_component_tag_unquoted_values(self):
+        """Unquoted values should be preserved without quotes"""
+        result = parse_component_tag('cotton test_comp count=5 disabled=True')
+        self.assertEqual(result.attrs["count"], '5')  # No quotes
+        self.assertEqual(result.attrs["disabled"], 'True')  # No quotes
+
+    def test_parse_component_tag_quoted_values_have_quotes(self):
+        """Quoted values should retain quotes in parsed result"""
+        result = parse_component_tag('cotton test_comp count="5" disabled="True"')
+        self.assertEqual(result.attrs["count"], '"5"')  # Has quotes
+        self.assertEqual(result.attrs["disabled"], '"True"')  # Has quotes
+
+    def test_parse_component_tag_mixed_quoted_unquoted(self):
+        """Mix of quoted and unquoted should preserve each correctly"""
+        result = parse_component_tag('cotton test_comp quoted="string" unquoted=True number=42')
+        self.assertEqual(result.attrs["quoted"], '"string"')  # Quoted
+        self.assertEqual(result.attrs["unquoted"], 'True')  # Unquoted
+        self.assertEqual(result.attrs["number"], '42')  # Unquoted
+
+    def test_parse_vars_tag_unquoted_values(self):
+        """Unquoted values in vars tag should be preserved without quotes"""
+        result = parse_vars_tag('cotton:vars enabled=True count=42')
+        self.assertEqual(result.attrs["enabled"], 'True')  # No quotes
+        self.assertEqual(result.attrs["count"], '42')  # No quotes
+
+    def test_parse_vars_tag_mixed_quoted_unquoted(self):
+        """Mix of quoted and unquoted in vars tag should preserve each correctly"""
+        result = parse_vars_tag('cotton:vars label="Hello" enabled=True')
+        self.assertEqual(result.attrs["label"], '"Hello"')  # Quoted
+        self.assertEqual(result.attrs["enabled"], 'True')  # Unquoted
+

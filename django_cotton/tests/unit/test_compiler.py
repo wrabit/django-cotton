@@ -123,3 +123,34 @@ class CompilerUnitTests(unittest.TestCase):
             )
 
         self.assertIn("c-slot tag must have a name attribute:", str(cm.exception))
+
+    def test_unquoted_attrs_preserved_in_compilation(self):
+        """Unquoted attrs should stay unquoted when HTML is compiled to template tag"""
+        compiled = get_compiled('<c-test disabled=True count=5 />')
+        self.assertIn('disabled=True', compiled)
+        self.assertIn('count=5', compiled)
+        # Should NOT wrap in quotes
+        self.assertNotIn('disabled="True"', compiled)
+        self.assertNotIn('count="5"', compiled)
+
+    def test_quoted_attrs_stay_quoted_in_compilation(self):
+        """Quoted attrs should stay quoted when compiled"""
+        compiled = get_compiled('<c-test disabled="True" count="5" />')
+        self.assertIn('disabled="True"', compiled)
+        self.assertIn('count="5"', compiled)
+
+    def test_mixed_quoted_unquoted_attrs_compilation(self):
+        """Both quoted and unquoted attrs in same component should be preserved correctly"""
+        compiled = get_compiled('<c-test quoted="string" unquoted=True />')
+        self.assertIn('quoted="string"', compiled)
+        self.assertIn('unquoted=True', compiled)
+        # Make sure unquoted isn't wrapped
+        self.assertNotIn('unquoted="True"', compiled)
+
+    def test_unquoted_cvars_preserved_in_compilation(self):
+        """Unquoted c-vars attrs should stay unquoted"""
+        compiled = get_compiled('<c-vars enabled=True count=42 />')
+        self.assertIn('enabled=True', compiled)
+        self.assertIn('count=42', compiled)
+        self.assertNotIn('enabled="True"', compiled)
+        self.assertNotIn('count="42"', compiled)

@@ -9,6 +9,7 @@
     <c-slot name="page_index">
         <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
         <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="outlined"><a href="#outlined" class="no-underline">Outlined</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -49,10 +50,55 @@
 
     <c-section id="sizes" title="Sizes">
 
-    <h3>Outlined</h3>
+    <p>Button sizes match input sizes for consistent alignment in forms.</p>
 
     <c-sample>
-        <div class="w-full flex items-center justify-center space-x-5">
+        <div class="w-full flex items-center justify-center gap-4">
+            <c-ui.button size="xs">Extra Small</c-ui.button>
+            <c-ui.button size="sm">Small</c-ui.button>
+            <c-ui.button>Default</c-ui.button>
+            <c-ui.button size="lg">Large</c-ui.button>
+            <c-ui.button size="xl">Extra Large</c-ui.button>
+        </div>
+
+        <c-slot name="code">
+            <c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.button size="xs">Extra Small</c-ui.button>
+<c-ui.button size="sm">Small</c-ui.button>
+<c-ui.button>Default</c-ui.button>
+<c-ui.button size="lg">Large</c-ui.button>
+<c-ui.button size="xl">Extra Large</c-ui.button>
+            {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <p>Buttons align with inputs of the same size:</p>
+
+    <c-sample>
+        <div class="w-full max-w-md flex items-center gap-2">
+            <div class="flex-1">
+                <c-ui.input placeholder="Search..." />
+            </div>
+            <c-ui.button variant="primary">Search</c-ui.button>
+        </div>
+
+        <c-slot name="code">
+            <c-snippet>{% cotton:verbatim %}{% verbatim %}
+<div class="flex items-center gap-2">
+    <div class="flex-1">
+        <c-ui.input placeholder="Search..." />
+    </div>
+    <c-ui.button variant="primary">Search</c-ui.button>
+</div>
+            {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="outlined" title="Outlined">
+
+    <c-sample>
+        <div class="w-full flex items-center justify-center gap-4">
             <c-ui.button variant="default" outlined>Default</c-ui.button>
             <c-ui.button variant="primary" outlined>Primary</c-ui.button>
             <c-ui.button variant="danger" outlined>Danger</c-ui.button>
@@ -70,10 +116,6 @@
             {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
-
-    <h3>Addons</h3>
-
-    <h3>Types</h3>
     </c-section>
 
     <c-section id="reference" title="API Reference">
@@ -92,9 +134,9 @@
                     description="Whether to display the button with an outline style." />
         <c-api-prop name="size"
                     type="str"
-                    :options="['sm', 'md', 'lg']"
-                    default="md"
-                    description="The size of the button." />
+                    :options="['xs', 'sm', '', 'lg', 'xl']"
+                    default=""
+                    description="The size of the button. Matches input sizes for consistent form alignment." />
         <c-api-prop name="type"
                     type="str"
                     :options="['button', 'submit', 'reset']"

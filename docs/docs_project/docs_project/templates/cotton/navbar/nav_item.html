@@ -2,11 +2,11 @@
 
 <a
     href="{{ url }}"
-    class="flex items-center px-4 py-1 rounded-full font-medium transition-colors border
+    class="flex items-center px-4 py-1 rounded-full font-medium transition-colors border-2
     {% if active_startswith and request.path|startswith:active_startswith or active_exact and request.path == url %}
-        border-accent bg-accent/15 text-accent-content dark:bg-accent/20 dark:text-accent
+        border-accent/30 bg-accent/15dark:bg-accent/20 text-accent-content dark:text-accent
     {% else %}
-        border-transparent text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800
+        border-transparent hover:border-zinc-200 hover:dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100dark:hover:bg-zinc-800
     {% endif %}
 ">
     {{ slot }}

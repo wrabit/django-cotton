@@ -14,7 +14,9 @@
 
     <c-section id="single-date" title="Single Date">
     <c-sample>
-        <c-ui.datepicker mode="single" />
+        <div class="w-full max-w-xs">
+            <c-ui.datepicker mode="single" />
+        </div>
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
@@ -29,7 +31,9 @@
     <p>Select a range of dates with a start and end date.</p>
 
     <c-sample>
-        <c-ui.datepicker mode="range" />
+        <div class="w-full max-w-xs">
+            <c-ui.datepicker mode="range" />
+        </div>
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}

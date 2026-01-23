@@ -22,7 +22,7 @@
 
     <!-- Fixed navbar -->
     <header class="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-zinc-200 dark:bg-zinc-900/80 dark:border-zinc-800">
-        <div class="py-4 px-5 max-w-7xl mx-auto flex items-center justify-between">
+        <div class="py-2 px-5 max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex item-center items-center">
                 <!-- Mobile menu button-->
                 <button @click="toggleMenu()"
@@ -40,22 +40,22 @@
 
                 <a href="/" class="flex item-center items-center space-x-1.5">
                     <div class="flex items-center space-x-1">
-                        <span class="font-semibold text-[1.5rem] ml-1.5 text-zinc-950 dark:text-gray-100 tracking-tight">cotton</span>
+                        <span class="font-semibold text-[1.75rem] ml-1.5 text-zinc-950 dark:text-gray-100 tracking-tight">cotton</span>
                         <div class="text-gray-700 dark:text-white text-sm opacity-50 mt-0.5 px-1">for</div>
                         <c-icons.django class="h-[1.2rem] text-teal-600 mt-1.5" />
                     </div>
                 </a>
-            </div>
 
-            <div class="hidden sm:flex items-center h-full space-x-1 ml-5 sm:ml-14">
-                <c-navbar.nav-item url="{% url 'home' %}" active-exact active-startswith="/docs/">
-                    <c-heroicon.book-open class="size-5 mr-2" />
-                    Cotton
-                </c-navbar.nav-item>
-                <c-navbar.nav-item url="{% url 'ui' %}" active-startswith="/ui">
-                    <c-heroicon.code-bracket class="size-5 mr-2" />
-                    Cotton UI
-                </c-navbar.nav-item>
+                <div class="hidden sm:flex items-center h-full space-x-1 ml-6">
+                    <c-navbar.nav-item url="{% url 'home' %}" active-exact active-startswith="/docs/">
+                        <c-icons.book class="size-4 mr-1.5" />
+                        Docs
+                    </c-navbar.nav-item>
+                    <c-navbar.nav-item url="{% url 'ui' %}" active-startswith="/ui">
+                        <c-icons.grid class="size-4 mr-1.5" />
+                        UI Components
+                    </c-navbar.nav-item>
+                </div>
             </div>
 
             <div class="flex items-center space-x-2">
@@ -102,13 +102,25 @@
         <div class="px-5 py-6">
             <!-- Mobile nav links -->
             <div class="flex flex-col gap-2 mb-6 pb-6 border-b border-zinc-200 dark:border-zinc-800">
-                <a href="{% url 'home' %}" class="flex items-center gap-2 px-3 py-2 rounded-md text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                    <c-heroicon.book-open class="size-5" />
-                    Cotton
+                <a href="{% url 'home' %}"
+                   class="flex items-center gap-2 px-3 py-2 rounded-md font-medium
+                   {% if request.path == '/' or request.path|startswith:'/docs/' %}
+                       bg-accent text-accent-foreground
+                   {% else %}
+                       text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800
+                   {% endif %}">
+                    <c-icons.book class="size-5" />
+                    Docs
                 </a>
-                <a href="{% url 'ui' %}" class="flex items-center gap-2 px-3 py-2 rounded-md text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                    <c-heroicon.code-bracket class="size-5" />
-                    Cotton UI
+                <a href="{% url 'ui' %}"
+                   class="flex items-center gap-2 px-3 py-2 rounded-md font-medium
+                   {% if request.path|startswith:'/ui' %}
+                       bg-accent text-accent-foreground
+                   {% else %}
+                       text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800
+                   {% endif %}">
+                    <c-icons.grid class="size-5" />
+                    UI Components
                 </a>
             </div>
 

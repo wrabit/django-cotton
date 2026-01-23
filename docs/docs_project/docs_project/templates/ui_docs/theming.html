@@ -7,16 +7,15 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink><a href="#accent-color" class="no-underline">Accent Color</a></c-index-sublink>
-        <c-index-sublink><a href="#accent-props" class="no-underline">Accent Props</a></c-index-sublink>
-        <c-index-sublink><a href="#examples" class="no-underline">Examples</a></c-index-sublink>
-        <c-index-sublink><a href="#advanced" class="no-underline">Advanced</a></c-index-sublink>
+        <c-index-sublink section-id="accent-color"><a href="#accent-color" class="no-underline">Accent Color</a></c-index-sublink>
+        <c-index-sublink section-id="accent-props"><a href="#accent-props" class="no-underline">Accent Props</a></c-index-sublink>
+        <c-index-sublink section-id="examples"><a href="#examples" class="no-underline">Examples</a></c-index-sublink>
+        <c-index-sublink section-id="advanced"><a href="#advanced" class="no-underline">Advanced</a></c-index-sublink>
     </c-slot>
 
     <p>Cotton UI uses Tailwind's built-in <code>zinc</code> for grays (works out of the box) and a customizable <strong>accent color</strong> (teal by default) for primary buttons, active states, and focus rings.</p>
 
-    <h2 id="accent-color">Changing the Accent Color</h2>
-
+    <c-section id="accent-color" title="Changing the Accent Color">
     <p>The accent color is defined in your <code>app.css</code> using Tailwind v4's <code>@theme</code> directive. Cotton UI uses a 3-value accent system:</p>
 
     <ul>
@@ -50,9 +49,9 @@
     <p class="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
         <code>@theme</code> registers colors with Tailwind, enabling utilities like <code>bg-accent</code>. Dark mode uses <code>@layer theme</code> for proper specificity.
     </p>
+    </c-section>
 
-    <h2 id="accent-props">Accent Props</h2>
-
+    <c-section id="accent-props" title="Accent Props">
     <p>Components support an <code>:accent</code> prop to opt out of accent colors for a monochrome style. Set <code>:accent="False"</code> to use zinc-based colors instead.</p>
 
     <h3>Radio Button Comparison</h3>
@@ -142,9 +141,9 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox value="analytics" label="Analytics" :accent="False" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h2 id="examples">Examples</h2>
-
+    <c-section id="examples" title="Examples">
     <h3>Popular Accent Colors</h3>
 
     <c-sample>
@@ -206,9 +205,9 @@
         <li><code>ring-accent</code> - Focus rings</li>
         <li><code>bg-zinc-*</code>, <code>text-zinc-*</code>, <code>border-zinc-*</code> - Base grays (Tailwind built-in)</li>
     </ul>
+    </c-section>
 
-    <h2 id="advanced">Advanced: Changing the Base Gray</h2>
-
+    <c-section id="advanced" title="Advanced: Changing the Base Gray">
     <p>Cotton UI uses Tailwind's built-in <code>zinc</code> for grays, which works with zero configuration. If you prefer a different gray family, you can remap zinc to another palette:</p>
 
     <c-sample>
@@ -235,5 +234,6 @@
     <p class="mt-6 text-sm opacity-70">
         Theming approach inspired by <a href="https://fluxui.dev/docs/theming" target="_blank" class="text-accent">Flux UI</a>.
     </p>
+    </c-section>
 
 </c-layouts.ui>

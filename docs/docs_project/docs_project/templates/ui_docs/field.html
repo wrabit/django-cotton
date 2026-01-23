@@ -19,11 +19,13 @@
 
     <c-section id="basic" title="Basic Usage">
     <c-sample>
-        <c-ui.field>
-            <c-ui.label>Email</c-ui.label>
-            <c-ui.input type="email" name="email" placeholder="you@example.com" />
-            <c-ui.error name="email" />
-        </c-ui.field>
+        <div class="w-full max-w-xs">
+            <c-ui.field>
+                <c-ui.label>Email</c-ui.label>
+                <c-ui.input type="email" name="email" placeholder="you@example.com" />
+                <c-ui.error name="email" />
+            </c-ui.field>
+        </div>
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
@@ -42,7 +44,7 @@
     <p>To reduce repetitive markup, form controls like <code>input</code> and <code>textarea</code> can accept <code>label</code>, <code>description</code>, <code>error</code>, and <code>badge</code> props directly. When any of these props are provided, the control will automatically be wrapped in a field structure.</p>
 
     <c-sample>
-        <div class="space-y-4">
+        <div class="w-full max-w-xs space-y-4">
             <c-ui.input
                 label="Email Address"
                 type="email"
@@ -99,7 +101,7 @@
     <p>Add a badge to the label to indicate required or optional fields.</p>
 
     <c-sample>
-        <div class="space-y-4">
+        <div class="w-full max-w-xs space-y-4">
             <c-ui.field>
                 <c-ui.label badge="Required">Full Name</c-ui.label>
                 <c-ui.input type="text" name="name" placeholder="John Doe" />
@@ -132,7 +134,7 @@
     <p>Add helper text to provide context about the field. Descriptions can appear before or after the input.</p>
 
     <c-sample>
-        <div class="space-y-4">
+        <div class="w-full max-w-xs space-y-4">
             <c-ui.field>
                 <c-ui.label>Username</c-ui.label>
                 <c-ui.description>This will be your public display name.</c-ui.description>
@@ -171,11 +173,13 @@
     <p>Display validation feedback with the error component. Supports Django form integration or explicit messages.</p>
 
     <c-sample>
-        <c-ui.field>
-            <c-ui.label>Password</c-ui.label>
-            <c-ui.input type="password" name="password" placeholder="•••••••••" />
-            <c-ui.error message="Password must be at least 8 characters." />
-        </c-ui.field>
+        <div class="w-full max-w-xs">
+            <c-ui.field>
+                <c-ui.label>Password</c-ui.label>
+                <c-ui.input type="password" name="password" placeholder="•••••••••" />
+                <c-ui.error message="Password must be at least 8 characters." />
+            </c-ui.field>
+        </div>
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
@@ -202,12 +206,14 @@
     <p>Combining all elements together with Django form integration.</p>
 
     <c-sample>
-        <c-ui.field>
-            <c-ui.label badge="Required">Password</c-ui.label>
-            <c-ui.description>Must include at least 8 characters with uppercase, lowercase, and numbers.</c-ui.description>
-            <c-ui.input type="password" name="password" placeholder="•••••••••" />
-            <c-ui.error name="password" />
-        </c-ui.field>
+        <div class="w-full max-w-xs">
+            <c-ui.field>
+                <c-ui.label badge="Required">Password</c-ui.label>
+                <c-ui.description>Must include at least 8 characters with uppercase, lowercase, and numbers.</c-ui.description>
+                <c-ui.input type="password" name="password" placeholder="•••••••••" />
+                <c-ui.error name="password" />
+            </c-ui.field>
+        </div>
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
@@ -229,13 +235,15 @@
     <p>Display the field in an inline layout with the label beside the input.</p>
 
     <c-sample>
-        <c-ui.field variant="inline">
-            <c-ui.label class="w-32 pt-2">Email</c-ui.label>
-            <div class="flex-1">
-                <c-ui.input type="email" name="email" placeholder="you@example.com" />
-                <c-ui.description>We'll never share your email.</c-ui.description>
-            </div>
-        </c-ui.field>
+        <div class="w-full max-w-sm">
+            <c-ui.field variant="inline">
+                <c-ui.label class="w-32 pt-2">Email</c-ui.label>
+                <div class="flex-1">
+                    <c-ui.input type="email" name="email" placeholder="you@example.com" />
+                    <c-ui.description>We'll never share your email.</c-ui.description>
+                </div>
+            </c-ui.field>
+        </div>
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}

@@ -71,7 +71,7 @@
             Alpine.data('scrollspy', () => ({
                 activeSection: null,
                 sections: [],
-                observer: null,
+                scrollHandler: null,
 
                 init() {
                     this.sections = Array.from(
@@ -92,42 +92,58 @@
                         this.activeSection = this.sections[0].id;
                     }
 
-                    this.setupObserver();
+                    this.setupScrollHandler();
                     this.handleHashChange();
                 },
 
                 destroy() {
-                    if (this.observer) {
-                        this.observer.disconnect();
+                    if (this.scrollHandler) {
+                        window.removeEventListener('scroll', this.scrollHandler);
                     }
                 },
 
-                setupObserver() {
-                    const options = {
-                        root: null,
-                        rootMargin: '-120px 0px -40% 0px',
-                        threshold: [0, 0.25, 0.5, 0.75, 1]
+                setupScrollHandler() {
+                    // Throttle scroll events
+                    let ticking = false;
+
+                    this.scrollHandler = () => {
+                        if (!ticking) {
+                            requestAnimationFrame(() => {
+                                this.updateActiveSection();
+                                ticking = false;
+                            });
+                            ticking = true;
+                        }
                     };
 
-                    this.observer = new IntersectionObserver((entries) => {
-                        const visibleSections = entries
-                            .filter(entry => entry.isIntersecting)
-                            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+                    window.addEventListener('scroll', this.scrollHandler, { passive: true });
+                    // Initial check
+                    this.updateActiveSection();
+                },
 
-                        if (visibleSections.length > 0) {
-                            const topSection = visibleSections[0];
-                            const newActiveId = topSection.target.dataset.sectionId;
+                updateActiveSection() {
+                    const scrollTop = window.scrollY;
+                    const offset = 150; // Account for fixed header + some buffer
 
-                            if (newActiveId !== this.activeSection) {
-                                this.activeSection = newActiveId;
-                                this.updateHash(newActiveId);
-                            }
+                    // Find the section that's currently in view
+                    // We look for the last section whose top is above the offset line
+                    let currentSection = this.sections[0];
+
+                    for (const section of this.sections) {
+                        const rect = section.element.getBoundingClientRect();
+                        const sectionTop = rect.top + scrollTop;
+
+                        if (sectionTop <= scrollTop + offset) {
+                            currentSection = section;
+                        } else {
+                            break;
                         }
-                    }, options);
+                    }
 
-                    this.sections.forEach(section => {
-                        this.observer.observe(section.element);
-                    });
+                    if (currentSection && currentSection.id !== this.activeSection) {
+                        this.activeSection = currentSection.id;
+                        this.updateHash(currentSection.id);
+                    }
                 },
 
                 handleHashChange() {

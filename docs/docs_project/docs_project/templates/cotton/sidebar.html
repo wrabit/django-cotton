@@ -1,7 +1,7 @@
 <div class="pb-6">
     <!-- Syntax Preference Switcher -->
     <div class="flex items-center space-x-1.5 mb-4">
-        <div class="text-xs font-semibold uppercase tracking-wider text-zinc-500">docs syntax</div>
+        <div class="text-xs font-semibold uppercase tracking-wider text-zinc-500">docs default syntax</div>
         <div class="relative" x-data="{ showPopover: false }" @mouseenter="showPopover = true" @mouseleave="showPopover = false">
             <button
                 class="text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
@@ -16,7 +16,7 @@
             >
                 <div class="space-y-2">
                     <div>
-                        <span class="font-semibold">HTML:</span> Snippets will be shown in HTML-like syntax.
+                        <span class="font-semibold">Cotton:</span> Snippets will be shown in HTML-like syntax.
                     </div>
                     <div>
                         <span class="font-semibold">Native:</span> Snippets will be shown in native Django template syntax.
@@ -39,7 +39,7 @@
                     ? 'bg-accent/20 text-accent-content font-semibold'
                     : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'"
             >
-                <span>HTML</span>&nbsp;&nbsp;<span>&lt;/&gt;</span>
+                <span>cotton</span>&nbsp;&nbsp;<span>&lt;/&gt;</span>
             </button>
             <button
                 @click="$store.syntaxPreference = 'template'"
@@ -48,7 +48,7 @@
                     ? 'bg-accent/20 text-accent-content font-semibold'
                     : 'text-zinc-700 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'"
             >
-                <span>Native</span>&nbsp;&nbsp;<span>&#37;}</span>
+                <span>native</span>&nbsp;&nbsp;<span>&#37;}</span>
             </button>
         </div>
     </div>

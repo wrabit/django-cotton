@@ -1,48 +1,42 @@
 <c-layouts.with-sidebar>
-    <h1 id="components">Usage Patterns</h1>
-
     <c-slot name="page_index">
-        <c-index-link><a href="#components" class="no-underline">Components</a></c-index-link>
-        <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
-        <c-index-sublink><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
-        <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
-        <c-index-sublink><a href="#tag-syntax" class="no-underline">Tag Syntax</a></c-index-sublink>
-        <c-index-sublink><a href="#index" class="no-underline">index.html</a></c-index-sublink>
-        <c-index-sublink><a href="#attribute-proxying" class="no-underline">Attribute Proxying</a></c-index-sublink>
+        <c-index-sublink section-id="basics"><a href="#basics" class="no-underline">Basics</a></c-index-sublink>
+        <c-index-sublink section-id="naming"><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
+        <c-index-sublink section-id="subfolders"><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
+        <c-index-sublink section-id="tag-syntax"><a href="#tag-syntax" class="no-underline">Tag Syntax</a></c-index-sublink>
+        <c-index-sublink section-id="index"><a href="#index" class="no-underline">index.html</a></c-index-sublink>
+        <c-index-sublink section-id="attribute-proxying"><a href="#attribute-proxying" class="no-underline">Attribute Proxying</a></c-index-sublink>
     </c-slot>
 
-    <h3 id="basics">Basics</h3>
+    <c-header>Usage Patterns</c-header>
+
+    <c-section id="basics" title="Basics">
     <c-ul>
         <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder ('cotton' path is <a href="{% url 'configuration' %}">configurable</a> using <code>COTTON_DIR</code>).</li>
         <li>The <code>templates</code> folder can be located in either an app-level or top-level project root folder.</li>
     </c-ul>
+    </c-section>
 
-    <c-hr />
-
-    <h3 id="naming">Naming</h3>
+    <c-section id="naming" title="Naming">
     <p>Cotton uses the following naming conventions:</p>
     <c-ul>
         <li>By default, component file names are in snake_case (<c-highlight>my_component.html</c-highlight>).
         <li>kebab-case filenames (<c-highlight>my-component.html</c-highlight>) can be enabled with <code>COTTON_SNAKE_CASED_NAMES = False</code> see <a href="{% url 'configuration' %}">configuration</a>.</li>
         <li>Components are included in templates using kebab-case name of the component: <code>{{ "<c-my-component />"|force_escape }}</code></li>
     </c-ul>
+    </c-section>
 
-    <c-hr />
-
-    <h3 id="subfolders">Subfolders</h3>
-
+    <c-section id="subfolders" title="Subfolders">
     <c-ul>
         <li>Components in subfolders can be called using dot notation to represent folder levels.</li>
         <li>A component in <c-highlight>sidebar/menu/link.html</c-highlight> would be included with <code>{{ "<c-sidebar.menu.link />"|force_escape }}</code></li>
     </c-ul>
+    </c-section>
 
-    <c-hr />
-
-    <h3 id="tag-syntax">Tag Syntax</h3>
-
+    <c-section id="tag-syntax" title="Tag Syntax">
     <p>Cotton components can be used with HTML-like syntax or native Django template tags.</p>
 
-    <h4 class="text-lg font-semibold mt-6 mb-3">HTML-like Syntax</h4>
+    <h3>HTML-like Syntax</h3>
 
     <p>Cotton enables you to use html-like syntax to include your components. This tends to enhance productivity as editors and IDEs often provide autocompletion, auto closing and syntax highlighting of xml-like tags out of the box.</p>
 
@@ -52,18 +46,18 @@
 </c-button>
     {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-    <h4 class="text-lg font-semibold mt-6 mb-3">Native Template Tags</h4>
+    <h3>Native Template Tags</h3>
 
     <p>If you prefer using native template tags you can use Cotton's template tags.</p>
 
-    <h5 class="font-semibold mt-4 mb-2">HTML Syntax</h5>
+    <h4>HTML Syntax</h4>
     <c-snippet label="HTML-like syntax" ignore-syntax-choice>{% cotton:verbatim %}{% verbatim %}
 <c-button title="Click me">
     Click here
 </c-button>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-    <h5 class="font-semibold mt-4 mb-2">Native Syntax</h5>
+    <h4>Native Syntax</h4>
 
     <c-snippet label="Native Django template syntax" ignore-syntax-choice>
 {{ '{%'|force_escape }} cotton button title="Click me" {{ '%}'|force_escape }}
@@ -71,7 +65,7 @@
 {{ '{%'|force_escape }} endcotton {{ '%}'|force_escape }}
     </c-snippet>
 
-    <h4 class="text-lg font-semibold mt-6 mb-3">Syntax Comparison</h4>
+    <h3>Syntax Comparison</h3>
 
     <div class="overflow-x-auto">
         <table class="min-w-full border border-gray-200 dark:border-gray-700">
@@ -113,11 +107,9 @@
             </tr>
         </table>
     </div>
+    </c-section>
 
-    <c-hr />
-
-    <h3 id="index">The index.html component</h3>
-
+    <c-section id="index" title="The index.html component">
     <p>When your component has sub-components, you can define the default component of a folder by adding an <code>index.html</code>. This helps to keep your project structure tidy and reduce additional code in the template.</p>
 
     <c-snippet label="Project structure">
@@ -137,11 +129,9 @@ templates/
 </c-card>
         {% endverbatim %}{% endcotton:verbatim %}
     </c-snippet>
+    </c-section>
 
-    <c-hr />
-
-    <h3 id="attribute-proxying">Attribute Proxying Pattern</h3>
-
+    <c-section id="attribute-proxying" title="Attribute Proxying Pattern">
     <p>The <code>:attrs</code> dynamic attribute enables us to create wrapper components that proxy all their attributes to an inner component:</p>
 
     <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
@@ -167,6 +157,7 @@ templates/
     <p>The attributes are passed through to the inner component with their original types preserved (strings, numbers, booleans, lists, etc.), making this pattern ideal for creating higher-order components.</p>
 
     <p>This pattern is particularly useful for Django form fields, where you might create a component hierarchy that passes Django widget attributes through multiple layers while adding labels, error handling, and styling at each level.</p>
+    </c-section>
 
     <c-navigation>
         <c-slot name="prev">

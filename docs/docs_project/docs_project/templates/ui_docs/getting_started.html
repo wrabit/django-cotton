@@ -1,9 +1,9 @@
 <c-layouts.base>
-    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_auto] flex-1 px-5 h-full">
-        <div class="relative h-full pr-10 border-r-yellow-800 border-opacity-10 hidden sm:block">
+    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_minmax(0,1fr)] px-5">
+        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block py-6">
             <c-ui-docs.sidebar />
         </div>
-        <div class="overflow-auto pb-10">
+        <div class="min-w-0 pb-10 py-6">
             <c-layouts.prose-container>
                 <div class="text-center mb-20">
         <div class="flex items-center justify-center gap-3 mb-6">

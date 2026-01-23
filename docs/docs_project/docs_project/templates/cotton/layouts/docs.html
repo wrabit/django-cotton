@@ -1,3 +1,5 @@
+<c-vars hide_intro />
+
 <c-layouts.base>
     <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_minmax(0,1fr)] lg:grid-cols-[230px_minmax(0,1fr)_250px] px-5" x-data="scrollspy">
         <!-- Left sidebar: sticky with independent scroll -->
@@ -24,7 +26,7 @@
                                 </c-ui.button>
                             </c-slot>
                             <div class="mt-5">
-                                <c-index-sublink section-id="intro"><a href="#intro" class="no-underline">Intro</a></c-index-sublink>
+                                {% if not hide_intro %}<c-index-sublink section-id="intro"><a href="#intro" class="no-underline">Intro</a></c-index-sublink>{% endif %}
                                 {{ page_index }}
                             </div>
                             <c-hr />
@@ -35,12 +37,12 @@
             </c-layouts.prose-container>
         </div>
         <!-- Right sidebar: sticky with independent scroll -->
-        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pl-10 hidden lg:block text-sm py-6">
+        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pl-10 hidden lg:block text-[14.5px] py-6">
             {% if page_index %}
                 <div>
                     <c-sidebar.heading>On this page</c-sidebar.heading>
                     <ul class="ml-0 pl-0 mt-4">
-                        <c-index-sublink section-id="intro"><a href="#intro" class="no-underline">Intro</a></c-index-sublink>
+                        {% if not hide_intro %}<c-index-sublink section-id="intro"><a href="#intro" class="no-underline">Intro</a></c-index-sublink>{% endif %}
                         {{ page_index }}
                     </ul>
                 </div>

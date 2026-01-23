@@ -34,7 +34,6 @@
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
-    </c-section>
 
     <c-section id="with-descriptions" title="With Descriptions">
 
@@ -379,10 +378,10 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="plans" variant="cards" class="flex-col" :values="['pro']">
     <c-ui.checkbox value="starter">
         <div class="flex items-start gap-4 flex-1">
-            {# Checkbox indicator #}
+            <!-- Checkbox indicator -->
             <div class="flex items-center h-5">...</div>
 
-            {# Custom content #}
+            <!-- Custom content -->
             <div class="flex-1">
                 <div class="flex items-center justify-between">
                     <h3>Starter Plan</h3>

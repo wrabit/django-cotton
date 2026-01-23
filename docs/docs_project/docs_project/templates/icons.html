@@ -1,11 +1,12 @@
 <c-layouts.with-sidebar>
     <c-slot name="page_index">
-        <c-index-link><a href="#icons" class="no-underline">Icons &amp; SVG Graphics</a></c-index-link>
-        <c-index-sublink><a href="#cottonizing" class="no-underline">Cotton-izing</a></c-index-sublink>
+        <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">Icons &amp; SVG Graphics</a></c-index-sublink>
+        <c-index-sublink section-id="cottonizing"><a href="#cottonizing" class="no-underline">Cotton-izing</a></c-index-sublink>
     </c-slot>
 
-    <h1 id="icons">Icons &amp; SVG Graphics</h1>
+    <c-header>Icons & SVG Graphics</c-header>
 
+    <c-section id="icons" title="Using custom SVG icons">
     <p>Cotton's component-ized approach provides another compelling use-case. Sure, there are svg icon packages for Django already, but what if you need to use a custom icon in your project?</p>
 
     <c-snippet label="plane.svg">{% cotton:verbatim %}{% verbatim %}
@@ -26,9 +27,9 @@
 </svg>
 </c-slot>
     </c-snippet>
+    </c-section>
 
-    <h2 id="cottonizing">Let's "cotton-ize"</h2>
-
+    <c-section id="cottonizing" title="Let's cotton-ize">
     <c-snippet label="cotton/icons/plane.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars stroke_width="30" />
 
@@ -56,6 +57,7 @@
         </div>
     </c-slot>
     </c-snippet>
+    </c-section>
 
 <c-navigation>
     <c-slot name="prev">

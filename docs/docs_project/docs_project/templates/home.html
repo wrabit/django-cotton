@@ -1,147 +1,108 @@
 <c-layouts.with-sidebar>
-    <!--
-    <div class="py-40 not-prose space-y-5">
-        <c-examples.tutorial title="Information">This is an informational message.</c-examples.tutorial>
-
-        <c-examples.tutorial type="success">
-          <c-slot name="title">
-            <h3 class="text-lg font-semibold text-xl mb-3">Great job!</h3>
-          </c-slot>
-
-            <p class="mb-3">You've successfully completed the task.</p>
-            <a href="#" class="underline">View results</a>
-        </c-examples.tutorial>
-
-        <c-examples.tutorial type="error" title="Oops!">
-            <p>Something's gone amiss, but we're working on it!</p>
-        </c-examples.tutorial>
-    </div>
-
-    -->
-
     <div class="max-w-5xl mx-auto px-0">
-        <div class="text-center mx-auto max-w-4xl leading-normal mb-6">
-            <h1 class="text-4xl md:text-5xl mb-15 dark:text-gray-200 mb-3 inline-flex flex-wrap items-center justify-center space-x-2 md:space-x-3 space-y-3">
-                <span class="w-full md:w-auto font-semibold">Goodbye</span>
-                <c-tag class="text-xl sm:text-2xl md:text-4xl">
-                    {% verbatim %}{% extends %}{% endverbatim %}
-                </c-tag>
-                <c-tag class="text-xl sm:text-2xl md:text-4xl">
-                    {% verbatim %}{% block %}{% endverbatim %}
-                </c-tag>
-
-                <c-tag class="text-xl sm:text-2xl md:text-4xl">
-                    {% verbatim %}{% include %}{% endverbatim %}
-                </c-tag>
-                <c-tag class="text-xl sm:text-2xl md:text-4xl">
-                    {% verbatim %}{% custom_tag %}{% endverbatim %}
-                </c-tag>
-                <div class="w-full shrink-0"></div>
-                <span class="pt-0 md:pt-5 clear-both flex-wrap inline-flex justify-center items-center space-x-2">
-                    <span class="">Hello</span>
-                    <span class="shrink-0 px-3 py-1 bg-teal-500/10 border-[3px] border-teal-600 font-mono text-xl sm:text-2xl md:text-4xl rounded-3xl text-teal-600 dark:text-white inline-block font-normal leading-normal">{{ '<c-cotton>'|force_escape }}</span>
-                </span>
+        <div class="text-center mx-auto max-w-3xl leading-normal mb-10">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-semibold dark:text-gray-100 mb-6">
+                Modern UI Composition in Django
             </h1>
 
-            <!-- A Faster, More Expressive Approach to Templating in Django-->
-            <h2 class="!text-xl sm:!text-2xl italic !font-normal mt-3 md:mt-8 mb-10 pt-0 dark:!text-teal-300 text-yellow-900 text-opacity-50 brightness-75 dark:opacity-100">
-                {#Bringing component-based design to django templates#}
-                Enabling Modern UI Composition in Django Templates
-            </h2>
+            <p class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400">
+                Replace verbose <code class="text-base bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">{% verbatim %}{% extends %}{% endverbatim %}</code>,
+                <code class="text-base bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">{% verbatim %}{% block %}{% endverbatim %}</code>, and
+                <code class="text-base bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">{% verbatim %}{% include %}{% endverbatim %}</code>
+                with clean, reusable components.
+            </p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid md:grid-cols-2 gap-6 mt-4">
             <div class="col-span-1 flex flex-col overflow-x-auto">
-                <h2 class="!font-normal !text-lg mb-3 mt-0 text-center"><span class="font-semibold">Before:</span> Strongly Coupled, Verbose</h2>
+                <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Django Templates:</span> One template per instance, no reuse</h3>
                 <div class="flex h-full rounded-xl overflow-hidden">
-                    <c-demo.snippet-tabs labels="view.html|product_layout.html" tabs_id="compare">
+                    <c-demo.snippet-tabs labels="page.html|card.html" tabs_id="compare">
                         <div class="flex flex-col h-full" x-show="active === 0">
 
 <c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
-{% extends "product_layout.html" %}
+{# Using {% include %} - can't pass HTML content #}
+{% include "card.html" with title="First Card" %}
+{% include "card.html" with title="Second Card" %}
 
-{% block img_url %}
-icon.png
-{% endblock %}
-
-{% block title %}
-Item Title
-{% endblock %}
-
+{# Using {% extends %} - only ONE per template! #}
+{% extends "card.html" %}
+{% block title %}My Card{% endblock %}
 {% block content %}
-    Description of the product
-
-    {% block price %}
-    $10
-    {% endblock %}
+    <p>Card content here</p>
+    <button>Click me</button>
 {% endblock %}
+
+{# Want two cards? Need two separate files
+   or write a custom template tag in Python #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>
                         <div class="flex flex-col h-full" x-show="active === 1">
 
 <c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
-<div id="container">
-    <div id="header">
-        <img src="{% block img_url %}{% endblock %}" />
-        <h1>
-            {% block title %}
-            {% endblock %}
-        </h1>
-    </div>
+<div class="card">
+    <h2>{% block title %}{% endblock %}</h2>
+    <div>
+        {# block: only works with {% extends %} #}
+        {% block content %}{% endblock %}
 
-    <div id="content">
-        {% block content %}
-
-            <div id="price">
-                {% block price %}
-                {% endblock %}
-            </div>
-
-        {% endblock %}
+        {# include: can only pass simple variables #}
+        {{ content }}
     </div>
 </div>
+
+{# No way to pass HTML content AND
+   use multiple instances on one page #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>
                     </c-demo.snippet-tabs>
                 </div>
             </div>
-            <div class="col-span-1 rounded-lg overflow-hidden  flex flex-col">
-                <h2 class="!font-normal !text-lg mb-3 mt-0 text-center"><span class="font-semibold">After:</span> Decoupled, Clean &amp; Re-usable</h2>
+            <div class="col-span-1 rounded-lg overflow-hidden flex flex-col">
+                <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">After:</span> True components, unlimited reuse</h3>
                 <div class="flex h-full rounded-xl overflow-hidden">
-                    <c-demo.snippet-tabs labels="view.html|product.html" tabs_id="compare">
+                    <c-demo.snippet-tabs labels="page.html|card.html" tabs_id="compare">
                         <div class="flex flex-col h-full" x-show="active === 0">
 
 <c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
+<c-card title="First Card">
+    <p>Any HTML content here</p>
+    <button>Click me</button>
+</c-card>
 
-<c-product img_url="icon.png"
-    title="Item Title"
-    price="$10">
-    Description of the product
-</c-product>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-card title="Second Card">
+    <p>Different content, same component</p>
+    <c-slot name="footer">
+        <span>Optional footer slot</span>
+    </c-slot>
+</c-card>
+
+<c-card title="Third Card" class="highlight">
+    Attributes pass through with {{ attrs }}
+</c-card>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>
 
                         <div class="flex flex-col h-full" x-show="active === 1">
 
 <c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
-<div id="container">
-    <div id="header">
-        <img src="{{ img_url }}" />
-        <h1>{{ title }}</h1>
-    </div>
+<c-vars title />
 
-    <div id="content">
-        {{ slot }}
-
-        {% if price %}
-            <div id="price">
-                {{ price }}
-            </div>
-        {% endif %}
-    </div>
+<div class="card" {{ attrs }}>
+    <h2>{{ title }}</h2>
+    <div>{{ slot }}</div>
+    {% if footer %}
+        <footer>{{ footer }}</footer>
+    {% endif %}
 </div>
+
+{# Attributes: pass data as props
+   Slots: pass HTML content
+   {{ attrs }}: forward HTML attributes
+   c-vars: define defaults #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>

@@ -1,25 +1,26 @@
 <c-layouts.with-sidebar>
-    <h1 id="components">Components</h1>
-
     <c-slot name="page_index">
-        <c-index-link><a href="#components" class="no-underline">Components</a></c-index-link>
-            <c-index-sublink><a href="#attributes" class="no-underline">Attributes</a></c-index-sublink>
-            <c-index-sublink><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
-            <c-index-sublink><a href="#dynamic-attributes" class="no-underline">Dynamic Attributes</a></c-index-sublink>
-            <c-index-sublink><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
-            <c-index-sublink><a href="#attrs-merging" class="no-underline">Merging with :attrs</a></c-index-sublink>
-            <c-index-sublink><a href="#vars" class="no-underline">Local state with {{ '<c-vars>'|force_escape }}</a></c-index-sublink>
-            <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
-            <c-index-sublink><a href="#dynamic-components" class="no-underline">Dynamic Components</a></c-index-sublink>
-            <c-index-sublink><a href="#context-isolation" class="no-underline">Context Isolation</a></c-index-sublink>
-            <c-index-sublink><a href="#alpine-js-support" class="no-underline">Alpine.js Support</a></c-index-sublink>
-            <c-index-sublink><a href="#summary" class="no-underline">Summary of concepts</a></c-index-sublink>
+        <c-index-sublink section-id="components"><a href="#components" class="no-underline">Components</a></c-index-sublink>
+        <c-index-sublink section-id="attributes"><a href="#attributes" class="no-underline">Attributes</a></c-index-sublink>
+        <c-index-sublink section-id="named-slots"><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
+        <c-index-sublink section-id="dynamic-attributes"><a href="#dynamic-attributes" class="no-underline">Dynamic Attributes</a></c-index-sublink>
+        <c-index-sublink section-id="attrs"><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
+        <c-index-sublink section-id="attrs-merging"><a href="#attrs-merging" class="no-underline">Merging with :attrs</a></c-index-sublink>
+        <c-index-sublink section-id="vars"><a href="#vars" class="no-underline">Local state with {{ '<c-vars>'|force_escape }}</a></c-index-sublink>
+        <c-index-sublink section-id="boolean-attributes"><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
+        <c-index-sublink section-id="dynamic-components"><a href="#dynamic-components" class="no-underline">Dynamic Components</a></c-index-sublink>
+        <c-index-sublink section-id="context-isolation"><a href="#context-isolation" class="no-underline">Context Isolation</a></c-index-sublink>
+        <c-index-sublink section-id="alpine-js-support"><a href="#alpine-js-support" class="no-underline">Alpine.js Support</a></c-index-sublink>
+        <c-index-sublink section-id="summary"><a href="#summary" class="no-underline">Summary of concepts</a></c-index-sublink>
     </c-slot>
 
+    <c-header>Components</c-header>
+
+    <c-section id="components">
     <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
         inside standard Django templates.</p>
 
-    <h2>1. The basic building block: {% verbatim %}{{ slot }}{% endverbatim %}</h2>
+    <h3>1. The basic building block: {% verbatim %}{{ slot }}{% endverbatim %}</h3>
 
     <p>The <code>{% verbatim %}{{ slot }}{% endverbatim %}</code> variable captures all content passed between a component's opening and closing tags.</p>
 
@@ -40,11 +41,9 @@
     <div class="border rounded shadow p-5">Some <strong>content</strong></div>
 </c-slot>
 </c-snippet>
+    </c-section>
 
-    <c-hr id="attributes" />
-
-    <h2>2. Adding Component Attributes</h2>
-
+    <c-section id="attributes" title="2. Adding Component Attributes">
     <p>We can further customize components with attribute, which allow you to pass specific data into the component as key-value pairs.</p>
 
 <c-snippet label="cotton/weather.html">{% cotton:verbatim %}{% verbatim %}
@@ -59,11 +58,9 @@
     It's 23<sup>o</sup>C and the condition is windy.
 </c-slot>
 </c-snippet>
+    </c-section>
 
-    <c-hr id="named-slots" />
-
-    <h2>3. Using Named Slots</h2>
-
+    <c-section id="named-slots" title="3. Using Named Slots">
     <p>If we want to pass HTML instead of just a string (or another data type) into a component, we can pass them as <c-highlight>named slots</c-highlight> with the <code>{{ '<c-slot name="...">...</c-slot>'|force_escape }}</code> syntax.</p>
 
     <p>So as with normal attributes, you reference the slot content like normal variables, as in:</p>
@@ -98,11 +95,9 @@
     <c-note>
         Component filenames should be <c-highlight>snake_cased</c-highlight> by default. To use <c-highlight>kebab-cased</c-highlight> / hyphenated filenames instead, set <code>COTTON_SNAKE_CASED_NAMES</code> to <code>False</code> in your settings.py, <a href="{% url 'configuration' %}">more</a>.
     </c-note>
+    </c-section>
 
-    <c-hr id="dynamic-attributes" />
-
-    <h2>4. Dynamic Attributes</h2>
-
+    <c-section id="dynamic-attributes" title="4. Dynamic Attributes">
     <p>We saw how by default, all attributes that we pass to a component are treated as strings. If we want to pass HTML, we can use named slots. But what if we want to pass another data type like a template variable, boolean, integer, float, dictionary, list?</p>
 
     <p>Cotton supports two syntaxes for dynamic values:</p>
@@ -202,11 +197,9 @@ context = { 'today': Weather.objects.get(...) }
 </select>
 {% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
+    </c-section>
 
-    <c-hr id="attrs" />
-
-    <h2>5. Pass all attributes with {% verbatim %}{{ attrs }}{% endverbatim %}</h2>
-
+    <c-section id="attrs" title="5. Pass all attributes with {{ attrs }}">
     <p>Sometimes it's useful to be able to reflect all attributes provided in the parent on to an HTML element in the component. This is particularly powerful when you are building <a href="{% url 'form-fields' %}">form inputs</a>.</p>
 
 <c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
@@ -230,11 +223,9 @@ context = { 'today': Weather.objects.get(...) }
 
 {% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
+    </c-section>
 
-    <c-hr id="attrs-merging" />
-
-    <h2>5.1 Merging Attributes with :attrs</h2>
-
+    <c-section id="attrs-merging" title="5.1 Merging Attributes with :attrs">
     <p>In addition to using <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> to output attributes, you can also pass in a dictionary of attributes using the special <code>:attrs</code> dynamic attribute. This is useful when you have a collection of attributes from your view or another component that you want to apply.</p>
 
     <c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
@@ -264,11 +255,9 @@ context = {
     <c-note>
         You can also proxy the whole attrs dictionary to other components. <code>{{ '<c-comp :attrs="attrs" />'|force_escape }}</code> This is useful when you want to pass all attributes from one component to another without having to specify each one individually. <a href="{% url 'usage-patterns' %}#attribute-proxying">More info</a>.
     </c-note>
+    </c-section>
 
-    <c-hr id="vars" />
-
-    <h2>6. Defining Local Variables with <code>{{ '<c-vars />'|force_escape }}</code></h2>
-
+    <c-section id="vars" title="6. Defining Local Variables with c-vars">
     <p>The <code>{{ '<c-vars />'|force_escape }}</code> tag simplifies component design by allowing local variable definition, reducing the need for repetitive attribute declarations and maintaining backend state.</p>
 
     <p>Place a single <code>{{ '<c-vars />'|force_escape }}</code> at the top of a component to set key-value pairs that provide a default configuration.</p>
@@ -332,12 +321,10 @@ context = {
 </c-slot>
 </c-snippet>
 
-    <p>By specifying <code>label</code> and <code>errors</code> keys in <code>{{ '<c-vars />'|force_escape }}</code>, these attributes won’t be included in <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>, allowing you to control attributes that are designed for component configuration and those intended as attributes.</p>
+    <p>By specifying <code>label</code> and <code>errors</code> keys in <code>{{ '<c-vars />'|force_escape }}</code>, these attributes won't be included in <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>, allowing you to control attributes that are designed for component configuration and those intended as attributes.</p>
+    </c-section>
 
-    <c-hr id="boolean-attributes" />
-
-    <h2>7. Boolean attributes</h2>
-
+    <c-section id="boolean-attributes" title="7. Boolean attributes">
     <p>Sometimes you just want to pass a simple boolean to a component. Cotton supports providing the attribute name without a value which will provide a boolean True to the component.</p>
 
 <c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
@@ -356,11 +343,9 @@ context = {
     <input type="text" autocomplete="off" class="border px-2 py-1 shadow rounded" name="telephone" placeholder="Telephone" /> <span class="text-red-500 text-2xl">*</span>
 </c-slot>
 </c-snippet>
+    </c-section>
 
-    <c-hr id="dynamic-components" />
-
-    <h2>8. Dynamic Components</h2>
-
+    <c-section id="dynamic-components" title="8. Dynamic Components">
     <p>There can be times where components need to be included dynamically. For these cases we can reach for a special <code>{{ '<c-component>'|force_escape }}</code> tag with an <code>is</code> attribute:</p>
 
 <c-snippet label="cotton/icon_list.html">{% cotton:verbatim %}{% verbatim %}
@@ -378,17 +363,13 @@ context = {
 <!-- as an expression -->
 <c-component is="icon_{{ icon_name }}" />
 {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
+    </c-section>
 
-    <c-hr id="context-isolation" />
-
-    <h2>9. Context Isolation</h2>
-
+    <c-section id="context-isolation" title="9. Context Isolation">
     <p>You can pass the <c-highlight>only</c-highlight> attribute to the component, which will prevent it from adopting any context other than its direct attributes.</p>
+    </c-section>
 
-    <c-hr id="alpine-js-support" />
-
-    <h2>10. Alpine.js support</h2>
-
+    <c-section id="alpine-js-support" title="10. Alpine.js support">
     <p>The following key features allow you to build re-usable components with alpine.js:</p>
 
     <c-ul>
@@ -399,10 +380,9 @@ context = {
             we can escape the first colon using <code>::</code>. This will ensure the attribute maintains a single <code>:</code> inside <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>
         </li>
     </c-ul>
+    </c-section>
 
-    <c-hr id="summary" />
-
-    <h2>Summary of Concepts</h2>
+    <c-section id="summary" title="Summary of Concepts">
     <ul>
         <li><code>{% verbatim %}{{ slot }}{% endverbatim %}</code> - Default content injection.</li>
         <li><c-highlight>Attributes</c-highlight> - Simple, straightforward customization.</li>
@@ -414,7 +394,7 @@ context = {
         <li><c-highlight>Dynamic Components</c-highlight> - Insert a component where the name is generated by a variable or template expression: <code>{{ '<c-component :is="my_variable" />'|force_escape }}</code>
         </li>
     </ul>
-
+    </c-section>
 
     <c-navigation>
         <c-slot name="prev">

@@ -15,73 +15,46 @@
 
         <div class="grid md:grid-cols-2 gap-6 mt-4">
             <div class="col-span-1 flex flex-col overflow-x-auto">
-                <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Django Templates:</span> One template per instance, no reuse</h3>
+                <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Native DTL:</span> No reusable components</h3>
                 <div class="flex h-full rounded-xl overflow-hidden">
-                    <c-demo.snippet-tabs labels="page.html|card.html" tabs_id="compare">
-                        <div class="flex flex-col h-full" x-show="active === 0">
 
-<c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
-{# Using {% include %} - can't pass HTML content #}
-{% include "card.html" with title="First Card" %}
-{% include "card.html" with title="Second Card" %}
+<c-snippet rounded="rounded-xl">{% cotton:verbatim %}{% verbatim %}
+{# ✗ {% include %} - can't pass HTML content #}
+{% include "card.html" with
+    content="<b>Bold</b>"  {# just a string #}
+%}
 
-{# Using {% extends %} - only ONE per template! #}
+{# ✗ {% extends %} - only ONE per template #}
 {% extends "card.html" %}
-{% block title %}My Card{% endblock %}
-{% block content %}
-    <p>Card content here</p>
-    <button>Click me</button>
-{% endblock %}
+{% block content %}Card 1{% endblock %}
+{# Want a second card? Need another file #}
 
-{# Want two cards? Need two separate files
-   or write a custom template tag in Python #}
+{# ✗ templatetags - requires a .py file #}
+{% load card_tags %}
+{% card %}  {# wrote Python for this #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-                        </div>
-                        <div class="flex flex-col h-full" x-show="active === 1">
-
-<c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
-<div class="card">
-    <h2>{% block title %}{% endblock %}</h2>
-    <div>
-        {# block: only works with {% extends %} #}
-        {% block content %}{% endblock %}
-
-        {# include: can only pass simple variables #}
-        {{ content }}
-    </div>
-</div>
-
-{# No way to pass HTML content AND
-   use multiple instances on one page #}
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-
-                        </div>
-                    </c-demo.snippet-tabs>
                 </div>
             </div>
             <div class="col-span-1 rounded-lg overflow-hidden flex flex-col">
-                <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">After:</span> True components, unlimited reuse</h3>
+                <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Cotton:</span> Just HTML files</h3>
                 <div class="flex h-full rounded-xl overflow-hidden">
                     <c-demo.snippet-tabs labels="page.html|card.html" tabs_id="compare">
                         <div class="flex flex-col h-full" x-show="active === 0">
 
 <c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
+{# ✓ Pass rich HTML content #}
 <c-card title="First Card">
-    <p>Any HTML content here</p>
-    <button>Click me</button>
+    <p><b>Bold</b>, <a href="#">links</a>, anything</p>
 </c-card>
 
+{# ✓ Use unlimited times #}
 <c-card title="Second Card">
-    <p>Different content, same component</p>
-    <c-slot name="footer">
-        <span>Optional footer slot</span>
-    </c-slot>
+    <c-slot name="footer">Named slots</c-slot>
 </c-card>
 
-<c-card title="Third Card" class="highlight">
-    Attributes pass through with {{ attrs }}
-</c-card>
+{# ✓ Create with just an HTML file #}
+<c-alert type="warning">No Python needed</c-alert>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>
@@ -89,6 +62,7 @@
                         <div class="flex flex-col h-full" x-show="active === 1">
 
 <c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
+{# ✓ No Python, just an HTML file #}
 <c-vars title />
 
 <div class="card" {{ attrs }}>
@@ -98,11 +72,6 @@
         <footer>{{ footer }}</footer>
     {% endif %}
 </div>
-
-{# Attributes: pass data as props
-   Slots: pass HTML content
-   {{ attrs }}: forward HTML attributes
-   c-vars: define defaults #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
                         </div>

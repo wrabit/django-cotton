@@ -16,10 +16,10 @@
     --color-accent-content: var(--color-teal-600);
     --color-accent-foreground: var(--color-white);
 
-    /* Font families - Albert Sans is loaded via Google Fonts */
-    --font-sans: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+    /* Font families - Figtree is loaded via Google Fonts */
+    --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "Roboto Mono", ui-monospace, monospace;
-    --default-font-family: "Albert Sans", ui-sans-serif, system-ui, sans-serif;
+    --default-font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
     --default-mono-font-family: "Roboto Mono", ui-monospace, monospace;
 
     /* Custom spacing */

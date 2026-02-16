@@ -1,6 +1,10 @@
 <c-layouts.with-sidebar>
     <h1>Setting up Cotton with Django Template Partials</h1>
 
+<c-note>
+    <strong>Django 6.0+:</strong> Template partials are now built into Django core. The instructions below are only needed if you're using the <code>django-template-partials</code> package on Django &lt; 6.0. For Django 6.0+, no additional configuration is required to use partials alongside Cotton.
+</c-note>
+
     <p>Both packages come with an auto-setup feature, but to get the packages working together we need to opt instead
         for the corresponding 'SimpleAppConfig' from each package:</p>
 

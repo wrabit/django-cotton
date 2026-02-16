@@ -49,7 +49,7 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 - **HTML-like Syntax:** Native code editor syntax highlighting, code formatting and autoclosing ([VS Code plugin](#tools) for autocompletion).  
 - **Minimal Overhead:** Compiles to native Django template tags with dynamic caching.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
-- **Compliments HTMX:** Create smart components, reducing repetition and enhancing maintainability.
+- **Compliments HTMX:** Create reusable htmx components, render components directly from views.
 
 <hr>
 
@@ -72,8 +72,8 @@ If you have previously specified a custom loader, you should perform [manual set
 ## Usage Basics
 - **Component Placement:** Components should be placed in the `templates/cotton` folder (or define a [custom folder](https://django-cotton.com/docs/configuration)).
 - **Naming Conventions:**
-  - Component filenames use snake_case: `my_component.html` (or [configure](https://django-cotton.com/docs/configuration) for kebab-case)
   - Components are called using kebab-case prefixed by 'c-': `<c-my-component />`
+  - Component filenames use snake_case: `my_component.html` (or [configure](https://django-cotton.com/docs/configuration) for kebab-case)
 
 ## Walkthrough
 
@@ -204,12 +204,29 @@ By passing just the attribute name without a value, it will automatically be pro
 
 ### Passing Python data types
 
-Using the ':' to prefix an attribute tells Cotton we're passing a dynamic type down. We already know we can use this to send a variable, but you can also send basic python types, namely:
+Cotton supports two syntaxes for passing dynamic values:
+
+1. **Quoteless values**: `attr=value` - for simple values without spaces (like native Django)
+2. **Colon prefix**: `:attr="value"` - works for any expression
+
+```html
+<!-- Quoteless: for simple literals and variables -->
+<c-button enabled=True />
+<c-button enabled=False />
+<c-input value=my_variable />
+<c-counter start=42 />
+
+<!-- Colon prefix: required for complex expressions with spaces/quotes -->
+<c-select :options="['yes', 'no', 'maybe']" />
+<c-card :config="{'open': True}" />
+```
+
+Both approaches support:
 
 - Integers and Floats
 - None, True and False
-- Lists
-- Dictionaries
+- Lists and Dictionaries (colon prefix required)
+- Context variables
 
 This benefits a number of use-cases, for example if you have a select component that you want to provide the possible options from the parent:
 
@@ -620,7 +637,7 @@ Cotton is optimal when used with Django's cached.Loader. If you use <a href="htt
 ## Version Support
 
 - Python >=3.8,<4
-- Django >4.2,<5.3
+- Django >4.2,<7.0
 
 <hr>
 
@@ -632,23 +649,24 @@ Cotton is optimal when used with Django's cached.Loader. If you use <a href="htt
 
 ## Comparison with other packages
 
-| **Feature**                                                                                         | **Cotton**                 | **django-components**                  | **Slippers**                                               |
-|-----------------------------------------------------------------------------------------------------|----------------------------|----------------------------------------|------------------------------------------------------------|
-| **Intro**                                                                                           | UI-focused, expressive syntax       | Holistic solution with backend logic   | Enhances DTL for reusable components                       |
-| **Definition of ‘component’**                                                                       | An HTML template           | A backend class with template          | An HTML template                                           |
-| **Syntax Style**                                                                                     | HTML-like                  | Django Template Tags                   | Django Template Tags with custom tags                      |
-| **One-step package install**                                                                        | ✅                        | ❌                                    | ❌                                                        |
-| **Create component in one step?**                                                                   | ✅ <br> (place in folder) | ✅ <br> (Technically yes with single-file components) | ❌ <br> (need to register in YAML file or with function)   |
-| **Slots** <br> Pass HTML content between tags                                             | ✅                        | ✅                                    | ✅                                                        |
-| **Named Slots** <br> Designate a slot in the component template                                     | ✅                        | ✅                                    | ✅ (using ‘fragments’)                                      |
-| **Dynamic Components** <br> Dynamically render components based on a variable or expression         | ✅                        | ✅                                    | ❌                                                        |
-| **Scoped Slots** <br> Reference component context in parent template                                | ❌                         | ✅                                    | ❌                                                         |
-| **Dynamic Attributes** <br> Pass string literals of basic Python types                              | ✅                        | ❌                                    | ❌                                                         |
-| **Boolean Attributes** <br> Pass valueless attributes as True                                       | ✅                        | ✅                                    | ❌                                                         |
-| **Implicit Attribute Passing** <br> Pass all defined attributes to an element                       | ✅                        | ❌                                     | ✅                                                        |
-| **Django Template Expressions in Attribute Values** <br> Use template expressions in attribute values | ✅                        | ❌                                    | ❌                                                         |
-| **Attribute Merging** <br> Replace existing attributes with component attributes                    | ✅                        | ✅                                    | ❌                                                         |
-| **Multi-line Component Tags** <br> Write component tags over multiple lines                         | ✅                        | ✅                                     | ❌                                                         |
+| **Feature**                                                                                         | **Cotton**                 | **django-components**                  | **Slippers**                                               | **Template Partials**                                      |
+|-----------------------------------------------------------------------------------------------------|----------------------------|----------------------------------------|------------------------------------------------------------|-----------------------------------------------------------|
+| **Intro**                                                                                           | UI-focused, expressive syntax       | Holistic solution with backend logic   | Enhances DTL for reusable components                       | Inline named partials for HTMX                            |
+| **Definition of 'component'**                                                                       | An HTML template           | A backend class with template          | An HTML template                                           | A named fragment within a template                        |
+| **Syntax Style**                                                                                     | HTML-like                  | Django Template Tags                   | Django Template Tags with custom tags                      | Django Template Tags                                      |
+| **One-step package install**                                                                        | ✅                        | ❌                                    | ❌                                                        | ✅ <br> (built-in since Django 6.0)                       |
+| **Create component in one step?**                                                                   | ✅ <br> (place in folder) | ✅ <br> (Technically yes with single-file components) | ❌ <br> (need to register in YAML file or with function)   | ✅ <br> (define with `{% partialdef %}`)                  |
+| **Renderable from views** <br> Render a component directly from a Python view                       | ✅                        | ✅                                    | ❌                                                        | ✅ <br> (via `template#partial` syntax)                   |
+| **Slots** <br> Pass HTML content between tags                                             | ✅                        | ✅                                    | ✅                                                        | ❌                                                        |
+| **Named Slots** <br> Designate a slot in the component template                                     | ✅                        | ✅                                    | ✅ (using 'fragments')                                      | ❌                                                        |
+| **Dynamic Components** <br> Dynamically render components based on a variable or expression         | ✅                        | ✅                                    | ❌                                                        | ❌                                                        |
+| **Scoped Slots** <br> Reference component context in parent template                                | ❌                         | ✅                                    | ❌                                                         | ❌                                                        |
+| **Dynamic Attributes** <br> Pass string literals of basic Python types                              | ✅                        | ❌                                    | ❌                                                         | ❌                                                        |
+| **Boolean Attributes** <br> Pass valueless attributes as True                                       | ✅                        | ✅                                    | ❌                                                         | ❌                                                        |
+| **Implicit Attribute Passing** <br> Pass all defined attributes to an element                       | ✅                        | ❌                                     | ✅                                                        | ❌                                                        |
+| **Django Template Expressions in Attribute Values** <br> Use template expressions in attribute values | ✅                        | ❌                                    | ❌                                                         | ❌                                                        |
+| **Attribute Merging** <br> Replace existing attributes with component attributes                    | ✅                        | ✅                                    | ❌                                                         | ❌                                                        |
+| **Multi-line Component Tags** <br> Write component tags over multiple lines                         | ✅                        | ✅                                     | ❌                                                         | ❌                                                        |
 
 **Notes:** 
 

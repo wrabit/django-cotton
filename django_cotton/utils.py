@@ -36,7 +36,9 @@ def render_component(request, component_name, context=None, **kwargs):
 
     Args:
         request: HttpRequest object (required, like Django's render())
-        component_name: Component name in dotted notation (e.g., "ui.button" or "button")
+        component_name: Component name using dots for folder nesting and hyphens for
+                       underscores in filenames (e.g., "ui.button" -> cotton/ui/button.html,
+                       "settings.user-row" -> cotton/settings/user_row.html)
         context: Dictionary of data to pass to the component as attributes
         **kwargs: Alternative way to pass component attributes
 
@@ -44,14 +46,20 @@ def render_component(request, component_name, context=None, **kwargs):
         Rendered HTML string
 
     Example:
-        # Using context dict (matches Django's render pattern)
-        render_component(request, "button", {"pk": 123, "label": "Click me"})
+        # Simple component: cotton/button.html
+        render_component(request, "button", {"label": "Click me"})
 
-        # Using kwargs (most common HTMX pattern)
-        render_component(request, "button", pk=123, label="Click me")
+        # Nested component: cotton/ui/button.html
+        render_component(request, "ui.button", {"label": "Click me"})
+
+        # Nested with hyphen (cotton/settings/user_row.html)
+        render_component(request, "settings.user-row", {"user": user})
+
+        # Using kwargs
+        render_component(request, "button", label="Click me", pk=123)
 
         # Mix dict and kwargs
-        render_component(request, "user_card", {"user": user}, extra_class="highlight")
+        render_component(request, "user-card", {"user": user}, extra_class="highlight")
     """
     from django.template import RequestContext, Template
 
@@ -64,8 +72,9 @@ def render_component(request, component_name, context=None, **kwargs):
         context = dict(context)  # Make a copy to avoid mutating original
 
     # Build minimal template using :attrs to pass all attributes at once
-    tag_name = component_name.replace(".", "-")
-    template_str = f'{{% cotton {tag_name} :attrs="cotton_component_attrs" / %}}'
+    # Note: Keep dots in component_name for folder nesting (e.g., "ui.button" -> cotton/ui/)
+    # Cotton's template tag handles the path resolution correctly
+    template_str = f'{{% cotton {component_name} :attrs="cotton_component_attrs" / %}}'
     template = Template(template_str)
 
     # Prepare render context (keep original context plus our attrs dict)

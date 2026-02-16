@@ -601,3 +601,84 @@ class CvarTests(CottonTestCase):
             # The url tag should be evaluated and the URL should appear in the href
             self.assertContains(response, 'href="/test-page/"')
             self.assertContains(response, 'class="link"')
+
+    def test_quoteless_dynamic_cvars(self):
+        """Unquoted c-vars values should be treated as dynamic"""
+        self.create_template(
+            "cotton/quoteless_cvars.html",
+            """
+            <c-vars default_true=True default_none=None default_num=42 />
+            {% if default_true is True %}<p>default_true is True</p>{% endif %}
+            {% if default_none is None %}<p>default_none is None</p>{% endif %}
+            {% if default_num == 42 %}<p>default_num is 42</p>{% endif %}
+            """,
+        )
+
+        self.create_template(
+            "quoteless_cvars_view.html",
+            "<c-quoteless-cvars />",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "default_true is True")
+            self.assertContains(response, "default_none is None")
+            self.assertContains(response, "default_num is 42")
+
+    def test_quoteless_cvars_with_context_variable(self):
+        """Unquoted c-vars can resolve context variables"""
+        self.create_template(
+            "cotton/quoteless_cvars_context.html",
+            """
+            <c-vars default_value=from_context />
+            {% if default_value == 999 %}<p>default_value is 999</p>{% endif %}
+            """,
+        )
+
+        self.create_template(
+            "quoteless_cvars_context_view.html",
+            "<c-quoteless-cvars-context />",
+            "view/",
+            context={"from_context": 999},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "default_value is 999")
+
+    def test_quoteless_cvars_override_by_component_attrs(self):
+        """Quoteless c-vars defaults can be overridden by component attrs"""
+        self.create_template(
+            "cotton/quoteless_cvars_override.html",
+            """
+            <c-vars enabled=False />
+            {% if enabled is True %}<p>enabled is True</p>{% endif %}
+            {% if enabled is False %}<p>enabled is False</p>{% endif %}
+            """,
+        )
+
+        # Without override - should use default False
+        self.create_template(
+            "quoteless_cvars_default_view.html",
+            "<c-quoteless-cvars-override />",
+            "default/",
+        )
+
+        # With override - should use True
+        self.create_template(
+            "quoteless_cvars_override_view.html",
+            "<c-quoteless-cvars-override enabled=True />",
+            "override/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            # Test default
+            response = self.client.get("/default/")
+            self.assertContains(response, "enabled is False")
+            self.assertNotContains(response, "enabled is True")
+
+            # Test override
+            response = self.client.get("/override/")
+            self.assertContains(response, "enabled is True")
+            self.assertNotContains(response, "enabled is False")

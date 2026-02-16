@@ -101,9 +101,30 @@
 
     <c-hr id="dynamic-attributes" />
 
-    <h2>4. Dynamic Attributes with ":"</h2>
+    <h2>4. Dynamic Attributes</h2>
 
-    <p>We saw how by default, all attributes that we pass to a component are treated as strings. If we want to pass HTML, we can use named slots. But what if we want to pass another data type like a template variable, boolean, integer, float, dictionary, list, dictionary?</p>
+    <p>We saw how by default, all attributes that we pass to a component are treated as strings. If we want to pass HTML, we can use named slots. But what if we want to pass another data type like a template variable, boolean, integer, float, dictionary, list?</p>
+
+    <p>Cotton supports two syntaxes for dynamic values:</p>
+
+    <c-ul>
+        <li><strong>Quoteless values</strong>: <code>attr=value</code> - for simple values without spaces (like native Django)</li>
+        <li><strong>Colon prefix</strong>: <code>:attr="value"</code> - works for any expression</li>
+    </c-ul>
+
+<c-snippet label="Quoteless syntax">{% cotton:verbatim %}{% verbatim %}
+<!-- Simple literals and variables -->
+<c-button enabled=True />
+<c-button enabled=False />
+<c-input value=my_variable />
+<c-counter start=42 />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+<c-snippet label="Colon prefix (for complex expressions)">{% cotton:verbatim %}{% verbatim %}
+<!-- Required for expressions with spaces/quotes -->
+<c-select :options="['yes', 'no', 'maybe']" />
+<c-card :config="{'open': True}" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <h3>Passing objects from context</h3>
 

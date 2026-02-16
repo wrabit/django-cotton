@@ -49,11 +49,11 @@
                 <div class="hidden sm:flex items-center h-full space-x-1 ml-6">
                     <c-navbar.nav-item url="{% url 'home' %}" active-exact active-startswith="/docs/">
                         <c-icons.book class="size-4 mr-1.5" />
-                        Docs
+                        Core
                     </c-navbar.nav-item>
                     <c-navbar.nav-item url="{% url 'ui' %}" active-startswith="/ui">
-                        <c-icons.grid class="size-4 mr-1.5" />
-                        UI Components
+                        {% heroicon_mini 'sparkles' class="size-4 mr-1.5" %}
+                        UI
                     </c-navbar.nav-item>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                        text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800
                    {% endif %}">
                     <c-icons.book class="size-5" />
-                    Docs
+                    Core
                 </a>
                 <a href="{% url 'ui' %}"
                    class="flex items-center gap-2 px-3 py-2 rounded-md font-medium
@@ -119,8 +119,8 @@
                    {% else %}
                        text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800
                    {% endif %}">
-                    <c-icons.grid class="size-5" />
-                    UI Components
+                    {% heroicon_mini 'sparkles' class="size-5" %}
+                    UI
                 </a>
             </div>
 

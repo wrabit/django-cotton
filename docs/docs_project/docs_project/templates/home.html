@@ -1,5 +1,10 @@
-<c-layouts.with-sidebar>
-    <div class="max-w-5xl mx-auto px-0">
+<c-layouts.base>
+    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_minmax(0,1fr)] px-5">
+        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block py-6">
+            <c-sidebar />
+        </div>
+        <div class="min-w-0 pb-10 py-6">
+            <c-layouts.prose-container>
         <div class="text-center mx-auto max-w-3xl leading-normal mb-10">
             <h1 class="text-3xl md:text-4xl lg:text-5xl font-semibold dark:text-gray-100 mb-6">
                 Modern UI Composition in Django
@@ -12,6 +17,8 @@
                 with clean, reusable components.
             </p>
         </div>
+
+        <c-docs-switcher active="core" />
 
         <div class="grid md:grid-cols-2 gap-6 mt-4">
             <div class="col-span-1 flex flex-col overflow-x-auto">
@@ -127,6 +134,7 @@
             <c-icons.chevron-right class="size-14 text-yellow-900 opacity-20 dark:text-teal-600 dark:opacity-100" />
         </div>
 
+            </c-layouts.prose-container>
+        </div>
     </div>
-
-</c-layouts.with-sidebar>
+</c-layouts.base>

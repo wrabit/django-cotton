@@ -5,7 +5,7 @@
     ignore_syntax_choice
     :hide_label="False"
     pre_class="flex-1 flex flex-col !leading-[1.8rem] !p-0 !m-0 rounded-none !text-[14px]"
-    :code_class="flex-1 !pb-4 {% if not hide_label %}!pt-10{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-zinc-800 dark:!bg-zinc-800/40"
+    code_class="flex-1 !pb-4 !px-6 !m-0 !bg-zinc-800 dark:!bg-zinc-800/40"
 />
 
 <div class="group relative flex-1 flex flex-col justify-start w-full overflow-hidden rounded-lg"
@@ -83,16 +83,16 @@
     {% if "<c-" in slot and not ignore_syntax_choice %}
         <!-- HTML Syntax Version -->
         <div x-show="$store.syntaxPreference === 'html'">
-            <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }}">{{ slot|strip }}</code></pre>
+            <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} !pt-10">{{ slot|strip }}</code></pre>
         </div>
 
         <!-- Template Tag Syntax Version -->
         <div x-show="$store.syntaxPreference === 'template'">
-            <pre class="{{ pre_class }}"><code x-ref="templateCode" class="language-{{ language }} {{ code_class }}">{{ slot|strip|to_template_tags }}</code></pre>
+            <pre class="{{ pre_class }}"><code x-ref="templateCode" class="language-{{ language }} {{ code_class }} !pt-10">{{ slot|strip|to_template_tags }}</code></pre>
         </div>
     {% else %}
         <!-- No Cotton tags OR ignore-syntax-choice is set - show single static version -->
-        <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }}">{{ slot|strip }}</code></pre>
+        <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} {% if label and not hide_label %}!pt-10{% else %}!pt-4{% endif %}">{{ slot|strip }}</code></pre>
     {% endif %}
 
     {% if preview %}

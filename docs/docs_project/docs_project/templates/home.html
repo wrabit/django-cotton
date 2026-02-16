@@ -4,37 +4,53 @@
             <c-sidebar />
         </div>
         <div class="min-w-0 pb-10 py-6">
+            <c-docs-switcher active="core" />
             <c-layouts.prose-container>
-        <div class="text-center mx-auto max-w-3xl leading-normal mb-10">
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-semibold dark:text-gray-100 mb-6">
-                Modern UI Composition in Django
-            </h1>
+                <div class="text-center mx-auto max-w-3xl leading-normal mb-16">
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold dark:text-gray-100 mb-6 tracking-tight">
+                        Modern UI Composition in Django
+                    </h1>
 
-            <p class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400">
-                Replace verbose <code class="text-base bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">{% verbatim %}{% extends %}{% endverbatim %}</code>,
-                <code class="text-base bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">{% verbatim %}{% block %}{% endverbatim %}</code>, and
-                <code class="text-base bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">{% verbatim %}{% include %}{% endverbatim %}</code>
-                with clean, reusable components.
-            </p>
-        </div>
+                    <p class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 mb-8">
+                        Build reusable components with just HTML — no Python required.
+                    </p>
 
-        <c-docs-switcher active="core" />
+                    <div class="flex gap-4 justify-center mb-6 not-prose">
+                        <c-ui.button href="{% url 'quickstart' %}" size="lg" variant="primary" class="text-lg px-8 py-3">
+                            Get Started
+                        </c-ui.button>
+                        <c-ui.button href="https://github.com/wrabit/django-cotton" target="_blank" size="lg" variant="default" class="text-lg px-8 py-3">
+                            <c-slot name="icon_leading">
+                                <c-icons.github class="size-5" />
+                            </c-slot>
+                            GitHub
+                        </c-ui.button>
+                    </div>
 
-        <div class="grid md:grid-cols-2 gap-6 mt-4">
-            <div class="col-span-1 flex flex-col overflow-x-auto">
-                <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Native DTL:</span> No reusable components</h3>
-                <div class="flex h-full rounded-xl overflow-hidden">
+                    <div class="flex items-center justify-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
+                        <a href="https://github.com/wrabit/django-cotton" target="_blank" class="inline-flex items-center gap-1.5 hover:text-zinc-700 dark:hover:text-zinc-300">
+                            <c-icons.github class="size-4" />
+                            <img src="https://img.shields.io/github/stars/wrabit/django-cotton?style=flat&label=Stars&color=black" alt="GitHub stars" class="h-5" />
+                        </a>
+                        <a href="https://pypi.org/project/django-cotton/" target="_blank" class="inline-flex items-center gap-1.5 hover:text-zinc-700 dark:hover:text-zinc-300">
+                            <img src="https://img.shields.io/pypi/v/django-cotton?style=flat&label=PyPI&color=teal" alt="PyPI version" class="h-5" />
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <div class="col-span-1 flex flex-col overflow-x-auto">
+                        <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Native DTL:</span> No reusable components</h3>
+                        <div class="flex h-full rounded-xl overflow-hidden">
 
 <c-snippet rounded="rounded-xl">{% cotton:verbatim %}{% verbatim %}
 {# ✗ {% include %} - can't pass HTML content #}
-{% include "card.html" with
-    content="<b>Bold</b>"  {# just a string #}
-%}
+{% include "card.html" with content="<b>Bold</b>" %}
+{# no html #}
 
 {# ✗ {% extends %} - only ONE per template #}
 {% extends "card.html" %}
 {% block content %}Card 1{% endblock %}
-{# Want a second card? Need another file #}
 
 {# ✗ templatetags - requires a .py file #}
 {% load card_tags %}
@@ -46,10 +62,10 @@
             <div class="col-span-1 rounded-lg overflow-hidden flex flex-col">
                 <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Cotton:</span> Just HTML files</h3>
                 <div class="flex h-full rounded-xl overflow-hidden">
-                    <c-demo.snippet-tabs labels="page.html|card.html" tabs_id="compare">
+                    <c-demo.snippet-tabs labels="page.html|card.html" tabs_id="compare" embedded>
                         <div class="flex flex-col h-full" x-show="active === 0">
 
-<c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
+<c-snippet rounded="rounded-xl">{% cotton:verbatim %}{% verbatim %}
 {# ✓ Pass rich HTML content #}
 <c-card title="First Card">
     <p><b>Bold</b>, <a href="#">links</a>, anything</p>
@@ -68,7 +84,7 @@
 
                         <div class="flex flex-col h-full" x-show="active === 1">
 
-<c-snippet rounded="rounded-b-xl">{% cotton:verbatim %}{% verbatim %}
+<c-snippet rounded="rounded-xl">{% cotton:verbatim %}{% verbatim %}
 {# ✓ No Python, just an HTML file #}
 <c-vars title />
 

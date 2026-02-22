@@ -1,0 +1,16 @@
+<div id="search-results" {{ attrs }} class="not-prose">
+    {% if results %}
+        <div class="border border-gray-200 dark:border-gray-700 rounded divide-y divide-gray-200 dark:divide-gray-700">
+            {% for result in results %}
+                <div class="p-3 hover:bg-gray-50 dark:hover:bg-gray-800">
+                    <h4 class="font-semibold text-gray-900 dark:text-gray-100">{{ result.title }}</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ result.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% elif query %}
+        <p class="text-gray-500 dark:text-gray-400 p-3">No results found for "{{ query }}"</p>
+    {% else %}
+        <p class="text-gray-400 dark:text-gray-500 p-3">Start typing to search...</p>
+    {% endif %}
+</div>

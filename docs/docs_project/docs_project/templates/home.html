@@ -57,15 +57,14 @@
 {% card %}  {# wrote Python for this #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
-                </div>
-            </div>
-            <div class="col-span-1 rounded-lg overflow-hidden flex flex-col">
-                <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Cotton:</span> Just HTML files</h3>
-                <div class="flex h-full rounded-xl overflow-hidden">
-                    <c-demo.snippet-tabs labels="page.html|card.html" tabs_id="compare" embedded>
-                        <div class="flex flex-col h-full" x-show="active === 0">
-
-<c-snippet rounded="rounded-xl">{% cotton:verbatim %}{% verbatim %}
+                        </div>
+                    </div>
+                    <div class="col-span-1 rounded-lg overflow-hidden flex flex-col">
+                        <h3 class="text-base font-medium text-zinc-500 dark:text-zinc-400 mb-3 mt-0"><span class="text-zinc-700 dark:text-zinc-300">Cotton:</span> Just HTML files</h3>
+                        <div class="flex h-full rounded-xl overflow-hidden">
+                            <c-demo.snippet-tabs embedded>
+                                <c-demo.snippet-tab name="page.html">
+<c-snippet :hide_label="True" :padded_top="True">{% cotton:verbatim %}{% verbatim %}
 {# ✓ Pass rich HTML content #}
 <c-card title="First Card">
     <p><b>Bold</b>, <a href="#">links</a>, anything</p>
@@ -79,12 +78,10 @@
 {# ✓ Create with just an HTML file #}
 <c-alert type="warning">No Python needed</c-alert>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                                </c-demo.snippet-tab>
 
-                        </div>
-
-                        <div class="flex flex-col h-full" x-show="active === 1">
-
-<c-snippet rounded="rounded-xl">{% cotton:verbatim %}{% verbatim %}
+                                <c-demo.snippet-tab name="card.html">
+<c-snippet :hide_label="True" :padded_top="True">{% cotton:verbatim %}{% verbatim %}
 {# ✓ No Python, just an HTML file #}
 <c-vars title />
 
@@ -96,12 +93,11 @@
     {% endif %}
 </div>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-
+                                </c-demo.snippet-tab>
+                            </c-demo.snippet-tabs>
                         </div>
-                    </c-demo.snippet-tabs>
+                    </div>
                 </div>
-            </div>
-        </div>
 
         <div>
             <h3 class="text-center pb-10">Why cotton?</h3>

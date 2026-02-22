@@ -27,6 +27,7 @@ Bringing component-based design to Django templates.
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
 [Merging and Proxying Attributes with `:attrs`](#merging-and-proxying-attributes-with-attrs)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
+[Organizing in Subfolders](#organizing-in-subfolders)  
 [HTMX Example](#an-example-with-htmx)  
 [Limitations in Django that Cotton overcomes](#limitations-in-django-that-cotton-overcomes)  
 [Template Syntax Options](#template-syntax-options)  
@@ -408,6 +409,38 @@ Input will have all attributes provided apart from the `icon`:
 
 ```html
 <input type="password" id="password" />
+```
+
+### Organizing in Subfolders
+
+Use dot notation in component names to organize components in subfolders. This keeps large projects easier to navigate and maintain.
+
+- A component at `cotton/sidebar/menu/link.html` is used as `<c-sidebar.menu.link />`
+- A component at `cotton/ui/alert.html` is used as `<c-ui.alert />`
+- Add `index.html` in a folder to define the default component (e.g. `cotton/card/index.html` for `<c-card />`)
+
+**Example structure for larger projects:**
+
+```
+templates/cotton/
+├── card/
+│   ├── index.html
+│   └── header.html
+├── form/
+│   ├── input.html
+│   └── button.html
+└── ui/
+    ├── alert.html
+    └── card.html
+```
+
+```html
+<!-- Usage -->
+<c-card>
+  <c-card.header>...</c-card.header>
+</c-card>
+<c-form.input placeholder="Name" />
+<c-ui.alert>Success!</c-ui.alert>
 ```
 
 ### Dynamic Components

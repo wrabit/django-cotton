@@ -1,0 +1,7 @@
+<c-vars name />
+
+<div x-init="register('{{ name }}')"
+     x-show="isActive('{{ name }}')"
+     class="flex flex-col">
+    {{ slot }}
+</div>

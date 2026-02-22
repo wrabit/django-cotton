@@ -1,17 +1,55 @@
-<c-vars embedded />
+<c-vars preview_label="Preview" embedded />
 
-<div class="{% if embedded %}relative{% else %}flex flex-col{% endif %} w-full" x-data="tabs">
-    <div x-init="tabs = '{{ labels }}'.split('|'); tabs_id = '{{ tabs_id }}'"></div>
-    <div class="flex space-x-1 w-full text-sm px-2 py-0 text-gray-400 {% if embedded %}absolute top-0 left-0 z-10{% else %}border-b bg-gray-800 border-b-gray-700 dark:bg-gray-800{% endif %}" @tab-change.window="onTabChange">
-        <template x-for="(tab, index) in tabs">
-            <div
-                class="pt-2.5 pb-2 px-3 cursor-pointer {% if not embedded %}border-b-2 border-transparent border-gray-500{% endif %}"
-                :class="{ 'text-gray-200 {% if not embedded %}border-b-teal-500 shadow-[0px_-2px_3px_0px_rgba(0,0,0,0.1)]{% endif %}': index === active }"
-                @click="updateTab(index)"
-                x-text="`${tab}`"
-            ></div>
-        </template>
+<div class="flex flex-col w-full {% if not embedded %}rounded-xl overflow-hidden border border-zinc-700{% endif %}">
+    {% if preview %}
+        <div class="px-6 py-6 prose-headings:text-zinc-800 bg-white dark:bg-zinc-50 dark:!text-zinc-800">
+            <div class="text-sm text-zinc-400 font-medium uppercase tracking-widest pb-5">{{ preview_label }}</div>
+            {{ preview }}
+        </div>
+    {% endif %}
+
+    <div x-data="{
+        tabs: [],
+        activeTab: '',
+        register(name) {
+            this.tabs.push(name);
+            if (!this.activeTab && this.tabs.length === 1) {
+                this.activeTab = name;
+            }
+        },
+        isActive(name) {
+            return this.activeTab === name;
+        }
+    }" class="w-full {% if embedded %}relative{% endif %}">
+
+        <!-- Tab navigation bar -->
+        <div class="flex space-x-1 text-sm px-2 py-0 text-zinc-400
+            {% if embedded %}
+                absolute top-0 left-0 z-10 pt-2.5
+            {% else %}
+                w-full bg-zinc-800 border-b border-zinc-700 dark:bg-zinc-800
+            {% endif %}
+        ">
+            <template x-for="tab in tabs" :key="tab">
+                <button
+                    type="button"
+                    @click="activeTab = tab"
+                    class="pb-2 px-3 cursor-pointer transition-colors
+                        {% if embedded %}
+                            text-xs
+                        {% else %}
+                            pt-2.5 border-b-2
+                        {% endif %}
+                    "
+                    :class="activeTab === tab
+                        ? 'text-zinc-200 {% if not embedded %}border-teal-500{% endif %}'
+                        : '{% if not embedded %}border-transparent{% endif %} hover:text-zinc-300'"
+                    x-text="tab"
+                ></button>
+            </template>
+        </div>
+
+        <!-- Tab panels -->
+        {{ slot }}
     </div>
-
-    {{ slot }}
 </div>

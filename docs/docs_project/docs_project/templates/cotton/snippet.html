@@ -2,13 +2,16 @@
 
 <c-vars
     language="django"
+    rounded="rounded-lg"
     ignore_syntax_choice
     :hide_label="False"
+    :flipped="False"
+    :padded_top="False"
     pre_class="flex-1 flex flex-col !leading-[1.8rem] !p-0 !m-0 rounded-none !text-[14px]"
     code_class="flex-1 !pb-4 !px-6 !m-0 !bg-zinc-800 dark:!bg-zinc-800/40"
 />
 
-<div class="group relative flex-1 flex flex-col justify-start w-full overflow-hidden rounded-lg"
+<div class="group relative flex-1 flex flex-col justify-start w-full overflow-hidden {{ rounded }}"
      x-data="{% verbatim %}{
         get currentCode() {
             const htmlCode = $refs.htmlCode;
@@ -47,12 +50,19 @@
         });
     {% endverbatim %}"
 >
+    {% if flipped and preview %}
+        <div class="px-6 py-6 prose-headings:text-zinc-800 bg-white dark:bg-zinc-50 rounded-t-xl dark:!text-zinc-800">
+            <div class="text-sm text-zinc-400 font-semibold uppercase tracking-wider pb-3">preview</div>
+            {{ preview }}
+        </div>
+    {% endif %}
+
     {% if label and not hide_label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-zinc-500 font-semibold">{{ label }}</div>{% endif %}
 
     <!-- Top-right controls: syntax switcher + copy button -->
     <div class="absolute right-0 top-0 pt-3 pr-5 flex items-center gap-3">
         {% if "<c-" in slot and not ignore_syntax_choice %}
-            <div class="inline-flex rounded-lg gap-0.5">
+            <div class="inline-flex rounded-lg gap-0.5 font-mono">
                 <!-- Buttons with individual backgrounds -->
                 <button
                     @click="$store.syntaxPreference = 'html'"
@@ -92,10 +102,10 @@
         </div>
     {% else %}
         <!-- No Cotton tags OR ignore-syntax-choice is set - show single static version -->
-        <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} {% if label and not hide_label %}!pt-10{% else %}!pt-4{% endif %}">{{ slot|strip }}</code></pre>
+        <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} {% if label and not hide_label or padded_top %}!pt-10{% else %}!pt-4{% endif %}">{{ slot|strip }}</code></pre>
     {% endif %}
 
-    {% if preview %}
+    {% if preview and not flipped %}
         <div class="text-base px-6 py-6 prose-headings:text-zinc-800 bg-white dark:bg-zinc-50 rounded-b border-l border-r border-b">
             <div class="text-sm text-zinc-400 font-semibold uppercase tracking-wider pb-3">preview</div>
             {{ preview }}

@@ -1,0 +1,27 @@
+<div id="task-{{ id }}" {{ attrs }} class="mb-3">
+    <div class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg">
+        <div class="flex-1">
+            <h3 class="font-semibold text-gray-900 mb-1">{{ title }}</h3>
+            <p class="text-gray-600 text-sm">{{ description }}</p>
+        </div>
+        <div class="flex space-x-2">
+            <button
+                hx-get="/demo/tasks/{{ id }}/edit?title={{ title|urlencode }}&description={{ description|urlencode }}"
+                hx-target="#task-{{ id }}"
+                hx-swap="outerHTML"
+                class="px-3 py-1.5 text-sm bg-teal-600 text-white hover:bg-teal-700 rounded transition-colors"
+            >
+                Edit
+            </button>
+            <button
+                hx-delete="/demo/tasks/{{ id }}/delete"
+                hx-target="#task-{{ id }}"
+                hx-swap="delete swap:0.5s"
+                hx-confirm="Delete this task?"
+                class="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
+            >
+                Delete
+            </button>
+        </div>
+    </div>
+</div>

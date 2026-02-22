@@ -1,0 +1,22 @@
+<div x-data="{ open: false }"
+     x-on:open-modal.window="open = true"
+     x-on:close-modal.window="open = false"
+     {{ attrs }}
+     class="not-prose">
+    <!-- Modal backdrop -->
+    <div x-show="open"
+         x-cloak
+         class="fixed inset-0 bg-black bg-opacity-50 z-40"
+         @click="open = false"></div>
+
+    <!-- Modal content -->
+    <div x-show="open"
+         x-cloak
+         class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6" @click.stop>
+            <div id="modal-content">
+                {{ slot }}
+            </div>
+        </div>
+    </div>
+</div>

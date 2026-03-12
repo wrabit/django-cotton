@@ -583,6 +583,39 @@ class AttributeHandlingTests(CottonTestCase):
             self.assertContains(response, 'class="link"')
             self.assertContains(response, "Go to Destination")
 
+    def test_url_tag_in_nested_components_issue_336(self):
+        """Issue #336: {% url %} tags in component attributes"""
+        from django.urls import path
+        from django.views.generic import TemplateView
+
+        self.create_template(
+            "cotton/navbar.html",
+            """<nav class="navbar">{{ slot }}</nav>""",
+        )
+
+        self.create_template(
+            "cotton/navbar/navitem.html",
+            """<c-vars url /><a href="{{ url }}" class="nav-link">{{ slot }}</a>""",
+        )
+
+        self.url_module.urlpatterns.append(
+            path("projects/", TemplateView.as_view(template_name="view.html"), name="project-list")
+        )
+
+        self.create_template(
+            "navbar_view.html",
+            """<c-navbar>
+    <c-navbar.navitem url="/">Home</c-navbar.navitem>
+    <c-navbar.navitem url="{% url 'project-list' %}">Projects</c-navbar.navitem>
+</c-navbar>""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<a href="/" class="nav-link">Home</a>')
+            self.assertContains(response, '<a href="/projects/" class="nav-link">Projects</a>')
+
     def test_nested_quotes_in_django_filters_double_quote_outer(self):
         import datetime
 

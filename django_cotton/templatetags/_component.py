@@ -44,7 +44,7 @@ class CottonComponentNode(Node):
                 component_data["attrs"][key] = True
             elif key.startswith("::"):  # Escaping 1 colon e.g for shorthand alpine
                 key = key[1:]
-                component_data["attrs"][key] = value
+                component_data["attrs"][key] = self._evaluate_template_value(value, context)
             elif key.startswith(":"):  # Explicit dynamic attribute with colon prefix
                 key = key[1:]
                 try:
@@ -67,20 +67,7 @@ class CottonComponentNode(Node):
                     component_data["attrs"][key] = value
             else:
                 # Static attribute (quoted) - check if it contains template syntax
-                if isinstance(value, str) and ("{{" in value or "{%" in value):
-                    try:
-                        # Evaluate template tags at render time (same as c-vars)
-                        # Prepend {% load %} tags for libraries that were loaded at parse time
-                        load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
-                        template_str = "".join(load_tags) + value
-                        mini_template = Template(template_str)
-                        rendered_value = mini_template.render(context)
-                        component_data["attrs"][key] = rendered_value
-                    except Exception:
-                        # If rendering fails, fall back to the raw value
-                        component_data["attrs"][key] = value
-                else:
-                    component_data["attrs"][key] = value
+                component_data["attrs"][key] = self._evaluate_template_value(value, context)
 
         # Render the nodelist to process any slot tags and vars
         default_slot = self.nodelist.render(context)
@@ -183,6 +170,18 @@ class CottonComponentNode(Node):
                 vars.update(node_vars)
 
         return vars
+
+    def _evaluate_template_value(self, value, context):
+        """Evaluate template syntax in a value if present, otherwise return as-is."""
+        if isinstance(value, str) and ("{{" in value or "{%" in value):
+            try:
+                load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
+                template_str = "".join(load_tags) + value
+                mini_template = Template(template_str)
+                return mini_template.render(context)
+            except Exception:
+                return value
+        return value
 
     @staticmethod
     @functools.lru_cache(maxsize=400)

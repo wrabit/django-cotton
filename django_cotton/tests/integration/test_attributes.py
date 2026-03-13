@@ -514,6 +514,42 @@ class AttributeHandlingTests(CottonTestCase):
                 """attrs: ':string="variable" dynamic="Ive been resolved!" :complex-string="{'something': 1}" complex-dynamic="{'something': 1}"'""",
             )
 
+    def test_double_colon_attributes_evaluate_template_variables(self):
+        """Test that :: attributes evaluate Django template variables in the value"""
+        self.create_template(
+            "cotton/alpine_component.html",
+            """<c-vars condition_ok /><div {{ attrs }}>{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "alpine_view.html",
+            """<c-alpine-component ::class="{{ condition_ok }} ? 'bg-green' : 'bg-red'" condition_ok />""",
+            "view/",
+            context={"condition_ok": True},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, """:class="True ? 'bg-green' : 'bg-red'""")
+
+    def test_double_colon_attributes_evaluate_template_variables(self):
+        """Test that :: attributes evaluate Django template variables in the value"""
+        self.create_template(
+            "cotton/alpine_component.html",
+            """<c-vars condition_ok /><div {{ attrs }}>{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "alpine_view.html",
+            """<c-alpine-component ::class="{{ condition_ok }} ? 'bg-green' : 'bg-red'" condition_ok />""",
+            "view/",
+            context={"condition_ok": True},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, """:class="True ? 'bg-green' : 'bg-red'""")
+
     def test_attributes_can_contain_valid_json(self):
         self.create_template(
             "cotton/json_attrs.html",

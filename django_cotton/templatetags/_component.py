@@ -75,6 +75,9 @@ class CottonComponentNode(Node):
         # Load the component template first
         template = self._get_cached_template(context, component_data["attrs"])
 
+        # Exclude 'is' from attrs string output - it's only used for dynamic component resolution
+        component_data["attrs"].exclude_from_string_output("is")
+
         # Extract vars from the component template
         vars = self._extract_vars_from_template(
             template, context, component_data["attrs"], component_data["slots"]

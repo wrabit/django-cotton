@@ -7,6 +7,7 @@
             <c-index-sublink><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
             <c-index-sublink><a href="#dynamic-attributes" class="no-underline">Dynamic Attributes</a></c-index-sublink>
             <c-index-sublink><a href="#attrs" class="no-underline">{% verbatim %}{{ attrs }}{% endverbatim %}</a></c-index-sublink>
+            <c-index-sublink><a href="#merge-filter" class="no-underline">The merge filter</a></c-index-sublink>
             <c-index-sublink><a href="#attrs-merging" class="no-underline">Merging with :attrs</a></c-index-sublink>
             <c-index-sublink><a href="#vars" class="no-underline">Local state with {{ '<c-vars>'|force_escape }}</a></c-index-sublink>
             <c-index-sublink><a href="#boolean-attributes" class="no-underline">Boolean Attributes</a></c-index-sublink>
@@ -231,9 +232,29 @@ context = { 'today': Weather.objects.get(...) }
 {% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
 
+    <c-hr id="merge-filter" />
+
+    <h2>5.1 Add Defaults with the <code>merge</code> Filter</h2>
+
+    <p>When you want to add default HTML attributes while keeping any attributes passed by the caller, use the built-in <code>merge</code> filter. If the attribute already exists, Cotton prepends the new value. Otherwise it adds the attribute.</p>
+
+    <c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
+<input type="text" {{ attrs|merge:'class:border rounded px-3 py-2' }} />
+    {% endcotton:verbatim %}{% endverbatim %}
+    </c-snippet>
+
+    <c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
+<c-input class="text-sm" placeholder="Enter your name" />
+
+<!-- html output
+<input type="text" class="border rounded px-3 py-2 text-sm" placeholder="Enter your name" />
+-->
+{% endcotton:verbatim %}{% endverbatim %}
+    </c-snippet>
+
     <c-hr id="attrs-merging" />
 
-    <h2>5.1 Merging Attributes with :attrs</h2>
+    <h2>5.2 Merging Attributes with :attrs</h2>
 
     <p>In addition to using <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> to output attributes, you can also pass in a dictionary of attributes using the special <code>:attrs</code> dynamic attribute. This is useful when you have a collection of attributes from your view or another component that you want to apply.</p>
 

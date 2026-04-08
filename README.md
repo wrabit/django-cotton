@@ -25,6 +25,7 @@ Bringing component-based design to Django templates.
 [Boolean attributes](#boolean-attributes)  
 [Passing Python data types](#passing-python-data-types)  
 [Increase Re-usability with `{{ attrs }}`](#increase-re-usability-with--attrs-)  
+[Add Defaults with the `merge` Filter](#add-defaults-with-the-merge-filter)  
 [Merging and Proxying Attributes with `:attrs`](#merging-and-proxying-attributes-with-attrs)  
 [In-component Variables with `<c-vars>`](#in-component-variables-with-c-vars)  
 [Organizing in Subfolders](#organizing-in-subfolders)  
@@ -272,6 +273,25 @@ This benefits a number of use-cases, for example if you have a select component 
 <!-- html output -->
 <input type="text" class="..." placeholder="Enter your name" />
 <input type="text" class="..." name="country" id="country" value="Japan" required />
+```
+
+### Add Defaults with the `merge` Filter
+
+When you want to add default HTML attributes while keeping any attributes passed by the caller, use the built-in `merge` filter. If the attribute already exists, Cotton prepends the new value. Otherwise it adds the attribute.
+
+```html
+<!-- cotton/input.html -->
+<input type="text" {{ attrs|merge:'class:border rounded px-3 py-2' }} />
+```
+
+```html
+<!-- example usage -->
+<c-input class="text-sm" placeholder="Enter your name" />
+```
+
+```html
+<!-- html output -->
+<input type="text" class="border rounded px-3 py-2 text-sm" placeholder="Enter your name" />
 ```
 
 ### Merging and Proxying Attributes with `:attrs`

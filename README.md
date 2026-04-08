@@ -658,7 +658,7 @@ Whether to search for component filenames in snake_case. If set to False, you ca
 
 ## Caching
 
-Cotton is optimal when used with Django's cached.Loader. If you use <a href="https://django-cotton.com/docs/quickstart">automatic configuration</a> then the cached loader will be automatically applied.
+Cotton includes its own compilation cache that avoids re-processing component syntax when template files haven't changed (based on file modification time). For full performance, Cotton should also be used with Django's cached.Loader, which additionally caches fully parsed Template objects and avoids disk reads entirely. If you use automatic configuration (the default), the cached loader is already applied automatically.
 
 <hr>
 

@@ -48,7 +48,7 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
 - **Interoperable with Django:** Cotton only enhances django's existing template system (no Jinja needed).
 - **HTML-like Syntax:** Native code editor syntax highlighting, code formatting and autoclosing ([VS Code plugin](#tools) for autocompletion).  
-- **Minimal Overhead:** Compiles to native Django template tags with dynamic caching.
+- **Minimal Overhead:** Compiles to native Django template tags with built-in compilation caching and automatic cache invalidation on file changes.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
 - **Compliments HTMX:** Create reusable htmx components, render components directly from views.
 

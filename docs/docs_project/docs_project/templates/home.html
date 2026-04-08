@@ -162,7 +162,7 @@ Item Title
                     <c-slot name="icon">
                         {% heroicon_outline 'presentation-chart-line' class="shrink-0 text-teal-600 size-16 mr-5 mt-1" stroke_width="1.8" %}
                     </c-slot>
-                    Cotton compiles to native django components and the compilation step is automatically cached and dynamically managed.
+                    Cotton compiles to native Django template tags with built-in compilation caching. Template files are only re-processed when modified, and when used with Django's cached.Loader (applied automatically by default), fully parsed templates are cached for the lifetime of the process.
                 </c-feature-tile>
             </c-feature-tiles>
         </div>

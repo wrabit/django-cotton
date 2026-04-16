@@ -95,7 +95,7 @@ class CottonComponentNode(Node):
         }
 
         isolate_by_default = getattr(settings, "COTTON_ISOLATE_BY_DEFAULT", False)
-        # Luke's experimental setting for backward compatibility during transition
+        # experimental setting for backward compatibility during transition
         enable_context_isolation = getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False)
 
         if self.only or isolate_by_default or enable_context_isolation:
@@ -207,13 +207,8 @@ class CottonComponentNode(Node):
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 
-def cotton_component(parser, token):
-    """
-    Parse a cotton component tag and return a CottonComponentNode.
+def cotton_component(parser, token): #Parse a cotton component tag and return a CottonComponentNode. Uses custom parser to preserve quotes and handle template tags in attributes. Supports self-closing syntax: {% cotton name /%} or {% cotton name / %}
 
-    Uses custom parser to preserve quotes and handle template tags in attributes.
-    Supports self-closing syntax: {% cotton name /%} or {% cotton name / %}
-    """
     from django_cotton.tag_parser import parse_component_tag
     from django.template import NodeList
 

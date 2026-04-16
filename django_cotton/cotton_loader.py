@@ -46,7 +46,6 @@ class Loader(BaseLoader):
         return compiled
 
     def get_template_from_string(self, template_string):
-        """Create and return a Template object from a string. Used primarily for testing."""
         return Template(template_string, engine=self.engine)
 
     def _get_template_string(self, template_name):
@@ -58,7 +57,6 @@ class Loader(BaseLoader):
 
     @lru_cache(maxsize=None)
     def get_dirs(self):
-        """Retrieves possible locations of cotton directory"""
         dirs = list(self.dirs or self.engine.dirs)
 
         # Include any included installed app directories, e.g. project/app1/templates
@@ -79,14 +77,12 @@ class Loader(BaseLoader):
 
         return dirs
 
-    def reset(self):
-        """Empty the template cache."""
+    def reset(self): #Empty the template cache.
         self.cache_handler.reset()
 
-    def get_template_sources(self, template_name):
-        """Return an Origin object pointing to an absolute path in each directory
-        in template_dirs. For security reasons, if a path doesn't lie inside
-        one of the template_dirs it is excluded from the result set."""
+    def get_template_sources(self, template_name): #Return an Origin object pointing to an absolute path in each directory
+        #in template_dirs. For security reasons, if a path doesn't lie inside
+        #one of the template_dirs it is excluded from the result set.
         for template_dir in self.get_dirs():
             try:
                 name = safe_join(template_dir, template_name)
@@ -103,11 +99,6 @@ class Loader(BaseLoader):
 
 
 class CottonTemplateCacheHandler:
-    """This mimics the simple template caching mechanism in Django's cached.Loader which acts a decent fallback when
-    the user has not configured the cache loader manually.
-
-    TODO: implement cache warming functionality e.g. to be used at deployment
-    """
 
     def __init__(self):
         self.template_cache = {}

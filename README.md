@@ -654,6 +654,14 @@ If you use a project-level templates folder then you can set the path here. This
 
 Whether to search for component filenames in snake_case. If set to False, you can use kebab-cased / hyphenated filenames.
 
+`COTTON_ISOLATE_BY_DEFAULT` (default: False)
+
+If set to True, all components will behave as if they have the `only` flag provided. This means they will not inherit any variables from the parent context.
+
+`COTTON_PROCESS_BY_DEFAULT` (default: True)
+
+By default, Cotton scans all templates for component syntax. If you have a very large project and want to optimize performance, you can set this to `False`. Cotton will then only process templates that contain the `{% cotton_enable %}` tag.
+
 <hr>
 
 ## Caching

@@ -95,18 +95,17 @@ class CottonComponentNode(Node):
         }
 
         isolate_by_default = getattr(settings, "COTTON_ISOLATE_BY_DEFAULT", False)
-        if self.only or isolate_by_default:
-            # Complete isolation
-            output = template.render(Context(component_state))
+        # Luke's experimental setting for backward compatibility during transition
+        enable_context_isolation = getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False)
+
+        if self.only or isolate_by_default or enable_context_isolation:
+            # Smart Isolation: Isolate from parent template leaks but preserve global context processors
+            new_context = self._create_partial_context(context, component_state)
+            output = template.render(new_context)
         else:
-            if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False) is True:
-                # Default - partial isolation
-                new_context = self._create_partial_context(context, component_state)
-                output = template.render(new_context)
-            else:
-                # Legacy - no isolation
-                with context.push(component_state):
-                    output = template.render(context)
+            # Legacy/No isolation: Push to existing context stack
+            with context.push(component_state):
+                output = template.render(context)
 
         cotton_data["stack"].pop()
 

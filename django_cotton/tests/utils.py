@@ -54,6 +54,30 @@ class CottonTestCase(TestCase):
     def tearDown(self):
         """Clear state between tests so that we can use the same file names"""
         self.clean_temp_dir()
+
+        from django.template import engines
+        from django_cotton.cotton_loader import Loader
+
+        for engine in engines.all():
+            try:
+                loaders = engine.engine.template_loaders
+            except AttributeError:
+                continue
+
+            for loader in loaders:
+                if hasattr(loader, "reset") and callable(loader.reset):
+                    loader.reset()
+                
+                if hasattr(loader, "template_cache"):
+                    loader.template_cache.clear()
+
+                if hasattr(loader, "loaders"):
+                    for sub_loader in loader.loaders:
+                        if hasattr(sub_loader, "reset") and callable(sub_loader.reset):
+                            sub_loader.reset()
+                        if hasattr(sub_loader, "template_cache"):
+                            sub_loader.template_cache.clear()
+
         super().tearDown()
 
     def clean_temp_dir(self):

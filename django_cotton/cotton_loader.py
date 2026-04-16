@@ -29,10 +29,17 @@ class Loader(BaseLoader):
 
         template_string = self._get_template_string(origin.name)
 
-        if "<c-" not in template_string and "{% cotton:verbatim" not in template_string:
-            compiled = template_string
-        else:
+        # Decide if we should run the Cotton compiler
+        enabled_by_tag = "{% cotton_enable %}" in template_string
+        enabled_by_default = getattr(settings, "COTTON_PROCESS_BY_DEFAULT", True)
+
+        if enabled_by_tag:
+            template_string = template_string.replace("{% cotton_enable %}", "")
             compiled = self.cotton_compiler.process(template_string)
+        elif enabled_by_default and ("<c-" in template_string or "{% cotton:verbatim" in template_string):
+            compiled = self.cotton_compiler.process(template_string)
+        else:
+            compiled = template_string
 
         self.cache_handler.cache_template(cache_key, compiled)
 

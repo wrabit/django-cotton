@@ -94,7 +94,8 @@ class CottonComponentNode(Node):
             "cotton_data": cotton_data,
         }
 
-        if self.only:
+        isolate_by_default = getattr(settings, "COTTON_ISOLATE_BY_DEFAULT", False)
+        if self.only or isolate_by_default:
             # Complete isolation
             output = template.render(Context(component_state))
         else:

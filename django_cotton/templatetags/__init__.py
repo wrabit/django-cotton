@@ -2,11 +2,37 @@ import ast
 from collections.abc import Mapping
 from typing import Set, Any, Dict, List, Tuple
 
-from django.template import Variable, TemplateSyntaxError, Context
-from django.template.base import VariableDoesNotExist, Template
+from django.template import Variable, TemplateSyntaxError, Context, Library
+from django.template.base import (
+    DebugLexer,
+    Lexer,
+    Origin,
+    Parser,
+    Template,
+    UNKNOWN_SOURCE,
+    VariableDoesNotExist,
+)
+from django.template.engine import Engine
 from django.utils.safestring import mark_safe
 
 from django_cotton.utils import ensure_quoted
+
+
+class InlineTemplate:
+    def __init__(self, template_string: str, nodelist, engine, origin=None, name=None):
+        self.name = name
+        self.origin = origin or Origin(UNKNOWN_SOURCE)
+        self.engine = engine
+        self.source = str(template_string)
+        self.nodelist = nodelist
+
+    def render(self, context):
+        with context.render_context.push_state(self):
+            if context.template is None:
+                with context.bind_template(self):
+                    context.template_name = self.name
+                    return self.nodelist.render(context)
+            return self.nodelist.render(context)
 
 
 def parse_template_tag_attributes(bits: List[str]) -> tuple[Dict[str, Any], List[str]]:
@@ -109,15 +135,57 @@ def strip_quotes_with_status(value: Any) -> Tuple[Any, bool]:
     return value, False
 
 
+def snapshot_parser_library(parser: Parser) -> Library:
+    """Capture the parser's active tag and filter table at this parse point."""
+    active_library = Library()
+    active_library.tags.update(parser.tags)
+    active_library.filters.update(parser.filters)
+    return active_library
+
+
+def render_inline_template(value: str, context: Context, active_library: Library | None = None) -> str:
+    """Render a template fragment with the caller template's active tag/filter scope."""
+    if active_library is None:
+        if context.template is not None:
+            return context.template.engine.from_string(value).render(context)
+        return Template(value).render(context)
+
+    if context.template is not None:
+        engine = context.template.engine
+        origin = context.template.origin
+        name = context.template.name
+    else:
+        engine = Engine.get_default()
+        origin = Origin(UNKNOWN_SOURCE)
+        name = None
+
+    lexer = DebugLexer(value) if engine.debug else Lexer(value)
+    parser = Parser(
+        lexer.tokenize(),
+        engine.template_libraries,
+        [active_library],
+        origin,
+    )
+    nodelist = parser.parse()
+    template = InlineTemplate(value, nodelist, engine, origin=origin, name=name)
+    return template.render(context)
+
+
 class UnprocessableDynamicAttr(Exception):
     pass
 
 
 class DynamicAttr:
-    def __init__(self, value: str, is_cvar=False):
+    def __init__(
+        self,
+        value: str,
+        is_cvar: bool = False,
+        active_library: Library | None = None,
+    ):
         self.value = value
         self._is_cvar = is_cvar
         self._resolved_value = None
+        self.active_library = active_library
 
     def resolve(self, context: Context) -> Any:
         if self._resolved_value is not None:
@@ -152,8 +220,7 @@ class DynamicAttr:
         raise ValueError
 
     def _resolve_as_template(self, context):
-        template = Template(self.value)
-        rendered_value = template.render(context)
+        rendered_value = render_inline_template(self.value, context, self.active_library)
         if rendered_value != self.value:
             # Try to evaluate the rendered value as a Python literal
             # This handles cases like :attr="{'key': {{ var }}}" where {{ var }} is rendered first

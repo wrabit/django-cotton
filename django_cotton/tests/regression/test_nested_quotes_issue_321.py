@@ -171,6 +171,7 @@ class NestedQuotesIssue321Tests(CottonTestCase):
         self.create_template(
             "same_double_view.html",
             """
+            {% load i18n %}
             <c-echo-component text="{% trans "Nested Text" %}" />
             """,
             "view/",
@@ -192,6 +193,7 @@ class NestedQuotesIssue321Tests(CottonTestCase):
         self.create_template(
             "same_single_view.html",
             """
+            {% load i18n %}
             <c-text-component content='{% trans 'Single Nested' %}' />
             """,
             "view/",

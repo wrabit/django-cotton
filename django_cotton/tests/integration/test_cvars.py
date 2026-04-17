@@ -1,9 +1,22 @@
+import copy
+
+from django.conf import settings
 from django.template.loader import render_to_string
 
 from django_cotton.tests.utils import CottonTestCase
 
 
 class CvarTests(CottonTestCase):
+    @staticmethod
+    def templates_with_url_override(*, builtins=()):
+        templates = copy.deepcopy(settings.TEMPLATES)
+        options = templates[0].setdefault("OPTIONS", {})
+        libraries = options.setdefault("libraries", {})
+        libraries["hosts_override"] = "django_cotton.tests.template_libraries.url_override"
+        if builtins:
+            options["builtins"] = [*builtins, *options.get("builtins", [])]
+        return templates
+
     def test_dynamic_attributes_in_cvars(self):
         self.create_template(
             "eval_attributes_in_cvars_view.html",
@@ -529,6 +542,30 @@ class CvarTests(CottonTestCase):
             self.assertContains(response, 'title="Loading"')
             self.assertContains(response, ">Loading<")
 
+    def test_cvars_only_use_explicitly_loaded_libraries(self):
+        self.create_template(
+            "cotton/cvars_trans_unloaded.html",
+            """
+            <c-vars label="{% trans 'Loading' %}" />
+
+            <span>{{ label|safe }}</span>
+            """,
+        )
+
+        self.create_template(
+            "cvars_trans_unloaded_view.html",
+            """
+            <c-cvars-trans-unloaded />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, "{% trans 'Loading' %}")
+            self.assertNotContains(response, ">Loading<")
+
     def test_cvars_with_trans_tag_override(self):
         """Test that c-vars defaults with {% trans %} can be overridden"""
         self.create_template(
@@ -601,6 +638,77 @@ class CvarTests(CottonTestCase):
             # The url tag should be evaluated and the URL should appear in the href
             self.assertContains(response, 'href="/test-page/"')
             self.assertContains(response, 'class="link"')
+
+    def test_registered_url_override_library_does_not_change_cvars_url_semantics(self):
+        from django.urls import path
+        from django.views.generic import TemplateView
+
+        self.create_template(
+            "cotton/cvars_url_override.html",
+            """
+            <c-vars url="{% url 'test_page' %}" />
+
+            <a href="{{ url }}" class="link">Test Link</a>
+            """,
+        )
+
+        self.create_template(
+            "cvars_url_override_view.html",
+            """
+            <c-cvars-url-override />
+            """,
+            "view/",
+        )
+
+        self.create_template(
+            "test_page.html",
+            """<h1>Test Page</h1>""",
+        )
+
+        self.url_module.urlpatterns.append(
+            path(
+                "test-page/",
+                TemplateView.as_view(template_name="test_page.html"),
+                name="test_page",
+            )
+        )
+
+        with self.settings(
+            ROOT_URLCONF=self.url_conf(),
+            TEMPLATES=self.templates_with_url_override(),
+        ):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, 'href="/test-page/"')
+            self.assertNotContains(response, 'href="/override/test_page/"')
+
+    def test_builtin_url_override_library_changes_cvars_url_semantics(self):
+        self.create_template(
+            "cotton/cvars_url_override_builtin.html",
+            """
+            <c-vars url="{% url 'test_page' %}" />
+
+            <a href="{{ url }}" class="link">Test Link</a>
+            """,
+        )
+
+        self.create_template(
+            "cvars_url_override_builtin_view.html",
+            """
+            <c-cvars-url-override-builtin />
+            """,
+            "view/",
+        )
+
+        with self.settings(
+            ROOT_URLCONF=self.url_conf(),
+            TEMPLATES=self.templates_with_url_override(
+                builtins=("django_cotton.tests.template_libraries.url_override",)
+            ),
+        ):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, 'href="/override/test_page/"')
 
     def test_quoteless_dynamic_cvars(self):
         """Unquoted c-vars values should be treated as dynamic"""

@@ -98,8 +98,11 @@ class CottonComponentNode(Node):
         # experimental setting for backward compatibility during transition
         enable_context_isolation = getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False)
 
-        if self.only or isolate_by_default or enable_context_isolation:
-            # Smart Isolation: Isolate from parent template leaks but preserve global context processors
+        if self.only:
+            # Total Isolation (Traditional behavior): No access to any parent or global context.
+            output = template.render(Context(component_state))
+        elif isolate_by_default or enable_context_isolation:
+            # Smart Isolation (New behavior): Isolate from parent template leaks but preserve global context processors
             new_context = self._create_partial_context(context, component_state)
             output = template.render(new_context)
         else:

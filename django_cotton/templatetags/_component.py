@@ -94,18 +94,21 @@ class CottonComponentNode(Node):
             "cotton_data": cotton_data,
         }
 
+        isolate_by_default = getattr(settings, "COTTON_ISOLATE_BY_DEFAULT", False)
+        # experimental setting for backward compatibility during transition
+        enable_context_isolation = getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False)
+
         if self.only:
-            # Complete isolation
+            # Total Isolation (Traditional behavior): No access to any parent or global context.
             output = template.render(Context(component_state))
+        elif isolate_by_default or enable_context_isolation:
+            # Smart Isolation (New behavior): Isolate from parent template leaks but preserve global context processors
+            new_context = self._create_partial_context(context, component_state)
+            output = template.render(new_context)
         else:
-            if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False) is True:
-                # Default - partial isolation
-                new_context = self._create_partial_context(context, component_state)
-                output = template.render(new_context)
-            else:
-                # Legacy - no isolation
-                with context.push(component_state):
-                    output = template.render(context)
+            # Legacy/No isolation: Push to existing context stack
+            with context.push(component_state):
+                output = template.render(context)
 
         cotton_data["stack"].pop()
 
@@ -207,13 +210,8 @@ class CottonComponentNode(Node):
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 
-def cotton_component(parser, token):
-    """
-    Parse a cotton component tag and return a CottonComponentNode.
+def cotton_component(parser, token): #Parse a cotton component tag and return a CottonComponentNode. Uses custom parser to preserve quotes and handle template tags in attributes. Supports self-closing syntax: {% cotton name /%} or {% cotton name / %}
 
-    Uses custom parser to preserve quotes and handle template tags in attributes.
-    Supports self-closing syntax: {% cotton name /%} or {% cotton name / %}
-    """
     from django_cotton.tag_parser import parse_component_tag
     from django.template import NodeList
 

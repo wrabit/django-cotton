@@ -5,26 +5,39 @@ from django.conf import settings
 from django.template import Library, TemplateDoesNotExist
 from django.template.base import (
     Node,
-    Template,
 )
 from django.template.context import Context, RequestContext
 from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
 from django_cotton.exceptions import CottonIncompleteDynamicComponentError
-from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr, strip_quotes_with_status
+from django_cotton.templatetags import (
+    Attrs,
+    DynamicAttr,
+    UnprocessableDynamicAttr,
+    render_inline_template,
+    snapshot_parser_library,
+    strip_quotes_with_status,
+)
 
 register = Library()
 
 
 class CottonComponentNode(Node):
-    def __init__(self, component_name, nodelist, attrs, only, loaded_libraries=None):
+    def __init__(
+        self,
+        component_name,
+        nodelist,
+        attrs,
+        only,
+        active_library: Library | None = None,
+    ):
         self.component_name = component_name
         self.nodelist = nodelist
         self.attrs = attrs
         self.template_cache = {}
         self.only = only
-        self.loaded_libraries = loaded_libraries or []
+        self.active_library = active_library
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
@@ -48,7 +61,9 @@ class CottonComponentNode(Node):
             elif key.startswith(":"):  # Explicit dynamic attribute with colon prefix
                 key = key[1:]
                 try:
-                    resolved_value = DynamicAttr(value).resolve(context)
+                    resolved_value = DynamicAttr(
+                        value, active_library=self.active_library
+                    ).resolve(context)
                 except UnprocessableDynamicAttr:
                     component_data["attrs"].unprocessable(key)
                 else:
@@ -60,7 +75,9 @@ class CottonComponentNode(Node):
             elif not was_quoted and isinstance(value, str) and value:
                 # Unquoted value - treat as dynamic (like native DTL behavior)
                 try:
-                    resolved_value = DynamicAttr(value).resolve(context)
+                    resolved_value = DynamicAttr(
+                        value, active_library=self.active_library
+                    ).resolve(context)
                     component_data["attrs"][key] = resolved_value
                 except UnprocessableDynamicAttr:
                     # Fall back to string literal (Django's permissive behavior)
@@ -178,10 +195,7 @@ class CottonComponentNode(Node):
         """Evaluate template syntax in a value if present, otherwise return as-is."""
         if isinstance(value, str) and ("{{" in value or "{%" in value):
             try:
-                load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
-                template_str = "".join(load_tags) + value
-                mini_template = Template(template_str)
-                return mini_template.render(context)
+                return render_inline_template(value, context, self.active_library)
             except Exception:
                 return value
         return value
@@ -207,6 +221,7 @@ class CottonComponentNode(Node):
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 
+
 def cotton_component(parser, token):
     """
     Parse a cotton component tag and return a CottonComponentNode.
@@ -223,8 +238,8 @@ def cotton_component(parser, token):
     # Use the custom parser that preserves quotes and handles nested template tags
     result = parse_component_tag(token.contents)
 
-    # Capture which template libraries were loaded at parse time
-    loaded_libraries = list(parser.libraries.keys()) if hasattr(parser, 'libraries') else []
+    # Snapshot the caller template's active tag/filter scope at this parse point.
+    active_library = snapshot_parser_library(parser)
 
     if is_self_closing:
         # Self-closing tag has no content
@@ -233,4 +248,4 @@ def cotton_component(parser, token):
         nodelist = parser.parse(("endcotton",))
         parser.delete_first_token()
 
-    return CottonComponentNode(result.name, nodelist, result.attrs, result.only, loaded_libraries)
+    return CottonComponentNode(result.name, nodelist, result.attrs, result.only, active_library)

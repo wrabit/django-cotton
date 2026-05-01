@@ -29,7 +29,12 @@ class Loader(BaseLoader):
 
         template_string = self._get_template_string(origin.name)
 
-        if "<c-" not in template_string and "{% cotton:verbatim" not in template_string:
+        has_cotton_tags = (
+            "<c-" in template_string
+            or "<x-" in template_string
+            or "{% cotton:verbatim" in template_string
+        )
+        if not has_cotton_tags:
             compiled = template_string
         else:
             compiled = self.cotton_compiler.process(template_string)

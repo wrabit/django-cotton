@@ -374,3 +374,52 @@ class TemplateRenderingTests(CottonTestCase):
                 f"""attrs: 'attr="blue"'""" in content,
                 f"Attrs were not proxied to the target: {content}",
             )
+
+    def test_x_prefix_component_is_rendered(self):
+        """x- prefix components should be rendered correctly"""
+        self.create_template(
+            "cotton/x_render.html",
+            """<div class="i-am-x-component">{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "x_prefix_view.html",
+            """<x-render>Hello, x-prefix!</x-render>""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<div class="i-am-x-component">')
+            self.assertContains(response, "Hello, x-prefix!")
+
+    def test_x_prefix_self_closing_is_rendered(self):
+        """x- prefix self-closing components should be rendered correctly"""
+        self.create_template("cotton/x_self_close.html", """I am x-self-closed!""")
+        self.create_template(
+            "x_self_close_view.html",
+            """<x-self-close />""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "I am x-self-closed!")
+
+    def test_x_prefix_with_attrs_is_rendered(self):
+        """x- prefix components with attributes should work correctly"""
+        self.create_template(
+            "cotton/x_attr_test.html",
+            """<div class="{{ class }}">{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "x_attr_view.html",
+            """<x-attr_test class="custom-class">Content</x-attr_test>""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, 'class="custom-class"')
+            self.assertContains(response, "Content")

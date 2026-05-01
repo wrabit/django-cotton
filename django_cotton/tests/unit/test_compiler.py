@@ -154,3 +154,51 @@ class CompilerUnitTests(unittest.TestCase):
         self.assertIn('count=42', compiled)
         self.assertNotIn('enabled="True"', compiled)
         self.assertNotIn('count="42"', compiled)
+
+    def test_compile_x_prefix_component_tag(self):
+        """x- prefix tags should compile to cotton template tags with x- prefix preserved"""
+        source = '<x-test_button>Click</x-test_button>'
+        result = self.compiler.process(source)
+        expected = '{% cotton x-test_button %}Click{% endcotton %}'
+        self.assertEqual(result, expected)
+
+    def test_compile_x_prefix_self_closing_component(self):
+        """x- prefix self-closing tags should compile correctly"""
+        source = '<x-test_button />'
+        result = self.compiler.process(source)
+        expected = '{% cotton x-test_button %}{% endcotton %}'
+        self.assertEqual(result, expected)
+
+    def test_compile_x_prefix_component_with_attrs(self):
+        """x- prefix tags with attributes should compile correctly"""
+        source = '<x-test_button class="btn" :count="5">Text</x-test_button>'
+        result = self.compiler.process(source)
+        expected = '{% cotton x-test_button class="btn" :count="5" %}Text{% endcotton %}'
+        self.assertEqual(result, expected)
+
+    def test_compile_x_prefix_with_dot_notation(self):
+        """x- prefix tags with dot notation should compile correctly"""
+        source = '<x-admin.button>Click</x-admin.button>'
+        result = self.compiler.process(source)
+        expected = '{% cotton x-admin.button %}Click{% endcotton %}'
+        self.assertEqual(result, expected)
+
+    def test_x_prefix_ignored_in_django_comments(self):
+        """x- prefix tags in Django comments should be ignored"""
+        source = '{% comment %}<x-test_button />{% endcomment %}'
+        result = self.compiler.process(source)
+        self.assertEqual(result, source)
+
+    def test_x_prefix_ignored_in_cotton_verbatim(self):
+        """x- prefix tags in cotton:verbatim should be preserved as-is"""
+        source = '{% cotton:verbatim %}<x-test_button />{% endcotton:verbatim %}'
+        result = self.compiler.process(source)
+        expected = '<x-test_button />'
+        self.assertEqual(result, expected)
+
+    def test_mixed_c_and_x_prefix_components(self):
+        """Both c- and x- prefix tags should work in the same template"""
+        source = '<c-wrapper><x-inner>Content</x-inner></c-wrapper>'
+        result = self.compiler.process(source)
+        expected = '{% cotton wrapper %}{% cotton x-inner %}Content{% endcotton %}{% endcotton %}'
+        self.assertEqual(result, expected)

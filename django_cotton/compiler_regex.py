@@ -4,17 +4,20 @@ from typing import List, Tuple
 
 class Tag:
     tag_pattern = re.compile(
-        r"<(/?)c-([^\s/>]+)((?:\s+[^\s/>\"'=<>`]+(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|\S+))?)*)\s*(/?)\s*>",
+        r"<(/?)(c|x)-([^\s/>]+)"
+        r"((?:\s+[^\s/>\"'=<>`]+(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|\S+))?)*)"
+        r"\s*(/?)\s*>",
         re.DOTALL,
     )
     attr_pattern = re.compile(r'([^\s/>\"\'=<>`]+)(?:\s*=\s*(?:(["\'])(.*?)\2|(\S+)))?', re.DOTALL)
 
     def __init__(self, match: re.Match):
         self.html = match.group(0)
-        self.tag_name = f"c-{match.group(2)}"
-        self.attrs = match.group(3) or ""
+        self.prefix = match.group(2)
+        self.tag_name = f"{self.prefix}-{match.group(3)}"
+        self.attrs = match.group(4) or ""
         self.is_closing = bool(match.group(1))
-        self.is_self_closing = bool(match.group(4))
+        self.is_self_closing = bool(match.group(5))
 
     def get_template_tag(self) -> str:
         """Convert a cotton tag to a Django template tag"""
@@ -22,7 +25,7 @@ class Tag:
             return ""  # c-vars tags will be handled separately
         elif self.tag_name == "c-slot":
             return self._process_slot()
-        elif self.tag_name.startswith("c-"):
+        elif self.tag_name.startswith("c-") or self.tag_name.startswith("x-"):
             return self._process_component()
         else:
             return self.html
@@ -38,8 +41,11 @@ class Tag:
         return f"{{% cotton:slot {slot_name} %}}"
 
     def _process_component(self) -> str:
-        """Convert a c- component tag to a Django template component tag"""
-        component_name = self.tag_name[2:]
+        """Convert a c-/x- component tag to a Django template component tag"""
+        if self.prefix == "c":
+            component_name = self.tag_name[2:]
+        else:
+            component_name = self.tag_name
         if self.is_closing:
             return "{% endcotton %}"
         processed_attrs, extracted_attrs = self._process_attributes()

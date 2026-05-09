@@ -10,7 +10,7 @@ from django.utils._os import safe_join
 from django.template import Template
 from django.apps import apps
 
-from django_cotton.compiler_regex import CottonCompiler
+from django_cotton.compiler_regex import CottonCompiler, get_cotton_tag_prefix
 
 
 class Loader(BaseLoader):
@@ -29,7 +29,8 @@ class Loader(BaseLoader):
 
         template_string = self._get_template_string(origin.name)
 
-        if "<c-" not in template_string and "{% cotton:verbatim" not in template_string:
+        prefix = get_cotton_tag_prefix()
+        if f"<{prefix}-" not in template_string and "{% cotton:verbatim" not in template_string:
             compiled = template_string
         else:
             compiled = self.cotton_compiler.process(template_string)

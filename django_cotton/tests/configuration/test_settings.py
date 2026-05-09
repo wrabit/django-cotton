@@ -18,7 +18,6 @@ class MiscComponentTests(CottonTestCase):
             "view/",
         )
 
-        # Override URLconf
         with self.settings(ROOT_URLCONF=self.url_conf(), COTTON_DIR=custom_dir):
             response = self.client.get("/view/")
             self.assertContains(response, '<div class="i-am-component">')
@@ -83,3 +82,76 @@ class MiscComponentTests(CottonTestCase):
         rendered = get_rendered(html)
 
         self.assertTrue("I'm an index file!" in rendered)
+
+
+class CustomTagPrefixTests(CottonTestCase):
+    @override_settings(COTTON_TAG_PREFIX="x")
+    def test_x_prefix_renders_component(self):
+        self.create_template(
+            "cotton/prefix_button.html",
+            """<div class="x-prefix-component">{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "x_prefix_view.html",
+            """<x-prefix-button>Hello from x prefix!</x-prefix-button>""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf(), COTTON_TAG_PREFIX="x"):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<div class="x-prefix-component">')
+            self.assertContains(response, "Hello from x prefix!")
+
+    @override_settings(COTTON_TAG_PREFIX="x")
+    def test_x_prefix_self_closing_renders(self):
+        self.create_template(
+            "cotton/self_close_x.html",
+            """I am self-closed with x prefix!""",
+        )
+
+        self.create_template(
+            "x_self_close_view.html",
+            """<x-self-close-x />""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf(), COTTON_TAG_PREFIX="x"):
+            response = self.client.get("/view/")
+            self.assertContains(response, "I am self-closed with x prefix!")
+
+    @override_settings(COTTON_TAG_PREFIX="x")
+    def test_x_prefix_passes_attributes(self):
+        self.create_template(
+            "cotton/attr_comp_x.html",
+            """<div class="{{ class }}">{{ label }}</div>""",
+        )
+
+        self.create_template(
+            "x_attr_view.html",
+            """<x-attr-comp-x class="btn-primary" label="Click me" />""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf(), COTTON_TAG_PREFIX="x"):
+            response = self.client.get("/view/")
+            self.assertContains(response, 'class="btn-primary"')
+            self.assertContains(response, "Click me")
+
+    @override_settings(COTTON_TAG_PREFIX="x")
+    def test_x_prefix_with_dot_notation(self):
+        self.create_template(
+            "cotton/ui/dot_button_x.html",
+            """<button>{{ slot }}</button>""",
+        )
+
+        self.create_template(
+            "x_dot_view.html",
+            """<x-ui.dot-button-x>Dot notation!</x-ui.dot-button-x>""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf(), COTTON_TAG_PREFIX="x"):
+            response = self.client.get("/view/")
+            self.assertContains(response, "<button>")
+            self.assertContains(response, "Dot notation!")

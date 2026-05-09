@@ -1,45 +1,45 @@
 import re
 from typing import List, Tuple
 
+from django.conf import settings
+
+
+def get_cotton_tag_prefix() -> str:
+    return getattr(settings, "COTTON_TAG_PREFIX", "c")
+
 
 class Tag:
-    tag_pattern = re.compile(
-        r"<(/?)c-([^\s/>]+)((?:\s+[^\s/>\"'=<>`]+(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|\S+))?)*)\s*(/?)\s*>",
-        re.DOTALL,
-    )
     attr_pattern = re.compile(r'([^\s/>\"\'=<>`]+)(?:\s*=\s*(?:(["\'])(.*?)\2|(\S+)))?', re.DOTALL)
 
-    def __init__(self, match: re.Match):
+    def __init__(self, match: re.Match, prefix: str = "c"):
+        self.prefix = prefix
         self.html = match.group(0)
-        self.tag_name = f"c-{match.group(2)}"
+        self.tag_name = f"{prefix}-{match.group(2)}"
         self.attrs = match.group(3) or ""
         self.is_closing = bool(match.group(1))
         self.is_self_closing = bool(match.group(4))
 
     def get_template_tag(self) -> str:
-        """Convert a cotton tag to a Django template tag"""
-        if self.tag_name == "c-vars":
-            return ""  # c-vars tags will be handled separately
-        elif self.tag_name == "c-slot":
+        if self.tag_name == f"{self.prefix}-vars":
+            return ""
+        elif self.tag_name == f"{self.prefix}-slot":
             return self._process_slot()
-        elif self.tag_name.startswith("c-"):
+        elif self.tag_name.startswith(f"{self.prefix}-"):
             return self._process_component()
         else:
             return self.html
 
     def _process_slot(self) -> str:
-        """Convert a c-slot tag to a Django template slot tag"""
         if self.is_closing:
             return "{% endcotton:slot %}"
         name_match = re.search(r'name=(["\'])(.*?)\1', self.attrs, re.DOTALL)
         if not name_match:
-            raise ValueError(f"c-slot tag must have a name attribute: {self.html}")
+            raise ValueError(f"{self.prefix}-slot tag must have a name attribute: {self.html}")
         slot_name = name_match.group(2)
         return f"{{% cotton:slot {slot_name} %}}"
 
     def _process_component(self) -> str:
-        """Convert a c- component tag to a Django template component tag"""
-        component_name = self.tag_name[2:]
+        component_name = self.tag_name[len(self.prefix) + 1:]
         if self.is_closing:
             return "{% endcotton %}"
         processed_attrs, extracted_attrs = self._process_attributes()
@@ -49,44 +49,66 @@ class Tag:
         return f"{opening_tag}{extracted_attrs}"
 
     def _process_attributes(self) -> Tuple[str, str]:
-        """Process attributes - nested tag support now handles template tags"""
         processed_attrs = []
         extracted_attrs = []
 
         for match in self.attr_pattern.finditer(self.attrs):
             key, quote, value, unquoted_value = match.groups()
             if value is None and unquoted_value is None:
-                # Boolean attribute (no value)
                 processed_attrs.append(key)
             elif value is not None:
-                # Quoted value - preserve quotes
                 quote_char = quote if quote else '"'
                 processed_attrs.append(f'{key}={quote_char}{value}{quote_char}')
             else:
-                # Unquoted value - pass through WITHOUT quotes to preserve dynamic status
                 processed_attrs.append(f'{key}={unquoted_value}')
 
         attrs_str = " ".join(processed_attrs)
         return " " + attrs_str if attrs_str else "", "".join(extracted_attrs)
 
 
+def _build_tag_pattern(prefix: str) -> re.Pattern:
+    escaped = re.escape(prefix)
+    return re.compile(
+        rf"<(/?){escaped}-([^\s/>]+)((?:\s+[^\s/>\"'=<>`]+(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|\S+))?)*)\s*(/?)\s*>",
+        re.DOTALL,
+    )
+
+
+def _build_c_vars_pattern(prefix: str) -> re.Pattern:
+    escaped = re.escape(prefix)
+    return re.compile(
+        rf"<{escaped}-vars\s([^>]*)(?:/>|>(.*?)</{escaped}-vars>)", re.DOTALL
+    )
+
+
 class CottonCompiler:
+    _ignore_pattern = re.compile(
+        r"({%\s*verbatim(?:\s+\w+)?\s*%}.*?{%\s*endverbatim(?:\s+\w+)?\s*%}|"
+        r"{%\s*cotton:verbatim\s*%}.*?{%\s*endcotton:verbatim\s*%}|"
+        r"{%\s*comment\s*%}.*?{%\s*endcomment\s*%}|{#.*?#}|"
+        r"{{.*?}}|{%.*?%})",
+        re.DOTALL,
+    )
+    _cotton_verbatim_pattern = re.compile(
+        r"{%\s*cotton:verbatim\s*%}(.*?){%\s*endcotton:verbatim\s*%}", re.DOTALL
+    )
+
     def __init__(self):
-        self.c_vars_pattern = re.compile(r"<c-vars\s([^>]*)(?:/>|>(.*?)</c-vars>)", re.DOTALL)
-        self.ignore_pattern = re.compile(
-            # Ignore Django's verbatim blocks (including named blocks)
-            r"({%\s*verbatim(?:\s+\w+)?\s*%}.*?{%\s*endverbatim(?:\s+\w+)?\s*%}|"
-            # cotton:verbatim isnt a real template tag, it's just a way to ignore <c-* tags from being compiled
-            r"{%\s*cotton:verbatim\s*%}.*?{%\s*endcotton:verbatim\s*%}|"
-            # Ignore both forms of comments
-            r"{%\s*comment\s*%}.*?{%\s*endcomment\s*%}|{#.*?#}|"
-            # Ignore django template tags and variables
-            r"{{.*?}}|{%.*?%})",
-            re.DOTALL,
-        )
-        self.cotton_verbatim_pattern = re.compile(
-            r"{%\s*cotton:verbatim\s*%}(.*?){%\s*endcotton:verbatim\s*%}", re.DOTALL
-        )
+        self._prefix = None
+        self._tag_pattern = None
+        self._c_vars_pattern = None
+        self._sync_prefix()
+
+    def _sync_prefix(self):
+        current_prefix = get_cotton_tag_prefix()
+        if self._prefix != current_prefix:
+            self._prefix = current_prefix
+            self._tag_pattern = _build_tag_pattern(self._prefix)
+            self._c_vars_pattern = _build_c_vars_pattern(self._prefix)
+
+    @property
+    def prefix(self):
+        return self._prefix
 
     def exclude_ignorables(self, html: str) -> Tuple[str, List[Tuple[str, str]]]:
         ignorables = []
@@ -96,14 +118,13 @@ class CottonCompiler:
             ignorables.append((placeholder, match.group(0)))
             return placeholder
 
-        processed_html = self.ignore_pattern.sub(replace_ignorable, html)
+        processed_html = self._ignore_pattern.sub(replace_ignorable, html)
         return processed_html, ignorables
 
     def restore_ignorables(self, html: str, ignorables: List[Tuple[str, str]]) -> str:
         for placeholder, content in ignorables:
             if content.strip().startswith("{% cotton:verbatim %}"):
-                # Extract content between cotton:verbatim tags, we don't want to leave these in
-                match = self.cotton_verbatim_pattern.search(content)
+                match = self._cotton_verbatim_pattern.search(content)
                 if match:
                     content = match.group(1)
             html = html.replace(placeholder, content)
@@ -111,14 +132,13 @@ class CottonCompiler:
 
     def get_replacements(self, html: str) -> List[Tuple[str, str]]:
         replacements = []
-        for match in Tag.tag_pattern.finditer(html):
-            tag = Tag(match)
+        for match in self._tag_pattern.finditer(html):
+            tag = Tag(match, self._prefix)
             try:
                 template_tag = tag.get_template_tag()
                 if template_tag != tag.html:
                     replacements.append((tag.html, template_tag))
             except ValueError as e:
-                # Find the line number of the error
                 position = match.start()
                 line_number = html[:position].count("\n") + 1
                 raise ValueError(f"Error in template at line {line_number}: {str(e)}") from e
@@ -126,37 +146,30 @@ class CottonCompiler:
         return replacements
 
     def process_c_vars(self, html: str) -> Tuple[str, str]:
-        """
-        Extract c-vars content and convert to standalone template tag.
-        Raises ValueError if more than one c-vars tag is found.
-        """
-        # Find all matches of c-vars tags
-        matches = list(self.c_vars_pattern.finditer(html))
+        matches = list(self._c_vars_pattern.finditer(html))
 
         if len(matches) > 1:
             raise ValueError(
-                "Multiple c-vars tags found in component template. Only one c-vars tag is allowed per template."
+                f"Multiple {self._prefix}-vars tags found in component template. "
+                f"Only one {self._prefix}-vars tag is allowed per template."
             )
 
-        # Process single c-vars tag if present
         match = matches[0] if matches else None
         if match:
             attrs = match.group(1)
-            # Create standalone cotton:vars tag (no wrapping)
             vars_content = f"{{% cotton:vars {attrs.strip()} %}}"
-            html = self.c_vars_pattern.sub("", html)  # Remove c-vars tags from html
+            html = self._c_vars_pattern.sub("", html)
             return vars_content, html
 
         return "", html
 
     def process(self, html: str) -> str:
-        """Putting it all together"""
+        self._sync_prefix()
         processed_html, ignorables = self.exclude_ignorables(html)
         vars_content, processed_html = self.process_c_vars(processed_html)
         replacements = self.get_replacements(processed_html)
         for original, replacement in replacements:
             processed_html = processed_html.replace(original, replacement)
         if vars_content:
-            # Insert standalone cotton:vars tag at the top (no wrapping)
             processed_html = f"{vars_content}{processed_html}"
         return self.restore_ignorables(processed_html, ignorables)

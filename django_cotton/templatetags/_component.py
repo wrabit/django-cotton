@@ -10,6 +10,7 @@ from django.template.base import (
 from django.template.context import Context, RequestContext
 from django.template.loader import get_template
 
+from django_cotton.compiler_regex import get_cotton_tag_prefix
 from django_cotton.utils import get_cotton_data
 from django_cotton.exceptions import CottonIncompleteDynamicComponentError
 from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr, strip_quotes_with_status
@@ -192,8 +193,9 @@ class CottonComponentNode(Node):
         """Generate the path to the template for the given component name."""
         if component_name == "component":
             if is_ is None:
+                prefix = get_cotton_tag_prefix()
                 raise CottonIncompleteDynamicComponentError(
-                    'Cotton error: "<c-component>" should be accompanied by an "is" attribute.'
+                    f'Cotton error: "<{prefix}-component>" should be accompanied by an "is" attribute.'
                 )
             component_name = is_
 

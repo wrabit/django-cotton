@@ -114,58 +114,83 @@ class UnprocessableDynamicAttr(Exception):
 
 
 class DynamicAttr:
+    _template_cache: dict[str, Template] = {}
+    _literal_cache: dict[str, Any] = {}
+    _variable_cache: dict[str, Variable] = {}
+
+    _MISSING = object()
+
     def __init__(self, value: str, is_cvar=False):
         self.value = value
         self._is_cvar = is_cvar
-        self._resolved_value = None
+        self._resolved_value = self._MISSING
+
+    def _resolve_variable(self, value, context):
+        var = self._variable_cache.get(value)
+        if var is None:
+            var = Variable(value)
+            self._variable_cache[value] = var
+        resolved = var.resolve(context)
+        return resolved.attrs_dict() if isinstance(resolved, Attrs) else resolved
+
+    def _resolve_template(self, value, context):
+        mini = self._template_cache.get(value)
+        if mini is None:
+            mini = Template(value)
+            self._template_cache[value] = mini
+        rendered = mini.render(context)
+        if rendered == value:
+            return self._MISSING
+        try:
+            return ast.literal_eval(rendered)
+        except (ValueError, SyntaxError):
+            return rendered
+
+    def _resolve_literal(self, value):
+        cached = self._literal_cache.get(value, self._MISSING)
+        if cached is not self._MISSING:
+            return cached
+        result = ast.literal_eval(value)
+        self._literal_cache[value] = result
+        return result
 
     def resolve(self, context: Context) -> Any:
-        if self._resolved_value is not None:
+        if self._resolved_value is not self._MISSING:
             return self._resolved_value
 
-        resolvers = [
-            self._resolve_as_variable,
-            self._resolve_as_boolean,
-            self._resolve_as_template,
-            self._resolve_as_literal,
-        ]
+        value = self.value
 
-        for resolver in resolvers:
+        if value == "":
+            self._resolved_value = True
+            return True
+
+        cached = self._literal_cache.get(value, self._MISSING)
+        if cached is not self._MISSING:
+            self._resolved_value = cached
+            return cached
+
+        try:
+            self._resolved_value = self._resolve_variable(value, context)
+            return self._resolved_value
+        except (VariableDoesNotExist, TemplateSyntaxError):
+            pass
+
+        if "{{" in value or "{%" in value:
             try:
-                # noinspection PyArgumentList
-                self._resolved_value = resolver(context)
-                return self._resolved_value
-            except (VariableDoesNotExist, TemplateSyntaxError, ValueError, SyntaxError):
-                continue
+                result = self._resolve_template(value, context)
+                if result is not self._MISSING:
+                    self._resolved_value = result
+                    return result
+            except Exception:
+                pass
+
+        try:
+            self._resolved_value = self._resolve_literal(value)
+            return self._resolved_value
+        except (ValueError, SyntaxError):
+            pass
 
         raise UnprocessableDynamicAttr
-
-    def _resolve_as_variable(self, context):
-        value = Variable(self.value).resolve(context)
-        if isinstance(value, Attrs):
-            return value.attrs_dict()
-        return value
-
-    def _resolve_as_boolean(self, _):
-        if self.value == "":
-            return True
-        raise ValueError
-
-    def _resolve_as_template(self, context):
-        template = Template(self.value)
-        rendered_value = template.render(context)
-        if rendered_value != self.value:
-            # Try to evaluate the rendered value as a Python literal
-            # This handles cases like :attr="{'key': {{ var }}}" where {{ var }} is rendered first
-            try:
-                return ast.literal_eval(rendered_value)
-            except (ValueError, SyntaxError):
-                # Not a valid literal, return as string
-                return rendered_value
-        raise TemplateSyntaxError
-
-    def _resolve_as_literal(self, _):
-        return ast.literal_eval(self.value)
 
 
 class Attrs(Mapping):

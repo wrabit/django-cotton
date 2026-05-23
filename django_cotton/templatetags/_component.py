@@ -18,6 +18,8 @@ register = Library()
 
 
 class CottonComponentNode(Node):
+    _mini_template_cache: dict[tuple, Template] = {}
+
     def __init__(self, component_name, nodelist, attrs, only, loaded_libraries=None):
         self.component_name = component_name
         self.nodelist = nodelist
@@ -178,9 +180,13 @@ class CottonComponentNode(Node):
         """Evaluate template syntax in a value if present, otherwise return as-is."""
         if isinstance(value, str) and ("{{" in value or "{%" in value):
             try:
-                load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
-                template_str = "".join(load_tags) + value
-                mini_template = Template(template_str)
+                cache_key = (value, tuple(self.loaded_libraries))
+                mini_template = self._mini_template_cache.get(cache_key)
+                if mini_template is None:
+                    load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
+                    template_str = "".join(load_tags) + value
+                    mini_template = Template(template_str)
+                    self._mini_template_cache[cache_key] = mini_template
                 return mini_template.render(context)
             except Exception:
                 return value

@@ -17,6 +17,8 @@ from django_cotton.utils import get_cotton_data
 
 
 class CottonVarsNode(Node):
+    _mini_template_cache: dict[tuple, Template] = {}
+
     def __init__(self, var_dict, empty_vars: List, loaded_libraries: List[str]):
         self.var_dict = var_dict
         self.empty_vars = empty_vars
@@ -56,11 +58,13 @@ class CottonVarsNode(Node):
                         # If value contains template tags or variables, evaluate it at render time
                         if isinstance(value, str) and ("{{" in value or "{%" in value):
                             try:
-                                # Prepend {% load %} tags for libraries that were loaded at parse time
-                                load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
-                                template_str = "".join(load_tags) + value
-
-                                mini_template = Template(template_str)
+                                cache_key = (value, tuple(self.loaded_libraries))
+                                mini_template = self._mini_template_cache.get(cache_key)
+                                if mini_template is None:
+                                    load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
+                                    template_str = "".join(load_tags) + value
+                                    mini_template = Template(template_str)
+                                    self._mini_template_cache[cache_key] = mini_template
                                 rendered_value = mini_template.render(context)
                                 # Convert hyphens to underscores for template accessibility
                                 accessible_key = key_to_exclude.replace("-", "_")

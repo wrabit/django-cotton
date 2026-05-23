@@ -633,6 +633,42 @@ class AttributeHandlingTests(CottonTestCase):
             self.assertContains(response, 'class="link"')
             self.assertContains(response, "Go to Destination")
 
+    def test_template_tags_in_dynamic_attributes(self):
+        """Test that template tags like {% trans %} work inside :attr= dynamic attributes (#348)"""
+        self.create_template(
+            "cotton/table_header.html",
+            """
+                {% load cotton %}
+                <c-vars columns="" />
+                <thead>
+                    <tr>
+                        {% for column in columns %}
+                            <th>{{ column.title }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+            """,
+        )
+
+        self.create_template(
+            "table_header_dynamic_view.html",
+            """
+                {% load i18n cotton %}
+                <c-table-header :columns="[
+                    {'title': '{% trans \"Name\" %}'},
+                    {'title': '{% trans \"Status\" %}'}
+                ]" />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "<th>Name</th>")
+            self.assertContains(response, "<th>Status</th>")
+            self.assertNotContains(response, "{% trans")
+            self.assertNotContains(response, "&quot;")
+
     def test_attributes_only_use_explicitly_loaded_libraries(self):
         from django.urls import path
         from django.views.generic import TemplateView

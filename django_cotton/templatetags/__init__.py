@@ -143,6 +143,30 @@ def snapshot_parser_library(parser: Parser) -> Library:
     return active_library
 
 
+def compile_inline_template(value: str, active_library: Library | None = None) -> InlineTemplate:
+    """Compile a template fragment at parse time for later rendering.
+
+    Returns an InlineTemplate whose .render(context) can be called at render time
+    without re-lexing or re-parsing the template string.
+    """
+    engine = Engine.get_default()
+    origin = Origin(UNKNOWN_SOURCE)
+
+    if active_library is None:
+        nodelist = engine.from_string(value).nodelist
+    else:
+        lexer = DebugLexer(value) if engine.debug else Lexer(value)
+        parser = Parser(
+            lexer.tokenize(),
+            engine.template_libraries,
+            [active_library],
+            origin,
+        )
+        nodelist = parser.parse()
+
+    return InlineTemplate(value, nodelist, engine, origin=origin)
+
+
 def render_inline_template(value: str, context: Context, active_library: Library | None = None) -> str:
     """Render a template fragment with the caller template's active tag/filter scope."""
     if active_library is None:
@@ -283,6 +307,8 @@ class Attrs(Mapping):
         self._unprocessable.append(key)
 
     def exclude_unprocessable(self):
+        if not self._unprocessable:
+            return self._attrs
         return {k: v for k, v in self._attrs.items() if k not in self._unprocessable}
 
     def exclude_from_string_output(self, key):

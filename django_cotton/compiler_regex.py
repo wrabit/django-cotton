@@ -73,6 +73,7 @@ class Tag:
 class CottonCompiler:
     def __init__(self):
         self.c_vars_pattern = re.compile(r"<c-vars\s([^>]*)(?:/>|>(.*?)</c-vars>)", re.DOTALL)
+        self.leading_load_tags_pattern = re.compile(r"^((?:\s*{%\s*load\b.*?%\}\s*)+)", re.DOTALL)
         self.ignore_pattern = re.compile(
             # Ignore Django's verbatim blocks (including named blocks)
             r"({%\s*verbatim(?:\s+\w+)?\s*%}.*?{%\s*endverbatim(?:\s+\w+)?\s*%}|"
@@ -156,7 +157,16 @@ class CottonCompiler:
         replacements = self.get_replacements(processed_html)
         for original, replacement in replacements:
             processed_html = processed_html.replace(original, replacement)
+        processed_html = self.restore_ignorables(processed_html, ignorables)
         if vars_content:
-            # Insert standalone cotton:vars tag at the top (no wrapping)
-            processed_html = f"{vars_content}{processed_html}"
-        return self.restore_ignorables(processed_html, ignorables)
+            vars_content = self.restore_ignorables(vars_content, ignorables)
+            # Keep c-vars near the top, but after any leading {% load %} tags,
+            # so the hoisted vars node snapshots the same explicit libraries.
+            match = self.leading_load_tags_pattern.match(processed_html)
+            if match:
+                processed_html = (
+                    f"{match.group(1)}{vars_content}{processed_html[match.end():]}"
+                )
+            else:
+                processed_html = f"{vars_content}{processed_html}"
+        return processed_html

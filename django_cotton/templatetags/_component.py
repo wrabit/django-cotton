@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 import functools
 from enum import IntEnum
-from typing import Any, NamedTuple, Union
+from typing import Any, NamedTuple
 
 from django.conf import settings
 from django.template import Library, TemplateDoesNotExist
@@ -181,7 +181,6 @@ class CottonComponentNode(Node):
         self.component_name = component_name
         self.nodelist = nodelist
         self.attrs = attrs
-        self.template_cache = {}
         self.only = only
         self.active_library = active_library
         self._prepared_attrs = _prepare_attrs(attrs, active_library)
@@ -339,7 +338,7 @@ class CottonComponentNode(Node):
 
     @staticmethod
     @functools.lru_cache(maxsize=400)
-    def _generate_component_template_path(component_name: str, is_: Union[str, None]) -> str:
+    def _generate_component_template_path(component_name: str, is_: str | None) -> str:
         """Generate the path to the template for the given component name."""
         if component_name == "component":
             if is_ is None:

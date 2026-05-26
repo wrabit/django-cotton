@@ -1,8 +1,7 @@
-import ast
 from collections.abc import Mapping
 from typing import Set, Any, Dict, List, Tuple
 
-from django.template import Variable, TemplateSyntaxError, Context, Library
+from django.template import Context, Library
 from django.template.base import (
     DebugLexer,
     Lexer,
@@ -10,7 +9,6 @@ from django.template.base import (
     Parser,
     Template,
     UNKNOWN_SOURCE,
-    VariableDoesNotExist,
 )
 from django.template.engine import Engine
 from django.utils.safestring import mark_safe
@@ -197,66 +195,6 @@ def render_inline_template(value: str, context: Context, active_library: Library
 
 class UnprocessableDynamicAttr(Exception):
     pass
-
-
-class DynamicAttr:
-    def __init__(
-        self,
-        value: str,
-        is_cvar: bool = False,
-        active_library: Library | None = None,
-    ):
-        self.value = value
-        self._is_cvar = is_cvar
-        self._resolved_value = None
-        self.active_library = active_library
-
-    def resolve(self, context: Context) -> Any:
-        if self._resolved_value is not None:
-            return self._resolved_value
-
-        resolvers = [
-            self._resolve_as_variable,
-            self._resolve_as_boolean,
-            self._resolve_as_template,
-            self._resolve_as_literal,
-        ]
-
-        for resolver in resolvers:
-            try:
-                # noinspection PyArgumentList
-                self._resolved_value = resolver(context)
-                return self._resolved_value
-            except (VariableDoesNotExist, TemplateSyntaxError, ValueError, SyntaxError):
-                continue
-
-        raise UnprocessableDynamicAttr
-
-    def _resolve_as_variable(self, context):
-        value = Variable(self.value).resolve(context)
-        if isinstance(value, Attrs):
-            return value.attrs_dict()
-        return value
-
-    def _resolve_as_boolean(self, _):
-        if self.value == "":
-            return True
-        raise ValueError
-
-    def _resolve_as_template(self, context):
-        rendered_value = render_inline_template(self.value, context, self.active_library)
-        if rendered_value != self.value:
-            # Try to evaluate the rendered value as a Python literal
-            # This handles cases like :attr="{'key': {{ var }}}" where {{ var }} is rendered first
-            try:
-                return ast.literal_eval(rendered_value)
-            except (ValueError, SyntaxError):
-                # Not a valid literal, return as string
-                return rendered_value
-        raise TemplateSyntaxError
-
-    def _resolve_as_literal(self, _):
-        return ast.literal_eval(self.value)
 
 
 class Attrs(Mapping):

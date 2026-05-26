@@ -3,13 +3,12 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Set, Any, Dict, List, Tuple
 
-from django.template import Context, Library
+from django.template import Library
 from django.template.base import (
     DebugLexer,
     Lexer,
     Origin,
     Parser,
-    Template,
     UNKNOWN_SOURCE,
 )
 from django.template.engine import Engine
@@ -35,91 +34,9 @@ class InlineTemplate:
             return self.nodelist.render(context)
 
 
-def parse_template_tag_attributes(bits: List[str]) -> tuple[Dict[str, Any], List[str]]:
-    """
-    Parse template tag attributes handling quoted values with spaces.
-
-    This function properly handles cases like:
-        label="{% trans 'Loading' %}"
-
-    Where Django's default split_contents() would break on the space between 'trans' and 'Loading'.
-
-    This logic is extracted from cotton_component() to be reused across template tags.
-
-    Args:
-        bits: List of tokens from token.split_contents()[1:]
-
-    Returns:
-        Tuple of (attributes_dict, empty_attributes_list)
-        Note: Quoted values will still have their quotes - use _strip_quotes_safely() to remove them
-    """
-    attrs = {}
-    empty_attrs = []
-    current_key = None
-    current_value = []
-
-    for bit in bits:
-        if "=" in bit:
-            # If we were building a previous value, store it
-            if current_key:
-                attrs[current_key] = " ".join(current_value)
-                current_value = []
-
-            # Start new key-value pair
-            key, value = bit.split("=", 1)
-            if value.startswith(("'", '"')):
-                if value.endswith(("'", '"')) and value[0] == value[-1]:
-                    # Complete quoted value
-                    attrs[key] = value
-                else:
-                    # Start of quoted value
-                    current_key = key
-                    current_value = [value]
-            else:
-                # Simple unquoted value
-                attrs[key] = value
-        else:
-            if current_key:
-                # Continue building quoted value
-                current_value.append(bit)
-            else:
-                # Empty attribute (no value)
-                empty_attrs.append(bit)
-
-    # Store any final value being built
-    if current_key:
-        attrs[current_key] = " ".join(current_value)
-
-    return attrs, empty_attrs
-
-
-def strip_quotes_safely(value: Any) -> Any:
-    """
-    Strip surrounding quotes from a string value if present.
-
-    Handles both single and double quotes - strips the outer quote pair
-    while preserving any inner quotes in the value.
-
-    Args:
-        value: The value to strip quotes from
-
-    Returns:
-        The value with outer quotes removed, or the original value if not a quoted string
-    """
-    if type(value) is str:
-        if value.startswith('"') and value.endswith('"') and len(value) >= 2:
-            return value[1:-1]
-        elif value.startswith("'") and value.endswith("'") and len(value) >= 2:
-            return value[1:-1]
-    return value
-
-
 def strip_quotes_with_status(value: Any) -> Tuple[Any, bool]:
     """
     Strip surrounding quotes and return whether the value was originally quoted.
-
-    More efficient than calling a separate check then strip_quotes_safely(),
-    as it only checks the string once.
 
     Args:
         value: The value to strip quotes from
@@ -165,34 +82,6 @@ def compile_inline_template(value: str, active_library: Library | None = None) -
         nodelist = parser.parse()
 
     return InlineTemplate(value, nodelist, engine, origin=origin)
-
-
-def render_inline_template(value: str, context: Context, active_library: Library | None = None) -> str:
-    """Render a template fragment with the caller template's active tag/filter scope."""
-    if active_library is None:
-        if context.template is not None:
-            return context.template.engine.from_string(value).render(context)
-        return Template(value).render(context)
-
-    if context.template is not None:
-        engine = context.template.engine
-        origin = context.template.origin
-        name = context.template.name
-    else:
-        engine = Engine.get_default()
-        origin = Origin(UNKNOWN_SOURCE)
-        name = None
-
-    lexer = DebugLexer(value) if engine.debug else Lexer(value)
-    parser = Parser(
-        lexer.tokenize(),
-        engine.template_libraries,
-        [active_library],
-        origin,
-    )
-    nodelist = parser.parse()
-    template = InlineTemplate(value, nodelist, engine, origin=origin, name=name)
-    return template.render(context)
 
 
 class UnprocessableDynamicAttr(Exception):

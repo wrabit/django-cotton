@@ -1,10 +1,11 @@
 from typing import Any, NamedTuple
 
-from django.template import Library
+from django.template import Library, TemplateSyntaxError
 from django.template.base import Node
 
 from django_cotton.templatetags import (
     Attrs,
+    UnprocessableDynamicAttr,
     snapshot_parser_library,
     strip_quotes_with_status,
 )
@@ -77,21 +78,21 @@ class CottonVarsNode(Node):
             if var.kind == AttrKind.DYNAMIC:
                 try:
                     vars[var.accessible_key] = var.compiled.resolve(context)
-                except Exception:
+                except UnprocessableDynamicAttr:
                     pass  # Var couldn't be resolved, skip it
 
             # No quotes — treated as dynamic, falls back to string literal
             elif var.kind == AttrKind.UNQUOTED:
                 try:
                     vars[var.accessible_key] = var.compiled.resolve(context)
-                except Exception:
+                except UnprocessableDynamicAttr:
                     vars[var.accessible_key] = var.value
 
             # Quoted value containing {{ }} or {% %} — render the template
             elif var.kind == AttrKind.ESCAPED:
                 try:
                     vars[var.accessible_key] = var.compiled.render(context) if var.compiled else var.value
-                except Exception:
+                except (TemplateSyntaxError, ValueError, SyntaxError):
                     vars[var.accessible_key] = var.value
 
             # Plain static value

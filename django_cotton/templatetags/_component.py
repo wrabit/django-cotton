@@ -108,7 +108,7 @@ class PreparedValue:
                         return ast.literal_eval(rendered)
                     except (ValueError, SyntaxError):
                         return rendered
-            except Exception:
+            except (TemplateSyntaxError, ValueError, SyntaxError):
                 pass  # Template render failed, fall through to literal resolution
 
         if self._literal is not _MISSING:
@@ -125,7 +125,7 @@ def _try_compile_template(value: Any, active_library: Library | None) -> InlineT
     if isinstance(value, str) and ("{{" in value or "{%" in value):
         try:
             return compile_inline_template(value, active_library)
-        except Exception:
+        except TemplateSyntaxError:
             pass
     return None
 
@@ -221,7 +221,7 @@ class CottonComponentNode(Node):
             elif attr.kind == AttrKind.UNQUOTED:
                 try:
                     component_data["attrs"][attr.key] = attr.compiled.resolve(context)
-                except Exception:
+                except UnprocessableDynamicAttr:
                     component_data["attrs"][attr.key] = attr.value
 
             # Plain static value

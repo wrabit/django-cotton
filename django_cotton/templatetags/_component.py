@@ -67,13 +67,13 @@ class PreparedValue:
 
         try:
             self._variable = Variable(raw)
-        except Exception:
+        except (TypeError, TemplateSyntaxError):
             pass  # Not a valid variable expression, will try other resolvers
 
         if "{{" in raw or "{%" in raw:
             try:
                 self._template = compile_inline_template(raw, active_library)
-            except Exception:
+            except TemplateSyntaxError:
                 pass  # Not a valid template expression, will try literal
 
         try:

@@ -1,8 +1,7 @@
-import ast
 from collections.abc import Mapping
 from typing import Set, Any, Dict, List, Tuple
 
-from django.template import Variable, TemplateSyntaxError, Context, Library
+from django.template import Context, Library
 from django.template.base import (
     DebugLexer,
     Lexer,
@@ -10,7 +9,6 @@ from django.template.base import (
     Parser,
     Template,
     UNKNOWN_SOURCE,
-    VariableDoesNotExist,
 )
 from django.template.engine import Engine
 from django.utils.safestring import mark_safe
@@ -143,6 +141,30 @@ def snapshot_parser_library(parser: Parser) -> Library:
     return active_library
 
 
+def compile_inline_template(value: str, active_library: Library | None = None) -> InlineTemplate:
+    """Compile a template fragment at parse time for later rendering.
+
+    Returns an InlineTemplate whose .render(context) can be called at render time
+    without re-lexing or re-parsing the template string.
+    """
+    engine = Engine.get_default()
+    origin = Origin(UNKNOWN_SOURCE)
+
+    if active_library is None:
+        nodelist = engine.from_string(value).nodelist
+    else:
+        lexer = DebugLexer(value) if engine.debug else Lexer(value)
+        parser = Parser(
+            lexer.tokenize(),
+            engine.template_libraries,
+            [active_library],
+            origin,
+        )
+        nodelist = parser.parse()
+
+    return InlineTemplate(value, nodelist, engine, origin=origin)
+
+
 def render_inline_template(value: str, context: Context, active_library: Library | None = None) -> str:
     """Render a template fragment with the caller template's active tag/filter scope."""
     if active_library is None:
@@ -173,66 +195,6 @@ def render_inline_template(value: str, context: Context, active_library: Library
 
 class UnprocessableDynamicAttr(Exception):
     pass
-
-
-class DynamicAttr:
-    def __init__(
-        self,
-        value: str,
-        is_cvar: bool = False,
-        active_library: Library | None = None,
-    ):
-        self.value = value
-        self._is_cvar = is_cvar
-        self._resolved_value = None
-        self.active_library = active_library
-
-    def resolve(self, context: Context) -> Any:
-        if self._resolved_value is not None:
-            return self._resolved_value
-
-        resolvers = [
-            self._resolve_as_variable,
-            self._resolve_as_boolean,
-            self._resolve_as_template,
-            self._resolve_as_literal,
-        ]
-
-        for resolver in resolvers:
-            try:
-                # noinspection PyArgumentList
-                self._resolved_value = resolver(context)
-                return self._resolved_value
-            except (VariableDoesNotExist, TemplateSyntaxError, ValueError, SyntaxError):
-                continue
-
-        raise UnprocessableDynamicAttr
-
-    def _resolve_as_variable(self, context):
-        value = Variable(self.value).resolve(context)
-        if isinstance(value, Attrs):
-            return value.attrs_dict()
-        return value
-
-    def _resolve_as_boolean(self, _):
-        if self.value == "":
-            return True
-        raise ValueError
-
-    def _resolve_as_template(self, context):
-        rendered_value = render_inline_template(self.value, context, self.active_library)
-        if rendered_value != self.value:
-            # Try to evaluate the rendered value as a Python literal
-            # This handles cases like :attr="{'key': {{ var }}}" where {{ var }} is rendered first
-            try:
-                return ast.literal_eval(rendered_value)
-            except (ValueError, SyntaxError):
-                # Not a valid literal, return as string
-                return rendered_value
-        raise TemplateSyntaxError
-
-    def _resolve_as_literal(self, _):
-        return ast.literal_eval(self.value)
 
 
 class Attrs(Mapping):
@@ -283,6 +245,8 @@ class Attrs(Mapping):
         self._unprocessable.append(key)
 
     def exclude_unprocessable(self):
+        if not self._unprocessable:
+            return self._attrs
         return {k: v for k, v in self._attrs.items() if k not in self._unprocessable}
 
     def exclude_from_string_output(self, key):

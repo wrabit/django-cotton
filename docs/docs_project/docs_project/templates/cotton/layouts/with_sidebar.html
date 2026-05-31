@@ -1,12 +1,13 @@
+<c-vars :wide="False" />
+
 <c-layouts.base>
-    <div class="max-w-8xl mx-auto grid sm:grid-cols-[200px_auto] lg:grid-cols-[230px_auto_250px] flex-1 px-5">
+    <div class="max-w-8xl mx-auto grid sm:grid-cols-[200px_auto] {% if wide %}lg:grid-cols-[230px_auto]{% else %}lg:grid-cols-[230px_auto_250px]{% endif %} flex-1 px-5">
         <div class="relative h-full pr-10 border-r-yellow-800 border-opacity-10 hidden sm:block text-[15px]">
             <c-sidebar />
         </div>
-        <div class="overflow-auto flex-1 pb-10">
+        <div class="overflow-auto flex-1 pb-10 min-w-0">
             <div class="
-                max-w-[760px]
-                mx-auto
+                {% if wide %}max-w-none{% else %}max-w-[760px] mx-auto{% endif %}
                 px-0
                 pt-3
                 md:pt-0
@@ -68,6 +69,7 @@
                 {{ slot }}
             </div>
         </div>
+        {% if not wide %}
         <div class="relative h-full pl-10 border-opacity-10 hidden lg:block text-[15px]">
             {% if page_index %}
                 <div class="sticky top-[68px] pt-0 pb-10">
@@ -78,5 +80,6 @@
                 </div>
             {% endif %}
         </div>
+        {% endif %}
     </div>
 </c-layouts.base>

@@ -1,4 +1,4 @@
-<div class="sticky top-[68px] pb-6 pt-2">
+<div class="sticky top-[68px] pt-2 max-h-[calc(100vh_-_68px)] flex flex-col">
     <!-- Syntax Preference Switcher -->
     <div class="flex items-center space-x-1.5 mb-4">
         <div class="text-xs font-semibold uppercase tracking-wider text-gray-500">Docs syntax</div>
@@ -33,33 +33,36 @@
     <div class="mb-3 pb-3 border-bborder-gray-200 dark:border-gray-700" x-data>
         <div class="flex items-center justify-between mb-1 w-full">
 
-            <div class="flex w-full bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5 gap-0.5">
-                <!-- Buttons with individual backgrounds -->
+            <div class="inline-flex rounded-lg gap-0.5 font-mono">
                 <button
                     @click="$store.syntaxPreference = 'html'"
-                    class="w-full px-2.5 py-1 text-sm transition-all duration-200 rounded-md min-w-[2rem]"
+                    class="px-2 py-0.5 text-[12px] border border-transparent transition-all duration-200 rounded-md min-w-[2rem]"
                     :class="$store.syntaxPreference === 'html'
-                        ? 'bg-teal-600/20 text-teal-600 font-semibold'
-                        : 'text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'"
+                        ? 'bg-gray-800 text-white !border-gray-500 '
+                        : 'text-gray-400 hover:text-gray-300 border-transparent'"
                 >
-                    <span>&lt;c&gt; tags</span>
+                    &lt;c&gt; tags
                 </button>
                 <button
                     @click="$store.syntaxPreference = 'template'"
-                    class="w-full px-2.5 py-1 text-sm transition-all duration-200 rounded-md min-w-[2rem]"
+                    class="px-2 py-0.5 text-[12px] border border-transparent transition-all duration-200 rounded-md min-w-[2rem]"
                     :class="$store.syntaxPreference === 'template'
-                        ? 'bg-teal-600/20 text-teal-600 font-semibold'
-                        : 'text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'"
+                        ? 'bg-gray-800 text-white !border-gray-500 '
+                        : 'text-gray-400 hover:text-gray-300 border-transparent'"
                 >
-                    <span>Native</span>&nbsp;&nbsp;<span>&#37;}</span>
+                    Native
                 </button>
             </div>
         </div>
     </div>
 
+    <div class="overflow-y-auto flex-1 pb-6">
     <c-sidebar-block>
         <c-slot name="title">Getting Started</c-slot>
         <ul>
+            <c-sidebar-link url="{% url 'thinking-in-components' %}">
+                Thinking in Components
+            </c-sidebar-link>
             <c-sidebar-link url="{% url 'quickstart' %}">
                 Quickstart
             </c-sidebar-link>
@@ -108,12 +111,5 @@
             </c-sidebar-link>
         </ul>
     </c-sidebar-block>
-    <c-sidebar-block>
-        <c-slot name="title">More</c-slot>
-        <ul>
-            <c-sidebar-link url="{% url 'django-template-partials' %}">
-                Django Template Partials
-            </c-sidebar-link>
-        </ul>
-    </c-sidebar-block>
+    </div>
 </div>

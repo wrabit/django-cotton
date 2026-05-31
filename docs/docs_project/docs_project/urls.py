@@ -17,6 +17,13 @@ urlpatterns = [
         ),
         name="home",
     ),
+    path(
+        "docs/thinking-in-components",
+        views.build_view(
+            "thinking_in_components", title="Thinking in Components - Django Cotton"
+        ),
+        name="thinking-in-components",
+    ),
     path("docs/quickstart", views.build_view("quickstart"), name="quickstart"),
     path("docs/fundamentals", views.build_view("fundamentals"), name="fundamentals"),
     # Features
@@ -73,9 +80,4 @@ urlpatterns = [
     path("demo/search", views.demo_search, name="demo-search"),
     # More
     path("docs/configuration", views.build_view("configuration"), name="configuration"),
-    path(
-        "docs/django-template-partials",
-        views.build_view("django_template_partials"),
-        name="django-template-partials",
-    ),
 ]

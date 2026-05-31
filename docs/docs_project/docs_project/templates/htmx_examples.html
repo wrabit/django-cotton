@@ -46,7 +46,7 @@
     </c-ul>
 
     <c-note>
-        No need for django-template-partials or other libraries - Cotton components work directly as HTMX partials.
+        No need for template partials or other libraries - Cotton components work directly as HTMX partials.
     </c-note>
 
     <script src="https://unpkg.com/htmx.org@2.0.0"></script>
@@ -437,7 +437,7 @@ def search(request):
     <c-ul>
         <li>Use <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code> to pass HTMX attributes to styled components</li>
         <li>Use <code>render_component()</code> to return Cotton components as HTMX partial responses</li>
-        <li>No need for django-template-partials or special configuration</li>
+        <li>No need for template partials or special configuration</li>
         <li>Components maintain their reusability while serving dynamic content</li>
         <li>Combine with Alpine.js for enhanced interactivity</li>
     </c-ul>
@@ -445,9 +445,6 @@ def search(request):
     <c-navigation>
         <c-slot name="prev">
             <a href="{% url 'index-component' %}">Compound Components</a>
-        </c-slot>
-        <c-slot name="next">
-            <a href="{% url 'django-template-partials' %}">Django Template Partials</a>
         </c-slot>
     </c-navigation>
 

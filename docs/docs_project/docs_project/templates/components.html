@@ -147,33 +147,33 @@ context = { 'today': Weather.objects.get(...) }
 
 <c-snippet label="Integers & Floats">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :prop="1" />
-<!-- {% prop == 1 %} -->
+{# prop == 1 #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="None">{% cotton:verbatim %}<c-mycomp :prop="None" />
-{% verbatim %}<!-- {% prop is None %} -->
+{% verbatim %}{# prop is None #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="Lists">{% cotton:verbatim %}<c-mycomp :items="['item1','item2','item3']" />
-{% verbatim %}<!-- {% for item in items %} -->
+{% verbatim %}{# for item in items #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="Dicts">{% cotton:verbatim %}<c-mycomp :mydict="{'name': 'Thom', 'products': [1,2]}" />
-{% verbatim %}<!-- {{ mydict.name }}, {{ mydict.products }} -->
+{% verbatim %}{# mydict.name, mydict.products #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="Parent variable">{% cotton:verbatim %}<c-mycomp :product="product" />
-{% verbatim %}<!-- {{ product.title }} -->
+{% verbatim %}{# product.title #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="With template expressions">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :slides="['{{ image1 }}', '{{ image2 }}']" />
-<!-- {% for images in slides %} -->
+{# for images in slides #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="Generated with template expressions">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :is_highlighted="{% if important %}True{% endif %}" />
-<!-- {% is_valid is False %} -->
+{# is_valid is False #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <c-note>

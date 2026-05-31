@@ -1,8 +1,22 @@
+import copy
+
+from django.conf import settings
+
 from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_compiled
 
 
 class AttributeHandlingTests(CottonTestCase):
+    @staticmethod
+    def templates_with_url_override(*, builtins=()):
+        templates = copy.deepcopy(settings.TEMPLATES)
+        options = templates[0].setdefault("OPTIONS", {})
+        libraries = options.setdefault("libraries", {})
+        libraries["hosts_override"] = "django_cotton.tests.template_libraries.url_override"
+        if builtins:
+            options["builtins"] = [*builtins, *options.get("builtins", [])]
+        return templates
+
     def test_dynamic_attributes_on_components(self):
         self.create_template(
             "eval_attributes_on_component_view.html",
@@ -514,6 +528,42 @@ class AttributeHandlingTests(CottonTestCase):
                 """attrs: ':string="variable" dynamic="Ive been resolved!" :complex-string="{'something': 1}" complex-dynamic="{'something': 1}"'""",
             )
 
+    def test_double_colon_attributes_evaluate_template_variables(self):
+        """Test that :: attributes evaluate Django template variables in the value"""
+        self.create_template(
+            "cotton/alpine_component.html",
+            """<c-vars condition_ok /><div {{ attrs }}>{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "alpine_view.html",
+            """<c-alpine-component ::class="{{ condition_ok }} ? 'bg-green' : 'bg-red'" condition_ok />""",
+            "view/",
+            context={"condition_ok": True},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, """:class="True ? 'bg-green' : 'bg-red'""")
+
+    def test_double_colon_attributes_evaluate_template_variables(self):
+        """Test that :: attributes evaluate Django template variables in the value"""
+        self.create_template(
+            "cotton/alpine_component.html",
+            """<c-vars condition_ok /><div {{ attrs }}>{{ slot }}</div>""",
+        )
+
+        self.create_template(
+            "alpine_view.html",
+            """<c-alpine-component ::class="{{ condition_ok }} ? 'bg-green' : 'bg-red'" condition_ok />""",
+            "view/",
+            context={"condition_ok": True},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, """:class="True ? 'bg-green' : 'bg-red'""")
+
     def test_attributes_can_contain_valid_json(self):
         self.create_template(
             "cotton/json_attrs.html",
@@ -582,6 +632,195 @@ class AttributeHandlingTests(CottonTestCase):
             self.assertContains(response, 'href="/destination/"')
             self.assertContains(response, 'class="link"')
             self.assertContains(response, "Go to Destination")
+
+    def test_template_tags_in_dynamic_attributes(self):
+        """Test that template tags like {% trans %} work inside :attr= dynamic attributes (#348)"""
+        self.create_template(
+            "cotton/table_header.html",
+            """
+                {% load cotton %}
+                <c-vars columns="" />
+                <thead>
+                    <tr>
+                        {% for column in columns %}
+                            <th>{{ column.title }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+            """,
+        )
+
+        self.create_template(
+            "table_header_dynamic_view.html",
+            """
+                {% load i18n cotton %}
+                <c-table-header :columns="[
+                    {'title': '{% trans \"Name\" %}'},
+                    {'title': '{% trans \"Status\" %}'}
+                ]" />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "<th>Name</th>")
+            self.assertContains(response, "<th>Status</th>")
+            self.assertNotContains(response, "{% trans")
+            self.assertNotContains(response, "&quot;")
+
+    def test_attributes_only_use_explicitly_loaded_libraries(self):
+        from django.urls import path
+        from django.views.generic import TemplateView
+
+        self.create_template(
+            "cotton/tag_loading_semantics.html",
+            """
+                <a href="{{ href }}">{{ label|safe }}</a>
+            """,
+        )
+
+        self.create_template(
+            "test_destination.html",
+            """<h1>Destination</h1>""",
+        )
+
+        self.url_module.urlpatterns.append(
+            path(
+                "destination/",
+                TemplateView.as_view(template_name="test_destination.html"),
+                name="test_destination",
+            )
+        )
+
+        self.create_template(
+            "tag_loading_semantics_view.html",
+            """
+                <c-tag-loading-semantics
+                    href="{% url 'test_destination' %}"
+                    label="{% trans 'Go to Destination' %}" />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, 'href="/destination/"')
+            self.assertContains(response, "{% trans 'Go to Destination' %}")
+            self.assertNotContains(response, ">Go to Destination<")
+
+    def test_attributes_can_use_explicitly_loaded_i18n_tags(self):
+        from django.urls import path
+        from django.views.generic import TemplateView
+
+        self.create_template(
+            "cotton/tag_loading_semantics_loaded.html",
+            """
+                <a href="{{ href }}">{{ label }}</a>
+            """,
+        )
+
+        self.create_template(
+            "test_destination.html",
+            """<h1>Destination</h1>""",
+        )
+
+        self.url_module.urlpatterns.append(
+            path(
+                "destination/",
+                TemplateView.as_view(template_name="test_destination.html"),
+                name="test_destination",
+            )
+        )
+
+        self.create_template(
+            "tag_loading_semantics_loaded_view.html",
+            """
+                {% load i18n %}
+                <c-tag-loading-semantics-loaded
+                    href="{% url 'test_destination' %}"
+                    label="{% trans 'Go to Destination' %}" />
+            """,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, 'href="/destination/"')
+            self.assertContains(response, ">Go to Destination<")
+
+    def test_registered_url_override_library_does_not_change_attr_url_semantics(self):
+        from django.urls import path
+        from django.views.generic import TemplateView
+
+        self.create_template(
+            "cotton/url_override_attr.html",
+            """
+                <a href="{{ href }}">{{ slot }}</a>
+            """,
+        )
+
+        self.create_template(
+            "test_destination.html",
+            """<h1>Destination</h1>""",
+        )
+
+        self.url_module.urlpatterns.append(
+            path(
+                "destination/",
+                TemplateView.as_view(template_name="test_destination.html"),
+                name="test_destination",
+            )
+        )
+
+        self.create_template(
+            "url_override_attr_view.html",
+            """
+                <c-url-override-attr href="{% url 'test_destination' %}">
+                    Go to Destination
+                </c-url-override-attr>
+            """,
+            "view/",
+        )
+
+        with self.settings(
+            ROOT_URLCONF=self.url_conf(),
+            TEMPLATES=self.templates_with_url_override(),
+        ):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, 'href="/destination/"')
+            self.assertNotContains(response, 'href="/override/test_destination/"')
+
+    def test_builtin_url_override_library_changes_attr_url_semantics(self):
+        self.create_template(
+            "cotton/url_override_attr_builtin.html",
+            """
+                <a href="{{ href }}">{{ slot }}</a>
+            """,
+        )
+
+        self.create_template(
+            "url_override_attr_builtin_view.html",
+            """
+                <c-url-override-attr-builtin href="{% url 'test_destination' %}">
+                    Go to Destination
+                </c-url-override-attr-builtin>
+            """,
+            "view/",
+        )
+
+        with self.settings(
+            ROOT_URLCONF=self.url_conf(),
+            TEMPLATES=self.templates_with_url_override(
+                builtins=("django_cotton.tests.template_libraries.url_override",)
+            ),
+        ):
+            response = self.client.get("/view/")
+
+            self.assertContains(response, 'href="/override/test_destination/"')
 
     def test_nested_quotes_in_django_filters_double_quote_outer(self):
         import datetime

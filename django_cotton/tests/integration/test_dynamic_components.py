@@ -66,3 +66,21 @@ class DynamicComponentTests(CottonTestCase):
         rendered = get_rendered(html, {"is": "dynamic-component-expression"})
 
         self.assertTrue("I am dynamic component from expression" in rendered)
+
+    def test_is_attribute_excluded_from_attrs(self):
+        """Test that 'is' attribute doesn't leak into {{ attrs }} output"""
+        self.create_template(
+            "cotton/icon.html",
+            """<c-vars name /><c-component is="icons.{{ name }}" :attrs="attrs" />""",
+        )
+
+        self.create_template(
+            "cotton/icons/check.html",
+            """<svg {{ attrs }}></svg>""",
+        )
+
+        html = """<c-icon name="check" class="text-green" />"""
+        rendered = get_rendered(html)
+
+        self.assertIn('class="text-green"', rendered)
+        self.assertNotIn('is=', rendered)

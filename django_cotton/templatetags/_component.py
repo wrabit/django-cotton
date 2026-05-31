@@ -1,30 +1,189 @@
+from __future__ import annotations
+
+import ast
 import functools
-from typing import Union
+from enum import IntEnum
+from typing import Any, NamedTuple
 
 from django.conf import settings
 from django.template import Library, TemplateDoesNotExist
 from django.template.base import (
     Node,
-    Template,
+    Variable,
+    VariableDoesNotExist,
+    TemplateSyntaxError,
 )
 from django.template.context import Context, RequestContext
 from django.template.loader import get_template
 
 from django_cotton.utils import get_cotton_data
 from django_cotton.exceptions import CottonIncompleteDynamicComponentError
-from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr, strip_quotes_with_status
+from django_cotton.templatetags import (
+    Attrs,
+    InlineTemplate,
+    UnprocessableDynamicAttr,
+    compile_inline_template,
+    snapshot_parser_library,
+    strip_quotes_with_status,
+)
 
 register = Library()
 
+_MISSING = object()
+
+
+class AttrKind(IntEnum):
+    BOOLEAN = 0
+    ESCAPED = 1      # :: prefix (Alpine.js colon escaping) or quoted value with {{ }}/{% %}
+    DYNAMIC = 2      # : prefix — explicit dynamic binding
+    UNQUOTED = 3     # no quotes — treated as dynamic, falls back to string literal
+    STATIC = 4
+
+
+class PreparedAttr(NamedTuple):
+    key: str
+    kind: AttrKind
+    value: Any
+    compiled: Any
+
+
+class PreparedValue:
+    """Pre-compiled resolution chain for a dynamic attribute value.
+
+    Created once at template parse time. At render time, resolve() tries
+    each pre-built resolver in order: variable lookup, template render
+    (with optional literal_eval of the result), then literal eval of the
+    raw value.
+    """
+
+    __slots__ = ("raw", "_variable", "_template", "_literal")
+
+    def __init__(self, raw: Any, *, active_library: Library | None = None) -> None:
+        self.raw = raw
+        self._variable = None
+        self._template = None
+        self._literal = _MISSING
+
+        if not isinstance(raw, str) or not raw:
+            return
+
+        try:
+            self._variable = Variable(raw)
+        except (TypeError, TemplateSyntaxError):
+            pass  # Not a valid variable expression, will try other resolvers
+
+        if "{{" in raw or "{%" in raw:
+            try:
+                self._template = compile_inline_template(raw, active_library)
+            except TemplateSyntaxError:
+                pass  # Not a valid template expression, will try literal
+
+        try:
+            self._literal = ast.literal_eval(raw)
+        except (ValueError, SyntaxError):
+            pass  # Not a Python literal, will raise UnprocessableDynamicAttr at resolve time
+
+    def resolve(self, context: Context) -> Any:
+        """Resolve the attribute value against a template context.
+
+        Tries each pre-built resolver in order: empty string (boolean True),
+        variable lookup, template render, then literal eval. Returns the
+        first successful result or raises UnprocessableDynamicAttr.
+        """
+        if self.raw == "":
+            return True
+
+        if self._variable is not None:
+            try:
+                resolved = self._variable.resolve(context)
+                if isinstance(resolved, Attrs):
+                    return resolved.attrs_dict()
+                return resolved
+            except (VariableDoesNotExist, TemplateSyntaxError):
+                pass
+
+        if self._template is not None:
+            try:
+                rendered = self._template.render(context)
+                if rendered != self.raw:
+                    try:
+                        return ast.literal_eval(rendered)
+                    except (ValueError, SyntaxError):
+                        return rendered
+            except (TemplateSyntaxError, ValueError, SyntaxError):
+                pass  # Template render failed, fall through to literal resolution
+
+        if self._literal is not _MISSING:
+            return self._literal
+
+        raise UnprocessableDynamicAttr
+
+
+def _try_compile_template(value: Any, active_library: Library | None) -> InlineTemplate | None:
+    """Try to compile a template from a value containing {{ }} or {% %}.
+    Returns the compiled InlineTemplate or None if compilation fails or value
+    has no template syntax.
+    """
+    if isinstance(value, str) and ("{{" in value or "{%" in value):
+        try:
+            return compile_inline_template(value, active_library)
+        except TemplateSyntaxError:
+            pass
+    return None
+
+
+def _prepare_attrs(attrs: dict[str, Any], active_library: Library | None) -> list[PreparedAttr]:
+    """Pre-classify and pre-compile component attributes at parse time.
+
+    Returns a list of PreparedAttr tuples with pre-built Variable, Template,
+    and literal objects so that render() only needs to call resolve/render
+    on them without recreating anything.
+    """
+    prepared = []
+
+    for key, raw_value in attrs.items():
+        value, was_quoted = strip_quotes_with_status(raw_value)
+
+        if value is True:
+            prepared.append(PreparedAttr(key, AttrKind.BOOLEAN, True, None))
+
+        elif key.startswith("::"):
+            compiled = _try_compile_template(value, active_library)
+            prepared.append(PreparedAttr(key[1:], AttrKind.ESCAPED, value, compiled))
+
+        elif key.startswith(":"):
+            pv = PreparedValue(value, active_library=active_library)
+            prepared.append(PreparedAttr(key[1:], AttrKind.DYNAMIC, value, pv))
+
+        elif not was_quoted and isinstance(value, str) and value:
+            pv = PreparedValue(value, active_library=active_library)
+            prepared.append(PreparedAttr(key, AttrKind.UNQUOTED, value, pv))
+
+        else:
+            compiled = _try_compile_template(value, active_library)
+            kind = AttrKind.ESCAPED if compiled else AttrKind.STATIC
+            prepared.append(PreparedAttr(key, kind, value, compiled))
+
+    return prepared
+
 
 class CottonComponentNode(Node):
-    def __init__(self, component_name, nodelist, attrs, only, loaded_libraries=None):
+    _vars_node_cache: dict[int, list[Node]] = {}
+
+    def __init__(
+        self,
+        component_name,
+        nodelist,
+        attrs,
+        only,
+        active_library: Library | None = None,
+    ):
         self.component_name = component_name
         self.nodelist = nodelist
         self.attrs = attrs
-        self.template_cache = {}
         self.only = only
-        self.loaded_libraries = loaded_libraries or []
+        self.active_library = active_library
+        self._prepared_attrs = _prepare_attrs(attrs, active_library)
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
@@ -37,56 +196,47 @@ class CottonComponentNode(Node):
         }
         cotton_data["stack"].append(component_data)
 
-        # Process simple attributes and boolean attributes
-        for key, value in self.attrs.items():
-            value, was_quoted = strip_quotes_with_status(value)
-            if value is True:  # Boolean attribute (no value, e.g. `disabled`)
-                component_data["attrs"][key] = True
-            elif key.startswith("::"):  # Escaping 1 colon e.g for shorthand alpine
-                key = key[1:]
-                component_data["attrs"][key] = value
-            elif key.startswith(":"):  # Explicit dynamic attribute with colon prefix
-                key = key[1:]
+        for attr in self._prepared_attrs:
+            # Boolean attribute (no value, e.g. `disabled`)
+            if attr.kind == AttrKind.BOOLEAN:
+                component_data["attrs"][attr.key] = True
+
+            # :: prefix (Alpine.js colon escaping) or quoted value with {{ }}/{% %}
+            elif attr.kind == AttrKind.ESCAPED:
+                component_data["attrs"][attr.key] = (
+                    attr.compiled.render(context) if attr.compiled else attr.value
+                )
+
+            # : prefix — explicit dynamic binding
+            elif attr.kind == AttrKind.DYNAMIC:
                 try:
-                    resolved_value = DynamicAttr(value).resolve(context)
-                except UnprocessableDynamicAttr:
-                    component_data["attrs"].unprocessable(key)
-                else:
-                    # Handle ":attrs" specially
-                    if key == "attrs":
-                        component_data["attrs"].dict.update(resolved_value)
+                    resolved = attr.compiled.resolve(context)
+                    if attr.key == "attrs":
+                        component_data["attrs"].dict.update(resolved)
                     else:
-                        component_data["attrs"][key] = resolved_value
-            elif not was_quoted and isinstance(value, str) and value:
-                # Unquoted value - treat as dynamic (like native DTL behavior)
-                try:
-                    resolved_value = DynamicAttr(value).resolve(context)
-                    component_data["attrs"][key] = resolved_value
+                        component_data["attrs"][attr.key] = resolved
                 except UnprocessableDynamicAttr:
-                    # Fall back to string literal (Django's permissive behavior)
-                    component_data["attrs"][key] = value
+                    component_data["attrs"].unprocessable(attr.key)
+
+            # No quotes — treated as dynamic, falls back to string literal
+            elif attr.kind == AttrKind.UNQUOTED:
+                try:
+                    component_data["attrs"][attr.key] = attr.compiled.resolve(context)
+                except UnprocessableDynamicAttr:
+                    component_data["attrs"][attr.key] = attr.value
+
+            # Plain static value
             else:
-                # Static attribute (quoted) - check if it contains template syntax
-                if isinstance(value, str) and ("{{" in value or "{%" in value):
-                    try:
-                        # Evaluate template tags at render time (same as c-vars)
-                        # Prepend {% load %} tags for libraries that were loaded at parse time
-                        load_tags = [f"{{% load {lib} %}}" for lib in self.loaded_libraries]
-                        template_str = "".join(load_tags) + value
-                        mini_template = Template(template_str)
-                        rendered_value = mini_template.render(context)
-                        component_data["attrs"][key] = rendered_value
-                    except Exception:
-                        # If rendering fails, fall back to the raw value
-                        component_data["attrs"][key] = value
-                else:
-                    component_data["attrs"][key] = value
+                component_data["attrs"][attr.key] = attr.value
 
         # Render the nodelist to process any slot tags and vars
         default_slot = self.nodelist.render(context)
 
         # Load the component template first
         template = self._get_cached_template(context, component_data["attrs"])
+
+        # Exclude 'is' from attrs string output - it's only used for dynamic component resolution
+        component_data["attrs"].exclude_from_string_output("is")
 
         # Extract vars from the component template
         vars = self._extract_vars_from_template(
@@ -173,20 +323,22 @@ class CottonComponentNode(Node):
         """Extract vars from any CottonVarsNode instances in the template."""
         from django_cotton.templatetags._vars import CottonVarsNode
 
-        vars = {}
+        template_id = id(template)
+        vars_nodes = self._vars_node_cache.get(template_id)
+        if vars_nodes is None:
+            vars_nodes = [n for n in template.nodelist if isinstance(n, CottonVarsNode)]
+            self._vars_node_cache[template_id] = vars_nodes
 
-        # Walk the template nodelist to find CottonVarsNode instances
-        for node in template.nodelist:
-            if isinstance(node, CottonVarsNode):
-                # Extract vars from this node
-                node_vars = node.extract_vars(context, attrs, slots)
-                vars.update(node_vars)
+        vars = {}
+        for node in vars_nodes:
+            node_vars = node.extract_vars(context, attrs, slots)
+            vars.update(node_vars)
 
         return vars
 
     @staticmethod
     @functools.lru_cache(maxsize=400)
-    def _generate_component_template_path(component_name: str, is_: Union[str, None]) -> str:
+    def _generate_component_template_path(component_name: str, is_: str | None) -> str:
         """Generate the path to the template for the given component name."""
         if component_name == "component":
             if is_ is None:
@@ -205,6 +357,7 @@ class CottonComponentNode(Node):
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 
+
 def cotton_component(parser, token):
     """
     Parse a cotton component tag and return a CottonComponentNode.
@@ -221,8 +374,8 @@ def cotton_component(parser, token):
     # Use the custom parser that preserves quotes and handles nested template tags
     result = parse_component_tag(token.contents)
 
-    # Capture which template libraries were loaded at parse time
-    loaded_libraries = list(parser.libraries.keys()) if hasattr(parser, 'libraries') else []
+    # Snapshot the caller template's active tag/filter scope at this parse point.
+    active_library = snapshot_parser_library(parser)
 
     if is_self_closing:
         # Self-closing tag has no content
@@ -231,4 +384,4 @@ def cotton_component(parser, token):
         nodelist = parser.parse(("endcotton",))
         parser.delete_first_token()
 
-    return CottonComponentNode(result.name, nodelist, result.attrs, result.only, loaded_libraries)
+    return CottonComponentNode(result.name, nodelist, result.attrs, result.only, active_library)

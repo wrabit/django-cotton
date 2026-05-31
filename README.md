@@ -48,7 +48,7 @@ Cotton aims to overcome [certain limitations](#limitations-in-django-that-cotton
 - **Modern UI Composition:** Efficiently compose and reuse UI components.
 - **Interoperable with Django:** Cotton only enhances django's existing template system (no Jinja needed).
 - **HTML-like Syntax:** Native code editor syntax highlighting, code formatting and autoclosing ([VS Code plugin](#tools) for autocompletion).  
-- **Minimal Overhead:** Compiles to native Django template tags with dynamic caching.
+- **Minimal Overhead:** Compiles to native Django template tags with built-in compilation caching and automatic cache invalidation on file changes.
 - **Encapsulates UI:** Keep layout, design and interaction in one file (especially when paired with Tailwind and Alpine.js)
 - **Compliments HTMX:** Create reusable htmx components, render components directly from views.
 
@@ -658,7 +658,7 @@ Whether to search for component filenames in snake_case. If set to False, you ca
 
 ## Caching
 
-Cotton is optimal when used with Django's cached.Loader. If you use <a href="https://django-cotton.com/docs/quickstart">automatic configuration</a> then the cached loader will be automatically applied.
+Cotton includes its own compilation cache that avoids re-processing component syntax when template files haven't changed (based on file modification time). For full performance, Cotton should also be used with Django's cached.Loader, which additionally caches fully parsed Template objects and avoids disk reads entirely. If you use automatic configuration (the default), the cached loader is already applied automatically.
 
 <hr>
 

@@ -62,7 +62,7 @@
                         ? 'bg-gray-800 text-white border-gray-500 '
                         : 'text-gray-400 hover:text-gray-300 border-transparent'"
                 >
-                    HTML
+                    &lt;c&gt; tags
                 </button>
                 <button
                     @click="$store.syntaxPreference = 'template'"
@@ -84,16 +84,16 @@
     {% if "<c-" in slot and not ignore_syntax_choice %}
         <!-- HTML Syntax Version -->
         <div x-show="$store.syntaxPreference === 'html'">
-            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-[#171e29] dark:!bg-[#171e29]">{{ slot|strip }}</code></pre>
         </div>
 
         <!-- Template Tag Syntax Version -->
         <div x-show="$store.syntaxPreference === 'template'">
-            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="templateCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip|to_template_tags }}</code></pre>
+            <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="templateCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-[#171e29] dark:!bg-[#171e29]">{{ slot|strip|to_template_tags }}</code></pre>
         </div>
     {% else %}
         <!-- No Cotton tags OR ignore-syntax-choice is set - show single static version -->
-        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-gray-800 dark:!bg-gray-800">{{ slot|strip }}</code></pre>
+        <pre {{ attrs.dict|merge:'class: flex-1 flex flex-col !leading-7 !p-0 !m-0 rounded-none !text-[14.5px]' }}><code x-ref="htmlCode" class="language-{{ language }} flex-1 !pb-4 {% if not hide_label %}!pt-12{% else %}!pt-4{% endif %} !px-6 !m-0 !bg-[#171e29] dark:!bg-[#171e29]">{{ slot|strip }}</code></pre>
     {% endif %}
 
     {% if preview and not flipped %}

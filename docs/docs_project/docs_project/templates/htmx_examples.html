@@ -2,13 +2,13 @@
 
     <c-slot name="page_index">
         <c-index-link><a href="#introduction" class="no-underline">Introduction</a></c-index-link>
-        <c-index-link><a href="#inline-editing" class="no-underline">Inline Editing</a></c-index-link>
-        <c-index-link><a href="#form-validation" class="no-underline">Form Validation</a></c-index-link>
-        <c-index-link><a href="#modal-loading" class="no-underline">Modal Loading</a></c-index-link>
-        <c-index-link><a href="#search-debounce" class="no-underline">Search with Debounce</a></c-index-link>
+        <c-index-sublink><a href="#inline-editing" class="no-underline">Inline Editing</a></c-index-sublink>
+        <c-index-sublink><a href="#form-validation" class="no-underline">Form Validation</a></c-index-sublink>
+        <c-index-sublink><a href="#modal-loading" class="no-underline">Modal Loading</a></c-index-sublink>
+        <c-index-sublink><a href="#search-debounce" class="no-underline">Search with Debounce</a></c-index-sublink>
     </c-slot>
 
-    <h1 id="introduction">HTMX Examples</h1>
+    <h1 id="introduction">HTMX Integration</h1>
 
     <p>Cotton helps you build re-usable HTMX-powered components. Define your styles and markup once, then pass different HTMX attributes via <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>:</p>
 
@@ -251,35 +251,35 @@ def validate_email_field(request):
                 <c-examples.htmx.modal />
 
                 <div class="space-y-2">
-                    <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
-                        <span class="text-gray-900 dark:text-gray-100">Alice Johnson</span>
+                    <div class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded">
+                        <span class="text-gray-900">Alice Johnson</span>
                         <button
                             hx-get="/demo/users/1/details"
                             hx-target="#modal-content"
                             @click="$dispatch('open-modal')"
-                            class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
+                            class="px-3 py-1 text-sm text-teal-600 hover:bg-teal-50 rounded"
                         >
                             View Details
                         </button>
                     </div>
-                    <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
-                        <span class="text-gray-900 dark:text-gray-100">Bob Smith</span>
+                    <div class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded">
+                        <span class="text-gray-900">Bob Smith</span>
                         <button
                             hx-get="/demo/users/2/details"
                             hx-target="#modal-content"
                             @click="$dispatch('open-modal')"
-                            class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
+                            class="px-3 py-1 text-sm text-teal-600 hover:bg-teal-50 rounded"
                         >
                             View Details
                         </button>
                     </div>
-                    <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
-                        <span class="text-gray-900 dark:text-gray-100">Carol White</span>
+                    <div class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded">
+                        <span class="text-gray-900">Carol White</span>
                         <button
                             hx-get="/demo/users/3/details"
                             hx-target="#modal-content"
                             @click="$dispatch('open-modal')"
-                            class="px-3 py-1 text-sm text-teal-600 dark:text-teal-500 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded"
+                            class="px-3 py-1 text-sm text-teal-600 hover:bg-teal-50 rounded"
                         >
                             View Details
                         </button>
@@ -367,7 +367,7 @@ def user_details(request, id):
                     hx-trigger="keyup changed delay:500ms"
                     hx-target="#search-results"
                     hx-include="this"
-                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    class="w-full px-4 py-2 border border-gray-300 bg-white text-gray-900 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
                 >
 
                 <c-examples.htmx.search_results />
@@ -444,10 +444,10 @@ def search(request):
 
     <c-navigation>
         <c-slot name="prev">
-            <a href="{% url 'icons' %}">Icons</a>
+            <a href="{% url 'index-component' %}">Compound Components</a>
         </c-slot>
         <c-slot name="next">
-            <a href="{% url 'configuration' %}">Configuration</a>
+            <a href="{% url 'django-template-partials' %}">Django Template Partials</a>
         </c-slot>
     </c-navigation>
 

@@ -1,7 +1,7 @@
 <div class="sticky top-[68px] pb-6 pt-2">
     <!-- Syntax Preference Switcher -->
     <div class="flex items-center space-x-1.5 mb-4">
-        <div class="text-xs font-semibold uppercase tracking-wider text-gray-500">cotton syntax</div>
+        <div class="text-xs font-semibold uppercase tracking-wider text-gray-500">Docs syntax</div>
         <div class="relative" x-data="{ showPopover: false }" @mouseenter="showPopover = true" @mouseleave="showPopover = false">
             <button
                 class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -16,14 +16,14 @@
             >
                 <div class="space-y-2">
                     <div>
-                        <span class="font-semibold">HTML:</span> Snippets will be shown in HTML-like syntax.
+                        <span class="font-semibold">&lt;c&gt; tags:</span> Snippets will be shown in Cotton's HTML-like tag syntax.
                     </div>
                     <div>
                         <span class="font-semibold">Native:</span> Snippets will be shown in native Django template syntax.
                     </div>
                 </div>
                 <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                    <a href="{% url 'usage-patterns' %}#tag-syntax" class="text-teal-600 dark:text-teal-600 text-xs font-medium">
+                    <a href="{% url 'fundamentals' %}#tag-syntax" class="text-teal-600 dark:text-teal-600 text-xs font-medium">
                         More info
                     </a>
                 </div>
@@ -42,7 +42,7 @@
                         ? 'bg-teal-600/20 text-teal-600 font-semibold'
                         : 'text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'"
                 >
-                    <span>HTML</span>&nbsp;&nbsp;<span>&lt;/&gt;</span>
+                    <span>&lt;c&gt; tags</span>
                 </button>
                 <button
                     @click="$store.syntaxPreference = 'template'"
@@ -66,8 +66,8 @@
             <c-sidebar-link url="{% url 'components' %}">
                 Components
             </c-sidebar-link>
-            <c-sidebar-link url="{% url 'usage-patterns' %}">
-                Usage Patterns
+            <c-sidebar-link url="{% url 'fundamentals' %}">
+                Fundamentals
             </c-sidebar-link>
             <c-sidebar-link url="{% url 'configuration' %}">
                 Configuration
@@ -75,22 +75,36 @@
         </ul>
     </c-sidebar-block>
     <c-sidebar-block>
-        <c-slot name="title">Examples</c-slot>
+        <c-slot name="title">Tutorials</c-slot>
         <ul>
             <c-sidebar-link url="{% url 'form-fields' %}">
                 Form Inputs
-            </c-sidebar-link>
-            <c-sidebar-link url="{% url 'htmx-examples' %}">
-                HTMX Examples
             </c-sidebar-link>
             <c-sidebar-link url="{% url 'alpine-js' %}">
                 Tabs with Alpine.js
             </c-sidebar-link>
             <c-sidebar-link url="{% url 'layouts' %}">
-                Layouts
+                Composing Layouts
             </c-sidebar-link>
             <c-sidebar-link url="{% url 'icons' %}">
-                Icons
+                Cotton as SVG Icons
+            </c-sidebar-link>
+        </ul>
+    </c-sidebar-block>
+    <c-sidebar-block>
+        <c-slot name="title">Usage Patterns</c-slot>
+        <ul>
+            <c-sidebar-link url="{% url 'variants' %}">
+                Component Variants
+            </c-sidebar-link>
+            <c-sidebar-link url="{% url 'attribute-proxying' %}">
+                Attribute Proxying
+            </c-sidebar-link>
+            <c-sidebar-link url="{% url 'index-component' %}">
+                Compound Components
+            </c-sidebar-link>
+            <c-sidebar-link url="{% url 'htmx-examples' %}">
+                HTMX Integration
             </c-sidebar-link>
         </ul>
     </c-sidebar-block>

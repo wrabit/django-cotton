@@ -1,0 +1,43 @@
+<c-layouts.with-sidebar>
+    <h1 id="attribute-proxying">Attribute Proxying</h1>
+
+    <c-slot name="page_index">
+        <c-index-link><a href="#attribute-proxying" class="no-underline">Attribute Proxying</a></c-index-link>
+    </c-slot>
+
+    <p>The <code>:attrs</code> dynamic attribute enables us to create wrapper components that proxy all their attributes to an inner component:</p>
+
+    <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
+<c-outer
+    class="outer-class"
+    :count="42"
+    :enabled="False">
+    Content passed to inner component
+</c-outer>
+    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
+
+    <c-snippet label="cotton/outer.html">{% cotton:verbatim %}{% verbatim %}
+<c-inner :attrs="attrs">{{ slot }}</c-inner>
+    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
+
+    <c-snippet label="cotton/inner.html">{% cotton:verbatim %}{% verbatim %}
+{{ class }}     <!-- "outer-class" -->
+{{ count }}     <!-- 42 -->
+{{ enabled }}   <!-- False -->
+{{ slot }}      <!-- Content passed to inner component -->
+    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
+
+    <p>The attributes are passed through to the inner component with their original types preserved (strings, numbers, booleans, lists, etc.), making this pattern ideal for creating higher-order components.</p>
+
+    <p>This pattern is particularly useful for Django form fields, where you might create a component hierarchy that passes Django widget attributes through multiple layers while adding labels, error handling, and styling at each level.</p>
+
+    <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'variants' %}">Component Variants</a>
+        </c-slot>
+        <c-slot name="next">
+            <a href="{% url 'index-component' %}">Compound Components</a>
+        </c-slot>
+    </c-navigation>
+
+</c-layouts.with-sidebar>

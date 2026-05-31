@@ -1,0 +1,40 @@
+<div id="task-{{ id }}" {{ attrs }} class="mb-3">
+    <form
+        hx-post="/demo/tasks/{{ id }}/update"
+        hx-target="#task-{{ id }}"
+        hx-swap="outerHTML"
+        class="p-4 bg-teal-50 border border-teal-200 rounded-lg"
+    >
+        {% csrf_token %}
+        <input
+            type="text"
+            name="title"
+            value="{{ title }}"
+            placeholder="Task title"
+            class="w-full px-3 py-2 mb-2 border border-gray-300 bg-white text-gray-900 rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
+        >
+        <textarea
+            name="description"
+            placeholder="Task description"
+            rows="2"
+            class="w-full px-3 py-2 mb-3 border border-gray-300 bg-white text-gray-900 rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
+        >{{ description }}</textarea>
+        <div class="flex space-x-2">
+            <button
+                type="submit"
+                class="px-4 py-1.5 text-sm bg-teal-600 hover:bg-teal-700 text-white rounded transition-colors"
+            >
+                Save
+            </button>
+            <button
+                type="button"
+                hx-get="/demo/tasks/{{ id }}?title={{ title|urlencode }}&description={{ description|urlencode }}"
+                hx-target="#task-{{ id }}"
+                hx-swap="outerHTML"
+                class="px-4 py-1.5 text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 rounded transition-colors"
+            >
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>

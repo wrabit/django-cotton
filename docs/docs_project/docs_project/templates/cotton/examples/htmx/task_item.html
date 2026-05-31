@@ -1,0 +1,12 @@
+<div id="task-{{ id }}" {{ attrs }} class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded mb-2 not-prose">
+    <span class="text-gray-900">{{ title }}</span>
+    <button
+        hx-delete="/demo/tasks/{{ id }}/delete"
+        hx-target="#task-{{ id }}"
+        hx-swap="delete swap:0.5s"
+        hx-confirm="Delete this task?"
+        class="px-3 py-1 text-sm text-red-600 hover:bg-red-50 rounded transition-colors"
+    >
+        Delete
+    </button>
+</div>

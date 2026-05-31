@@ -1,17 +1,15 @@
 <c-layouts.with-sidebar>
-    <h1 id="components">Usage Patterns</h1>
+    <h1 id="fundamentals">Fundamentals</h1>
 
     <c-slot name="page_index">
-        <c-index-link><a href="#components" class="no-underline">Components</a></c-index-link>
-        <c-index-sublink><a href="#basics" class="no-underline text-opacity-70">Basics</a></c-index-sublink>
+        <c-index-link><a href="#fundamentals" class="no-underline">Fundamentals</a></c-index-link>
+        <c-index-sublink><a href="#location" class="no-underline">Location</a></c-index-sublink>
         <c-index-sublink><a href="#naming" class="no-underline">Naming</a></c-index-sublink>
         <c-index-sublink><a href="#subfolders" class="no-underline">Subfolders</a></c-index-sublink>
         <c-index-sublink><a href="#tag-syntax" class="no-underline">Tag Syntax</a></c-index-sublink>
-        <c-index-sublink><a href="#index" class="no-underline">index.html</a></c-index-sublink>
-        <c-index-sublink><a href="#attribute-proxying" class="no-underline">Attribute Proxying</a></c-index-sublink>
     </c-slot>
 
-    <h3 id="basics">Basics</h3>
+    <h3 id="location">Location</h3>
     <c-ul>
         <li>Cotton components should be placed in the <c-highlight>templates/cotton</c-highlight> folder ('cotton' path is <a href="{% url 'configuration' %}">configurable</a> using <code>COTTON_DIR</code>).</li>
         <li>The <code>templates</code> folder can be located in either an app-level or top-level project root folder.</li>
@@ -114,66 +112,12 @@
         </table>
     </div>
 
-    <c-hr />
-
-    <h3 id="index">The index.html component</h3>
-
-    <p>When your component has sub-components, you can define the default component of a folder by adding an <code>index.html</code>. This helps to keep your project structure tidy and reduce additional code in the template.</p>
-
-    <c-snippet label="Project structure">
-        {% cotton:verbatim %}{% verbatim %}
-templates/
-├── cotton/
-│   ├── card/
-│   │   ├── index.html
-│   │   ├── header.html
-        {% endverbatim %}{% endcotton:verbatim %}
-    </c-snippet>
-
-    <c-snippet label="Usage">
-        {% cotton:verbatim %}{% verbatim %}
-<c-card>
-    <c-card.header>...</c-card.header>
-</c-card>
-        {% endverbatim %}{% endcotton:verbatim %}
-    </c-snippet>
-
-    <c-hr />
-
-    <h3 id="attribute-proxying">Attribute Proxying Pattern</h3>
-
-    <p>The <code>:attrs</code> dynamic attribute enables us to create wrapper components that proxy all their attributes to an inner component:</p>
-
-    <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
-<c-outer
-    class="outer-class"
-    :count="42"
-    :enabled="False">
-    Content passed to inner component
-</c-outer>
-    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
-
-    <c-snippet label="cotton/outer.html">{% cotton:verbatim %}{% verbatim %}
-<c-inner :attrs="attrs">{{ slot }}</c-inner>
-    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
-
-    <c-snippet label="cotton/inner.html">{% cotton:verbatim %}{% verbatim %}
-{{ class }}     <!-- "outer-class" -->
-{{ count }}     <!-- 42 -->
-{{ enabled }}   <!-- False -->
-{{ slot }}      <!-- Content passed to inner component -->
-    {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
-
-    <p>The attributes are passed through to the inner component with their original types preserved (strings, numbers, booleans, lists, etc.), making this pattern ideal for creating higher-order components.</p>
-
-    <p>This pattern is particularly useful for Django form fields, where you might create a component hierarchy that passes Django widget attributes through multiple layers while adding labels, error handling, and styling at each level.</p>
-
     <c-navigation>
         <c-slot name="prev">
             <a href="{% url 'components' %}">Components</a>
         </c-slot>
         <c-slot name="next">
-            <a href="{% url 'form-fields' %}">Form Inputs</a>
+            <a href="{% url 'configuration' %}">Configuration</a>
         </c-slot>
     </c-navigation>
 

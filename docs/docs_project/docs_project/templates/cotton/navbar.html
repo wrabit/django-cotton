@@ -1,4 +1,4 @@
-<div class="py-5 sticky top-0 bg-amber-50 dark:bg-gray-900 md:bg-transparent dark:md:bg-transparent border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
+<div class="py-5 sticky top-0 bg-amber-50 dark:bg-[#0e1219] md:bg-transparent dark:md:bg-transparent border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
      x-data="{isOpen: false}"
      x-init="
         window.addEventListener('resize', () => {
@@ -50,20 +50,9 @@
         </div>
 
         <div class="flex items-center space-x-2">
-            <a href="#" @click.prevent="toggleDark" x-data="{
-                    'dark': false,
-                    init() {
-                        this.dark = document.documentElement.classList.contains('dark')
-
-                    },
-                    toggleDark() {
-                        this.dark = !this.dark
-                        document.documentElement.classList.toggle('dark')
-
-                        // Whenever the user explicitly chooses light mode
-                        localStorage.theme = this.dark ? 'dark' : 'light'
-                    }
-                }">
+            <a href="#" class="cursor-pointer" @click.prevent="
+                    localStorage.theme = document.documentElement.classList.toggle('dark') ? 'dark' : 'light'
+                ">
                 <c-icons.sun class="size-7 text-yellow-900/40 dark:text-gray-100/50" />
             </a>
             <a href="https://github.com/wrabit/django-cotton" target="_blank" class="text-yellow-900/40 dark:text-gray-100/50 flex items-center space-x-2">

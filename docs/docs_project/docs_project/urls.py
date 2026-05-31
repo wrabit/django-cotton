@@ -1,7 +1,15 @@
 from . import views
 from django.urls import path
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+    # 301: the old "Usage Patterns" page was split into Fundamentals,
+    # Attribute Proxying and Compound Components. Point the retired slug at
+    # Fundamentals, which inherited the bulk of its content.
+    path(
+        "docs/usage-patterns",
+        RedirectView.as_view(pattern_name="fundamentals", permanent=True),
+    ),
     path(
         "",
         views.build_view(
@@ -9,10 +17,15 @@ urlpatterns = [
         ),
         name="home",
     ),
-    path("docs/quickstart", views.build_view("quickstart"), name="quickstart"),
     path(
-        "docs/usage-patterns", views.build_view("usage_patterns"), name="usage-patterns"
+        "docs/thinking-in-components",
+        views.build_view(
+            "thinking_in_components", title="Thinking in Components - Django Cotton"
+        ),
+        name="thinking-in-components",
     ),
+    path("docs/quickstart", views.build_view("quickstart"), name="quickstart"),
+    path("docs/fundamentals", views.build_view("fundamentals"), name="fundamentals"),
     # Features
     path("docs/components", views.build_view("components"), name="components"),
     path("docs/slots", views.build_view("slots"), name="slots"),
@@ -24,9 +37,39 @@ urlpatterns = [
     # Examples
     path("docs/form-fields", views.build_view("form_fields"), name="form-fields"),
     path("docs/alpine-js", views.build_view("alpine_js"), name="alpine-js"),
-    path("docs/htmx-examples", views.build_view("htmx_examples"), name="htmx-examples"),
-    path("docs/layouts", views.build_view("layouts"), name="layouts"),
-    path("docs/icons", views.build_view("icons"), name="icons"),
+    path(
+        "docs/htmx-examples",
+        views.build_view("htmx_examples", title="HTMX Integration - Django Cotton"),
+        name="htmx-examples",
+    ),
+    path(
+        "docs/layouts",
+        views.build_view("layouts", title="Composing Layouts - Django Cotton"),
+        name="layouts",
+    ),
+    path(
+        "docs/icons",
+        views.build_view("icons", title="Cotton as SVG Icons - Django Cotton"),
+        name="icons",
+    ),
+    # Usage Patterns
+    path(
+        "docs/variants",
+        views.build_view("variants", title="Component Variants - Django Cotton"),
+        name="variants",
+    ),
+    path(
+        "docs/attribute-proxying",
+        views.build_view("attribute_proxying"),
+        name="attribute-proxying",
+    ),
+    path(
+        "docs/index-component",
+        views.build_view(
+            "index_component", title="Compound Components - Django Cotton"
+        ),
+        name="index-component",
+    ),
     # Demo endpoints for HTMX examples
     path("demo/tasks/<int:id>", views.demo_task_detail, name="demo-task-detail"),
     path("demo/tasks/<int:id>/edit", views.demo_task_edit, name="demo-task-edit"),
@@ -37,11 +80,6 @@ urlpatterns = [
     path("demo/search", views.demo_search, name="demo-search"),
     # More
     path("docs/configuration", views.build_view("configuration"), name="configuration"),
-    path(
-        "docs/django-template-partials",
-        views.build_view("django_template_partials"),
-        name="django-template-partials",
-    ),
     # UI
     path("ui", views.build_view("ui_docs/getting_started"), name="ui"),
     path("ui/installation", views.build_view("ui_docs/installation"), name="ui-installation"),

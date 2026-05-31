@@ -1,7 +1,7 @@
-<c-vars hide_intro />
+<c-vars hide_intro :wide="False" />
 
 <c-layouts.base>
-    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_minmax(0,1fr)] lg:grid-cols-[230px_minmax(0,1fr)_250px] px-5" x-data="scrollspy">
+    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_minmax(0,1fr)] {% if wide %}lg:grid-cols-[230px_minmax(0,1fr)]{% else %}lg:grid-cols-[230px_minmax(0,1fr)_250px]{% endif %} px-5" x-data="scrollspy">
         <!-- Left sidebar: sticky with independent scroll -->
         <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block py-6">
             {{ sidebar }}
@@ -36,6 +36,7 @@
                 {{ slot }}
             </c-layouts.prose-container>
         </div>
+        {% if not wide %}
         <!-- Right sidebar: sticky with independent scroll -->
         <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pl-10 hidden lg:block text-[14.5px] py-6">
             {% if page_index %}
@@ -48,5 +49,6 @@
                 </div>
             {% endif %}
         </div>
+        {% endif %}
     </div>
 </c-layouts.base>

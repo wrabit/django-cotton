@@ -1,5 +1,5 @@
 <div class="mb-4 not-prose" id="field-{{ name }}">
-    <label for="{{ name }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+    <label for="{{ name }}" class="block text-sm font-medium text-gray-700 mb-1">
         {{ label }}
     </label>
     <input
@@ -12,9 +12,9 @@
         hx-target="#field-{{ name }}"
         hx-swap="outerHTML"
         hx-include="#validation-form"
-        class="w-full px-3 py-2 border {% if error %}border-red-500{% else %}border-gray-300{% endif %} rounded focus:outline-none focus:ring-2 {% if error %}focus:ring-red-500{% else %}focus:ring-teal-500{% endif %} bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+        class="w-full px-3 py-2 border {% if error %}border-red-500{% else %}border-gray-300{% endif %} rounded focus:outline-none focus:ring-2 {% if error %}focus:ring-red-500{% else %}focus:ring-teal-500{% endif %} bg-white text-gray-900"
     >
     {% if error %}
-        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ error }}</p>
+        <p class="mt-1 text-sm text-red-600">{{ error }}</p>
     {% endif %}
 </div>

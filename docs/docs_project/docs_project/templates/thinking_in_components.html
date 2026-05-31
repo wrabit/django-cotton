@@ -1,0 +1,95 @@
+<c-layouts.with-sidebar>
+    <h1 id="thinking-in-components">Thinking in Components</h1>
+
+    <c-slot name="page_index">
+        <c-index-link><a href="#thinking-in-components" class="no-underline">Thinking in Components</a></c-index-link>
+        <c-index-sublink><a href="#the-django-way" class="no-underline">The Django way</a></c-index-sublink>
+        <c-index-sublink><a href="#what-is-a-component" class="no-underline">What is a component?</a></c-index-sublink>
+        <c-index-sublink><a href="#the-payoff" class="no-underline">The payoff</a></c-index-sublink>
+        <c-index-sublink><a href="#coming-from-dtl" class="no-underline">Coming from DTL</a></c-index-sublink>
+    </c-slot>
+
+    <c-note>
+        Already comfortable with components from React, Vue, Svelte, Blade or similar? Feel free to skip ahead to the <a href="{% url 'quickstart' %}">Quickstart</a>. This page is a primer for anyone coming from vanilla Django templates.
+    </c-note>
+
+    <p>If you've built Django sites, you've composed pages with <code>{% verbatim %}{% include %}{% endverbatim %}</code>, <code>{% verbatim %}{% extends %}{% endverbatim %}</code> / <code>{% verbatim %}{% block %}{% endverbatim %}</code> and the occasional custom template tag. These work, but they were designed for page-level layout and value substitution, not for building small, self-contained pieces of UI you reuse and nest. That gap is what components fill.</p>
+
+    <h3 id="the-django-way">The Django way, and where it stops</h3>
+
+    <c-ul>
+        <li><code>{% verbatim %}{% include %}{% endverbatim %}</code> pulls in another template, but you can only hand it flat context values. You can't pass a block of markup, or nest other pieces inside it.</li>
+        <li><code>{% verbatim %}{% extends %}{% endverbatim %}</code> / <code>{% verbatim %}{% block %}{% endverbatim %}</code> is great for one page-level skeleton, but it's single inheritance and top-down: a template fills a parent's holes, it can't be dropped in repeatedly like a widget.</li>
+        <li>Custom template tags can encapsulate logic, but each one needs a registered Python function, even for something purely presentational.</li>
+    </c-ul>
+
+    <h3 id="what-is-a-component">What is a component?</h3>
+
+    <p>A component is a single, self-contained piece of UI that you use like an HTML tag. It bundles three things:</p>
+
+    <c-ul>
+        <li><strong>Markup</strong>: the HTML it renders.</li>
+        <li><strong>Inputs</strong>: attributes you pass in, like <code>{{ '<c-card title="Welcome">'|force_escape }}</code>.</li>
+        <li><strong>A slot</strong>: the content you nest between its tags, which can be text, HTML or other components.</li>
+    </c-ul>
+
+    <c-snippet label="cotton/card.html">{% cotton:verbatim %}{% verbatim %}
+<div class="card">
+    <h2>{{ title }}</h2>
+    {{ slot }}
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+    <p>Now use it like a tag, passing an attribute and nesting whatever content you like, including other components:</p>
+
+    <c-snippet label="my_view.html">{% cotton:verbatim %}{% verbatim %}
+<c-card title="Welcome">
+    <p>Any HTML, or even <c-icon name="star" />, goes here.</p>
+</c-card>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+    <h3 id="the-payoff">The payoff</h3>
+
+    <c-ul>
+        <li><strong>Reuse</strong>: define the markup once, use it anywhere and change it in a single place.</li>
+        <li><strong>Composition</strong>: nest components inside components and pass rich content as the slot, building complex UI out of small, understandable parts.</li>
+        <li><strong>Encapsulation</strong>: a component's markup, styling and behaviour live together in one file. No Python, nothing scattered across base templates.</li>
+    </c-ul>
+
+    <h3 id="coming-from-dtl">Coming from DTL</h3>
+
+    <p>The instincts you already have map directly onto components:</p>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200 dark:border-gray-700">
+            <thead class="dark:bg-gray-800">
+                <tr>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">When you'd reach for...</th>
+                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700">Use a component</th>
+                </tr>
+            </thead>
+            <tr class="border-b dark:border-b-gray-700 border-b-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300"><code>{% verbatim %}{% include %}{% endverbatim %}</code> with context</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">A tag with attributes: <code>{{ '<c-card title="..." />'|force_escape }}</code></td>
+            </tr>
+            <tr class="border-b dark:border-b-gray-700 border-b-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300"><code>{% verbatim %}{% block %}{% endverbatim %}</code> / <code>{% verbatim %}{% extends %}{% endverbatim %}</code></td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">A <code>{{ '<c-slot>'|force_escape }}</code> for each content hole</td>
+            </tr>
+            <tr class="border-b dark:border-b-gray-700 border-b-gray-200">
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">A presentational custom tag</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">A component, just an HTML file, no Python</td>
+            </tr>
+        </table>
+    </div>
+
+    <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'home' %}">Home</a>
+        </c-slot>
+        <c-slot name="next">
+            <a href="{% url 'quickstart' %}">Quickstart</a>
+        </c-slot>
+    </c-navigation>
+
+</c-layouts.with-sidebar>

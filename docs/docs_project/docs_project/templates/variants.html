@@ -1,0 +1,98 @@
+<c-layouts.with-sidebar>
+    <h1 id="variants">Component Variants</h1>
+
+    <c-slot name="page_index">
+        <c-index-link><a href="#variants" class="no-underline">Component Variants</a></c-index-link>
+        <c-index-sublink><a href="#problem" class="no-underline">The problem</a></c-index-sublink>
+        <c-index-sublink><a href="#defining" class="no-underline">Defining variants</a></c-index-sublink>
+        <c-index-sublink><a href="#using" class="no-underline">Using variants</a></c-index-sublink>
+        <c-index-sublink><a href="#beyond" class="no-underline">Beyond styling</a></c-index-sublink>
+        <c-index-sublink><a href="#tips" class="no-underline">Tips</a></c-index-sublink>
+    </c-slot>
+
+    <p>Variants are a simple pattern for giving a component a set of named styling options. Think a button that's <em>primary</em>, <em>danger</em> or <em>subtle</em>, an alert that's <em>info</em> or <em>warning</em>, and so on. With Cotton you can keep all of those options in one component file, with no extra Python and no duplicated templates.</p>
+
+    <h3 id="problem">The problem</h3>
+
+    <p>Without variants you tend to end up with a template per flavour (<c-highlight>button_primary.html</c-highlight>, <c-highlight>button_danger.html</c-highlight>&hellip;) or a tangle of <code>{{ '{% if %}'|force_escape }}</code> branches. Both duplicate the component's core markup and drift out of sync over time.</p>
+
+    <h3 id="defining">Defining variants</h3>
+
+    <p>Declare a dictionary of variants with <code>{{ '<c-vars />'|force_escape }}</code>, set a sensible default, then look the chosen one up with Cotton's built-in <code>get_item</code> filter:</p>
+
+    <c-snippet label="cotton/button.html">{% cotton:verbatim %}{% verbatim %}
+<c-vars
+    variant="default"
+    :variants="{
+        'default': 'bg-gray-200 text-gray-800 hover:bg-gray-300',
+        'primary': 'bg-sky-500 text-white hover:bg-sky-600',
+        'danger': 'bg-red-500 text-white hover:bg-red-600',
+    }"
+/>
+
+<button {{ attrs }} class="px-4 py-2 rounded {{ variants|get_item:variant }}">
+    {{ slot }}
+</button>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+    <p>Because the variant map lives inside <code>{{ '<c-vars />'|force_escape }}</code>, it never leaks out as an attribute on the rendered <code>{{ '<button>'|force_escape }}</code>. Only the resolved class string does.</p>
+
+    <h3 id="using">Using variants</h3>
+
+    <p>Pick a variant by name. Omit it and the default kicks in:</p>
+
+    <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
+<c-button>Click me!</c-button>
+<c-button variant="primary">Submit</c-button>
+<c-button variant="danger">Delete</c-button>
+{% endverbatim %}{% endcotton:verbatim %}
+        <c-slot name="preview">
+            <div class="flex items-center gap-3 flex-wrap">
+                <c-ui.button theme="subtle">Click me!</c-ui.button>
+                <c-ui.button theme="primary">Submit</c-ui.button>
+                <c-ui.button theme="danger">Delete</c-ui.button>
+            </div>
+        </c-slot>
+    </c-snippet>
+
+    <c-note>
+        The variable doesn't have to be called <code>variant</code>. This site's own button names its map <code>theme</code> (<code>{{ '<c-button theme="primary" />'|force_escape }}</code>). Use whatever reads best for the component.
+    </c-note>
+
+    <h3 id="beyond">Beyond styling</h3>
+
+    <p>Variants aren't limited to a single class string or even to colours. A map value can carry any markup-driving data, and you can keep more than one map for orthogonal options. For example, a <code>:variants</code> map for the fill style and an <code>:outlined-variants</code> map toggled by a boolean:</p>
+
+    <c-snippet label="cotton/button.html">{% cotton:verbatim %}{% verbatim %}
+<c-vars
+    variant="primary"
+    :outlined="False"
+    :variants="{ 'primary': 'bg-sky-500 text-white', 'danger': 'bg-red-500 text-white' }"
+    :outlined-variants="{ 'primary': 'border border-sky-500 text-sky-500', 'danger': 'border border-red-500 text-red-500' }"
+/>
+
+<button {{ attrs }} class="px-4 py-2 rounded
+    {% if outlined %}{{ outlined_variants|get_item:variant }}{% else %}{{ variants|get_item:variant }}{% endif %}">
+    {{ slot }}
+</button>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+    <h3 id="tips">Tips</h3>
+
+    <c-ul>
+        <li>Keep every flavour of a component centralised in the one component file. That's the whole win.</li>
+        <li>Always provide a <code>default</code> so callers can stay terse and nothing breaks when a variant is omitted.</li>
+        <li>Use descriptive, intent-based names (<code>info</code>, <code>success</code>, <code>warning</code>, <code>danger</code>) rather than colour names.</li>
+        <li>The same approach scales to alerts, badges, tabs, inputs, modals and menus, or anywhere you'd reach for a "type" or "style" prop.</li>
+    </c-ul>
+
+    <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'icons' %}">Cotton as SVG Icons</a>
+        </c-slot>
+        <c-slot name="next">
+            <a href="{% url 'attribute-proxying' %}">Attribute Proxying</a>
+        </c-slot>
+    </c-navigation>
+
+</c-layouts.with-sidebar>

@@ -9,14 +9,14 @@
             <c-slot name="content">
                 <div class="space-y-2 text-xs">
                     <div>
-                        <span class="font-semibold">Cotton:</span> Snippets in HTML-like syntax.
+                        <span class="font-semibold">&lt;c&gt; tags:</span> Snippets in HTML-like syntax.
                     </div>
                     <div>
                         <span class="font-semibold">Native:</span> Snippets in Django template syntax.
                     </div>
                 </div>
                 <div class="mt-2 pt-2 border-t border-zinc-200 dark:border-zinc-700">
-                    <a href="{% url 'usage-patterns' %}#tag-syntax" class="text-accent-content text-xs font-medium">
+                    <a href="{% url 'fundamentals' %}#tag-syntax" class="text-accent-content text-xs font-medium">
                         More info
                     </a>
                 </div>
@@ -24,45 +24,48 @@
         </c-ui.tooltip>
     </div>
     <div class="mb-3 pb-3" x-data>
-        <div class="flex w-full border border-zinc-200 dark:border-zinc-700 rounded-lg overflow-hidden gap-0.5">
+        <div class="inline-flex rounded-lg gap-0.5 font-mono">
             <button
                 @click="$store.syntaxPreference = 'html'"
-                class="cursor-pointer w-full px-2.5 py-1 text-sm min-w-8"
+                class="cursor-pointer px-2 py-0.5 text-[12px] border border-transparent transition-all duration-200 rounded-md min-w-[2rem]"
                 :class="$store.syntaxPreference === 'html'
-                    ? 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-300 font-semibold'
-                    : 'text-zinc-700 dark:text-zinc-400'"
+                    ? 'bg-zinc-700 text-white !border-zinc-500 '
+                    : 'text-zinc-400 hover:text-zinc-300 border-transparent'"
             >
-                <span>cotton</span>&nbsp;&nbsp;<span :class="$store.syntaxPreference === 'html' ? 'text-accent-content' : ''">&lt;/&gt;</span>
+                &lt;c&gt; tags
             </button>
             <button
                 @click="$store.syntaxPreference = 'template'"
-                class="cursor-pointer w-full px-2.5 py-1 text-sm min-w-8"
+                class="cursor-pointer px-2 py-0.5 text-[12px] border border-transparent transition-all duration-200 rounded-md min-w-[2rem]"
                 :class="$store.syntaxPreference === 'template'
-                    ? 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-300 font-semibold'
-                    : 'text-zinc-700 dark:text-zinc-400'"
+                    ? 'bg-zinc-700 text-white !border-zinc-500 '
+                    : 'text-zinc-400 hover:text-zinc-300 border-transparent'"
             >
-                <span>native</span>&nbsp;&nbsp;<span :class="$store.syntaxPreference === 'template' ? 'text-accent-content' : ''">&#37;}</span>
+                Native
             </button>
         </div>
     </div>
 
     <c-sidebar.menu>
         <c-slot name="title">Getting Started</c-slot>
+        <c-sidebar.link title="Thinking in Components" url="{% url 'thinking-in-components' %}" />
         <c-sidebar.link title="Quickstart" url="{% url 'quickstart' %}" />
         <c-sidebar.link title="Components" url="{% url 'components' %}" />
-        <c-sidebar.link title="Usage Patterns" url="{% url 'usage-patterns' %}" />
+        <c-sidebar.link title="Fundamentals" url="{% url 'fundamentals' %}" />
         <c-sidebar.link title="Configuration" url="{% url 'configuration' %}" />
     </c-sidebar.menu>
     <c-sidebar.menu>
-        <c-slot name="title">Examples</c-slot>
+        <c-slot name="title">Tutorials</c-slot>
         <c-sidebar.link title="Form Inputs" url="{% url 'form-fields' %}" />
-        <c-sidebar.link title="HTMX Examples" url="{% url 'htmx-examples' %}" />
         <c-sidebar.link title="Tabs with Alpine.js" url="{% url 'alpine-js' %}" />
-        <c-sidebar.link title="Layouts" url="{% url 'layouts' %}" />
-        <c-sidebar.link title="Icons" url="{% url 'icons' %}" />
+        <c-sidebar.link title="Composing Layouts" url="{% url 'layouts' %}" />
+        <c-sidebar.link title="Cotton as SVG Icons" url="{% url 'icons' %}" />
     </c-sidebar.menu>
     <c-sidebar.menu>
-        <c-slot name="title">More</c-slot>
-        <c-sidebar.link title="Django Template Partials" url="{% url 'django-template-partials' %}" />
+        <c-slot name="title">Usage Patterns</c-slot>
+        <c-sidebar.link title="Component Variants" url="{% url 'variants' %}" />
+        <c-sidebar.link title="Attribute Proxying" url="{% url 'attribute-proxying' %}" />
+        <c-sidebar.link title="Compound Components" url="{% url 'index-component' %}" />
+        <c-sidebar.link title="HTMX Integration" url="{% url 'htmx-examples' %}" />
     </c-sidebar.menu>
 </div>

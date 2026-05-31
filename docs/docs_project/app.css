@@ -32,6 +32,12 @@
         --color-accent: var(--color-teal-400);
         --color-accent-content: var(--color-teal-300);
         --color-accent-foreground: var(--color-teal-950);
+
+        /* Darker surface palette (main-style dark theme).
+           zinc-900 is the dominant page surface; remap it (and the
+           next surface up) to main's deeper, slightly-cool darks. */
+        --color-zinc-900: #0e1219;
+        --color-zinc-800: #171e29;
     }
 }
 

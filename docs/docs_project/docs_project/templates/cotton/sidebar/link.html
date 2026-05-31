@@ -3,9 +3,9 @@
     selected_class="border-accent"
 />
 
-<li class="relative -ml-3 pl-4 border-l-2 {% if request.path == url %}{{ selected_class }}{% else %}{{ default_class }}{% endif %}">
+<li class="relative -ml-3 pl-4 py-1.5 border-l-2 {% if request.path == url %}{{ selected_class }}{% else %}{{ default_class }}{% endif %}">
     <a href="{{ url }}"
-       class="dark:text-white dark:hover:opacity-100 text-[#1a384a]
+       class="block leading-tight dark:text-white dark:hover:opacity-100 text-[#1a384a]
         {% if request.path == url %}
             font-semibold
             dark:opacity-100

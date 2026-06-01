@@ -1,5 +1,7 @@
 import ast
 
+from django.utils.html import escape
+
 
 def eval_string(value):
     """
@@ -12,12 +14,25 @@ def eval_string(value):
 
 
 def ensure_quoted(value):
-    if isinstance(value, str):
-        if value.startswith('{"') and value.endswith("}"):
-            return f"'{value}'"  # use single quotes for json-like strings
-        elif value.startswith('"') and value.endswith('"'):
-            return value  # already quoted
-    return f'"{value}"'  # default to double quotes
+    value = str(value)
+    if value.startswith('"') and value.endswith('"'):
+        return value  # already quoted
+
+    has_double = '"' in value
+    has_single = "'" in value
+
+    if value.startswith('{"') and value.endswith("}"):
+        # JSON-like strings: use single quotes, escape inner single quotes
+        return "'" + value.replace("'", "&#x27;") + "'"
+    elif has_double and not has_single:
+        # Contains double quotes only: wrap with single quotes to avoid escaping
+        return "'" + value + "'"
+    elif has_double and has_single:
+        # Contains both: wrap with double quotes and escape inner double quotes
+        return '"' + value.replace('"', '&quot;') + '"'
+    else:
+        # No problematic quotes: default to double quotes
+        return '"' + value + '"'
 
 
 def get_cotton_data(context):

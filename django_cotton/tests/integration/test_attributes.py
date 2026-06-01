@@ -977,3 +977,30 @@ class AttributeHandlingTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, "some_undefined_thing")
+
+
+class AttributeInjectionTests(CottonTestCase):
+    def test_dynamic_attr_escapes_quotes_in_attrs_output(self):
+        """Ensure dynamic attribute values with quotes are HTML-escaped in {{ attrs }} (#361)"""
+        self.create_template(
+            "cotton/injection_test.html",
+            '<input {{ attrs }} />',
+        )
+
+        self.create_template(
+            "injection_test_view.html",
+            '{% load cotton %}<c-injection-test :placeholder="payload" />',
+            "view/",
+            context={"payload": 'x" onmouseover="alert(1)'},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            content = response.content.decode()
+            # The payload must NOT break out of the placeholder attribute.
+            # Unsafe output: placeholder="x" onmouseover="alert(1)"
+            # Safe output:   placeholder='x" onmouseover="alert(1)'
+            #            or: placeholder="x&quot; onmouseover=&quot;alert(1)"
+            self.assertNotIn('placeholder="x"', content)
+            # The whole payload must be contained in one attribute value
+            self.assertRegex(content, r'''placeholder=["']x.+alert\(1\)["']''')

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import functools
+import weakref
 from enum import IntEnum
 from typing import Any, NamedTuple
 
@@ -168,7 +169,13 @@ def _prepare_attrs(attrs: dict[str, Any], active_library: Library | None) -> lis
 
 
 class CottonComponentNode(Node):
-    _vars_node_cache: dict[int, list[Node]] = {}
+    # Keyed by the Template object itself (not id(template)). Using id() is unsafe
+    # because CPython reuses an address once an object is GC'd, so in development
+    # (no cached template loader) a freshly loaded template can collide with a
+    # collected one and inherit the wrong component's <c-vars> nodes. A
+    # WeakKeyDictionary keys on identity and auto-evicts when the template dies,
+    # so production keeps the cache while dev always re-extracts a new template.
+    _vars_node_cache: "weakref.WeakKeyDictionary[Any, list[Node]]" = weakref.WeakKeyDictionary()
 
     def __init__(
         self,
@@ -323,11 +330,10 @@ class CottonComponentNode(Node):
         """Extract vars from any CottonVarsNode instances in the template."""
         from django_cotton.templatetags._vars import CottonVarsNode
 
-        template_id = id(template)
-        vars_nodes = self._vars_node_cache.get(template_id)
+        vars_nodes = self._vars_node_cache.get(template)
         if vars_nodes is None:
             vars_nodes = [n for n in template.nodelist if isinstance(n, CottonVarsNode)]
-            self._vars_node_cache[template_id] = vars_nodes
+            self._vars_node_cache[template] = vars_nodes
 
         vars = {}
         for node in vars_nodes:

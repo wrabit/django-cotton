@@ -1,26 +1,28 @@
 <c-layouts.base>
-    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_minmax(0,1fr)] px-5">
-        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block py-6">
+    <div class="mx-auto max-w-8xl grid sm:grid-cols-[200px_minmax(0,1fr)] px-5">
+        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block">
             <c-ui-docs.sidebar />
         </div>
         <div class="min-w-0 pb-10 py-6">
-            <c-docs-switcher active="ui" />
             <c-layouts.prose-container>
-                <div class="text-center mb-20">
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">Modern UI Components for Django</h1>
-        <p class="text-2xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto mb-8">
-            Beautiful, accessible components built with Alpine.js, Tailwind CSS, and Django Cotton.
-        </p>
-        <div class="flex gap-4 justify-center mb-10">
-            <c-ui.button size="lg" variant="primary" class="text-lg px-8 py-3">Get Started</c-ui.button>
-            <c-ui.button size="lg" variant="default" class="text-lg px-8 py-3">View on GitHub</c-ui.button>
-        </div>
-    </div>
-
-    <h2 class="text-center text-4xl font-bold mb-3">Build anything</h2>
-    <p class="text-center text-xl text-zinc-600 dark:text-zinc-400 mb-12 max-w-2xl mx-auto">
-        From simple forms to complex dashboards. Every component you need to ship faster.
-    </p>
+                <div class="text-center max-w-2xl mx-auto mb-12 not-prose">
+                    <div class="inline-flex items-center gap-1.5 mb-5 px-3 py-1 rounded-full bg-accent/10 text-accent-content text-sm font-medium">
+                        <c-icons.blocks class="size-4" />
+                        Cotton UI
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Beautiful components for Django</h1>
+                    <p class="text-lg text-zinc-600 dark:text-zinc-400 mt-4">
+                        An accessible, customizable component kit built with Cotton, Alpine.js and Tailwind CSS. Copy, paste and ship.
+                    </p>
+                    <div class="flex gap-3 justify-center mt-8">
+                        <a href="{% url 'ui-installation' %}" class="no-underline">
+                            <c-ui.button size="lg" variant="primary">Get Started</c-ui.button>
+                        </a>
+                        <a href="https://github.com/wrabit/django-cotton" target="_blank" class="no-underline">
+                            <c-ui.button size="lg" variant="default">View on GitHub</c-ui.button>
+                        </a>
+                    </div>
+                </div>
 
     {# Application-style Mosaic Grid #}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 not-prose items-start">

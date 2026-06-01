@@ -81,7 +81,7 @@ urlpatterns = [
     # More
     path("docs/configuration", views.build_view("configuration"), name="configuration"),
     # UI
-    path("ui", views.build_view("ui_docs/getting_started"), name="ui"),
+    path("ui", views.build_view("ui_docs/home"), name="ui"),
     path("ui/installation", views.build_view("ui_docs/installation"), name="ui-installation"),
     path("ui/theming", views.build_view("ui_docs/theming"), name="ui-theming"),
     path("ui/accordion", views.build_view("ui_docs/accordion"), name="ui-accordion"),

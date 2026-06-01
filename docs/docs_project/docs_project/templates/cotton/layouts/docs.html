@@ -1,9 +1,9 @@
 <c-vars hide_intro :wide="False" />
 
 <c-layouts.base>
-    <div class="mx-auto max-w-7xl grid sm:grid-cols-[200px_minmax(0,1fr)] {% if wide %}lg:grid-cols-[230px_minmax(0,1fr)]{% else %}lg:grid-cols-[230px_minmax(0,1fr)_250px]{% endif %} px-5" x-data="scrollspy">
+    <div class="mx-auto max-w-8xl grid sm:grid-cols-[200px_minmax(0,1fr)] {% if wide %}lg:grid-cols-[230px_minmax(0,1fr)]{% else %}lg:grid-cols-[230px_minmax(0,1fr)_250px]{% endif %} px-5" x-data="scrollspy">
         <!-- Left sidebar: sticky with independent scroll -->
-        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block py-6">
+        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block">
             {{ sidebar }}
         </div>
         <!-- Main content: scrolls with page -->

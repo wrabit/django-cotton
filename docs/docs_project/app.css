@@ -24,6 +24,9 @@
 
     /* Custom spacing */
     --spacing-8xl: 96rem;
+
+    /* Container size used by the docs layout (matches main's max-w-8xl) */
+    --container-8xl: 96rem;
 }
 
 /* Dark mode accent color overrides (Flux pattern) */

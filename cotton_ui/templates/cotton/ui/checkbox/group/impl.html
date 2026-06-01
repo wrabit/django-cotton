@@ -1,0 +1,32 @@
+<c-vars
+    name=""
+    :values="[]"
+    variant="default"
+    class=""
+/>
+
+<fieldset
+    x-data='checkbox("{{ name }}", {{ values|json_encode }})'
+    role="group"
+    data-variant="{{ variant }}"
+    {% if variant == 'default' %}
+        class="space-y-3"
+    {% elif variant == 'buttons' %}
+        class="inline-flex"
+    {% elif variant == 'cards' %}
+        class="flex gap-4"
+    {% endif %}
+    {{ attrs }}
+>
+    <div
+        {% if variant == 'default' %}
+            class="space-y-3 {{ class }}"
+        {% elif variant == 'buttons' %}
+            class="inline-flex rounded-lg border border-zinc-200 dark:border-zinc-700 {{ class }}"
+        {% elif variant == 'cards' %}
+            class="flex gap-4 w-full {{ class }}"
+        {% endif %}
+    >
+        {{ slot }}
+    </div>
+</fieldset>

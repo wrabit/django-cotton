@@ -1,11 +1,11 @@
 <c-vars
-    label
-    description
-    description_trailing
-    error
-    badge
+    label=""
+    description=""
+    description_trailing=""
+    error=""
+    badge=""
     form
-    name
+    name=""
 />
 
 {% if label or description or description_trailing or error %}
@@ -18,8 +18,8 @@
         :form="form"
         name="{{ name }}">
 
-        <c-ui.combobox.impl name="{{ name }}" :attrs="attrs" />
+        <c-ui.checkbox.group.impl name="{{ name }}" :attrs="attrs">{{ slot }}</c-ui.checkbox.group.impl>
     </c-ui.field>
 {% else %}
-    <c-ui.combobox.impl name="{{ name }}" :attrs="attrs" />
+    <c-ui.checkbox.group.impl name="{{ name }}" :attrs="attrs">{{ slot }}</c-ui.checkbox.group.impl>
 {% endif %}

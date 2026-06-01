@@ -1,16 +1,11 @@
 <c-vars
-    name
-    value="on"
     label
     description
     description_trailing
     error
     badge
     form
-    :disabled="False"
-    :checked="False"
-    :accent="True"
-    size
+    name
 />
 
 {% if label or description or description_trailing or error %}
@@ -23,24 +18,8 @@
         :form="form"
         name="{{ name }}">
 
-        <c-ui.switch.impl
-            name="{{ name }}"
-            value="{{ value }}"
-            :disabled="disabled"
-            :checked="checked"
-            :accent="accent"
-            size="{{ size }}"
-            :attrs="attrs"
-        />
+        <c-ui.switch.impl name="{{ name }}" :attrs="attrs" />
     </c-ui.field>
 {% else %}
-    <c-ui.switch.impl
-        name="{{ name }}"
-        value="{{ value }}"
-        :disabled="disabled"
-        :checked="checked"
-        :accent="accent"
-        size="{{ size }}"
-        :attrs="attrs"
-    />
+    <c-ui.switch.impl name="{{ name }}" :attrs="attrs" />
 {% endif %}

@@ -5,6 +5,28 @@ export default () => ({
     offset: 4,
     responsive: false,
 
+    init() {
+        // Keep the open menu correctly placed when the viewport changes
+        // (resize, or scrolling within a scroll container).
+        let ticking = false;
+        this._reposition = () => {
+            if (!this.dropdownMenu || ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                this.positionDropdown();
+                ticking = false;
+            });
+        };
+        window.addEventListener('resize', this._reposition);
+        window.addEventListener('scroll', this._reposition, true);
+    },
+
+    destroy() {
+        if (!this._reposition) return;
+        window.removeEventListener('resize', this._reposition);
+        window.removeEventListener('scroll', this._reposition, true);
+    },
+
     positionDropdown() {
         if (!this.$refs.content || !this.$refs.trigger) return;
 
@@ -51,8 +73,6 @@ export default () => ({
                 }
             }
         }
-
-        console.log('Positioning:', finalPosition, finalAlign, offset, this.responsive ? '(responsive)' : '');
 
         // Reset positioning
         content.style.top = '';

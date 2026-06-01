@@ -1,6 +1,7 @@
 <c-layouts.with-sidebar>
     <c-slot name="page_index">
         <c-index-sublink section-id="components"><a href="#components" class="no-underline">Components</a></c-index-sublink>
+        <c-index-sublink section-id="slot"><a href="#slot" class="no-underline">{% verbatim %}{{ slot }}{% endverbatim %}</a></c-index-sublink>
         <c-index-sublink section-id="attributes"><a href="#attributes" class="no-underline">Attributes</a></c-index-sublink>
         <c-index-sublink section-id="named-slots"><a href="#named-slots" class="no-underline">Named slots</a></c-index-sublink>
         <c-index-sublink section-id="dynamic-attributes"><a href="#dynamic-attributes" class="no-underline">Dynamic Attributes</a></c-index-sublink>
@@ -20,7 +21,10 @@
     <p>Components are reusable pieces of view template. They can contain native Django template syntax and can be used
         inside standard Django templates.</p>
 
-    <h3>1. The basic building block: {% verbatim %}{{ slot }}{% endverbatim %}</h3>
+    </c-section>
+
+    <c-section id="slot">
+    <h2>1. The basic building block: {% verbatim %}{{ slot }}{% endverbatim %}</h2>
 
     <p>The <code>{% verbatim %}{{ slot }}{% endverbatim %}</code> variable captures all content passed between a component's opening and closing tags.</p>
 
@@ -52,7 +56,7 @@
 </c-snippet>
 
 <c-snippet label="view.html">{% cotton:verbatim %}{% verbatim %}
-<c-weather temperature="23" unit="{{ unit }}" condition="windy"></c-weather>
+<c-weather temperature="23" unit=unit condition="windy"></c-weather>
 {% endcotton:verbatim %}{% endverbatim %}
 <c-slot name="preview">
     It's 23<sup>o</sup>C and the condition is windy.
@@ -141,33 +145,33 @@ context = { 'today': Weather.objects.get(...) }
 
 <c-snippet label="Integers & Floats">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :prop="1" />
-<!-- {% prop == 1 %} -->
+{# prop == 1 #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="None">{% cotton:verbatim %}<c-mycomp :prop="None" />
-{% verbatim %}<!-- {% prop is None %} -->
+{% verbatim %}{# prop is None #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="Lists">{% cotton:verbatim %}<c-mycomp :items="['item1','item2','item3']" />
-{% verbatim %}<!-- {% for item in items %} -->
+{% verbatim %}{# for item in items #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="Dicts">{% cotton:verbatim %}<c-mycomp :mydict="{'name': 'Thom', 'products': [1,2]}" />
-{% verbatim %}<!-- {{ mydict.name }}, {{ mydict.products }} -->
+{% verbatim %}{# mydict.name, mydict.products #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="Parent variable">{% cotton:verbatim %}<c-mycomp :product="product" />
-{% verbatim %}<!-- {{ product.title }} -->
+{% verbatim %}{# product.title #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="With template expressions">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :slides="['{{ image1 }}', '{{ image2 }}']" />
-<!-- {% for images in slides %} -->
+{# for images in slides #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
 <c-snippet label="Generated with template expressions">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :is_highlighted="{% if important %}True{% endif %}" />
-<!-- {% is_valid is False %} -->
+{# is_valid is False #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <c-note>

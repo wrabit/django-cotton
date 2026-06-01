@@ -1,8 +1,4 @@
 <c-vars
-    :autoresize="False"
-    size="base"
-    height="base"
-    :resizable="True"
     label
     description
     description_trailing
@@ -10,20 +6,6 @@
     badge
     form
     name
-    :size_classes="{
-        'xs': 'text-xs px-2 py-1',
-        'sm': 'text-sm px-2.5 py-1.5',
-        'base': 'text-base px-3 py-2',
-        'lg': 'text-lg px-3.5 py-2.5',
-        'xl': 'text-xl px-4 py-3'
-    }"
-    :height_classes="{
-        'xs': 'h-16',
-        'sm': 'h-24',
-        'base': 'h-32',
-        'lg': 'h-48',
-        'xl': 'h-64'
-    }"
 />
 
 {% if label or description or description_trailing or error %}
@@ -35,64 +17,9 @@
         badge="{{ badge }}"
         :form="form"
         name="{{ name }}">
-        <textarea
-            class="
-                w-full
-                border
-                border-zinc-300
-                dark:border-zinc-700
-                bg-white
-                dark:bg-zinc-900
-                dark:text-zinc-300
-                rounded-lg
-                shadow-sm
-                transition-colors
-                hover:border-zinc-400
-                dark:hover:border-zinc-600
-                focus:outline-none
-                focus:ring-2
-                focus:ring-accent
-                {% if resizable == False %} resize-none{% endif %}
-                {{ size_classes|get_item:size }}
-                {{ height_classes|get_item:height }}
-            "
-            {{ attrs }}
-            {% if autoresize %}
-                x-data="{ resize: () => { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
-                x-init="$nextTick(() => resize())"
-                @input="resize()"
-                style="overflow-y:hidden;"
-            {% endif %}
-        >{{ slot }}</textarea>
+
+        <c-ui.textarea.impl :attrs="attrs">{{ slot }}</c-ui.textarea.impl>
     </c-ui.field>
 {% else %}
-    <textarea
-        class="
-            w-full
-            border
-            border-zinc-300
-            dark:border-zinc-700
-            bg-white
-            dark:bg-zinc-900
-            dark:text-zinc-300
-            rounded-lg
-            shadow-sm
-            transition-colors
-            hover:border-zinc-400
-            dark:hover:border-zinc-600
-            focus:outline-none
-            focus:ring-2
-            focus:ring-accent
-            {% if resizable == False %} resize-none{% endif %}
-            {{ size_classes|get_item:size }}
-            {{ height_classes|get_item:height }}
-        "
-        {{ attrs }}
-        {% if autoresize %}
-            x-data="{ resize: () => { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px' } }"
-            x-init="$nextTick(() => resize())"
-            @input="resize()"
-            style="overflow-y:hidden;"
-        {% endif %}
-    >{{ slot }}</textarea>
+    <c-ui.textarea.impl :attrs="attrs">{{ slot }}</c-ui.textarea.impl>
 {% endif %}

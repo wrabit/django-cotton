@@ -1,17 +1,11 @@
 <c-vars
-    type="text"
-    name=""
-    value=""
-    placeholder=""
-    size=""
     label=""
     description=""
     description_trailing=""
     error=""
     badge=""
     form
-    :disabled="False"
-    :readonly="False"
+    name=""
     left_addon
     right_addon
 />
@@ -27,29 +21,17 @@
         name="{{ name }}">
 
         <c-ui.input.impl
-            type="{{ type }}"
             name="{{ name }}"
-            value="{{ value }}"
-            placeholder="{{ placeholder }}"
-            size="{{ size }}"
-            :disabled="disabled"
-            :readonly="readonly"
-            :attrs="attrs"
             left_addon="{{ left_addon }}"
             right_addon="{{ right_addon }}"
+            :attrs="attrs"
         />
     </c-ui.field>
 {% else %}
     <c-ui.input.impl
-        type="{{ type }}"
         name="{{ name }}"
-        value="{{ value }}"
-        placeholder="{{ placeholder }}"
-        size="{{ size }}"
-        :disabled="disabled"
-        :readonly="readonly"
-        :attrs="attrs"
         left_addon="{{ left_addon }}"
         right_addon="{{ right_addon }}"
+        :attrs="attrs"
     />
 {% endif %}

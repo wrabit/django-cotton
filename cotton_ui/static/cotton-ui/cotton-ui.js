@@ -2377,6 +2377,26 @@
     align: "start",
     offset: 4,
     responsive: false,
+    init() {
+      let ticking = false;
+      this._reposition = () => {
+        if (!this.dropdownMenu || ticking)
+          return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          this.positionDropdown();
+          ticking = false;
+        });
+      };
+      window.addEventListener("resize", this._reposition);
+      window.addEventListener("scroll", this._reposition, true);
+    },
+    destroy() {
+      if (!this._reposition)
+        return;
+      window.removeEventListener("resize", this._reposition);
+      window.removeEventListener("scroll", this._reposition, true);
+    },
     positionDropdown() {
       if (!this.$refs.content || !this.$refs.trigger)
         return;
@@ -2416,7 +2436,6 @@
           }
         }
       }
-      console.log("Positioning:", finalPosition, finalAlign, offset, this.responsive ? "(responsive)" : "");
       content.style.top = "";
       content.style.bottom = "";
       content.style.left = "";

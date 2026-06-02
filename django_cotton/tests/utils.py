@@ -56,7 +56,6 @@ class CottonTestCase(TestCase):
         self.clean_temp_dir()
 
         from django.template import engines
-        from django_cotton.cotton_loader import Loader
 
         for engine in engines.all():
             try:

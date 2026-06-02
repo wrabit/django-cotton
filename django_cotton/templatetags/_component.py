@@ -1,4 +1,5 @@
 import functools
+import warnings
 from typing import Union
 
 from django.conf import settings
@@ -15,6 +16,26 @@ from django_cotton.exceptions import CottonIncompleteDynamicComponentError
 from django_cotton.templatetags import Attrs, DynamicAttr, UnprocessableDynamicAttr, strip_quotes_with_status
 
 register = Library()
+
+_deprecation_warned = False
+
+
+def _check_deprecated_isolation_setting():
+    """Emit a one-time DeprecationWarning if the old COTTON_ENABLE_CONTEXT_ISOLATION
+    setting is in use. It is superseded by COTTON_ISOLATE_BY_DEFAULT."""
+    global _deprecation_warned
+    if _deprecation_warned:
+        return
+    if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False):
+        warnings.warn(
+            "COTTON_ENABLE_CONTEXT_ISOLATION is deprecated and will be removed in a future "
+            "release. Use COTTON_ISOLATE_BY_DEFAULT instead — it provides the same "
+            "'Smart Isolation' behaviour (parent template vars are blocked, context "
+            "processors like request/user/messages/perms are preserved).",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+    _deprecation_warned = True
 
 
 class CottonComponentNode(Node):
@@ -94,8 +115,9 @@ class CottonComponentNode(Node):
             "cotton_data": cotton_data,
         }
 
+        _check_deprecated_isolation_setting()
         isolate_by_default = getattr(settings, "COTTON_ISOLATE_BY_DEFAULT", False)
-        # experimental setting for backward compatibility during transition
+        # Backward-compat: old experimental setting, deprecated in favour of COTTON_ISOLATE_BY_DEFAULT
         enable_context_isolation = getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False)
 
         if self.only:
@@ -210,8 +232,13 @@ class CottonComponentNode(Node):
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
 
-def cotton_component(parser, token): #Parse a cotton component tag and return a CottonComponentNode. Uses custom parser to preserve quotes and handle template tags in attributes. Supports self-closing syntax: {% cotton name /%} or {% cotton name / %}
+def cotton_component(parser, token):
+    """
+    Parse a cotton component tag and return a CottonComponentNode.
 
+    Uses custom parser to preserve quotes and handle template tags in attributes.
+    Supports self-closing syntax: {% cotton name /%} or {% cotton name / %}
+    """
     from django_cotton.tag_parser import parse_component_tag
     from django.template import NodeList
 

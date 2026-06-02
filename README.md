@@ -656,11 +656,9 @@ Whether to search for component filenames in snake_case. If set to False, you ca
 
 `COTTON_ISOLATE_BY_DEFAULT` (default: False)
 
-If set to True, all components will behave as if they have the `only` flag provided. This enables "Smart Isolation"—components will not inherit variables from the parent template context (preventing accidental context leaking), but they will still have access to global context-processor variables such as `request`, `user`, and `messages`.
+If set to True, all components will behave as if they have the `only` flag provided. This enables "Smart Isolation" — components will not inherit variables from the parent template context (preventing accidental context leaking), but they will still have access to global context-processor variables such as `request`, `user`, `messages` and `perms`. Use the `only` flag on an individual component for total isolation (no globals either).
 
-`COTTON_PROCESS_BY_DEFAULT` (default: True)
-
-By default, Cotton scans all templates for component syntax. If you have a very large project and want to optimize performance, you can set this to `False`. Cotton will then only process templates that contain the `{% cotton_enable %}` tag.
+This replaces the experimental `COTTON_ENABLE_CONTEXT_ISOLATION` setting, which will continue to work for now but emits a `DeprecationWarning`.
 
 <hr>
 

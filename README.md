@@ -656,9 +656,13 @@ Whether to search for component filenames in snake_case. If set to False, you ca
 
 `COTTON_ISOLATE_BY_DEFAULT` (default: False)
 
-If set to True, all components will behave as if they have the `only` flag provided. This enables "Smart Isolation" — components will not inherit variables from the parent template context (preventing accidental context leaking), but they will still have access to global context-processor variables such as `request`, `user`, `messages` and `perms`. Use the `only` flag on an individual component for total isolation (no globals either).
+When set to True, every component is rendered with **Smart Isolation**: it cannot see variables from the surrounding parent template (preventing accidental context leaks via `{% with %}`, `{% for %}`, the view context, etc.), but it does still receive global context-processor output such as `request`, `user`, `messages`, `perms` and any of your own custom processors.
 
-This replaces the experimental `COTTON_ENABLE_CONTEXT_ISOLATION` setting, which will continue to work for now but emits a `DeprecationWarning`.
+Context-processor output is captured once per request and reused across every component on the page — processor functions are not re-invoked per component, so DB-backed processors stay cheap regardless of how deeply you nest components.
+
+For **total isolation** on an individual component (block context processors too), add the `only` flag on the tag itself.
+
+This setting replaces the experimental `COTTON_ENABLE_CONTEXT_ISOLATION` flag, which continues to work but emits a `DeprecationWarning`.
 
 <hr>
 

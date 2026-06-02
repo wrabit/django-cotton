@@ -383,7 +383,14 @@ context = {
 
     <h2>9. Context Isolation</h2>
 
-    <p>You can pass the <c-highlight>only</c-highlight> attribute to the component, which will prevent it from adopting any context other than its direct attributes.</p>
+    <p>By default, components inherit the parent template's full context. There are two ways to opt out:</p>
+
+    <h6 class="mt-4 mb-2"><code class="!text-teal-600">only</code> &mdash; total isolation per component</h6>
+    <p>Add the <c-highlight>only</c-highlight> attribute to an individual component to block <em>all</em> outside context. The component sees nothing except its directly passed attributes &mdash; no parent template variables, no context processors (no <code>request</code>, no <code>user</code>, etc).</p>
+
+    <h6 class="mt-4 mb-2"><code class="!text-teal-600">COTTON_ISOLATE_BY_DEFAULT</code> &mdash; smart isolation project-wide</h6>
+    <p>Set <code>COTTON_ISOLATE_BY_DEFAULT = True</code> in <code>settings.py</code> to make every component <em>silently scoped</em>: parent template variables (from <code>{% verbatim %}{% with %}{% endverbatim %}</code>, <code>{% verbatim %}{% for %}{% endverbatim %}</code>, the view context, etc.) do not leak in, but global context-processor output is preserved. Useful when you want isolation as the default but still want components to see <code>request</code>, <code>user</code>, <code>messages</code>, etc.</p>
+    <p>You can still add <code>only</code> on a per-component basis to also block context-processor output. See <a href="{% url 'configuration' %}">configuration</a>.</p>
 
     <c-hr id="alpine-js-support" />
 

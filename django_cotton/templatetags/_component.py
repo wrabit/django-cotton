@@ -169,20 +169,37 @@ class CottonComponentNode(Node):
             return template
 
     def _create_partial_context(self, original_context, component_state):
-        # Get the request object from the original context
-        request = original_context.get("request")
+        # Smart Isolation: block parent template scope, but preserve context
+        # processor output. We reuse the processor snapshot from the parent
+        # RequestContext rather than building a new RequestContext per
+        # component (which would re-fire every processor — see issue #269).
+        processor_snapshot = self._get_processor_snapshot(original_context)
 
-        if request:
-            # Create a new RequestContext
-            new_context = RequestContext(request)
+        new_context = Context()
+        if processor_snapshot is not None:
+            new_context.dicts.append(processor_snapshot)
+        new_context.dicts.append(component_state)
 
-            # Add the component_state to the new context
-            new_context.update(component_state)
-        else:
-            # If there's no request object, create a simple Context
-            new_context = Context(component_state)
-
+        # Propagate the snapshot through nested isolated components so
+        # children can reuse it instead of looking back at a RequestContext
+        # they no longer have access to.
+        new_context._cotton_processor_snapshot = processor_snapshot
         return new_context
+
+    @staticmethod
+    def _get_processor_snapshot(original_context):
+        """Return the context-processor output dict from the parent context,
+        or None if processors haven't been bound (no request, or a parent
+        that wasn't a RequestContext)."""
+        snapshot = getattr(original_context, "_cotton_processor_snapshot", None)
+        if snapshot is not None:
+            return snapshot
+        if isinstance(original_context, RequestContext):
+            try:
+                return original_context.dicts[original_context._processors_index]
+            except (IndexError, AttributeError):
+                return None
+        return None
 
     def _extract_vars_from_template(self, template, context, attrs, slots):
         """Extract vars from any CottonVarsNode instances in the template."""

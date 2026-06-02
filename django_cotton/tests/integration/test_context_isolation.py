@@ -96,8 +96,8 @@ class ContextIsolationTests(CottonTestCase):
             response = self.client.get("/view/")
             self.assertContains(response, "blee")
 
-    @override_settings(COTTON_ENABLE_CONTEXT_ISOLATION=True)
-    def test_context_isolated_by_default(self):
+    @override_settings(COTTON_ISOLATE_BY_DEFAULT=True)
+    def test_smart_isolation_by_default(self):
         self.create_template(
             "cotton/receiver.html",
             """
@@ -106,17 +106,14 @@ class ContextIsolationTests(CottonTestCase):
             Custom context processor: {{ from_context_processor }}
             
             Some context from django builtins:
-            csrf: "{{ csrf_token }}" 
-            request: "{{ request }}"
-            messages: "{{ messages }}"
-            user: "{{ user }}"
-            perms: "{{ perms }}"
+            request: {{ request.path }}
+            user: {{ user }}
             """,
         )
 
         self.create_template(
             "context_isolation_view.html",
-            """<c-receiver direct="hello" />""",
+            """{% with global="leak" %}<c-receiver direct="hello" />{% endwith %}""",
             "view/",
             context={"global": "shouldnotbeseen"},
         )
@@ -125,10 +122,95 @@ class ContextIsolationTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
 
+            # Parent scope must be blocked
+            self.assertNotContains(response, "Global Scope: leak")
             self.assertNotContains(response, "Global Scope: shouldnotbeseen")
+            
+            # Explicit attrs must work
             self.assertContains(response, "Direct attribute: hello")
+            
+            # Context processors MUST be preserved (Smart Isolation)
             self.assertContains(response, "Custom context processor: logo.png")
-            self.assertNotContains(response, 'csrf: ""')
-            self.assertNotContains(response, 'request: "<WSGIRequest')
-            self.assertNotContains(response, 'messages: ""')
-            self.assertContains(response, 'perms: "PermWrapper')
+            self.assertContains(response, "request: /view/")
+            self.assertContains(response, "user: AnonymousUser")
+
+    def test_only_flag_remains_total_isolation(self):
+        """Verify that 'only' flag still provides 100% total isolation (no globals)."""
+        self.create_template(
+            "cotton/receiver.html",
+            "Request: {{ request.path }}",
+        )
+
+        self.create_template(
+            "total_isolation_view.html",
+            "<c-receiver only />",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            # Global request should be MISSING in total isolation mode
+            self.assertContains(response, "Request: ")
+            self.assertNotContains(response, "/view/")
+
+    @override_settings(COTTON_ISOLATE_BY_DEFAULT=True)
+    def test_context_processors_fire_once_with_many_isolated_components(self):
+        """Regression test for issue #269.
+
+        When `COTTON_ISOLATE_BY_DEFAULT` is on, rendering a page with N cotton
+        components must still invoke each context processor only once per
+        request, not N+1 times. Earlier implementations built a fresh
+        RequestContext per component, which re-triggered every processor and
+        could repeatedly hit the DB for ORM-backed processors.
+        """
+        from example_project.context_processors import ProcessorCallCounter
+
+        self.create_template("cotton/leaf.html", "[{{ from_context_processor }}]")
+        self.create_template(
+            "many_components_view.html",
+            "PAGE:" + "<c-leaf />" * 10,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            ProcessorCallCounter.count = 0
+            response = self.client.get("/view/")
+
+        # Sanity check: components actually rendered and saw processor output
+        self.assertContains(response, "[logo.png]")
+        # The critical assertion: processor fired exactly once for the request
+        self.assertEqual(
+            ProcessorCallCounter.count,
+            1,
+            f"Expected processor to fire exactly once, got {ProcessorCallCounter.count}. "
+            "Each isolated cotton component should reuse the parent's processor output, "
+            "not trigger a new RequestContext.bind_template.",
+        )
+
+    @override_settings(COTTON_ISOLATE_BY_DEFAULT=True)
+    def test_context_processors_fire_once_with_nested_isolated_components(self):
+        """Nested isolated components should also reuse the processor snapshot."""
+        from example_project.context_processors import ProcessorCallCounter
+
+        self.create_template("cotton/leaf.html", "[{{ from_context_processor }}]")
+        self.create_template(
+            "cotton/branch.html",
+            "<branch>" + "<c-leaf />" * 3 + "</branch>",
+        )
+        self.create_template(
+            "nested_view.html",
+            "PAGE:" + "<c-branch />" * 3,
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            ProcessorCallCounter.count = 0
+            response = self.client.get("/view/")
+
+        self.assertContains(response, "[logo.png]")
+        self.assertEqual(
+            ProcessorCallCounter.count,
+            1,
+            f"Expected processor to fire exactly once, got {ProcessorCallCounter.count}. "
+            "Processor snapshot must propagate through nested isolated components.",
+        )

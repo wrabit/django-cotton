@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import functools
+import warnings
 import weakref
 from enum import IntEnum
 from typing import Any, NamedTuple
@@ -29,6 +30,27 @@ from django_cotton.templatetags import (
 )
 
 register = Library()
+
+_deprecation_warned = False
+
+
+def _check_deprecated_isolation_setting():
+    """Emit a one-time DeprecationWarning if the old COTTON_ENABLE_CONTEXT_ISOLATION
+    setting is in use. It is superseded by COTTON_ISOLATE_BY_DEFAULT."""
+    global _deprecation_warned
+    if _deprecation_warned:
+        return
+    if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False):
+        warnings.warn(
+            "COTTON_ENABLE_CONTEXT_ISOLATION is deprecated and will be removed in a future "
+            "release. Use COTTON_ISOLATE_BY_DEFAULT instead — it provides the same "
+            "'Smart Isolation' behaviour (parent template vars are blocked, context "
+            "processors like request/user/messages/perms are preserved).",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+    _deprecation_warned = True
+
 
 _MISSING = object()
 
@@ -261,18 +283,22 @@ class CottonComponentNode(Node):
             "cotton_data": cotton_data,
         }
 
+        _check_deprecated_isolation_setting()
+        isolate_by_default = getattr(settings, "COTTON_ISOLATE_BY_DEFAULT", False)
+        # Backward-compat: old experimental setting, deprecated in favour of COTTON_ISOLATE_BY_DEFAULT
+        enable_context_isolation = getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False)
+
         if self.only:
-            # Complete isolation
+            # Total Isolation (Traditional behavior): No access to any parent or global context.
             output = template.render(Context(component_state))
+        elif isolate_by_default or enable_context_isolation:
+            # Smart Isolation (New behavior): Isolate from parent template leaks but preserve global context processors
+            new_context = self._create_partial_context(context, component_state)
+            output = template.render(new_context)
         else:
-            if getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False) is True:
-                # Default - partial isolation
-                new_context = self._create_partial_context(context, component_state)
-                output = template.render(new_context)
-            else:
-                # Legacy - no isolation
-                with context.push(component_state):
-                    output = template.render(context)
+            # Legacy/No isolation: Push to existing context stack
+            with context.push(component_state):
+                output = template.render(context)
 
         cotton_data["stack"].pop()
 
@@ -311,20 +337,37 @@ class CottonComponentNode(Node):
             return template
 
     def _create_partial_context(self, original_context, component_state):
-        # Get the request object from the original context
-        request = original_context.get("request")
+        # Smart Isolation: block parent template scope, but preserve context
+        # processor output. We reuse the processor snapshot from the parent
+        # RequestContext rather than building a new RequestContext per
+        # component (which would re-fire every processor — see issue #269).
+        processor_snapshot = self._get_processor_snapshot(original_context)
 
-        if request:
-            # Create a new RequestContext
-            new_context = RequestContext(request)
+        new_context = Context()
+        if processor_snapshot is not None:
+            new_context.dicts.append(processor_snapshot)
+        new_context.dicts.append(component_state)
 
-            # Add the component_state to the new context
-            new_context.update(component_state)
-        else:
-            # If there's no request object, create a simple Context
-            new_context = Context(component_state)
-
+        # Propagate the snapshot through nested isolated components so
+        # children can reuse it instead of looking back at a RequestContext
+        # they no longer have access to.
+        new_context._cotton_processor_snapshot = processor_snapshot
         return new_context
+
+    @staticmethod
+    def _get_processor_snapshot(original_context):
+        """Return the context-processor output dict from the parent context,
+        or None if processors haven't been bound (no request, or a parent
+        that wasn't a RequestContext)."""
+        snapshot = getattr(original_context, "_cotton_processor_snapshot", None)
+        if snapshot is not None:
+            return snapshot
+        if isinstance(original_context, RequestContext):
+            try:
+                return original_context.dicts[original_context._processors_index]
+            except (IndexError, AttributeError):
+                return None
+        return None
 
     def _extract_vars_from_template(self, template, context, attrs, slots):
         """Extract vars from any CottonVarsNode instances in the template."""

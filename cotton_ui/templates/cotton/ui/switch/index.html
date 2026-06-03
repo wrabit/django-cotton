@@ -6,10 +6,12 @@
     badge
     form
     name
+    :inline="False"
 />
 
 {% if label or description or description_trailing or error %}
     <c-ui.field
+        variant="{% if inline %}toggle{% else %}block{% endif %}"
         label="{{ label }}"
         description="{{ description }}"
         description_trailing="{{ description_trailing }}"

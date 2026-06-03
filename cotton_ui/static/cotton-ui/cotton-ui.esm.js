@@ -3027,75 +3027,6 @@ var switchInput_default = (disabled = false, checked = false) => ({
   }
 });
 
-// js/tabs.js
-var tabs_default = (initialTab = null, activationMode = "automatic") => ({
-  active: initialTab,
-  activationMode,
-  init() {
-    if (this.active === null) {
-      const firstTab = this.$el.querySelector("[data-tab-value]");
-      if (firstTab) {
-        this.active = firstTab.dataset.tabValue;
-      }
-    }
-  }
-});
-
-// js/tabsContent.js
-var tabsContent_default = (value) => ({
-  value,
-  root: {
-    ["x-show"]() {
-      return this.value == this.$data.active;
-    },
-    [":tabindex"]() {
-      return this.$data.active == this.value ? 0 : -1;
-    },
-    ["x-cloak"]() {
-      return this.value == this.$data.active;
-    },
-    [":aria-controls"]() {
-      return this.$id("tab") + "-" + this.value + "-trigger";
-    },
-    [":id"]() {
-      return this.$id("accordion-item") + "-panel";
-    }
-  }
-});
-
-// js/tabsTrigger.js
-var tabsTrigger_default = (value) => ({
-  value,
-  root: {
-    ["@click"]() {
-      return this.setAsActive();
-    },
-    ["@focus"]() {
-      if (this.$data.activationMode != "manual") {
-        this.setAsActive();
-      }
-    },
-    [":aria-selected"]() {
-      return this.value == this.$data.active;
-    },
-    [":tabindex"]() {
-      return this.$data.active == this.value ? 0 : -1;
-    },
-    [":class"]() {
-      return { "bg-background text-foreground shadow-sm": this.$data.active == this.value };
-    },
-    [":aria-labelledby"]() {
-      return this.$id("tab") + "-" + this.value + "-panel";
-    },
-    [":id"]() {
-      return this.$id("accordion-item") + "-trigger";
-    }
-  },
-  setAsActive() {
-    this.$data.active = this.value;
-  }
-});
-
 // js/cotton-ui.js
 document.addEventListener("alpine:init", () => {
   Alpine.data("accordion", accordion_default);
@@ -3115,7 +3046,4 @@ document.addEventListener("alpine:init", () => {
   Alpine.data("select", select_default);
   Alpine.data("sheet", sheet_default);
   Alpine.data("switchInput", switchInput_default);
-  Alpine.data("tabs", tabs_default);
-  Alpine.data("tabsTrigger", tabsTrigger_default);
-  Alpine.data("tabsContent", tabsContent_default);
 });

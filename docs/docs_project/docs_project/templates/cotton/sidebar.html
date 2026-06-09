@@ -1,36 +1,46 @@
-<div class="pb-6">
-    <a href="{% url 'home' %}" class="block mb-5 pb-4 border-b border-zinc-200 dark:border-zinc-800 no-underline group">
-        <div class="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-accent-content">Cotton Core</div>
-        <div class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">The component framework for Django</div>
+<c-vars :persist="True" />
+
+{% comment %}persist=False for the mobile menu copy so the two instances don't race on the shared scroll key.{% endcomment %}
+<div class="pb-6 sm:pb-0 sm:flex sm:flex-col sm:max-h-[calc(100dvh-73px)]">
+    <a href="{% url 'home' %}" class="relative block pb-4 border-b border-zinc-200 dark:border-zinc-800 no-underline group overflow-hidden sm:shrink-0">
+        <c-icons.logo class="pointer-events-none absolute -right-3 -top-3 size-24 text-accent opacity-10" />
+        <div class="relative">
+            <div class="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-accent-content">Core</div>
+            <div class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">The UI component framework for Django</div>
+        </div>
     </a>
 
-    <c-sidebar.menu>
-        <c-slot name="title">Getting Started</c-slot>
-        <c-sidebar.link title="Thinking in Components" url="{% url 'thinking-in-components' %}" />
-        <c-sidebar.link title="Quickstart" url="{% url 'quickstart' %}" />
-        <c-sidebar.link title="Components" url="{% url 'components' %}" />
-        <c-sidebar.link title="Fundamentals" url="{% url 'fundamentals' %}" />
-        <c-sidebar.link title="Configuration" url="{% url 'configuration' %}" />
-    </c-sidebar.menu>
-    <c-sidebar.menu>
-        <c-slot name="title">Tutorials</c-slot>
-        <c-sidebar.link title="Form Inputs" url="{% url 'form-fields' %}" />
-        <c-sidebar.link title="Tabs with Alpine.js" url="{% url 'alpine-js' %}" />
-        <c-sidebar.link title="Composing Layouts" url="{% url 'layouts' %}" />
-        <c-sidebar.link title="Cotton as SVG Icons" url="{% url 'icons' %}" />
-    </c-sidebar.menu>
-    <c-sidebar.menu>
-        <c-slot name="title">Usage Patterns</c-slot>
-        <c-sidebar.link title="Component Variants" url="{% url 'variants' %}" />
-        <c-sidebar.link title="Attribute Proxying" url="{% url 'attribute-proxying' %}" />
-        <c-sidebar.link title="Compound Components" url="{% url 'index-component' %}" />
-        <c-sidebar.link title="HTMX Integration" url="{% url 'htmx-examples' %}" />
-    </c-sidebar.menu>
+    <div class="relative sm:flex sm:flex-col sm:flex-1 sm:min-h-0">
+        <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 z-10 h-5 hidden sm:block bg-gradient-to-b from-[var(--color-bg)] to-transparent"></div>
+        <c-ui.navlist variant="sidebar" :persist_scroll="persist"
+                  class="py-5 sm:flex-1 sm:min-h-0 sm:overflow-y-auto sm:overscroll-contain sm:pr-2">
+        <c-ui.navlist.group heading="Getting Started">
+            <c-ui.navlist.item href="{% url 'quickstart' %}" :current="{% if request.resolver_match.url_name == 'quickstart' %}True{% else %}False{% endif %}">Quickstart</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'components' %}" :current="{% if request.resolver_match.url_name == 'components' %}True{% else %}False{% endif %}">Components</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'fundamentals' %}" :current="{% if request.resolver_match.url_name == 'fundamentals' %}True{% else %}False{% endif %}">Fundamentals</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'configuration' %}" :current="{% if request.resolver_match.url_name == 'configuration' %}True{% else %}False{% endif %}">Configuration</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'thinking-in-components' %}" :current="{% if request.resolver_match.url_name == 'thinking-in-components' %}True{% else %}False{% endif %}">Thinking in Components</c-ui.navlist.item>
+        </c-ui.navlist.group>
+        <c-ui.navlist.group heading="Tutorials">
+            <c-ui.navlist.item href="{% url 'form-fields' %}" :current="{% if request.resolver_match.url_name == 'form-fields' %}True{% else %}False{% endif %}">Form Inputs</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'alpine-js' %}" :current="{% if request.resolver_match.url_name == 'alpine-js' %}True{% else %}False{% endif %}">Tabs with Alpine.js</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'layouts' %}" :current="{% if request.resolver_match.url_name == 'layouts' %}True{% else %}False{% endif %}">Composing Layouts</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'icons' %}" :current="{% if request.resolver_match.url_name == 'icons' %}True{% else %}False{% endif %}">Cotton as SVG Icons</c-ui.navlist.item>
+        </c-ui.navlist.group>
+        <c-ui.navlist.group heading="Usage Patterns">
+            <c-ui.navlist.item href="{% url 'variants' %}" :current="{% if request.resolver_match.url_name == 'variants' %}True{% else %}False{% endif %}">Component Variants</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'attribute-proxying' %}" :current="{% if request.resolver_match.url_name == 'attribute-proxying' %}True{% else %}False{% endif %}">Attribute Proxying</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'index-component' %}" :current="{% if request.resolver_match.url_name == 'index-component' %}True{% else %}False{% endif %}">Compound Components</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'htmx-examples' %}" :current="{% if request.resolver_match.url_name == 'htmx-examples' %}True{% else %}False{% endif %}">HTMX Integration</c-ui.navlist.item>
+        </c-ui.navlist.group>
+        </c-ui.navlist>
+        <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-5 hidden sm:block bg-gradient-to-t from-[var(--color-bg)] to-transparent"></div>
+    </div>
 
-    <div class="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-        <a href="{% url 'ui' %}" class="flex items-center gap-2 text-sm no-underline text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
-            <c-icons.blocks class="size-4" />
-            Need pre-built components? Cotton UI
+    <div class="pt-3 pb-4 border-t border-zinc-200 dark:border-zinc-800 sm:shrink-0">
+        <a href="{% url 'ui' %}" class="flex items-center gap-2 text-xs no-underline text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
+            <c-icons.blocks class="size-4 shrink-0" />
+            Need pre-built components?
         </a>
     </div>
 </div>

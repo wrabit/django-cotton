@@ -20,7 +20,7 @@
     <ul>
         <li>Python 3.8+</li>
         <li>Django 4.2+</li>
-        <li><a href="https://tailwindcss.com/docs/installation" target="_blank">Tailwind CSS v4</a> configured in your project</li>
+        <li><a href="https://tailwindcss.com/docs/installation" target="_blank">Tailwind CSS v4</a> with a build step. The same setup any Tailwind project uses, but the Play CDN and v3 are not supported: the kit's classes are compiled from your <code>@source</code>-scanned templates (set up below).</li>
         <li><a href="https://alpinejs.dev/" target="_blank">Alpine.js v3</a> for interactive components</li>
     </ul>
     </c-section>
@@ -28,7 +28,7 @@
     <c-section id="install-packages" title="Install Packages">
     <p>Install Cotton UI and its dependencies via pip:</p>
 
-    <c-sample :code_only="True">
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="bash">{% cotton:verbatim %}{% verbatim %}
 pip install django-cotton-ui
@@ -42,15 +42,15 @@ pip install django-cotton-ui
     </c-section>
 
     <c-section id="django-settings" title="Django Settings">
-    <p>Add both <code>django_cotton</code> and <code>cotton_ui</code> to your <code>INSTALLED_APPS</code>:</p>
+    <p>Add both <code>django_cotton</code> and <code>django_cotton_ui</code> to your <code>INSTALLED_APPS</code>:</p>
 
-    <c-sample :code_only="True">
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="python" label="settings.py">{% cotton:verbatim %}{% verbatim %}
 INSTALLED_APPS = [
     # ...
     "django_cotton",
-    "cotton_ui",
+    "django_cotton_ui",
     # ...
 ]
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -58,14 +58,14 @@ INSTALLED_APPS = [
     </c-sample>
 
     <p class="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
-        The order matters: <code>django_cotton</code> should come before <code>cotton_ui</code>.
+        The order matters: <code>django_cotton</code> should come before <code>django_cotton_ui</code>.
     </p>
     </c-section>
 
     <c-section id="base-template" title="Base Template Setup">
     <p>Your base template needs to include the Cotton UI stylesheet, JavaScript, and Alpine.js. Here's a minimal setup:</p>
 
-    <c-sample :code_only="True">
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="html" label="base.html">{% cotton:verbatim %}{% verbatim %}
 {% load static %}
@@ -75,25 +75,22 @@ INSTALLED_APPS = [
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Your Tailwind CSS -->
+    <!-- Your compiled Tailwind CSS. The cotton-ui.css import (see Tailwind setup below)
+         pulls Cotton UI's accent, component tokens and x-cloak into this file,
+         so there is no separate Cotton UI stylesheet to link. -->
     <link rel="stylesheet" href="{% static 'css/app.css' %}">
-
-    <!-- Cotton UI Styles -->
-    <link href="{% static 'cotton-ui/cotton-ui.css' %}" rel="stylesheet">
 </head>
 <body>
     {{ slot }}
 
-    <!-- Alpine.js Plugins (before Alpine core) -->
+    <!-- Cotton UI bundle first: it registers components on Alpine's alpine:init event -->
+    <script defer src="{% static 'cotton-ui/cotton-ui.min.js' %}"></script>
+
+    <!-- Alpine.js plugins, then Alpine core (deferred scripts run in order) -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- Alpine.js Core -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- Cotton UI JavaScript -->
-    <script src="{% static 'cotton-ui/cotton-ui.js' %}"></script>
 </body>
 </html>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -115,47 +112,46 @@ INSTALLED_APPS = [
     <c-section id="tailwind-setup" title="Tailwind CSS v4 Setup">
     <p>Configure Tailwind to scan Cotton UI component templates. In your main CSS file:</p>
 
-    <c-sample :code_only="True">
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
 @import "tailwindcss";
+
+/* Cotton UI: accent + component tokens + x-cloak. Override the accent below to brand it. */
+@import "./path/to/django_cotton_ui/static/cotton-ui/cotton-ui.css";
 
 /* Scan your templates */
 @source "./your_app/templates/**/*.html";
 
 /* Scan Cotton UI component templates */
-@source "./path/to/cotton_ui/templates/**/*.html";
+@source "./path/to/django_cotton_ui/templates/**/*.html";
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
     <p class="mt-4">To find the Cotton UI templates path, run:</p>
 
-    <c-sample :code_only="True">
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="bash">{% cotton:verbatim %}{% verbatim %}
-python -c "import cotton_ui; print(cotton_ui.__path__[0] + '/templates/**/*.html')"
+python -c "import django_cotton_ui; print(django_cotton_ui.__path__[0] + '/templates/**/*.html')"
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
     </c-section>
 
     <c-section id="accent-colors" title="Accent Colors">
-    <p>Cotton UI uses a customizable accent color system. Define your accent in <code>app.css</code> using Tailwind v4's <code>@theme</code> directive:</p>
+    <p>A neutral zinc accent ships by default via the <code>cotton-ui.css</code> import above. To brand the kit, override <code>--color-accent</code> in your own <code>@theme</code> after that import (with a <code>.dark</code> value for dark mode):</p>
 
-    <c-sample :code_only="True">
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
-@import "tailwindcss";
-
 @theme {
-    /* Accent colors (teal by default) */
     --color-accent: var(--color-teal-500);
     --color-accent-content: var(--color-teal-600);
     --color-accent-foreground: var(--color-white);
 }
 
-/* Dark mode overrides */
 @layer theme {
     .dark {
         --color-accent: var(--color-teal-400);

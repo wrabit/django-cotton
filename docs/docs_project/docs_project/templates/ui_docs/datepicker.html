@@ -8,9 +8,16 @@
 
     <c-slot name="page_index">
         <c-index-sublink section-id="single-date"><a href="#single-date" class="no-underline">Single Date</a></c-index-sublink>
-        <c-index-sublink section-id="date-range"><a href="#date-range" class="no-underline">Date Range</a></c-index-sublink>
+        <c-index-sublink section-id="date-range"><a href="#date-range" class="no-underline">Range</a></c-index-sublink>
+        <c-index-sublink section-id="limits"><a href="#limits" class="no-underline">Limits</a></c-index-sublink>
+        <c-index-sublink section-id="responsive"><a href="#responsive" class="no-underline">Responsive</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
+
+    <c-note>
+        The Date Picker opens the <a href="{% url 'ui-calendar' %}">Calendar</a> component in a popover and adds the field, formatting and form serialization. If you want the grid always visible inline, use the <a href="{% url 'ui-calendar' %}">Calendar</a> directly.
+    </c-note>
 
     <c-section id="single-date" title="Single Date">
     <c-sample>
@@ -26,7 +33,7 @@
     </c-sample>
     </c-section>
 
-    <c-section id="date-range" title="Date Range">
+    <c-section id="date-range" title="Range">
 
     <p>Select a range of dates with a start and end date.</p>
 
@@ -43,19 +50,92 @@
     </c-sample>
     </c-section>
 
+    <c-section id="limits" title="Limits">
+    <p>Restrict selectable dates with <code>min_date</code> / <code>max_date</code> (bounds), <code>:disabled_days</code> (weekday numbers, 0 = Sunday) or <code>:disabled_dates</code> (specific dates). Disabled days are greyed out and can't be selected.</p>
+    <c-sample>
+        <div class="grid sm:grid-cols-3 gap-6 w-full">
+            <div>
+                <div class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">Weekends disabled</div>
+                <c-ui.datepicker mode="single" :disabled_days="[0, 6]" />
+            </div>
+            <div>
+                <div class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">Bounded (9th to 20th)</div>
+                <c-ui.datepicker mode="single" min_date="{{ dp_min }}" max_date="{{ dp_max }}" />
+            </div>
+            <div>
+                <div class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">Specific dates off</div>
+                <c-ui.datepicker mode="single" :disabled_dates="dp_disabled_dates" />
+            </div>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# Disable weekends (0 = Sunday, 6 = Saturday) #}
+<c-ui.datepicker mode="single" :disabled_days="[0, 6]" />
+
+{# Bound the selectable range #}
+<c-ui.datepicker mode="single" min_date="2026-06-09" max_date="2026-06-20" />
+
+{# Disable specific dates #}
+<c-ui.datepicker mode="single" :disabled_dates="['2026-06-11', '2026-06-12', '2026-06-18']" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="responsive" title="Responsive positioning">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            The calendar flips and realigns to stay within the viewport. Drag the handles to resize the
+            preview on either axis and watch it reposition.
+        </p>
+        <c-demo.viewport src="{% url 'ui-datepicker-viewport' %}" w="540" h="620" />
+    </c-section>
+
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the datepicker wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.datepicker label="Date of birth" description="We'll keep this private." />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.datepicker
+    label="Date of birth"
+    description="We'll keep this private."
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
     <c-section id="reference" title="API Reference">
 
     <h4>Props</h4>
 
     <c-api-props>
         <c-api-prop name="mode" type="str" :options="['single', 'range', 'multiple']" default="single" description="Selection mode for single date, date range, or multiple dates."></c-api-prop>
-        <c-api-prop name="placeholder" type="str" default="Select date" description="Placeholder text for the input field.">
-            <c-slot name="options_content">Any text</c-slot>
-        </c-api-prop>
+        <c-api-prop name=":value" type="str|list" default="None" description="Initial value: a YYYY-MM-DD string (single), or a list of dates (range/multiple)."></c-api-prop>
+        <c-api-prop name="name" type="str" default="" description="Form field name for the submitted value (single/multiple modes)."></c-api-prop>
+        <c-api-prop name="fromName" type="str" default="" description="Form field name for the range start (range mode)."></c-api-prop>
+        <c-api-prop name="toName" type="str" default="" description="Form field name for the range end (range mode)."></c-api-prop>
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Size variant of the trigger, from xs to 2xl."></c-api-prop>
+        <c-api-prop name=":open" type="bool" :options="['True', 'False']" default="False" description="Render the calendar open on load."></c-api-prop>
         <c-api-prop name="disabled" type="bool" :options="['True', 'False']" default="False" description="Prevents interaction with the datepicker."></c-api-prop>
-        <c-api-prop name="format" type="str" default="MM/dd/yyyy" description="Date format for display.">
-            <c-slot name="options_content">Any valid date format string</c-slot>
+        <c-api-prop name="format" type="str" default="auto" description="Display format. 'auto' (plus 'short' / 'medium' / 'long' / 'full') formats per the user's locale via Intl; any other value is treated as a date-fns format string. Affects display only, not the submitted value.">
+            <c-slot name="options_content">auto | short | medium | long | full | date-fns string</c-slot>
         </c-api-prop>
+        <c-api-prop name="locale" type="str" default="" description="Locale used when format is 'auto' (e.g. 'en-GB'). Defaults to the browser's locale.">
+            <c-slot name="options_content">Any BCP-47 locale tag</c-slot>
+        </c-api-prop>
+        <c-api-prop name="value_format" type="str" default="yyyy-MM-dd" description="Format of the submitted value (date-fns tokens). Formatted locally, so the date never shifts a day via a UTC round-trip.">
+            <c-slot name="options_content">Any valid date-fns format</c-slot>
+        </c-api-prop>
+        <c-api-prop name="min_date" type="str" default="" description="Earliest selectable date (YYYY-MM-DD); earlier dates are disabled."></c-api-prop>
+        <c-api-prop name="max_date" type="str" default="" description="Latest selectable date (YYYY-MM-DD); later dates are disabled."></c-api-prop>
+        <c-api-prop name=":disabled_days" type="list" default="None" description="Weekday numbers to disable (0 = Sunday … 6 = Saturday)."></c-api-prop>
+        <c-api-prop name=":disabled_dates" type="list" default="None" description="Specific dates to disable (list of YYYY-MM-DD)."></c-api-prop>
+        <c-api-prop name=":min / :max" type="int" default="None" description="In range mode, the minimum / maximum number of days the range may span."></c-api-prop>
+        <c-api-prop name=":close_on_complete" type="bool" :options="['True', 'False']" default="True" description="Close the calendar once the selection is complete (single: a date is picked; range: both ends set; multiple: never auto-closes)."></c-api-prop>
+        <c-api-prop name=":trap" type="bool" :options="['True', 'False']" default="True" description="Trap focus inside the calendar while it is open (keyboard accessibility)."></c-api-prop>
     </c-api-props>
     </c-section>
 

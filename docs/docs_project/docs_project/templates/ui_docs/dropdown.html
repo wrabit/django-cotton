@@ -9,6 +9,7 @@
     <c-slot name="page_index">
         <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
         <c-index-sublink section-id="positioning"><a href="#positioning" class="no-underline">Positioning</a></c-index-sublink>
+        <c-index-sublink section-id="responsive"><a href="#responsive" class="no-underline">Responsive</a></c-index-sublink>
         <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Item Variants</a></c-index-sublink>
         <c-index-sublink section-id="custom-trigger"><a href="#custom-trigger" class="no-underline">Custom Trigger</a></c-index-sublink>
         <c-index-sublink section-id="separators"><a href="#separators" class="no-underline">Separators</a></c-index-sublink>
@@ -51,21 +52,25 @@
                 <c-ui.dropdown position="bottom" align="start" offset="8" trigger_text="Bottom Start">
                     <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
                     <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
                 </c-ui.dropdown>
 
                 <c-ui.dropdown position="bottom" align="end" offset="8" trigger_text="Bottom End">
                     <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
                     <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
                 </c-ui.dropdown>
 
                 <c-ui.dropdown position="top" align="start" offset="8" trigger_text="Top Start">
                     <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
                     <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
                 </c-ui.dropdown>
 
                 <c-ui.dropdown position="top" align="end" offset="8" trigger_text="Top End">
                     <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
                     <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
                 </c-ui.dropdown>
             </div>
 
@@ -73,14 +78,39 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.dropdown position="bottom" align="start" offset="8" trigger_text="Bottom Start">
     <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+</c-ui.dropdown>
+
+<c-ui.dropdown position="bottom" align="end" offset="8" trigger_text="Bottom End">
+    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+</c-ui.dropdown>
+
+<c-ui.dropdown position="top" align="start" offset="8" trigger_text="Top Start">
+    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
 </c-ui.dropdown>
 
 <c-ui.dropdown position="top" align="end" offset="8" trigger_text="Top End">
     <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
 </c-ui.dropdown>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
             </c-slot>
         </c-sample>
+    </c-section>
+
+    <c-section id="responsive" title="Responsive positioning">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            With <code>:auto_position</code> (on by default) the menu watches the viewport and flips or realigns to stay
+            visible. Drag the handle to shrink the preview into a mini viewport and watch the open menu reposition.
+        </p>
+
+        <c-demo.viewport src="{% url 'ui-dropdown-viewport' %}" w="480" h="500" />
     </c-section>
 
     <c-section id="variants" title="Item Variants">
@@ -125,6 +155,12 @@
             <svg>...</svg>
         </c-slot>
         Edit
+    </c-ui.dropdown.item>
+    <c-ui.dropdown.item kbd="⌘D">
+        <c-slot name="icon">
+            <svg>...</svg>
+        </c-slot>
+        Duplicate
     </c-ui.dropdown.item>
     <c-ui.dropdown.separator />
     <c-ui.dropdown.item variant="danger" kbd="⌘⌫">
@@ -190,6 +226,8 @@
         </button>
     </c-slot>
     <c-ui.dropdown.item>Edit</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Duplicate</c-ui.dropdown.item>
+    <c-ui.dropdown.separator />
     <c-ui.dropdown.item variant="danger">Delete</c-ui.dropdown.item>
 </c-ui.dropdown>
 
@@ -202,6 +240,8 @@
         </button>
     </c-slot>
     <c-ui.dropdown.item>My Profile</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Account Settings</c-ui.dropdown.item>
+    <c-ui.dropdown.separator />
     <c-ui.dropdown.item>Sign Out</c-ui.dropdown.item>
 </c-ui.dropdown>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -220,7 +260,7 @@
                 <c-ui.dropdown.item>Edit Profile</c-ui.dropdown.item>
                 <c-ui.dropdown.separator />
                 <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
-                <c-ui.dropdown.item :disabled="True">Upgrade Plan</c-ui.dropdown.item>
+                <c-ui.dropdown.item disabled>Upgrade Plan</c-ui.dropdown.item>
                 <c-ui.dropdown.separator />
                 <c-ui.dropdown.item variant="danger">Sign Out</c-ui.dropdown.item>
             </c-ui.dropdown>
@@ -231,7 +271,8 @@
     <c-ui.dropdown.item href="/profile">View Profile</c-ui.dropdown.item>
     <c-ui.dropdown.item>Edit Profile</c-ui.dropdown.item>
     <c-ui.dropdown.separator />
-    <c-ui.dropdown.item :disabled="True">Upgrade Plan</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
+    <c-ui.dropdown.item disabled>Upgrade Plan</c-ui.dropdown.item>
     <c-ui.dropdown.separator />
     <c-ui.dropdown.item variant="danger">Sign Out</c-ui.dropdown.item>
 </c-ui.dropdown>

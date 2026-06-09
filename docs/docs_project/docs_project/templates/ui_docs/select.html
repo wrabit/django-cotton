@@ -15,6 +15,8 @@
         <c-index-sublink section-id="rich"><a href="#rich" class="no-underline">Rich Options</a></c-index-sublink>
         <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
         <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="responsive"><a href="#responsive" class="no-underline">Responsive</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -41,7 +43,8 @@
         <c-ui.select.option value="us">United States</c-ui.select.option>
         <c-ui.select.option value="uk">United Kingdom</c-ui.select.option>
         <c-ui.select.option value="ca">Canada</c-ui.select.option>
-        ...
+        <c-ui.select.option value="au">Australia</c-ui.select.option>
+        <c-ui.select.option value="de">Germany</c-ui.select.option>
     </c-ui.select>
 </div>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -112,10 +115,17 @@
         <c-ui.menu.group label="North America">
             <c-ui.menu.item value="us" group="North America">United States</c-ui.menu.item>
             <c-ui.menu.item value="ca" group="North America">Canada</c-ui.menu.item>
+            <c-ui.menu.item value="mx" group="North America">Mexico</c-ui.menu.item>
         </c-ui.menu.group>
         <c-ui.menu.group label="Europe">
             <c-ui.menu.item value="uk" group="Europe">United Kingdom</c-ui.menu.item>
             <c-ui.menu.item value="de" group="Europe">Germany</c-ui.menu.item>
+            <c-ui.menu.item value="fr" group="Europe">France</c-ui.menu.item>
+        </c-ui.menu.group>
+        <c-ui.menu.group label="Asia">
+            <c-ui.menu.item value="jp" group="Asia">Japan</c-ui.menu.item>
+            <c-ui.menu.item value="cn" group="Asia">China</c-ui.menu.item>
+            <c-ui.menu.item value="in" group="Asia">India</c-ui.menu.item>
         </c-ui.menu.group>
     </c-ui.select>
 </div>
@@ -165,6 +175,16 @@
                 <svg>...</svg>
             </c-slot>
         </c-ui.menu.item>
+        <c-ui.menu.item value="paypal" label="PayPal">
+            <c-slot name="icon">
+                <svg>...</svg>
+            </c-slot>
+        </c-ui.menu.item>
+        <c-ui.menu.item value="bank" label="Bank Transfer">
+            <c-slot name="icon">
+                <svg>...</svg>
+            </c-slot>
+        </c-ui.menu.item>
     </c-ui.select>
 </div>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -193,6 +213,8 @@
     <c-ui.select name="plan" variant="listbox" placeholder="Choose your plan">
         <c-ui.menu.item value="free" label="Free" description="Perfect for personal projects" />
         <c-ui.menu.item value="starter" label="Starter" description="Great for small teams • $9/month" />
+        <c-ui.menu.item value="pro" label="Professional" description="For growing businesses • $29/month" />
+        <c-ui.menu.item value="enterprise" label="Enterprise" description="Advanced features & support • $99/month" />
     </c-ui.select>
 </div>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -241,7 +263,19 @@
 <div class="w-full max-w-64">
     <c-ui.select name="integration" variant="listbox" placeholder="Select integration">
         <c-ui.menu.group label="Development">
-            <c-ui.menu.item value="github" label="GitHub" description="Version control" group="Development">
+            <c-ui.menu.item value="github" label="GitHub" description="Version control and collaboration" group="Development">
+                <c-slot name="icon">
+                    <svg>...</svg>
+                </c-slot>
+            </c-ui.menu.item>
+            <c-ui.menu.item value="gitlab" label="GitLab" description="DevOps platform" group="Development">
+                <c-slot name="icon">
+                    <svg>...</svg>
+                </c-slot>
+            </c-ui.menu.item>
+        </c-ui.menu.group>
+        <c-ui.menu.group label="Communication">
+            <c-ui.menu.item value="slack" label="Slack" description="Team messaging" group="Communication">
                 <c-slot name="icon">
                     <svg>...</svg>
                 </c-slot>
@@ -255,7 +289,7 @@
     </c-section>
 
     <c-section id="sizes" title="Sizes">
-    <p>Select components come in three sizes.</p>
+    <p>Select components run from <code>size="xs"</code> to <code>size="2xl"</code>, defaulting to <code>md</code>.</p>
 
     <c-sample>
         <div class="flex items-center justify-center w-full ">
@@ -280,16 +314,19 @@
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <div class="w-full max-w-64 space-y-4">
-    <c-ui.select name="size-sm" variant="listbox" size="sm">
+    <c-ui.select name="size-sm" variant="listbox" placeholder="Small select" size="sm">
         <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+        <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
     </c-ui.select>
 
-    <c-ui.select name="size-default" variant="listbox">
+    <c-ui.select name="size-default" variant="listbox" placeholder="Default select">
         <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+        <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
     </c-ui.select>
 
-    <c-ui.select name="size-lg" variant="listbox" size="lg">
+    <c-ui.select name="size-lg" variant="listbox" placeholder="Large select" size="lg">
         <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+        <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
     </c-ui.select>
 </div>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -303,15 +340,15 @@
     <c-sample>
         <div class="flex items-center justify-center w-full ">
             <div class="w-full max-w-64 space-y-4">
-                <c-ui.select name="disabled" variant="listbox" placeholder="Disabled select" :disabled="True">
+                <c-ui.select name="disabled" variant="listbox" placeholder="Disabled select" disabled>
                     <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
                     <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
                 </c-ui.select>
 
                 <c-ui.select name="disabled-options" variant="listbox" placeholder="Select an option">
                     <c-ui.menu.item value="available">Available</c-ui.menu.item>
-                    <c-ui.menu.item value="sold-out" :disabled="True">Sold Out</c-ui.menu.item>
-                    <c-ui.menu.item value="coming-soon" :disabled="True">Coming Soon</c-ui.menu.item>
+                    <c-ui.menu.item value="sold-out" disabled>Sold Out</c-ui.menu.item>
+                    <c-ui.menu.item value="coming-soon" disabled>Coming Soon</c-ui.menu.item>
                     <c-ui.menu.item value="in-stock">In Stock</c-ui.menu.item>
                 </c-ui.select>
             </div>
@@ -321,16 +358,54 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <div class="w-full max-w-64 space-y-4">
     <!-- Disabled select -->
-    <c-ui.select name="disabled" variant="listbox" :disabled="True">
+    <c-ui.select name="disabled" variant="listbox" placeholder="Disabled select" disabled>
         <c-ui.menu.item value="1">Option 1</c-ui.menu.item>
+        <c-ui.menu.item value="2">Option 2</c-ui.menu.item>
     </c-ui.select>
 
     <!-- Disabled options -->
-    <c-ui.select name="options" variant="listbox">
+    <c-ui.select name="disabled-options" variant="listbox" placeholder="Select an option">
         <c-ui.menu.item value="available">Available</c-ui.menu.item>
-        <c-ui.menu.item value="sold-out" :disabled="True">Sold Out</c-ui.menu.item>
+        <c-ui.menu.item value="sold-out" disabled>Sold Out</c-ui.menu.item>
+        <c-ui.menu.item value="coming-soon" disabled>Coming Soon</c-ui.menu.item>
+        <c-ui.menu.item value="in-stock">In Stock</c-ui.menu.item>
     </c-ui.select>
 </div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="responsive" title="Responsive positioning">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            The listbox flips above the trigger when there isn't room below, keeping the options in view.
+            Drag the handle to shorten the viewport and watch it flip. (Native selects are positioned by the browser.)
+        </p>
+        <c-demo.viewport src="{% url 'ui-select-viewport' %}" w="460" h="560" />
+    </c-section>
+
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the select wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.select name="country" label="Country" placeholder="Select a country" description="Where are you based?">
+                <c-ui.select.option value="us">United States</c-ui.select.option>
+                <c-ui.select.option value="uk">United Kingdom</c-ui.select.option>
+                <c-ui.select.option value="ca">Canada</c-ui.select.option>
+            </c-ui.select>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.select
+    name="country"
+    label="Country"
+    placeholder="Select a country"
+    description="Where are you based?"
+>
+    <c-ui.select.option value="us">United States</c-ui.select.option>
+    <c-ui.select.option value="uk">United Kingdom</c-ui.select.option>
+    <c-ui.select.option value="ca">Canada</c-ui.select.option>
+</c-ui.select>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -373,9 +448,9 @@
         <c-api-prop
             name="size"
             type="str"
-            :options="['sm', '', 'lg']"
-            default=""
-            description="Size variant: 'sm', '' (default), 'lg'."
+            :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']"
+            default="md"
+            description="Size variant from xs to 2xl."
         />
     </c-api-props>
 

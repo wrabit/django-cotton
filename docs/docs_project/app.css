@@ -1,12 +1,25 @@
 @import "tailwindcss";
+@import "./django_cotton_ui/static/cotton-ui/cotton-ui.css";
 @plugin "@tailwindcss/typography";
 
-/* Use class-based dark mode (looks for .dark on html element) */
-@custom-variant dark (&:where(.dark, .dark *));
+/* Use class-based dark mode (looks for .dark on html element).
+   A nested `.light` scope opts a subtree back out of dark styling, so previews
+   can render their components in light mode even while the page is dark. */
+@custom-variant dark (&:where(.dark, .dark *):not(:where(.light, .light *)));
+
+/* Bare `border` utilities default to currentColor in v4. Inside a .light preview
+   (where text is forced dark) that renders dark borders, so give the scope a
+   light-gray default. :where() keeps specificity 0 so explicit border-color
+   utilities (border-gray-300, border-red-500, ...) still win. */
+@layer base {
+    :where(.light *) {
+        border-color: var(--color-zinc-200);
+    }
+}
 
 /* Content sources for class detection */
 @source "./docs_project/templates/**/*.html";
-@source "./cotton_ui/templates/**/*.html";
+@source "./django_cotton_ui/templates/**/*.html";
 
 /* Theme customization (replaces tailwind.config.js theme.extend) */
 @theme {
@@ -27,21 +40,77 @@
 
     /* Container size used by the docs layout (matches main's max-w-8xl) */
     --container-8xl: 96rem;
+
+    /* Docs house style: softer control corners than the kit default (0.375rem).
+       Consumer override of a kit token; the base kit ships unchanged. */
+    --radius-control: 0.5rem;
 }
 
-/* Dark mode accent color overrides (Flux pattern) */
+/* Per-mode token overrides. Dark tokens go under .dark. For a LIGHT-only override,
+   scope to :root:not(.dark): a bare :root rule sits after the kit's .dark block and
+   wins by source order, so it would leak the light value into dark mode. */
 @layer theme {
+    :root:not(.dark) {
+        /* Light page background a hair deeper than the kit default (zinc-50): midway to zinc-100. */
+        --color-bg: color-mix(in oklab, var(--color-zinc-50) 50%, var(--color-zinc-100));
+        /* Shadow-only structural surfaces: drop the border on cards, dialogs, menus. */
+        --color-box-border: transparent;
+    }
+
     .dark {
         --color-accent: var(--color-teal-400);
         --color-accent-content: var(--color-teal-300);
-        --color-accent-foreground: var(--color-teal-950);
+        --color-box-border: transparent;
+        /* accent-foreground stays white (from :root): white reads on teal in both modes.
+           Only flip it if the accent itself becomes light/neutral in dark mode. */
 
-        /* Darker surface palette (main-style dark theme).
-           zinc-900 is the dominant page surface; remap it (and the
-           next surface up) to main's deeper, slightly-cool darks. */
+        /* Bespoke dark surface override (main-style deeper, slightly-cool darks)
+           hidden for now so the docs use Tailwind's default zinc darks and the
+           theme builder's gray remap drives every surface. Restore to re-skin.
         --color-zinc-900: #0e1219;
         --color-zinc-800: #171e29;
+        --color-bg: #0e1219;
+        --color-surface: #171e29;
+        */
     }
+}
+
+/* Component tokens (radius, surfaces, shadows, focus ring) now come from the
+   cotton-ui.css import at the top. Override any of them in the @theme / @layer above. */
+
+/* Demo components used in the homepage "define -> use -> render" triptych carousel.
+   Real CSS classes keep the shown component markup short and complete. */
+@layer components {
+    .card {
+        border-radius: 0.75rem;
+        border: 1px solid var(--color-zinc-200);
+        background-color: var(--color-surface);
+        padding: 1.25rem;
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+    }
+    .card h3 { font-weight: 600; }
+    .card p { margin-top: 0.25rem; font-size: 0.875rem; color: var(--color-zinc-500); }
+    .dark .card {
+        border-color: var(--color-zinc-700);
+    }
+
+    .field label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; }
+    .field input {
+        width: 100%;
+        border: 1px solid var(--color-zinc-300);
+        border-radius: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background-color: #ffffff;
+        font-size: 0.875rem;
+    }
+    .field input:focus { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+    .dark .field input { border-color: var(--color-zinc-600); background-color: var(--color-zinc-800); color: #ffffff; }
+
+    .btn { border-radius: 0.5rem; padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 500; cursor: pointer; }
+    .btn-primary { background-color: var(--color-teal-600); color: #ffffff; }
+    .btn-default { background-color: var(--color-zinc-100); color: var(--color-zinc-800); border: 1px solid var(--color-zinc-200); }
+    .dark .btn-default { background-color: var(--color-zinc-700); color: #ffffff; border-color: var(--color-zinc-600); }
+    .btn-danger { background-color: var(--color-red-600); color: #ffffff; }
 }
 
 /* Badge component - safelist colors for dynamic class generation */

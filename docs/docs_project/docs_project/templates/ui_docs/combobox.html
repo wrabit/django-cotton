@@ -13,6 +13,8 @@
         <c-index-sublink section-id="single"><a href="#single" class="no-underline">Single Select</a></c-index-sublink>
         <c-index-sublink section-id="autoclose"><a href="#autoclose" class="no-underline">Autoclose</a></c-index-sublink>
         <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="responsive"><a href="#responsive" class="no-underline">Responsive</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -66,7 +68,7 @@
                 name="countries"
                 placeholder="Search countries..."
                 :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
-                :searchable="True"
+                searchable
             />
 
             <c-slot name="code">
@@ -75,7 +77,7 @@
         name="countries"
         placeholder="Search countries..."
         :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
-        :searchable="True"
+        searchable
     />
     {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
             </c-slot>
@@ -91,7 +93,7 @@
             name="tags"
             placeholder="Type and press Enter to add tags"
             :options="['News', 'Updates', 'Alerts']"
-            :writable="True"
+            writable
         />
 
         <c-slot name="code">
@@ -100,7 +102,7 @@
     name="tags"
     placeholder="Type and press Enter to add tags"
     :options="['News', 'Updates', 'Alerts']"
-    :writable="True"
+    writable
 />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -142,7 +144,7 @@
             placeholder="Pick your top 2 skills"
             :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS', 'TypeScript']"
             :max_tags="2"
-            :autoclose="True"
+            autoclose
         />
 
         <c-slot name="code">
@@ -152,7 +154,7 @@
     placeholder="Pick your top 2 skills"
     :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS', 'TypeScript']"
     :max_tags="2"
-    :autoclose="True"
+    autoclose
 />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -169,7 +171,7 @@
             placeholder="Cannot select"
             :options="['One', 'Two']"
             :selected="['One']"
-            :disabled="True"
+            disabled
         />
 
         <c-slot name="code">
@@ -179,7 +181,33 @@
     placeholder="Cannot select"
     :options="['One', 'Two']"
     :selected="['One']"
-    :disabled="True"
+    disabled
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="responsive" title="Responsive positioning">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            The options panel flips above the field when there isn't room below, keeping it in view.
+            Drag the handle to shorten the viewport and watch it flip.
+        </p>
+        <c-demo.viewport src="{% url 'ui-combobox-viewport' %}" w="460" h="560" />
+    </c-section>
+
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the combobox wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample slim>
+        <c-ui.combobox name="skills" label="Skills" placeholder="Select skills" description="Pick all that apply." :options="['Python', 'Django', 'JavaScript', 'Alpine.js']" />
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="skills"
+    label="Skills"
+    placeholder="Select skills"
+    description="Pick all that apply."
+    :options="['Python', 'Django', 'JavaScript', 'Alpine.js']"
 />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -201,8 +229,11 @@
         <c-api-prop name=":close_after_selecting" type="bool" :options="['True', 'False']" default="False" description="Close the dropdown automatically after selecting an item." />
         <c-api-prop name=":autoclose" type="bool" :options="['True', 'False']" default="False" description="Automatically close the dropdown when the maximum number of tags is reached." />
         <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disable the component." />
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Size variant from xs to 2xl." />
+        <c-api-prop name=":required" type="bool" :options="['True', 'False']" default="False" description="Mark the field as required." />
         <c-api-prop name="label" type="str" default="" description="Shorthand: wraps with a label field." />
         <c-api-prop name="description" type="str" default="" description="Shorthand: adds description text." />
+        <c-api-prop name="badge" type="str" default="" description="Shorthand: badge text on the label (e.g. 'Required')." />
         <c-api-prop name="error" type="str" default="" description="Shorthand: displays error message." />
     </c-api-props>
     </c-section>

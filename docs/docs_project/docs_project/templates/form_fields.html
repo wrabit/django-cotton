@@ -54,7 +54,7 @@
 <c-input name="some_text" placeholder="Just a text field" />
 <c-input type="email" name="email" placeholder="Email" />
 <c-input type="password" name="password" placeholder="Password" />
-<c-input type="number" name="Count" placeholder="Password" />
+<c-input type="number" name="count" placeholder="Count" />
 {% endverbatim %}{% endcotton:verbatim %}
     <c-slot name="preview">
         <div class="mb-2"><input type="text" placeholder="Just a text field" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
@@ -92,7 +92,7 @@
     <p>To take customization a step further and to demonstrate the flexibility of cotton, let's now give our input component the ability to display icons.</p>
 
 <c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
-<c-vars type="text" leading_icon trailing_icon />
+<c-vars type="text" leading_icon />
 
 <div class="border rounded shadow flex items-center">
     {% if leading_icon %}
@@ -105,13 +105,13 @@
 
 <c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 
-<c-input name="text" name="username" placeholder="Username">
+<c-input type="text" name="username" placeholder="Username">
     <c-slot name="leading_icon">
         <svg>...</svg>
     </c-slot>
 </c-input>
 
-<c-input type="password" name="password" name="password" placeholder="Password">
+<c-input type="password" name="password" placeholder="Password">
     <c-slot name="leading_icon">
         <svg>...</svg>
     </c-slot>

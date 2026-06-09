@@ -14,7 +14,7 @@
 
     <c-demo.snippet-tabs preview-label="demo">
         <c-demo.snippet-tab name="view.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <c-button hx-post="/follow" hx-swap="outerHTML">Follow</c-button>
 
 <c-button hx-delete="/posts/1" hx-confirm="Delete?">Delete</c-button>
@@ -25,7 +25,7 @@
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="cotton/button.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <button {{ attrs }} class="btn btn-primary">
     {{ slot }}
 </button>
@@ -49,8 +49,8 @@
         No need for template partials or other libraries - Cotton components work directly as HTMX partials.
     </c-note>
 
+    {# Alpine is already loaded by the base layout; only htmx is page-specific here. #}
     <script src="https://unpkg.com/htmx.org@2.0.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script>
         document.body.addEventListener('htmx:configRequest', (event) => {
             event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
@@ -73,7 +73,7 @@
         </c-slot>
 
         <c-demo.snippet-tab name="view.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 {% for task in tasks %}
     <c-task :id="task.id" :title="task.title" :description="task.description" />
 {% endfor %}
@@ -82,7 +82,7 @@
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="cotton/task.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <div id="task-{{ id }}">
     <h3>{{ title }}</h3>
     <p>{{ description }}</p>
@@ -107,7 +107,7 @@
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="cotton/task_edit.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <form
     hx-post="/tasks/{{ id }}/update"
     hx-target="#task-{{ id }}"
@@ -193,7 +193,7 @@ def task_delete(request, id):
         </c-slot>
 
         <c-demo.snippet-tab name="view.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <c-email-field
     hx-post="/validate-email"
     hx-trigger="blur from:find input"
@@ -205,7 +205,7 @@ def task_delete(request, id):
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="email_field.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <div {{ attrs }}>
     <label for="email">Email</label>
     <input type="email" id="email" name="email" value="{{ value }}">
@@ -289,7 +289,7 @@ def validate_email_field(request):
         </c-slot>
 
         <c-demo.snippet-tab name="view.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <c-modal />
 
 {% for user in users %}
@@ -309,7 +309,7 @@ def validate_email_field(request):
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="modal.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <div x-data="{ open: false }"
      x-on:open-modal.window="open = true"
      x-on:close-modal.window="open = false">
@@ -323,7 +323,7 @@ def validate_email_field(request):
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="user_details.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <div>
     <h2>{{ name }}</h2>
     <p>Email: {{ email }}</p>
@@ -375,7 +375,7 @@ def user_details(request, id):
         </c-slot>
 
         <c-demo.snippet-tab name="view.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <input
     type="search"
     name="q"
@@ -392,7 +392,7 @@ def user_details(request, id):
         </c-demo.snippet-tab>
 
         <c-demo.snippet-tab name="search_results.html">
-            <c-snippet rounded="rounded-b-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
+            <c-snippet rounded="rounded-b-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
 <div id="search-results">
     {% if results %}
         {% for result in results %}

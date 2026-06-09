@@ -2,16 +2,18 @@
 
 <c-vars
     language="django"
-    rounded="rounded-lg"
+    rounded="rounded-box"
     ignore_syntax_choice
     :hide_label="False"
     :flipped="False"
     :padded_top="False"
-    pre_class="flex-1 flex flex-col !leading-[1.8rem] !p-0 !m-0 rounded-none !text-[14.5px]"
-    code_class="flex-1 !pb-4 !px-6 !m-0 !bg-zinc-800 dark:!bg-zinc-800/40"
+    :hide_copy="False"
+    box_class="bg-white dark:bg-zinc-800"
+    pre_class="flex-1 flex flex-col !leading-[1.7rem] !p-0 !m-0 rounded-none !bg-transparent !text-[13.5px]"
+    code_class="flex-1 !pb-4 !px-6 !m-0 !bg-transparent !text-[13.5px] !leading-[1.7rem]"
 />
 
-<div class="group relative flex-1 flex flex-col justify-start w-full overflow-hidden {{ rounded }}"
+<div class="group relative mb-3 flex-1 flex flex-col justify-start w-full overflow-hidden border border-zinc-200 dark:border-zinc-700 {{ box_class }} {{ rounded }}"
      x-data="{% verbatim %}{
         get currentCode() {
             const htmlCode = $refs.htmlCode;
@@ -51,63 +53,71 @@
     {% endverbatim %}"
 >
     {% if flipped and preview %}
-        <div class="px-6 py-6 prose-headings:text-zinc-800 bg-white dark:bg-zinc-50 rounded-t-xl dark:!text-zinc-800">
+        <div class="px-6 py-6 bg-white prose-headings:text-zinc-800 dark:!text-zinc-800 rounded-t-xl border-b border-zinc-200 dark:border-zinc-700">
             <div class="text-sm text-zinc-400 font-semibold uppercase tracking-wider pb-3">preview</div>
-            {{ preview }}
+            <div class="light">{{ preview }}</div>
         </div>
     {% endif %}
 
-    {% if label and not hide_label %}<div class="absolute left-0 top-0 text-left w-full px-5 pt-3 text-sm text-zinc-500 font-semibold">{{ label }}</div>{% endif %}
-
-    <!-- Top-right controls: syntax switcher + copy button -->
-    <div class="absolute right-0 top-0 pt-3 pr-5 flex items-center gap-3">
-        {% if "<c-" in slot and not ignore_syntax_choice %}
-            <div class="inline-flex rounded-lg gap-0.5 font-mono">
-                <button
-                    @click="$store.syntaxPreference = 'html'"
-                    class="px-2 py-0.5 text-[12px] border border-transparent transition-all duration-200 rounded-md min-w-[2rem]"
-                    :class="$store.syntaxPreference === 'html'
-                        ? 'bg-zinc-700 text-white !border-zinc-500 '
-                        : 'text-zinc-400 hover:text-zinc-300 border-transparent'"
-                >
-                    &lt;c&gt; tags
-                </button>
-                <button
-                    @click="$store.syntaxPreference = 'template'"
-                    class="px-2 py-0.5 text-[12px] border border-transparent transition-all duration-200 rounded-md min-w-[2rem]"
-                    :class="$store.syntaxPreference === 'template'
-                        ? 'bg-zinc-700 text-white !border-zinc-500 '
-                        : 'text-zinc-400 hover:text-zinc-300 border-transparent'"
-                >
-                    Native
-                </button>
-            </div>
+    <!-- Top bar: snippet label (left) + syntax switcher & copy (right), vertically centered together -->
+    <div class="absolute left-0 top-0 w-full px-5 pt-3 flex items-center justify-between">
+        {% if label and not hide_label %}
+            <div class="text-sm text-zinc-500 font-semibold">{{ label }}</div>
+        {% else %}
+            <div></div>
         {% endif %}
-        <!-- Copy button - always visible -->
-        <button @click.prevent="copy" class="transition-opacity text-zinc-500 duration-200 hover:text-zinc-400">
-            <c-icons.copy class="size-[1.1rem]" />
-        </button>
+
+        <div class="flex items-center gap-3">
+            {% if "<c-" in slot and not ignore_syntax_choice %}
+                <div class="inline-flex items-center gap-0.5 font-mono">
+                    <button
+                        @click="$store.syntaxPreference = 'html'"
+                        class="cursor-pointer py-0 text-[12px] transition-all duration-200 rounded-md"
+                        :class="$store.syntaxPreference === 'html'
+                            ? 'text-teal-600 dark:text-teal-400'
+                            : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'"
+                    >
+                        c-tags
+                    </button>
+                    <span class="px-1.5 text-zinc-300 dark:text-zinc-600 select-none" aria-hidden="true">|</span>
+                    <button
+                        @click="$store.syntaxPreference = 'template'"
+                        class="cursor-pointer py-0 text-[12px] transition-all duration-200 rounded-md"
+                        :class="$store.syntaxPreference === 'template'
+                            ? 'text-teal-600 dark:text-teal-400'
+                            : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'"
+                    >
+                        DTL
+                    </button>
+                </div>
+            {% endif %}
+            {% if not hide_copy %}
+            <button @click.prevent="copy" class="transition-opacity text-zinc-500 duration-200 hover:text-zinc-700 dark:hover:text-zinc-300">
+                <c-icons.copy class="size-[1.1rem]" />
+            </button>
+            {% endif %}
+        </div>
     </div>
 
     {% if "<c-" in slot and not ignore_syntax_choice %}
         <!-- HTML Syntax Version -->
         <div x-show="$store.syntaxPreference === 'html'">
-            <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} !pt-10">{{ slot|strip }}</code></pre>
+            <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} !pt-12">{{ slot|strip }}</code></pre>
         </div>
 
         <!-- Template Tag Syntax Version -->
         <div x-show="$store.syntaxPreference === 'template'">
-            <pre class="{{ pre_class }}"><code x-ref="templateCode" class="language-{{ language }} {{ code_class }} !pt-10">{{ slot|strip|to_template_tags }}</code></pre>
+            <pre class="{{ pre_class }}"><code x-ref="templateCode" class="language-{{ language }} {{ code_class }} !pt-12">{{ slot|strip|to_template_tags }}</code></pre>
         </div>
     {% else %}
         <!-- No Cotton tags OR ignore-syntax-choice is set - show single static version -->
-        <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} {% if label and not hide_label or padded_top %}!pt-10{% else %}!pt-4{% endif %}">{{ slot|strip }}</code></pre>
+        <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} {% if label and not hide_label or padded_top %}!pt-12{% else %}!pt-4{% endif %}">{{ slot|strip }}</code></pre>
     {% endif %}
 
     {% if preview and not flipped %}
-        <div class="text-base px-6 py-6 prose-headings:text-zinc-800 bg-white dark:bg-zinc-50 rounded-b border-l border-r border-b">
+        <div class="text-base px-6 py-6 bg-white prose-headings:text-zinc-800 dark:!text-zinc-800 border-t border-zinc-200 dark:border-zinc-700">
             <div class="text-sm text-zinc-400 font-semibold uppercase tracking-wider pb-3">preview</div>
-            {{ preview }}
+            <div class="light">{{ preview }}</div>
         </div>
     {% endif %}
 </div>

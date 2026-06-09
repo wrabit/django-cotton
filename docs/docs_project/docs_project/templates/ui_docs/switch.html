@@ -11,21 +11,23 @@
         <c-index-sublink section-id="checked"><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
         <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
         <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
-        <c-index-sublink section-id="standalone"><a href="#standalone" class="no-underline">Standalone</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
+    <p>On its own, a switch is just the toggle control, so you can pair it with your own label or drop it into a custom layout. Add a field attribute (<code>label</code>, <code>description</code>, ...) and it wraps itself as a <a href="#field">field</a> instead.</p>
+
     <c-sample>
-        <c-ui.switch
-            name="notifications"
-            label="Enable Notifications"
-        />
+        <div class="flex items-center gap-3">
+            <c-ui.switch name="wifi" checked />
+            <span class="text-sm text-zinc-700 dark:text-zinc-300">Wi-Fi</span>
+        </div>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
-    name="notifications"
-    label="Enable Notifications"
-/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<div class="flex items-center gap-3">
+    <c-ui.switch name="wifi" checked />
+    <span class="text-sm text-zinc-700 dark:text-zinc-300">Wi-Fi</span>
+</div>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
@@ -49,7 +51,7 @@
                 name="security_alerts"
                 label="Security Alerts"
                 description="Important account security notifications"
-                :checked="True"
+                checked
             />
         </div>
 
@@ -68,7 +70,7 @@
     name="security_alerts"
     label="Security Alerts"
     description="Important account security notifications"
-    :checked="True"
+    checked
 />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -76,14 +78,14 @@
 
     <c-section id="checked" title="Checked by Default">
 
-    <p>Set the initial state to checked with <code>:checked="True"</code>.</p>
+    <p>Set the initial state to checked with <code>checked</code>.</p>
 
     <c-sample>
         <c-ui.switch
             name="dark_mode"
             label="Dark Mode"
             description="Enable dark theme"
-            :checked="True"
+            checked
         />
 
         <c-slot name="code">
@@ -91,7 +93,7 @@
     name="dark_mode"
     label="Dark Mode"
     description="Enable dark theme"
-    :checked="True"
+    checked
 />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -99,7 +101,7 @@
 
     <c-section id="disabled" title="Disabled">
 
-    <p>Disable interaction with <code>:disabled="True"</code>.</p>
+    <p>Disable interaction with <code>disabled</code>.</p>
 
     <c-sample>
         <div class="space-y-4">
@@ -107,14 +109,14 @@
                 name="feature_disabled_off"
                 label="Premium Feature"
                 description="Upgrade to enable this feature"
-                :disabled="True"
+                disabled
             />
             <c-ui.switch
                 name="feature_disabled_on"
                 label="Auto-save"
                 description="Automatically save your work"
-                :checked="True"
-                :disabled="True"
+                checked
+                disabled
             />
         </div>
 
@@ -123,14 +125,14 @@
     name="feature_disabled_off"
     label="Premium Feature"
     description="Upgrade to enable this feature"
-    :disabled="True"
+    disabled
 />
 <c-ui.switch
     name="feature_disabled_on"
     label="Auto-save"
     description="Automatically save your work"
-    :checked="True"
-    :disabled="True"
+    checked
+    disabled
 />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -138,7 +140,7 @@
 
     <c-section id="sizes" title="Sizes">
 
-    <p>Three size variants are available: <code>size="sm"</code>, default, and <code>size="lg"</code>.</p>
+    <p>Size variants run from <code>size="xs"</code> to <code>size="2xl"</code>. The default is <code>md</code>.</p>
 
     <c-sample>
         <div class="space-y-4">
@@ -183,21 +185,30 @@
     </c-sample>
     </c-section>
 
-    <c-section id="standalone" title="Standalone">
-
-    <p>Use switches without labels for inline controls or custom layouts.</p>
-
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the switch wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component with no extra markup. By default the label sits above the control (block layout); add <code>inline</code> to lay it out as a toggle row with the switch on the right.</p>
     <c-sample>
-        <div class="flex items-center gap-4">
-            <span class="text-sm text-zinc-600 dark:text-zinc-400">Wi-Fi</span>
-            <c-ui.switch name="wifi" :checked="True" />
+        <div class="w-full max-w-sm space-y-6">
+            <c-ui.switch name="n_block" label="Enable notifications" description="Get notified about account activity." />
+            <c-ui.switch name="n_inline" label="Enable notifications" description="Get notified about account activity." inline />
         </div>
-
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<div class="flex items-center gap-4">
-    <span class="text-sm text-zinc-600 dark:text-zinc-400">Wi-Fi</span>
-    <c-ui.switch name="wifi" :checked="True" />
-</div>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# Block layout (default) #}
+<c-ui.switch
+    name="notifications"
+    label="Enable notifications"
+    description="Get notified about account activity."
+/>
+
+{# Toggle row #}
+<c-ui.switch
+    name="notifications"
+    label="Enable notifications"
+    description="Get notified about account activity."
+    inline
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
     </c-section>
@@ -218,7 +229,7 @@
         <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disables the switch and prevents interaction"></c-api-prop>
         <c-api-prop name=":checked" type="bool" :options="['True', 'False']" default="False" description="Sets the initial checked state of the switch"></c-api-prop>
         <c-api-prop name=":accent" type="bool" :options="['True', 'False']" default="True" description="Uses accent color when checked. Set to False for neutral colors"></c-api-prop>
-        <c-api-prop name="size" type="str" :options="['sm', '', 'lg']" default="" description="Size variant: 'sm' (small), '' (default), or 'lg' (large)"></c-api-prop>
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Size variant from xs to 2xl."></c-api-prop>
     </c-api-props>
 
     <h4 class="mt-6">Events</h4>

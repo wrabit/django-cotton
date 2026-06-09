@@ -16,6 +16,7 @@
         <c-index-sublink section-id="vertical-cards"><a href="#vertical-cards" class="no-underline">Vertical Cards</a></c-index-sublink>
         <c-index-sublink section-id="cards-with-icons"><a href="#cards-with-icons" class="no-underline">Cards With Icons</a></c-index-sublink>
         <c-index-sublink section-id="custom-content"><a href="#custom-content" class="no-underline">Custom Content</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -76,10 +77,10 @@
 
     <c-section id="horizontal" title="Horizontal Layout">
 
-    <p>Arrange checkboxes horizontally by adding flexbox classes to the group.</p>
+    <p>Add <code>horizontal</code> to lay the checkboxes out in a wrapping row instead of stacking them.</p>
 
     <c-sample>
-        <c-ui.checkbox.group name="days" label="Available days" class="flex flex-wrap gap-4">
+        <c-ui.checkbox.group name="days" label="Available days" horizontal>
             <c-ui.checkbox value="mon" label="Monday" />
             <c-ui.checkbox value="tue" label="Tuesday" />
             <c-ui.checkbox value="wed" label="Wednesday" />
@@ -88,7 +89,7 @@
         </c-ui.checkbox.group>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="days" label="Available days" class="flex flex-wrap gap-4">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="days" label="Available days" horizontal>
     <c-ui.checkbox value="mon" label="Monday" />
     <c-ui.checkbox value="tue" label="Tuesday" />
     <c-ui.checkbox value="wed" label="Wednesday" />
@@ -124,22 +125,22 @@
 
     <c-section id="disabled" title="Disabled">
 
-    <p>Disable individual checkboxes with the <code>:disabled="True"</code> attribute.</p>
+    <p>Disable individual checkboxes with the <code>disabled</code> attribute.</p>
 
     <c-sample>
         <c-ui.checkbox.group name="services" label="Available services">
             <c-ui.checkbox value="web" label="Web hosting" />
             <c-ui.checkbox value="email" label="Email service" />
-            <c-ui.checkbox value="backup" label="Backup service" :disabled="True" />
-            <c-ui.checkbox value="ssl" label="SSL certificate" :disabled="True" />
+            <c-ui.checkbox value="backup" label="Backup service" disabled />
+            <c-ui.checkbox value="ssl" label="SSL certificate" disabled />
         </c-ui.checkbox.group>
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="services" label="Available services">
     <c-ui.checkbox value="web" label="Web hosting" />
     <c-ui.checkbox value="email" label="Email service" />
-    <c-ui.checkbox value="backup" label="Backup service" :disabled="True" />
-    <c-ui.checkbox value="ssl" label="SSL certificate" :disabled="True" />
+    <c-ui.checkbox value="backup" label="Backup service" disabled />
+    <c-ui.checkbox value="ssl" label="SSL certificate" disabled />
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -395,7 +396,51 @@
             </div>
         </div>
     </c-ui.checkbox>
+    <c-ui.checkbox value="pro">
+        <div class="flex items-start gap-4 flex-1">
+            <!-- Checkbox indicator -->
+            <div class="flex items-center h-5">...</div>
+
+            <!-- Custom content -->
+            <div class="flex-1">
+                <div class="flex items-center justify-between">
+                    <h3>Pro Plan</h3>
+                    <span class="text-accent">$29/mo</span>
+                </div>
+                <p>Best for growing teams</p>
+                <ul class="mt-3 space-y-1">
+                    <li>50 GB storage</li>
+                    <li>10 users</li>
+                    <li>Priority support</li>
+                </ul>
+            </div>
+        </div>
+    </c-ui.checkbox>
 </c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="field" title="As a field">
+    <p>Give the group any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and it wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.checkbox.group name="features" label="Features" description="Choose the features to enable.">
+                <c-ui.checkbox value="analytics" label="Analytics dashboard" />
+                <c-ui.checkbox value="reports" label="Custom reports" />
+            </c-ui.checkbox.group>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.checkbox.group
+    name="features"
+    label="Features"
+    description="Choose the features to enable."
+>
+    <c-ui.checkbox value="analytics" label="Analytics dashboard" />
+    <c-ui.checkbox value="reports" label="Custom reports" />
+</c-ui.checkbox.group>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
     </c-section>
@@ -410,6 +455,7 @@
         <c-api-prop name="description" type="str" default="" description="Help text displayed below label"></c-api-prop>
         <c-api-prop name=":values" type="list" default="[]" description="List of initially checked values (e.g. :values=&quot;['option1', 'option2']&quot;)"></c-api-prop>
         <c-api-prop name="variant" type="str" :options="['default', 'buttons', 'cards']" default="default" description="Visual style of the checkbox group"></c-api-prop>
+        <c-api-prop name=":horizontal" type="bool" :options="['True', 'False']" default="False" description="With the default variant, lays options out in a wrapping row instead of a vertical stack."></c-api-prop>
         <c-api-prop name="class" type="str" default="" description="Additional CSS classes for the options container"></c-api-prop>
     </c-api-props>
 

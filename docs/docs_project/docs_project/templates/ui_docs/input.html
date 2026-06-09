@@ -12,6 +12,7 @@
         <c-index-sublink section-id="with-icons"><a href="#with-icons" class="no-underline">With Icons</a></c-index-sublink>
         <c-index-sublink section-id="alpine-masks"><a href="#alpine-masks" class="no-underline">Alpine.js Masks</a></c-index-sublink>
         <c-index-sublink section-id="states"><a href="#states" class="no-underline">States</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -52,23 +53,25 @@
 
     <c-section id="sizes" title="Sizes">
 
-    <p>Five size variants are available: <code>size="xs"</code>, <code>size="sm"</code>, default, <code>size="lg"</code>, and <code>size="xl"</code>.</p>
+    <p>Six size variants are available, from <code>size="xs"</code> to <code>size="2xl"</code>. The default is <code>md</code>.</p>
 
     <c-sample>
         <div class="w-full max-w-xs space-y-3">
-            <c-ui.input size="xs" placeholder="Extra small input" />
-            <c-ui.input size="sm" placeholder="Small input" />
-            <c-ui.input placeholder="Default input" />
-            <c-ui.input size="lg" placeholder="Large input" />
-            <c-ui.input size="xl" placeholder="Extra large input" />
+            <c-ui.input size="xs" placeholder="Extra small" />
+            <c-ui.input size="sm" placeholder="Small" />
+            <c-ui.input size="md" placeholder="Medium (default)" />
+            <c-ui.input size="lg" placeholder="Large" />
+            <c-ui.input size="xl" placeholder="Extra large" />
+            <c-ui.input size="2xl" placeholder="2XL" />
         </div>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.input size="xs" placeholder="Extra small input" />
-<c-ui.input size="sm" placeholder="Small input" />
-<c-ui.input placeholder="Default input" />
-<c-ui.input size="lg" placeholder="Large input" />
-<c-ui.input size="xl" placeholder="Extra large input" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.input size="xs" placeholder="Extra small" />
+<c-ui.input size="sm" placeholder="Small" />
+<c-ui.input size="md" placeholder="Medium (default)" />
+<c-ui.input size="lg" placeholder="Large" />
+<c-ui.input size="xl" placeholder="Extra large" />
+<c-ui.input size="2xl" placeholder="2XL" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
     </c-section>
@@ -246,14 +249,14 @@
         <div class="w-full max-w-xs space-y-4">
             <c-ui.input
                 placeholder="You can't edit this"
-                :disabled="True"
+                disabled
                 label="Disabled"
                 description="This input is disabled"
             />
 
             <c-ui.input
                 value="Read-only value"
-                :readonly="True"
+                readonly
                 label="Readonly"
                 description="This input is readonly"
             />
@@ -278,14 +281,14 @@
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.input
     placeholder="You can't edit this"
-    :disabled="True"
+    disabled
     label="Disabled"
     description="This input is disabled"
 />
 
 <c-ui.input
     value="Read-only value"
-    :readonly="True"
+    readonly
     label="Readonly"
     description="This input is readonly"
 />
@@ -309,6 +312,25 @@
     </c-sample>
     </c-section>
 
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the input wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.input label="Email" type="email" placeholder="you@example.com" description="We'll only use this for receipts." />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.input
+    label="Email"
+    type="email"
+    placeholder="you@example.com"
+    description="We'll only use this for receipts."
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
     <c-section id="reference" title="Reference">
 
     <h4>Props</h4>
@@ -318,7 +340,7 @@
         <c-api-prop name="name" type="str" default="" description="Form field name for submission"></c-api-prop>
         <c-api-prop name="value" type="str" default="" description="Initial value of the input"></c-api-prop>
         <c-api-prop name="placeholder" type="str" default="" description="Placeholder text displayed when the input is empty"></c-api-prop>
-        <c-api-prop name="size" type="str" :options="['xs', 'sm', '', 'lg', 'xl']" default="" description="Size variant: 'xs' (extra small), 'sm' (small), '' (default), 'lg' (large), or 'xl' (extra large)"></c-api-prop>
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Size variant from xs to 2xl."></c-api-prop>
         <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disables the input and prevents interaction"></c-api-prop>
         <c-api-prop name=":readonly" type="bool" :options="['True', 'False']" default="False" description="Makes the input readonly (user can't edit but can copy)"></c-api-prop>
         <c-api-prop name="label" type="str" default="" description="Label text displayed above the input (automatically wraps in field)"></c-api-prop>

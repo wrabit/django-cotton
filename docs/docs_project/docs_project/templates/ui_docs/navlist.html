@@ -1,0 +1,229 @@
+<c-layouts.ui>
+    <c-header>
+        Navlist
+        <c-slot name="subheading">
+            A vertical navigation list for sidebars, with optional groups and badges.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Variants</a></c-index-sublink>
+        <c-index-sublink section-id="groups"><a href="#groups" class="no-underline">Groups</a></c-index-sublink>
+        <c-index-sublink section-id="expandable"><a href="#expandable" class="no-underline">Expandable Groups</a></c-index-sublink>
+        <c-index-sublink section-id="badges"><a href="#badges" class="no-underline">With Badges</a></c-index-sublink>
+        <c-index-sublink section-id="persist-scroll"><a href="#persist-scroll" class="no-underline">Persist scroll</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+    <c-sample>
+        <c-ui.navlist class="w-64">
+            <c-ui.navlist.item href="javascript:void(0)" current>Dashboard</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Team</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)" badge="3">Settings</c-ui.navlist.item>
+        </c-ui.navlist>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navlist class="w-64">
+    <c-ui.navlist.item href="/dashboard" current>Dashboard</c-ui.navlist.item>
+    <c-ui.navlist.item href="/projects">Projects</c-ui.navlist.item>
+    <c-ui.navlist.item href="/team">Team</c-ui.navlist.item>
+    <c-ui.navlist.item href="/settings" badge="3">Settings</c-ui.navlist.item>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="variants" title="Variants">
+
+    <p>The default fills the active row. Set <code>variant="sidebar"</code> on the navlist for an accent left-bar rail, common in docs sidebars.</p>
+
+    <c-sample>
+        <div class="grid grid-cols-2 gap-10">
+            <div>
+                <div class="text-xs font-medium text-zinc-400 dark:text-zinc-500 mb-2">default</div>
+                <c-ui.navlist>
+                    <c-ui.navlist.item href="javascript:void(0)" current>Dashboard</c-ui.navlist.item>
+                    <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
+                    <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+                </c-ui.navlist>
+            </div>
+            <div>
+                <div class="text-xs font-medium text-zinc-400 dark:text-zinc-500 mb-2">sidebar</div>
+                <c-ui.navlist variant="sidebar">
+                    <c-ui.navlist.item href="javascript:void(0)" current>Dashboard</c-ui.navlist.item>
+                    <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
+                    <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+                </c-ui.navlist>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# default: filled rows #}
+<c-ui.navlist>
+    <c-ui.navlist.item href="/dashboard" current>Dashboard</c-ui.navlist.item>
+    <c-ui.navlist.item href="/projects">Projects</c-ui.navlist.item>
+    <c-ui.navlist.item href="/settings">Settings</c-ui.navlist.item>
+</c-ui.navlist>
+
+{# sidebar: accent left-bar rail #}
+<c-ui.navlist variant="sidebar">
+    <c-ui.navlist.item href="/dashboard" current>Dashboard</c-ui.navlist.item>
+    <c-ui.navlist.item href="/projects">Projects</c-ui.navlist.item>
+    <c-ui.navlist.item href="/settings">Settings</c-ui.navlist.item>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="groups" title="Groups">
+
+    <p>Group related items under a heading with <code>navlist.group</code>.</p>
+
+    <c-sample>
+        <c-ui.navlist class="w-64">
+            <c-ui.navlist.item href="javascript:void(0)">Dashboard</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
+
+            <c-ui.navlist.group heading="Account">
+                <c-ui.navlist.item href="javascript:void(0)" current>Profile</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Billing</c-ui.navlist.item>
+            </c-ui.navlist.group>
+        </c-ui.navlist>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navlist class="w-64">
+    <c-ui.navlist.item href="/dashboard">Dashboard</c-ui.navlist.item>
+    <c-ui.navlist.item href="/projects">Projects</c-ui.navlist.item>
+
+    <c-ui.navlist.group heading="Account">
+        <c-ui.navlist.item href="/profile" current>Profile</c-ui.navlist.item>
+        <c-ui.navlist.item href="/settings">Settings</c-ui.navlist.item>
+        <c-ui.navlist.item href="/billing">Billing</c-ui.navlist.item>
+    </c-ui.navlist.group>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="expandable" title="Expandable Groups">
+
+    <p>Make a group collapsible with <code>:expandable</code>, and set its initial state with <code>:expanded</code>.</p>
+
+    <c-sample>
+        <c-ui.navlist class="w-64">
+            <c-ui.navlist.item href="javascript:void(0)">Dashboard</c-ui.navlist.item>
+
+            <c-ui.navlist.group heading="Account" expandable expanded>
+                <c-ui.navlist.item href="javascript:void(0)">Profile</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+            </c-ui.navlist.group>
+
+            <c-ui.navlist.group heading="Team" expandable :expanded="False">
+                <c-ui.navlist.item href="javascript:void(0)">Members</c-ui.navlist.item>
+                <c-ui.navlist.item href="javascript:void(0)">Invitations</c-ui.navlist.item>
+            </c-ui.navlist.group>
+        </c-ui.navlist>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navlist class="w-64">
+    <c-ui.navlist.item href="/dashboard">Dashboard</c-ui.navlist.item>
+
+    <c-ui.navlist.group heading="Account" expandable expanded>
+        <c-ui.navlist.item href="/profile">Profile</c-ui.navlist.item>
+        <c-ui.navlist.item href="/settings">Settings</c-ui.navlist.item>
+    </c-ui.navlist.group>
+
+    <c-ui.navlist.group heading="Team" expandable :expanded="False">
+        <c-ui.navlist.item href="/team/members">Members</c-ui.navlist.item>
+        <c-ui.navlist.item href="/team/invitations">Invitations</c-ui.navlist.item>
+    </c-ui.navlist.group>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="badges" title="With Badges">
+
+    <p>Show counts or labels with the <code>badge</code> prop on items.</p>
+
+    <c-sample>
+        <c-ui.navlist class="w-64">
+            <c-ui.navlist.item href="javascript:void(0)">Home</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)" badge="12">Inbox</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)">Contacts</c-ui.navlist.item>
+            <c-ui.navlist.item href="javascript:void(0)" badge="Pro" badge_color="lime" badge_variant="solid">Calendar</c-ui.navlist.item>
+        </c-ui.navlist>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navlist class="w-64">
+    <c-ui.navlist.item href="/home">Home</c-ui.navlist.item>
+    <c-ui.navlist.item href="/inbox" badge="12">Inbox</c-ui.navlist.item>
+    <c-ui.navlist.item href="/contacts">Contacts</c-ui.navlist.item>
+    <c-ui.navlist.item href="/calendar" badge="Pro" badge_color="lime" badge_variant="solid">Calendar</c-ui.navlist.item>
+</c-ui.navlist>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="persist-scroll" title="Persist scroll">
+
+    <p>For a long sidebar that scrolls on its own, add <code>persist_scroll</code> so the list keeps its scroll position across full page loads. It only restores when you navigated via a link <em>inside</em> the navlist, so arriving from the top nav or an external link still starts at the top instead of resuming a stale position. The navlist has to be its own scroll container, so give it a max-height and <code>overflow-y-auto</code>.</p>
+
+    <p>The sidebar on this very site uses it: scroll the sidebar down, open a component, and it stays where you left it.</p>
+
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.navlist variant="sidebar" persist_scroll
+              class="max-h-[calc(100dvh-5rem)] overflow-y-auto">
+    <c-ui.navlist.item href="/dashboard" current>Dashboard</c-ui.navlist.item>
+    <c-ui.navlist.item href="/projects">Projects</c-ui.navlist.item>
+    <c-ui.navlist.item href="/settings">Settings</c-ui.navlist.item>
+</c-ui.navlist>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+    <p>You only need <code>scroll_key</code> when more than one persisted navlist appears on the same page, so each keeps its own saved position. A single sidebar can leave it at the default.</p>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Navlist Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="variant" type="str" :options="['', 'sidebar']" default="" description="Empty fills the active row; sidebar uses an accent left-bar rail." />
+        <c-api-prop name=":persist_scroll" type="bool" :options="['True', 'False']" default="False" description="Remember the navlist's scroll position across page loads (sessionStorage), restoring it only when you navigated via a link inside this navlist. For long sidebars this stops the list jumping to the top on every in-nav navigation, without resuming a stale position when you arrive from an unrelated page. The navlist must be its own scroll container (give it a max-height plus overflow-y-auto)." />
+        <c-api-prop name="scroll_key" type="str" default="navlist" description="Optional storage key for persist_scroll. Only needed when more than one persisted navlist renders on the same page; give each a unique key. A single sidebar can leave the default." />
+        <c-api-prop name="slot (default)" type="—" default="" description="The navigation items and groups."></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Navlist.Item Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="href" type="str" default="#" description="URL the item links to." />
+        <c-api-prop name=":current" type="bool" :options="['True', 'False']" default="False" description="Applies active styling to mark the current page." />
+        <c-api-prop name="badge" type="str" default="" description="Trailing badge content." />
+        <c-api-prop name="badge_color" type="str" :options="['zinc', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose']" default="zinc" description="Badge color." />
+        <c-api-prop name="badge_variant" type="str" :options="['', 'pill', 'solid']" default="" description="Badge variant." />
+    </c-api-props>
+
+    <h4 class="mt-6">Navlist.Group Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="heading" type="str" default="" description="Group heading text." />
+        <c-api-prop name=":expandable" type="bool" :options="['True', 'False']" default="False" description="Makes the group collapsible with a toggle." />
+        <c-api-prop name=":expanded" type="bool" :options="['True', 'False']" default="True" description="Initial open state when expandable." />
+        <c-api-prop name="slot (default)" type="—" default="" description="The group's items." />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

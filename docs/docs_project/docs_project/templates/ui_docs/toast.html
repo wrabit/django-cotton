@@ -1,0 +1,297 @@
+<c-layouts.ui>
+    <c-ui.toast.container />
+
+    <c-header>
+        Toast
+        <c-slot name="subheading">
+            Show transient, self-dismissing notifications from anywhere in your app using a single global container.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="setup"><a href="#setup" class="no-underline">Setup</a></c-index-sublink>
+        <c-index-sublink section-id="emit"><a href="#emit" class="no-underline">Ways to Emit</a></c-index-sublink>
+        <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Variants</a></c-index-sublink>
+        <c-index-sublink section-id="appearances"><a href="#appearances" class="no-underline">Appearances</a></c-index-sublink>
+        <c-index-sublink section-id="positions"><a href="#positions" class="no-underline">Positions</a></c-index-sublink>
+        <c-index-sublink section-id="override"><a href="#override" class="no-underline">Custom Styling</a></c-index-sublink>
+        <c-index-sublink section-id="server"><a href="#server" class="no-underline">From the Server</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="setup" title="Setup">
+
+    <p>Drop the container <strong>once</strong> on your page, typically in your base layout. It registers a global Alpine store, listens on the window for a <code>toast</code> event and renders a stack in each corner.</p>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.toast.container />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <p>To raise a toast, dispatch a browser <code>toast</code> <code>CustomEvent</code> whose <code>detail</code> describes the notification. Anything it omits falls back to the container's props.</p>
+    </c-section>
+
+    <c-section id="emit" title="Ways to Emit">
+
+    <p>Any code can fire a toast. There are three common ways:</p>
+
+    <ul>
+        <li>
+            <strong>Vanilla JS</strong> dispatch a window event directly:
+            <br><code>window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Saved', variant: 'success' } }))</code>
+        </li>
+        <li>
+            <strong>Alpine</strong> use <code>$dispatch</code> inside any component (Alpine events bubble to the window, where the container listens):
+            <br><code>$dispatch('toast', { message: 'Saved', variant: 'success' })</code>
+        </li>
+        <li>
+            <strong>HTMX</strong> return an <code>HX-Trigger</code> response header (HTMX re-dispatches it as a window event):
+            <br><code>HX-Trigger: {"toast": {"message": "Saved", "variant": "success"}}</code>
+        </li>
+    </ul>
+
+    <c-sample>
+        <div class="flex flex-wrap gap-3 justify-center" x-data>
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Fired from vanilla JS', variant: 'info' } }))">Vanilla JS</c-ui.button>
+            <c-ui.button x-on:click="$dispatch('toast', { message: 'Fired from Alpine', variant: 'info' })">Alpine $dispatch</c-ui.button>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Saved', variant: 'success' } }))">
+    Vanilla JS
+</c-ui.button>
+
+<div x-data>
+    <c-ui.button x-on:click="$dispatch('toast', { message: 'Saved', variant: 'success' })">
+        Alpine $dispatch
+    </c-ui.button>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="variants" title="Variants">
+
+    <p>The <code>variant</code> sets the contextual colour and icon: <code>info</code>, <code>success</code>, <code>warning</code> or <code>error</code>. Add an optional <code>title</code> for a bold heading above the message.</p>
+
+    <c-sample>
+        <div class="flex flex-wrap gap-3 justify-center">
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Heads up, a new version is available.', variant: 'info' } }))">Info</c-ui.button>
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Saved successfully', variant: 'success' } }))">Success</c-ui.button>
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Your trial ends soon.', variant: 'warning' } }))">Warning</c-ui.button>
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not connect to the server.', variant: 'error' } }))">Error</c-ui.button>
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { title: 'Invitation sent', message: 'Your teammate will receive an email shortly.', variant: 'success' } }))">With title</c-ui.button>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Heads up, a new version is available.', variant: 'info' } }))">
+    Info
+</c-ui.button>
+
+<c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Saved successfully', variant: 'success' } }))">
+    Success
+</c-ui.button>
+
+<c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Your trial ends soon.', variant: 'warning' } }))">
+    Warning
+</c-ui.button>
+
+<c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Could not connect to the server.', variant: 'error' } }))">
+    Error
+</c-ui.button>
+
+<c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { title: 'Invitation sent', message: 'Your teammate will receive an email shortly.', variant: 'success' } }))">
+    With title
+</c-ui.button>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="appearances" title="Appearances">
+
+    <p>Three visual treatments, set per toast with <code>appearance</code> or as the container default. <code>soft</code> (default) is a tinted panel, <code>solid</code> is a filled colour and <code>outline</code> is a bordered panel on a plain surface.</p>
+
+    <c-sample>
+        <div class="flex flex-wrap gap-3 justify-center">
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Soft appearance', variant: 'success', appearance: 'soft' } }))">Soft</c-ui.button>
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Solid appearance', variant: 'success', appearance: 'solid' } }))">Solid</c-ui.button>
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Outline appearance', variant: 'success', appearance: 'outline' } }))">Outline</c-ui.button>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# Per toast #}
+window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Saved', variant: 'success', appearance: 'solid' } }))
+
+{# Or as the container default for every toast #}
+<c-ui.toast.container appearance="solid" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="positions" title="Positions">
+
+    <p>Six anchor points, set per toast with <code>position</code> or as the container default: <code>top-right</code> (default), <code>top-left</code>, <code>top-center</code>, <code>bottom-right</code>, <code>bottom-left</code> and <code>bottom-center</code>. Bottom stacks grow upward so the newest toast is always nearest the edge. Try each below.</p>
+
+    <c-sample>
+        <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+            <c-ui.button size="sm" variant="default" onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'top-left', variant: 'info', position: 'top-left' } }))">top-left</c-ui.button>
+            <c-ui.button size="sm" variant="default" onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'top-center', variant: 'info', position: 'top-center' } }))">top-center</c-ui.button>
+            <c-ui.button size="sm" variant="default" onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'top-right', variant: 'info', position: 'top-right' } }))">top-right</c-ui.button>
+            <c-ui.button size="sm" variant="default" onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'bottom-left', variant: 'info', position: 'bottom-left' } }))">bottom-left</c-ui.button>
+            <c-ui.button size="sm" variant="default" onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'bottom-center', variant: 'info', position: 'bottom-center' } }))">bottom-center</c-ui.button>
+            <c-ui.button size="sm" variant="default" onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'bottom-right', variant: 'info', position: 'bottom-right' } }))">bottom-right</c-ui.button>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# Per toast #}
+window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Saved', position: 'bottom-center' } }))
+
+{# Or as the container default #}
+<c-ui.toast.container position="bottom-center" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="override" title="Custom Styling">
+
+    <p>For one-off styling beyond the built-in appearances, pass a <code>class</code> in the event detail. It is appended to that toast, so any Tailwind utilities you add win over the defaults.</p>
+
+    <c-sample>
+        <div class="flex justify-center">
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { title: 'Custom', message: 'Fully restyled toast', appearance: 'outline', class: '!bg-zinc-900 !border-zinc-700 !text-white' } }))">Custom styled</c-ui.button>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+window.dispatchEvent(new CustomEvent('toast', {
+    detail: {
+        title: 'Custom',
+        message: 'Fully restyled toast',
+        class: '!bg-zinc-900 !border-zinc-700 !text-white'
+    }
+}))
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="server" title="From the Server (HTMX)">
+
+    <p>Return an <code>HX-Trigger</code> response header naming the <code>toast</code> event. HTMX re-dispatches it as a window event with the JSON value as the event detail, which the container catches automatically.</p>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet language="python" label="views.py">{% cotton:verbatim %}{% verbatim %}
+import json
+from django.http import HttpResponse
+
+def delete_item(request, pk):
+    # ... delete the item ...
+    response = HttpResponse(status=204)
+    response["HX-Trigger"] = json.dumps({
+        "toast": {"message": "Item deleted", "variant": "error"}
+    })
+    return response
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Container Props</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="position"
+            type="str"
+            :options="['top-right', 'top-left', 'top-center', 'bottom-right', 'bottom-left', 'bottom-center']"
+            default="top-right"
+            description="Default anchor for toasts that do not specify their own position."
+        />
+        <c-api-prop
+            name="appearance"
+            type="str"
+            :options="['soft', 'solid', 'outline']"
+            default="soft"
+            description="Default visual treatment for toasts that do not specify their own appearance."
+        />
+        <c-api-prop
+            name="duration"
+            type="int"
+            default="4000"
+            description="Default auto-dismiss time in milliseconds. Use 0 for a sticky toast. Overridable per toast."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional classes merged onto each toast stack wrapper."
+        />
+    </c-api-props>
+
+    <h4>Event Contract</h4>
+
+    <p>Fire a window <code>CustomEvent</code> named <code>toast</code>. Its <code>detail</code> object accepts:</p>
+
+    <c-api-props>
+        <c-api-prop
+            name="message"
+            type="str"
+            default=""
+            description="The toast body text (required for a useful toast)."
+        />
+        <c-api-prop
+            name="variant"
+            type="str"
+            :options="['info', 'success', 'warning', 'error']"
+            default="info"
+            description="Contextual colour and icon."
+        />
+        <c-api-prop
+            name="appearance"
+            type="str"
+            :options="['soft', 'solid', 'outline']"
+            default="container default"
+            description="Visual treatment for this toast."
+        />
+        <c-api-prop
+            name="position"
+            type="str"
+            :options="['top-right', 'top-left', 'top-center', 'bottom-right', 'bottom-left', 'bottom-center']"
+            default="container default"
+            description="Anchor point for this toast."
+        />
+        <c-api-prop
+            name="title"
+            type="str"
+            default=""
+            description="Optional bold heading shown above the message."
+        />
+        <c-api-prop
+            name="duration"
+            type="int"
+            default="container default"
+            description="Auto-dismiss time in milliseconds for this toast. Use 0 to keep it sticky."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Extra Tailwind classes appended to this toast for one-off styling."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

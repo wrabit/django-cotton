@@ -11,6 +11,7 @@
         <c-index-sublink section-id="height"><a href="#height" class="no-underline">Height</a></c-index-sublink>
         <c-index-sublink section-id="autoresize"><a href="#autoresize" class="no-underline">Autoresize</a></c-index-sublink>
         <c-index-sublink section-id="non-resizable"><a href="#non-resizable" class="no-underline">Non-resizable</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -28,19 +29,21 @@
     <p>Control the font size and padding using the <code>size</code> attribute.</p>
     <c-sample>
         <div class="space-y-4">
-            <c-ui.textarea size="xs" placeholder="Extra Small Text" />
-            <c-ui.textarea size="sm" placeholder="Small Text" />
-            <c-ui.textarea size="base" placeholder="Base Text (Default)" />
-            <c-ui.textarea size="lg" placeholder="Large Text" />
-            <c-ui.textarea size="xl" placeholder="Extra Large Text" />
+            <c-ui.textarea size="xs" placeholder="Extra small" />
+            <c-ui.textarea size="sm" placeholder="Small" />
+            <c-ui.textarea size="md" placeholder="Medium (default)" />
+            <c-ui.textarea size="lg" placeholder="Large" />
+            <c-ui.textarea size="xl" placeholder="Extra large" />
+            <c-ui.textarea size="2xl" placeholder="2XL" />
         </div>
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
-<c-ui.textarea size="xs" placeholder="Extra Small Text" />
-<c-ui.textarea size="sm" placeholder="Small Text" />
-<c-ui.textarea size="base" placeholder="Base Text (Default)" />
-<c-ui.textarea size="lg" placeholder="Large Text" />
-<c-ui.textarea size="xl" placeholder="Extra Large Text" />
+<c-ui.textarea size="xs" placeholder="Extra small" />
+<c-ui.textarea size="sm" placeholder="Small" />
+<c-ui.textarea size="md" placeholder="Medium (default)" />
+<c-ui.textarea size="lg" placeholder="Large" />
+<c-ui.textarea size="xl" placeholder="Extra large" />
+<c-ui.textarea size="2xl" placeholder="2XL" />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -50,19 +53,21 @@
     <p>Control the initial height using the <code>height</code> attribute. This sets a fixed height, which will be overridden if <code>autoresize</code> is used and the content grows.</p>
     <c-sample>
         <div class="space-y-4">
-            <c-ui.textarea height="xs" placeholder="Extra Small Height" />
-            <c-ui.textarea height="sm" placeholder="Small Height" />
-            <c-ui.textarea height="base" placeholder="Base Height (Default)" />
-            <c-ui.textarea height="lg" placeholder="Large Height" />
-            <c-ui.textarea height="xl" placeholder="Extra Large Height" />
+            <c-ui.textarea height="xs" placeholder="Extra small height" />
+            <c-ui.textarea height="sm" placeholder="Small height" />
+            <c-ui.textarea height="md" placeholder="Medium height (default)" />
+            <c-ui.textarea height="lg" placeholder="Large height" />
+            <c-ui.textarea height="xl" placeholder="Extra large height" />
+            <c-ui.textarea height="2xl" placeholder="2XL height" />
         </div>
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
-<c-ui.textarea height="xs" placeholder="Extra Small Height" />
-<c-ui.textarea height="sm" placeholder="Small Height" />
-<c-ui.textarea height="base" placeholder="Base Height (Default)" />
-<c-ui.textarea height="lg" placeholder="Large Height" />
-<c-ui.textarea height="xl" placeholder="Extra Large Height" />
+<c-ui.textarea height="xs" placeholder="Extra small height" />
+<c-ui.textarea height="sm" placeholder="Small height" />
+<c-ui.textarea height="md" placeholder="Medium height (default)" />
+<c-ui.textarea height="lg" placeholder="Large height" />
+<c-ui.textarea height="xl" placeholder="Extra large height" />
+<c-ui.textarea height="2xl" placeholder="2XL height" />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -75,7 +80,7 @@
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
-<c-ui.textarea autoresize placeholder="Type something long here..." />
+<c-ui.textarea autoresize placeholder="Type something long here and the textarea will grow..." />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -94,14 +99,32 @@
     </c-sample>
     </c-section>
 
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the textarea wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.textarea label="Bio" placeholder="Tell us about yourself..." description="A short description for your profile." />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.textarea
+    label="Bio"
+    placeholder="Tell us about yourself..."
+    description="A short description for your profile."
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
     <c-section id="reference" title="API Reference">
 
     <h4>Props</h4>
 
     <c-api-props>
         <c-api-prop name=":autoresize" type="bool" :options="['True', 'False']" default="False" description="Automatically adjusts height to fit content. Requires Alpine.js." />
-        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'base', 'lg', 'xl']" default="base" description="Sets the font size and padding." />
-        <c-api-prop name="height" type="str" :options="['xs', 'sm', 'base', 'lg', 'xl']" default="base" description="Sets the initial fixed height. Overridden by autoresize." />
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Sets the font size and padding." />
+        <c-api-prop name="height" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Sets the initial fixed height. Overridden by autoresize." />
         <c-api-prop name=":resizable" type="bool" :options="['True', 'False']" default="True" description="Allows or prevents manual resizing by the user via CSS." />
         <c-api-prop name="label" type="str" default="" description="Shorthand: Automatically wraps the textarea with a label in a field structure.">
             <c-slot name="options_content">Any text</c-slot>

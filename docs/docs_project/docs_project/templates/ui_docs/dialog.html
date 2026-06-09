@@ -7,8 +7,8 @@
     </c-header>
 
     <c-slot name="page_index">
-        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
         <c-index-sublink section-id="form"><a href="#form" class="no-underline">Form</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -35,6 +35,7 @@
     <h3 class="text-lg font-semibold mb-2">Simple Content</h3>
     <p class="text-zinc-600 dark:text-zinc-400">
         This is a basic dialog with just content in the default slot.
+        No header or footer sections defined.
     </p>
 </c-ui.dialog>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -73,12 +74,12 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.dialog>
     <c-slot name="trigger">
-        <c-ui.button>Edit Profile</c-ui.button>
+        <c-ui.button variant="primary">Edit Profile</c-ui.button>
     </c-slot>
 
     <c-slot name="header">
         <c-ui.dialog.title>Edit Profile</c-ui.dialog.title>
-        <c-ui.dialog.description>Make changes to your profile here.</c-ui.dialog.description>
+        <c-ui.dialog.description>Make changes to your profile here. Click save when you're done.</c-ui.dialog.description>
     </c-slot>
 
     <div class="space-y-4">

@@ -65,6 +65,7 @@
 <c-ui.tabs variant="segmented">
     <c-ui.tabs.tab name="Overview">...</c-ui.tabs.tab>
     <c-ui.tabs.tab name="Analytics">...</c-ui.tabs.tab>
+    <c-ui.tabs.tab name="Reports">...</c-ui.tabs.tab>
 </c-ui.tabs>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -99,6 +100,12 @@
         </c-slot>
         Content...
     </c-ui.tabs.tab>
+    <c-ui.tabs.tab name="Settings">
+        <c-slot name="icon">
+             <!-- SVG Icon -->
+        </c-slot>
+        Content...
+    </c-ui.tabs.tab>
 </c-ui.tabs>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -128,8 +135,15 @@
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
-<c-ui.tabs size="sm">...</c-ui.tabs>
-<c-ui.tabs size="lg">...</c-ui.tabs>
+<c-ui.tabs size="sm" variant="segmented">
+    <c-ui.tabs.tab name="Tab 1">Content 1</c-ui.tabs.tab>
+    <c-ui.tabs.tab name="Tab 2">Content 2</c-ui.tabs.tab>
+</c-ui.tabs>
+
+<c-ui.tabs size="lg" variant="segmented">
+    <c-ui.tabs.tab name="Tab 1">Content 1</c-ui.tabs.tab>
+    <c-ui.tabs.tab name="Tab 2">Content 2</c-ui.tabs.tab>
+</c-ui.tabs>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>

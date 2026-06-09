@@ -29,6 +29,12 @@ def compile_to_template_tags(html_code):
         compiler = CottonCompiler()
         compiled = compiler.process(html_code)
 
+        # The compiler emits the block form for self-closing components
+        # ({% cotton x %}{% endcotton %}). Cotton's tag parser also accepts the
+        # self-closing form ({% cotton x /%}), which is the cleaner native
+        # equivalent, so collapse empty blocks back to it.
+        compiled = collapse_self_closing(compiled)
+
         # Restore multi-line formatting from original HTML
         compiled = restore_multiline_formatting(compiled, html_code)
 
@@ -36,6 +42,26 @@ def compile_to_template_tags(html_code):
     except Exception as e:
         # If compilation fails, return error message for debugging
         return f"<!-- Compilation error: {str(e)} -->\n{html_code}"
+
+
+def collapse_self_closing(compiled_code):
+    """
+    Collapse empty Cotton blocks to the self-closing tag form.
+
+    Turns `{% cotton x attrs %}{% endcotton %}` into `{% cotton x attrs /%}`.
+    Only fires when the opening tag's `%}` is immediately followed by
+    `{% endcotton %}` (no content), so non-empty components are untouched. The
+    `[^%]` class keeps the match inside a single tag and cannot span into
+    another `{% ... %}`.
+
+    Args:
+        compiled_code: Compiled template tag code
+
+    Returns:
+        Code with empty blocks rewritten as self-closing tags
+    """
+    pattern = re.compile(r'\{%\s*cotton\s+([^%]*?)\s*%\}\{%\s*endcotton\s*%\}')
+    return pattern.sub(lambda m: '{% cotton ' + m.group(1) + ' /%}', compiled_code)
 
 
 def restore_multiline_formatting(compiled_code, original_html):
@@ -50,12 +76,14 @@ def restore_multiline_formatting(compiled_code, original_html):
     Returns:
         Code with multi-line formatting restored
     """
-    # Pattern to find Cotton template tag opening tags
-    template_pattern = r'{%\s*cotton\s+([^\s%}]+)((?:\s+[^%}]+?)?)%}'
+    # Pattern to find Cotton template tag opening tags. Group 3 captures an
+    # optional self-closing "/" so it can be preserved through reformatting.
+    template_pattern = r'{%\s*cotton\s+([^\s%}]+)((?:\s+[^%}]+?)?)\s*(/?)%}'
 
     def format_if_multiline(match):
         component_name = match.group(1)
         attrs_string = match.group(2).strip()
+        self_closing = bool(match.group(3))
 
         # Find corresponding HTML tag in original
         original_tag = find_original_tag(original_html, component_name, attrs_string)
@@ -65,7 +93,8 @@ def restore_multiline_formatting(compiled_code, original_html):
             return format_as_multiline_template_tag(
                 component_name,
                 attrs_string,
-                original_tag
+                original_tag,
+                self_closing,
             )
 
         # Keep as is (single line)
@@ -93,15 +122,19 @@ def find_original_tag(original_html, component_name, attrs_string):
     if first_attr_match:
         attr_name = first_attr_match.group(1).lstrip(':')
         attr_value = first_attr_match.group(3)
-        html_pattern = rf'<c-{re.escape(component_name)}[^>]*?{re.escape(attr_name)}\s*=\s*["\'].*?{re.escape(attr_value)}.*?["\'][^>]*?/?>'
+        # Use [^>] (not .* with DOTALL) so a match cannot span across a tag
+        # boundary into a later component. A multi-line opening tag has no '>'
+        # until its end, so [^>] still matches genuinely multi-line tags while
+        # preventing the value from being found in a different tag.
+        html_pattern = rf'<c-{re.escape(component_name)}[^>]*?{re.escape(attr_name)}\s*=\s*["\'][^>]*?{re.escape(attr_value)}[^>]*?["\'][^>]*?/?>'
     else:
         html_pattern = rf'<c-{re.escape(component_name)}[^>]*?/?>'
 
-    match = re.search(html_pattern, original_html, re.DOTALL)
+    match = re.search(html_pattern, original_html)
     return match.group(0) if match else None
 
 
-def format_as_multiline_template_tag(component_name, attrs_string, original_tag):
+def format_as_multiline_template_tag(component_name, attrs_string, original_tag, self_closing=False):
     """
     Format template tag as multiline, preserving indentation from original.
 
@@ -109,10 +142,13 @@ def format_as_multiline_template_tag(component_name, attrs_string, original_tag)
         component_name: Component name
         attrs_string: Attribute string
         original_tag: Original HTML tag for indentation reference
+        self_closing: Whether the tag is self-closing (emit `/%}` instead of `%}`)
 
     Returns:
         Multi-line formatted template tag
     """
+    closing = "/%}" if self_closing else "%}"
+
     # Extract base indentation from original
     indentation = extract_base_indentation(original_tag)
     attr_indent = indentation + "    "
@@ -121,7 +157,7 @@ def format_as_multiline_template_tag(component_name, attrs_string, original_tag)
     attrs = parse_template_tag_attributes(attrs_string)
 
     if not attrs:
-        return f"{{% cotton {component_name} %}}"
+        return f"{{% cotton {component_name} {closing}}}" if self_closing else f"{{% cotton {component_name} %}}"
 
     # Build multiline
     lines = [f"{{% cotton {component_name}"]
@@ -132,7 +168,7 @@ def format_as_multiline_template_tag(component_name, attrs_string, original_tag)
         else:
             lines.append(f"{attr_indent}{attr_name}")
 
-    lines.append(f"{indentation}%}}")
+    lines.append(f"{indentation}{closing}")
 
     return '\n'.join(lines)
 

@@ -14,6 +14,7 @@
         <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
         <c-index-sublink section-id="icon-position"><a href="#icon-position" class="no-underline">Icon Position</a></c-index-sublink>
         <c-index-sublink section-id="custom-icon"><a href="#custom-icon" class="no-underline">Custom Icon</a></c-index-sublink>
+        <c-index-sublink section-id="card"><a href="#card" class="no-underline">In a card</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -32,7 +33,7 @@
         </c-ui.accordion>
 
         <c-slot name="code">
-<c-snippet language="html">{% cotton:verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.accordion>
     <c-ui.accordion.item header="Do you offer bulk discounts?">
         Yes! We provide special pricing for large orders.
@@ -68,13 +69,13 @@
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion type="multiple">
     <c-ui.accordion.item header="Terms &amp; Conditions">
-        By using this service, you agree to our terms and conditions.
+        By using this service, you agree to our terms and conditions. Please read carefully before proceeding.
     </c-ui.accordion.item>
     <c-ui.accordion.item header="Privacy Notice">
-        We respect your privacy and will never share your information.
+        We respect your privacy and will never share your personal information with third parties.
     </c-ui.accordion.item>
     <c-ui.accordion.item header="About us">
-        We are a team dedicated to building beautiful UI components.
+        We are a team dedicated to building beautiful, accessible UI components for Django developers.
     </c-ui.accordion.item>
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -99,8 +100,8 @@
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion>
     <c-ui.accordion.item header="Step 1: Enter Details">
-        <input type="text" name="name" placeholder="Your name">
-        <input type="email" name="email" placeholder="Email address">
+        <c-ui.input type="text" name="name" placeholder="Your name" class="w-full mb-3" />
+        <c-ui.input type="email" name="email" placeholder="Email address" class="w-full" />
     </c-ui.accordion.item>
     <c-ui.accordion.item header="Step 2: Review & Submit" expanded>
         <p>Please review your information and click submit to complete the process.</p>
@@ -112,17 +113,17 @@
 
     <c-section id="disabled" title="Disabled">
 
-    <p>Disable individual accordion items with <code>:disabled="True"</code>.</p>
+    <p>Disable individual accordion items with <code>disabled</code>.</p>
 
     <c-sample>
         <c-ui.accordion>
             <c-ui.accordion.item header="Available Features">
                 All features are accessible and ready to use in your current plan.
             </c-ui.accordion.item>
-            <c-ui.accordion.item header="Premium Features" :disabled="True">
+            <c-ui.accordion.item header="Premium Features" disabled>
                 These features require a premium subscription. Upgrade to unlock.
             </c-ui.accordion.item>
-            <c-ui.accordion.item header="Beta Features" :disabled="True">
+            <c-ui.accordion.item header="Beta Features" disabled>
                 These experimental features are coming soon. Stay tuned!
             </c-ui.accordion.item>
         </c-ui.accordion>
@@ -130,13 +131,13 @@
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion>
     <c-ui.accordion.item header="Available Features">
-        All features are accessible and ready to use.
+        All features are accessible and ready to use in your current plan.
     </c-ui.accordion.item>
-    <c-ui.accordion.item header="Premium Features" :disabled="True">
-        These features require a premium subscription.
+    <c-ui.accordion.item header="Premium Features" disabled>
+        These features require a premium subscription. Upgrade to unlock.
     </c-ui.accordion.item>
-    <c-ui.accordion.item header="Beta Features" :disabled="True">
-        These experimental features are coming soon.
+    <c-ui.accordion.item header="Beta Features" disabled>
+        These experimental features are coming soon. Stay tuned!
     </c-ui.accordion.item>
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -163,10 +164,13 @@
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.accordion>
     <c-ui.accordion.item header="Security Settings" icon_position="leading">
-        Enable two-factor authentication and manage your security preferences.
+        Enable two-factor authentication and manage your security preferences here.
     </c-ui.accordion.item>
     <c-ui.accordion.item header="Notification Preferences" icon_position="leading">
-        Choose which notifications you want to receive.
+        Choose which notifications you want to receive via email, SMS, or push.
+    </c-ui.accordion.item>
+    <c-ui.accordion.item header="Privacy Controls" icon_position="leading">
+        Manage who can see your profile and activity on the platform.
     </c-ui.accordion.item>
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -217,9 +221,98 @@
         <c-slot name="icon_open">
             <c-heroicon.minus class="size-5" />
         </c-slot>
-        The icon changes from plus to minus when expanded.
+        The icon changes from a plus to a minus when expanded, providing clear visual feedback about the accordion state.
+    </c-ui.accordion.item>
+    <c-ui.accordion.item header="Click to reveal more">
+        <c-slot name="icon_closed">
+            <c-heroicon.plus class="size-5" />
+        </c-slot>
+        <c-slot name="icon_open">
+            <c-heroicon.minus class="size-5" />
+        </c-slot>
+        This pattern works well for FAQ sections where users expect clear open/close indicators.
+    </c-ui.accordion.item>
+    <c-ui.accordion.item header="Additional information">
+        <c-slot name="icon_closed">
+            <c-heroicon.plus class="size-5" />
+        </c-slot>
+        <c-slot name="icon_open">
+            <c-heroicon.minus class="size-5" />
+        </c-slot>
+        Both icons automatically respect the accent color setting for consistent theming.
     </c-ui.accordion.item>
 </c-ui.accordion>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="card" title="In a card">
+
+    <p>Rows are flush by default and take their horizontal padding from each item, so the accordion drops cleanly into a card. Give the card <code>padding="none"</code> for an edge-to-edge body, then match each item's <code>px-*</code> to the card.</p>
+
+    <c-sample>
+        <div class="w-full max-w-lg">
+            <c-ui.card variant="outline" padding="none">
+                <c-ui.accordion>
+                    <c-ui.accordion.item class="px-4" header="How does billing work?">
+                        We offer monthly and annual plans, charged at the start of each cycle. You can cancel anytime, and every plan includes automatic backups and 24/7 support.
+                    </c-ui.accordion.item>
+                    <c-ui.accordion.item class="px-4" header="Is my data secure?">
+                        Yes. We use end-to-end encryption and regular third-party audits, with all data encrypted at rest and in transit.
+                    </c-ui.accordion.item>
+                    <c-ui.accordion.item class="px-4" header="What integrations do you support?">
+                        We integrate with hundreds of popular tools and expose a REST API plus webhooks for anything custom.
+                    </c-ui.accordion.item>
+                </c-ui.accordion>
+            </c-ui.card>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.card variant="outline" padding="none">
+    <c-ui.accordion>
+        <c-ui.accordion.item class="px-4" header="How does billing work?">
+            We offer monthly and annual plans, charged at the start of each cycle.
+        </c-ui.accordion.item>
+        <c-ui.accordion.item class="px-4" header="Is my data secure?">
+            Yes. We use end-to-end encryption and regular third-party audits.
+        </c-ui.accordion.item>
+    </c-ui.accordion>
+</c-ui.card>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <p class="mt-8">The same flush rows drop straight into a titled card. Use <code>padding="none"</code> for an edge-to-edge body, pass the card a <code>title</code> and <code>subheading</code>, and match the items' padding to the card header.</p>
+
+    <c-sample>
+        <div class="w-full max-w-lg">
+            <c-ui.card padding="none" class="overflow-hidden" title="Frequently asked questions" subheading="Billing and plans">
+                <c-ui.accordion>
+                    <c-ui.accordion.item class="px-6" header="How is billing calculated?">
+                        Accounts are invoiced monthly on their signup anniversary. Usage above your plan is billed at the end of the cycle.
+                    </c-ui.accordion.item>
+                    <c-ui.accordion.item class="px-6" header="Can I add seats mid-cycle?">
+                        Seats added partway through a cycle are prorated automatically, so you only pay for the days you use them.
+                    </c-ui.accordion.item>
+                    <c-ui.accordion.item class="px-6" header="Do annual plans save money?">
+                        Annual plans include two months free over paying monthly, billed once a year.
+                    </c-ui.accordion.item>
+                </c-ui.accordion>
+            </c-ui.card>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.card padding="none" class="overflow-hidden"
+    title="Frequently asked questions"
+    subheading="Billing and plans">
+    <c-ui.accordion>
+        <c-ui.accordion.item class="px-6" header="How is billing calculated?">
+            Accounts are invoiced monthly on their signup anniversary.
+        </c-ui.accordion.item>
+        <c-ui.accordion.item class="px-6" header="Can I add seats mid-cycle?">
+            Seats added partway through a cycle are prorated automatically.
+        </c-ui.accordion.item>
+    </c-ui.accordion>
+</c-ui.card>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
     </c-section>

@@ -1,28 +1,27 @@
 <c-layouts.base>
-    <div class="mx-auto max-w-8xl grid sm:grid-cols-[200px_minmax(0,1fr)] px-5">
-        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pr-10 pl-3 -ml-3 hidden sm:block">
+    <div class="mx-auto max-w-8xl grid sm:grid-cols-[200px_minmax(0,1fr)] lg:grid-cols-[230px_minmax(0,1fr)] px-5">
+        <div class="hidden sm:block sm:sticky sm:top-[73px] sm:self-start pr-10 pl-3 -ml-3">
             <c-ui-docs.sidebar />
         </div>
         <div class="min-w-0 pb-10 py-6">
             <c-layouts.prose-container>
                 <div class="text-center max-w-2xl mx-auto mb-12 not-prose">
-                    <div class="inline-flex items-center gap-1.5 mb-5 px-3 py-1 rounded-full bg-accent/10 text-accent-content text-sm font-medium">
-                        <c-icons.blocks class="size-4" />
-                        Cotton UI
-                    </div>
-                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Beautiful components for Django</h1>
+                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Django UI components, woven from Cotton</h1>
                     <p class="text-lg text-zinc-600 dark:text-zinc-400 mt-4">
-                        An accessible, customizable component kit built with Cotton, Alpine.js and Tailwind CSS. Copy, paste and ship.
+                        An optional kit of accessible, themeable components, built on Cotton with Alpine.js and Tailwind CSS.
                     </p>
                     <div class="flex gap-3 justify-center mt-8">
                         <a href="{% url 'ui-installation' %}" class="no-underline">
                             <c-ui.button size="lg" variant="primary">Get Started</c-ui.button>
                         </a>
-                        <a href="https://github.com/wrabit/django-cotton" target="_blank" class="no-underline">
-                            <c-ui.button size="lg" variant="default">View on GitHub</c-ui.button>
+                        <a href="https://github.com/wrabit/django-cotton-ui" target="_blank" class="no-underline">
+                            <c-ui.button size="lg" variant="default" :outlined="True">View on GitHub</c-ui.button>
                         </a>
                     </div>
                 </div>
+
+    {# Toast notifications: dropped once on the page, fed by a window "toast" event #}
+    <c-ui.toast.container />
 
     {# Application-style Mosaic Grid #}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 not-prose items-start">
@@ -30,7 +29,7 @@
         {# Column 1 #}
         <div class="space-y-6">
             {# Payment Method Card #}
-            <c-ui.card class="space-y-4">
+            <c-ui.card x-data class="space-y-4">
                 <div>
                     <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Payment Method</h3>
                     <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">All transactions are secure and encrypted</p>
@@ -47,14 +46,25 @@
                             <c-ui.input
                                 label="Card Number"
                                 type="text"
+                                inputmode="numeric"
                                 placeholder="1234 5678 9012 3456"
+                                x-mask="9999 9999 9999 9999"
                             />
                         </div>
                         <c-ui.input
                             label="CVV"
                             type="text"
+                            inputmode="numeric"
                             placeholder="123"
+                            x-mask="999"
                         />
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-2">
+                    <c-ui.button variant="default">Back</c-ui.button>
+                    <div class="flex items-center gap-2">
+                        <c-ui.button variant="ghost">Cancel</c-ui.button>
+                        <c-ui.button variant="primary" @click="$dispatch('toast', { title: 'Payment received', message: '$49.00 charged to your card', variant: 'success' })">Pay now</c-ui.button>
                     </div>
                 </div>
             </c-ui.card>
@@ -65,8 +75,19 @@
             </c-ui.checkbox.group>
 
             {# Status Indicators #}
-            <c-ui.card size="sm" class="space-y-3">
-                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">System Status</h3>
+            <c-ui.card variant="outline" class="space-y-3">
+                <div class="flex items-center gap-1.5">
+                    <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">System Status</h3>
+                    <c-ui.popover position="bottom">
+                        <c-slot name="trigger">
+                            <button type="button" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors rounded focus-ring" aria-label="About these statuses">
+                                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+                            </button>
+                        </c-slot>
+                        <p class="font-medium text-zinc-900 dark:text-zinc-100 mb-1">Service health</p>
+                        <p class="text-zinc-600 dark:text-zinc-400">Live status of each service. <span class="text-amber-600 dark:text-amber-400 font-medium">Degraded</span> means slower than usual responses.</p>
+                    </c-ui.popover>
+                </div>
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="text-sm text-zinc-600 dark:text-zinc-400">API Server</span>
@@ -80,11 +101,18 @@
                         <span class="text-sm text-zinc-600 dark:text-zinc-400">CDN</span>
                         <c-ui.badge color="amber" size="sm">Degraded</c-ui.badge>
                     </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-zinc-600 dark:text-zinc-400">Backups</span>
+                        <span class="flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+                            <c-ui.spinner size="xs" color="current" />
+                            Syncing
+                        </span>
+                    </div>
                 </div>
             </c-ui.card>
 
             {# Project Selection #}
-            <c-ui.card size="sm" class="space-y-3">
+            <c-ui.card class="space-y-3">
                 <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Active Project</h3>
                 <c-ui.select name="project" variant="listbox" placeholder="Select a project" value="api">
                     <c-ui.menu.item value="website" label="Company Website">
@@ -112,7 +140,7 @@
             </c-ui.card>
 
             {# File Processing #}
-            <c-ui.card size="sm" class="space-y-3">
+            <c-ui.card class="space-y-3">
                 <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Processing Status</h3>
                 <div class="space-y-3">
                     <div>
@@ -127,9 +155,7 @@
                                 Processing
                             </c-ui.badge>
                         </div>
-                        <div class="h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-blue-500 rounded-full" style="width: 65%"></div>
-                        </div>
+                        <c-ui.progress :value="65" color="blue" />
                     </div>
                     <div>
                         <div class="flex items-center justify-between mb-1">
@@ -143,15 +169,16 @@
                                 Complete
                             </c-ui.badge>
                         </div>
-                        <div class="h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
-                            <div class="h-full bg-green-500 rounded-full" style="width: 100%"></div>
-                        </div>
+                        <c-ui.progress :value="100" color="green" />
                     </div>
                 </div>
+                <c-ui.alert variant="error" appearance="soft">
+                    1 file failed to process. <a href="#" class="font-medium underline">Retry</a>.
+                </c-ui.alert>
             </c-ui.card>
 
             {# Tags/Categories - Clickable Badges #}
-            <c-ui.card size="sm" class="space-y-3">
+            <c-ui.card class="space-y-3">
                 <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Article Tags</h3>
                 <div class="flex flex-wrap gap-2">
                     <c-ui.badge href="javascript:void(0)" color="purple" variant="pill">
@@ -174,53 +201,143 @@
                     <c-ui.badge href="javascript:void(0)" color="pink" variant="pill">Tutorial</c-ui.badge>
                 </div>
             </c-ui.card>
+
+            {# Tooltip toolbar - imaginary editing studio: free-flowing bar, equal cells (lucide icons) #}
+            <div class="flex items-stretch rounded-box border border-zinc-200 dark:border-zinc-700 bg-[var(--color-surface)] divide-x divide-zinc-200 dark:divide-zinc-700 shadow-[var(--shadow-box)]">
+                <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
+                    <c-ui.tooltip size="sm" content="Capture">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                        </button>
+                    </c-ui.tooltip>
+                </div>
+                <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
+                    <c-ui.tooltip size="sm" content="Crop">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>
+                        </button>
+                    </c-ui.tooltip>
+                </div>
+                <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
+                    <c-ui.tooltip size="sm" content="Resize">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg>
+                        </button>
+                    </c-ui.tooltip>
+                </div>
+                <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
+                    <c-ui.tooltip size="sm" content="Rotate">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                        </button>
+                    </c-ui.tooltip>
+                </div>
+                <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
+                    <c-ui.tooltip size="sm" content="Zoom out">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+                        </button>
+                    </c-ui.tooltip>
+                </div>
+                <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
+                    <c-ui.tooltip size="sm" content="Zoom in">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                        </button>
+                    </c-ui.tooltip>
+                </div>
+            </div>
+
+            {# Segmented (pill) radio #}
+            <c-ui.card class="space-y-3">
+                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Billing period</h3>
+                <c-ui.radio.group name="billing" variant="pill" value="yearly">
+                    <c-ui.radio value="monthly" label="Monthly" />
+                    <c-ui.radio value="yearly" label="Yearly" />
+                </c-ui.radio.group>
+            </c-ui.card>
         </div>
 
         {# Column 2 #}
         <div class="space-y-6">
             {# Team Collaboration #}
-            <c-ui.card class="space-y-4">
+            <c-ui.card class="space-y-4 border-0">
                 <div class="text-center py-4">
-                    <div class="flex justify-center -space-x-2 mb-4">
-                        <div class="w-10 h-10 rounded-full bg-blue-500 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-white font-semibold">S</div>
-                        <div class="w-10 h-10 rounded-full bg-purple-500 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-white font-semibold">M</div>
-                        <div class="w-10 h-10 rounded-full bg-teal-500 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-white font-semibold">A</div>
-                    </div>
+                    <c-ui.avatar.group class="justify-center mb-4">
+                        <c-ui.avatar initials="S" color="blue" />
+                        <c-ui.avatar initials="M" color="purple" />
+                        <c-ui.avatar initials="A" color="teal" />
+                        <c-ui.avatar initials="+2" class="text-xs" />
+                    </c-ui.avatar.group>
                     <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Team Members</h3>
                     <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">3 members in this workspace</p>
-                    <c-ui.button variant="default" class="w-full">+ Invite Members</c-ui.button>
+                    <c-ui.dialog>
+                        <c-slot name="trigger">
+                            <c-ui.button variant="default" class="w-full">+ Invite Members</c-ui.button>
+                        </c-slot>
+                        <c-slot name="header">
+                            <c-ui.dialog.title>Invite to workspace</c-ui.dialog.title>
+                            <c-ui.dialog.description>Send an invite by email and they'll get access right away.</c-ui.dialog.description>
+                        </c-slot>
+                        <div class="space-y-4 text-left">
+                            <c-ui.input label="Email address" type="email" placeholder="teammate@example.com" />
+                        </div>
+                        <c-slot name="footer">
+                            <c-ui.button variant="ghost" @click="close()">Cancel</c-ui.button>
+                            <c-ui.button variant="primary" @click="close()">Send invite</c-ui.button>
+                        </c-slot>
+                    </c-ui.dialog>
                 </div>
             </c-ui.card>
 
             {# Notification Preferences #}
-            <c-ui.card class="space-y-4">
+            <div class="space-y-4">
                 <div>
                     <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Notifications</h3>
                     <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Manage your notification preferences</p>
                 </div>
                 <div class="space-y-3">
                     <c-ui.switch
+                        inline
                         name="email_notifications"
                         label="Email Notifications"
                         description="Receive updates via email"
-                        :checked="True"
+                        checked
                     />
                     <c-ui.switch
+                        inline
                         name="push_notifications"
                         label="Push Notifications"
                         description="Get instant alerts on your device"
-                        :checked="True"
+                        checked
                     />
                     <c-ui.switch
+                        inline
                         name="sms_notifications"
                         label="SMS Notifications"
                         description="Receive text messages for important updates"
                     />
                 </div>
+            </div>
+
+            {# Skills Combobox #}
+            <c-ui.card class="space-y-3">
+                <div>
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Required skills</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Search and tag the skills for this role</p>
+                </div>
+                <c-ui.combobox
+                    name="skills"
+                    placeholder="Search skills..."
+                    :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS', 'PostgreSQL', 'HTMX']"
+                    :selected="['Django', 'Alpine.js']"
+                    searchable
+                    :max_tags="4"
+                />
             </c-ui.card>
 
             {# Hosting Plan Selection #}
-            <div>
+            <c-ui.card variant="outline">
                 <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Choose Your Plan</h3>
                 <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">Select the hosting plan that fits your needs</p>
                 <c-ui.radio.group name="hosting" variant="cards" class="flex-col" value="shared">
@@ -290,11 +407,68 @@
                         </div>
                     </c-ui.radio>
                 </c-ui.radio.group>
-            </div>
+            </c-ui.card>
+
+            {# LLM "thinking" pattern with collapse #}
+            <c-ui.card class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Assistant</h3>
+                </div>
+                <c-ui.collapse trigger-text="Thought for 4 seconds">
+                    <div class="mt-2 pl-3 border-l-2 border-zinc-200 dark:border-zinc-700 space-y-2 text-sm text-zinc-500 dark:text-zinc-400">
+                        <p>Splitting the request into discrete steps.</p>
+                        <p>Checking the component library for a matching primitive.</p>
+                        <p>Drafting and refining the final answer.</p>
+                    </div>
+                </c-ui.collapse>
+                <p class="text-sm text-zinc-700 dark:text-zinc-300">Done. Here is a concise summary of what changed and why.</p>
+            </c-ui.card>
         </div>
 
         {# Column 3 #}
         <div class="space-y-6">
+            {# Composer / prompt box with upward tool + model menus #}
+            <c-ui.composer placeholder="Ask anything…">
+                <c-slot name="leading">
+                    <c-ui.dropdown position="top" align="start" min_width="14rem">
+                        <c-slot name="trigger">
+                            <button type="button" aria-label="Add" class="inline-flex items-center justify-center size-8 rounded-control text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer focus-ring">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                            </button>
+                        </c-slot>
+                        <c-ui.dropdown.item>Upload from computer</c-ui.dropdown.item>
+                        <c-ui.dropdown.item>Add photos &amp; files</c-ui.dropdown.item>
+                        <c-ui.dropdown.item>Add from a URL</c-ui.dropdown.item>
+                    </c-ui.dropdown>
+                </c-slot>
+                <c-slot name="trailing">
+                    <div x-data="{ model: 'Opus 4.8' }" class="contents">
+                        <c-ui.dropdown position="top" align="end" min_width="13rem">
+                            <c-slot name="trigger">
+                                <button type="button" class="inline-flex items-center gap-1 px-2 py-1 rounded-control text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer focus-ring">
+                                    <span x-text="model"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                </button>
+                            </c-slot>
+                            <c-ui.dropdown.item @click.capture="model = 'Opus 4.8'">Opus 4.8</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'GPT-5'">GPT-5</c-ui.dropdown.item>
+                            <c-ui.dropdown.separator />
+                            <c-ui.dropdown.item @click.capture="model = 'Llama 3.3 70B'">Llama 3.3 70B</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'Mistral Large'">Mistral Large</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'Qwen2.5 72B'">Qwen2.5 72B</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'DeepSeek-V3'">DeepSeek-V3</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'Gemma 2 27B'">Gemma 2 27B</c-ui.dropdown.item>
+                        </c-ui.dropdown>
+                    </div>
+                    <c-ui.button variant="ghost" size="sm" class="!px-2" aria-label="Dictate">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" /></svg>
+                    </c-ui.button>
+                    <c-ui.button variant="primary" size="sm" class="!px-2" aria-label="Send">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7" /></svg>
+                    </c-ui.button>
+                </c-slot>
+            </c-ui.composer>
             {# Security Settings #}
             <c-ui.card class="space-y-4">
                 <div>
@@ -319,12 +493,7 @@
             {# Dashboard Tabs #}
             <c-ui.card>
                 <c-ui.tabs>
-                    <c-ui.tabs.list>
-                        <c-ui.tabs.tab target="overview">Overview</c-ui.tabs.tab>
-                        <c-ui.tabs.tab target="analytics">Analytics</c-ui.tabs.tab>
-                        <c-ui.tabs.tab target="reports">Reports</c-ui.tabs.tab>
-                    </c-ui.tabs.list>
-                    <c-ui.tabs.panel name="overview">
+                    <c-ui.tabs.tab name="Overview">
                         <div class="py-6 space-y-6">
                             <div class="grid grid-cols-3 gap-4">
                                 <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
@@ -344,13 +513,13 @@
                                 </div>
                             </div>
                         </div>
-                    </c-ui.tabs.panel>
-                    <c-ui.tabs.panel name="analytics">
+                    </c-ui.tabs.tab>
+                    <c-ui.tabs.tab name="Analytics">
                         <p class="text-zinc-600 dark:text-zinc-400 py-6">Deep dive into user behavior and engagement metrics.</p>
-                    </c-ui.tabs.panel>
-                    <c-ui.tabs.panel name="reports">
+                    </c-ui.tabs.tab>
+                    <c-ui.tabs.tab name="Reports">
                         <p class="text-zinc-600 dark:text-zinc-400 py-6">Generate and export custom reports.</p>
-                    </c-ui.tabs.panel>
+                    </c-ui.tabs.tab>
                 </c-ui.tabs>
             </c-ui.card>
 
@@ -368,8 +537,23 @@
             </c-ui.card>
 
             {# Activity Feed #}
-            <c-ui.card class="space-y-4">
-                <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Recent Activity</h3>
+            <c-ui.card variant="outline" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Recent Activity</h3>
+                    <c-ui.dropdown position="bottom" align="end" offset="8">
+                        <c-slot name="trigger">
+                            <button type="button" class="p-1.5 -mr-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 transition-colors focus-ring" aria-label="More options">
+                                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                </svg>
+                            </button>
+                        </c-slot>
+                        <c-ui.dropdown.item>Mark all as read</c-ui.dropdown.item>
+                        <c-ui.dropdown.item>Notification settings</c-ui.dropdown.item>
+                        <c-ui.dropdown.separator />
+                        <c-ui.dropdown.item variant="danger">Clear activity</c-ui.dropdown.item>
+                    </c-ui.dropdown>
+                </div>
                 <div class="space-y-4">
                     <div class="flex gap-3">
                         <div class="w-2 h-2 mt-2 rounded-full bg-blue-500"></div>
@@ -393,17 +577,19 @@
                         </div>
                     </div>
                 </div>
+                <c-ui.pagination class="justify-center pt-1">
+                    <c-ui.pagination.prev :disabled="True" />
+                    <c-ui.pagination.item :current="True">1</c-ui.pagination.item>
+                    <c-ui.pagination.item href="#">2</c-ui.pagination.item>
+                    <c-ui.pagination.item href="#">3</c-ui.pagination.item>
+                    <c-ui.pagination.next href="#" />
+                </c-ui.pagination>
             </c-ui.card>
+
+            {# Standalone calendar - ships its own surface, no card/title needed #}
+            <c-ui.calendar mode="single" full />
         </div>
 
-    </div>
-
-    <div class="text-center py-16 border-t border-zinc-200 dark:border-zinc-700">
-        <h2 class="text-4xl font-bold mb-6">Ready to build?</h2>
-        <p class="text-xl text-zinc-600 dark:text-zinc-400 mb-8 max-w-2xl mx-auto">
-            Start using these components in your Django project today. No complex setup required.
-        </p>
-        <c-ui.button variant="primary" class="text-lg px-10 py-4">Browse All Components</c-ui.button>
     </div>
 
             </c-layouts.prose-container>

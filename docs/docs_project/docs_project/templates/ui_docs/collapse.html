@@ -11,75 +11,82 @@
     </c-note>
 
     <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
         <c-index-sublink section-id="custom-trigger"><a href="#custom-trigger" class="no-underline">Custom Trigger</a></c-index-sublink>
         <c-index-sublink section-id="open-default"><a href="#open-default" class="no-underline">Open by Default</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
-    <c-sample>
-        <div class="w-full max-w-xs">
-            <c-ui.collapse trigger-text="Show Details">
-                <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md">
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                        This content is hidden by default and smoothly expands when the trigger is clicked.
-                    </p>
-                </div>
-            </c-ui.collapse>
-        </div>
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse trigger-text="Show Details">
-    <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md">
-        <p class="text-sm text-zinc-600 dark:text-zinc-400">
-            This content is hidden by default and smoothly expands when clicked.
-        </p>
-    </div>
-</c-ui.collapse>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-
-    <c-section id="custom-trigger" title="Custom Trigger">
-        <p>Provide a custom trigger element using the <code>trigger</code> slot for complete control over the appearance.</p>
+    <c-section id="basic" title="Basic Usage">
+        <p>Hide secondary detail behind a toggle. Pass the label as <code>trigger_text</code>; the chevron is appended and rotated for you.</p>
 
         <c-sample>
             <div class="w-full max-w-xs">
-                <c-ui.collapse>
-                    <c-slot name="trigger">
-                        <div class="inline-flex items-center gap-2 text-accent hover:text-accent/80 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
-                                <path fill-rule="evenodd" d="M2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8Zm6-4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
-                            </svg>
-                            <span class="text-sm font-medium">Read More</span>
-                        </div>
-                    </c-slot>
-
-                    <div class="mt-2 p-4 border border-zinc-200 dark:border-zinc-700 rounded-md">
-                        <h4 class="font-semibold mb-2">Additional Information</h4>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                            You can use any HTML element as a trigger - links, custom buttons, icons, or complex layouts.
-                        </p>
+                <c-ui.collapse trigger_text="Show details">
+                    <div class="pt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                        Extra detail that stays out of the way until someone needs it.
                     </div>
                 </c-ui.collapse>
             </div>
 
             <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse>
-    <c-slot name="trigger">
-        <div class="inline-flex items-center gap-2 text-accent">
-            <svg><!-- info icon --></svg>
-            <span class="text-sm font-medium">Read More</span>
-        </div>
-    </c-slot>
-
-    <div class="mt-2 p-4 border rounded-md">
-        <h4 class="font-semibold mb-2">Additional Information</h4>
-        <p class="text-sm">
-            You can use any HTML element as a trigger.
-        </p>
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse trigger_text="Show details">
+    <div class="pt-2 text-sm">
+        Extra detail that stays out of the way until someone needs it.
     </div>
 </c-ui.collapse>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
             </c-slot>
         </c-sample>
+    </c-section>
+
+    <c-section id="custom-trigger" title="Custom Trigger">
+        <p>Provide a custom trigger element with the <code>trigger</code> slot for full control over the appearance. The chevron is still appended and rotated; set <code>:chevron="false"</code> to drop it, or pass an <code>icon</code> slot to replace it.</p>
+
+    <c-sample>
+        <div class="w-full max-w-lg">
+            <c-ui.collapse>
+                <c-slot name="trigger">
+                    <span class="inline-flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-zinc-400"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437" /></svg>
+                        Tool called: <span class="font-medium text-zinc-900 dark:text-zinc-100">Knowledge Agent</span>
+                    </span>
+                </c-slot>
+                <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
+                    <p>Searched the knowledge base across 14 documents and ranked the passages most relevant to the billing question.</p>
+                    <p class="font-medium text-zinc-900 dark:text-zinc-100">Key findings</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Accounts are invoiced monthly on their signup anniversary.</li>
+                        <li>Seats added mid cycle are prorated automatically.</li>
+                        <li>Annual plans include two months free over paying monthly.</li>
+                    </ul>
+                    <p>Cited 3 sources, confidence high.</p>
+                </div>
+            </c-ui.collapse>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse>
+    <c-slot name="trigger">
+        <span class="inline-flex items-center gap-2 text-sm text-zinc-600">
+            <svg><!-- wrench --></svg>
+            Tool called: <span class="font-medium">Knowledge Agent</span>
+        </span>
+    </c-slot>
+
+    {# the chevron is appended and rotated for you #}
+    <div class="mt-2 p-4 bg-zinc-50 rounded-md text-sm space-y-2">
+        <p>Searched the knowledge base across 14 documents and ranked the most relevant passages.</p>
+        <p class="font-medium">Key findings</p>
+        <ul class="list-disc pl-5 space-y-1">
+            <li>Accounts are invoiced monthly on their signup anniversary.</li>
+            <li>Seats added mid cycle are prorated automatically.</li>
+            <li>Annual plans include two months free over paying monthly.</li>
+        </ul>
+        <p>Cited 3 sources, confidence high.</p>
+    </div>
+</c-ui.collapse>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
     </c-section>
 
     <c-section id="open-default" title="Open by Default">
@@ -114,12 +121,14 @@
         <c-api-props>
             <c-api-prop name="trigger-text" type="str" default="Toggle" description="Text to display on the default button trigger. Only used when trigger slot is not provided."></c-api-prop>
             <c-api-prop name=":expanded" type="bool" :options="['True', 'False']" default="False" description="Set to True to show content by default."></c-api-prop>
+            <c-api-prop name=":chevron" type="bool" :options="['True', 'False']" default="True" description="Show a chevron next to the trigger that rotates when expanded. Applies to both the default and a custom trigger slot."></c-api-prop>
         </c-api-props>
 
         <h4 class="mt-6">Slots</h4>
 
         <c-api-props>
-            <c-api-prop name="trigger" type="slot" default="" description="Custom trigger element. When provided, overrides the default button. The trigger will automatically toggle the collapsed content on click."></c-api-prop>
+            <c-api-prop name="trigger" type="slot" default="" description="Custom trigger content. Replaces the default button text; the chevron is still appended automatically. Toggles the content on click."></c-api-prop>
+            <c-api-prop name="icon" type="slot" default="" description="Replace the default chevron with your own icon. The component still rotates it on expand."></c-api-prop>
             <c-api-prop name="default" type="slot" default="" description="The content to show/hide with collapse animation."></c-api-prop>
         </c-api-props>
 

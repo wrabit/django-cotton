@@ -13,7 +13,7 @@
         <c-index-sublink section-id="with-description"><a href="#with-description" class="no-underline">With Description</a></c-index-sublink>
         <c-index-sublink section-id="with-error"><a href="#with-error" class="no-underline">With Error</a></c-index-sublink>
         <c-index-sublink section-id="complete"><a href="#complete" class="no-underline">Complete Example</a></c-index-sublink>
-        <c-index-sublink section-id="inline"><a href="#inline" class="no-underline">Inline Variant</a></c-index-sublink>
+        <c-index-sublink section-id="layouts"><a href="#layouts" class="no-underline">Layouts</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -84,12 +84,14 @@
     description_trailing="Must be at least 8 characters"
     type="password"
     name="password"
+    placeholder="•••••••••"
 />
 
 <c-ui.textarea
     label="Bio"
     description="Tell us about yourself"
     name="bio"
+    placeholder="Write something..."
 />
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -230,31 +232,67 @@
     </c-sample>
     </c-section>
 
-    <c-section id="inline" title="Inline Variant">
+    <c-section id="layouts" title="Layouts">
 
-    <p>Display the field in an inline layout with the label beside the input.</p>
+    <p>
+        The default <code>block</code> layout stacks the label above the control. Two named
+        shortcuts cover the common alternatives: <code>inline</code> sits the label beside the
+        control, and <code>toggle</code> pushes the control to the far right (ideal for switches
+        and checkboxes). The <a href="{% url 'ui-switch' %}">Switch</a> uses the <code>toggle</code>
+        layout for its own <code>inline</code> prop.
+    </p>
+    <p>
+        These shortcuts only exist because they encode flex wiring that is awkward to repeat by
+        hand. They are deliberately few: for anything outside them, pass utility classes on the
+        field rather than waiting for a new variant to be invented.
+    </p>
 
     <c-sample>
-        <div class="w-full max-w-sm">
+        <div class="w-full max-w-sm space-y-8">
+            {% comment %}block (default){% endcomment %}
+            <c-ui.field>
+                <c-ui.label>Email</c-ui.label>
+                <c-ui.input type="email" name="email_block" placeholder="you@example.com" />
+            </c-ui.field>
+
+            {% comment %}inline: label beside control{% endcomment %}
             <c-ui.field variant="inline">
-                <c-ui.label class="w-32 pt-2">Email</c-ui.label>
+                <c-ui.label class="w-24 pt-2">Email</c-ui.label>
                 <div class="flex-1">
-                    <c-ui.input type="email" name="email" placeholder="you@example.com" />
-                    <c-ui.description>We'll never share your email.</c-ui.description>
+                    <c-ui.input type="email" name="email_inline" placeholder="you@example.com" />
                 </div>
+            </c-ui.field>
+
+            {% comment %}toggle: control pushed right{% endcomment %}
+            <c-ui.field variant="toggle" label="Email alerts" description="Get notified about activity.">
+                <c-ui.switch name="alerts" />
             </c-ui.field>
         </div>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-snippet>{% cotton:verbatim %}{% verbatim %}{# block: label above control (default) #}
+<c-ui.field>
+    <c-ui.label>Email</c-ui.label>
+    <c-ui.input type="email" name="email" placeholder="you@example.com" />
+</c-ui.field>
+
+{# inline: label beside control #}
 <c-ui.field variant="inline">
-    <c-ui.label class="w-32 pt-2">Email</c-ui.label>
+    <c-ui.label class="w-24 pt-2">Email</c-ui.label>
     <div class="flex-1">
         <c-ui.input type="email" name="email" placeholder="you@example.com" />
-        <c-ui.description>We'll never share your email.</c-ui.description>
     </div>
 </c-ui.field>
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+{# toggle: control pushed to the far right #}
+<c-ui.field variant="toggle" label="Email alerts" description="Get notified about activity.">
+    <c-ui.switch name="alerts" />
+</c-ui.field>
+
+{# escape hatch: override classes for anything else #}
+<c-ui.field class="flex flex-row-reverse items-center gap-3">
+    ...
+</c-ui.field>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
     </c-section>
@@ -264,7 +302,8 @@
     <h4>Field Props</h4>
 
     <c-api-props>
-        <c-api-prop name="variant" type="str" :options="['block', 'inline']" default="block" description="Layout variant for the field." />
+        <c-api-prop name="variant" type="str" :options="['block', 'inline', 'toggle']" default="block" description="Layout variant. 'block' stacks the label above the control, 'inline' sits the label beside it, 'toggle' pushes the control to the far right. For anything else, pass utility classes via class." />
+        <c-api-prop name="class" type="str" default="" description="Utility classes merged onto the field wrapper. The escape hatch for layouts the variants don't cover." />
     </c-api-props>
 
     <h4 class="mt-6">Label Props</h4>

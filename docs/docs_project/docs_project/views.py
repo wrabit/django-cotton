@@ -12,6 +12,16 @@ def build_view(template_name, title=None):
     def view(request):
         context = {"meta_title": title}
 
+        # Datepicker docs: dynamic limit dates within the current month, so the
+        # disabled / min / max examples are always visible in the opened calendar.
+        if template_name == "ui_docs/datepicker":
+            import datetime
+
+            ym = datetime.date.today().strftime("%Y-%m")
+            context["dp_min"] = f"{ym}-09"
+            context["dp_max"] = f"{ym}-20"
+            context["dp_disabled_dates"] = [f"{ym}-11", f"{ym}-12", f"{ym}-18"]
+
         # Add demo data for HTMX examples page
         if template_name == "htmx_examples":
             context["demo_tasks"] = [

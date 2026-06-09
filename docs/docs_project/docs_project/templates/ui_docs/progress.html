@@ -1,0 +1,143 @@
+<c-layouts.ui>
+    <c-header>
+        Progress
+        <c-slot name="subheading">
+            A slim progress bar for showing completion, upload or task state.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="colors"><a href="#colors" class="no-underline">Colors</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="custom-color"><a href="#custom-color" class="no-underline">Custom Color</a></c-index-sublink>
+        <c-index-sublink section-id="value"><a href="#value" class="no-underline">Showing the Value</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+    <p>Set <code>:value</code> to a number from 0 to 100. The fill uses the accent colour by default and animates as the value changes.</p>
+
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.progress :value="60" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.progress :value="60" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="colors" title="Colors">
+    <p>Use the <code>color</code> prop for a set of built-in fills.</p>
+
+    <c-sample>
+        <div class="w-full max-w-sm space-y-3">
+            <c-ui.progress :value="70" color="accent" />
+            <c-ui.progress :value="70" color="blue" />
+            <c-ui.progress :value="70" color="green" />
+            <c-ui.progress :value="70" color="amber" />
+            <c-ui.progress :value="70" color="red" />
+            <c-ui.progress :value="70" color="violet" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.progress :value="70" color="accent" />
+<c-ui.progress :value="70" color="blue" />
+<c-ui.progress :value="70" color="green" />
+<c-ui.progress :value="70" color="amber" />
+<c-ui.progress :value="70" color="red" />
+<c-ui.progress :value="70" color="violet" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="sizes" title="Sizes">
+    <p>Five track heights, from <code>size="xs"</code> to <code>size="xl"</code>. The default is <code>md</code>.</p>
+
+    <c-sample>
+        <div class="w-full max-w-sm space-y-3">
+            <c-ui.progress :value="60" size="xs" />
+            <c-ui.progress :value="60" size="sm" />
+            <c-ui.progress :value="60" size="md" />
+            <c-ui.progress :value="60" size="lg" />
+            <c-ui.progress :value="60" size="xl" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.progress :value="60" size="xs" />
+<c-ui.progress :value="60" size="sm" />
+<c-ui.progress :value="60" size="md" />
+<c-ui.progress :value="60" size="lg" />
+<c-ui.progress :value="60" size="xl" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="custom-color" title="Custom Color">
+    <p>Need something outside the built-in set? Pass any utility classes to the fill with <code>bar_class</code>. It overrides <code>color</code>, so you can use a solid shade, a gradient, anything.</p>
+
+    <c-sample>
+        <div class="w-full max-w-sm space-y-3">
+            <c-ui.progress :value="80" bar_class="bg-fuchsia-600" />
+            <c-ui.progress :value="80" bar_class="bg-gradient-to-r from-sky-500 to-violet-500" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.progress :value="80" bar_class="bg-fuchsia-600" />
+<c-ui.progress :value="80" bar_class="bg-gradient-to-r from-sky-500 to-violet-500" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="value" title="Showing the Value">
+    <p>Add <code>show_value</code> to render the percentage beside the bar.</p>
+
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.progress :value="42" show_value />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.progress :value="42" show_value />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <p class="mt-6">Or label the value with a <a href="{% url 'ui-tooltip' %}">Tooltip</a>. Pin it <code>open</code> for a permanent callout, or drop <code>open</code> to show it on hover.</p>
+
+    <c-sample>
+        <div class="w-full max-w-sm pt-10">
+            <c-ui.tooltip content="42% complete" arrow open>
+                <div class="w-64">
+                    <c-ui.progress :value="42" />
+                </div>
+            </c-ui.tooltip>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tooltip content="42% complete" arrow open>
+    <div class="w-64">
+        <c-ui.progress :value="42" />
+    </div>
+</c-ui.tooltip>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name=":value" type="int" default="0" description="Completion percentage from 0 to 100." />
+        <c-api-prop name="color" type="str" :options="['accent', 'zinc', 'blue', 'sky', 'green', 'amber', 'red', 'violet']" default="accent" description="Built-in fill colour." />
+        <c-api-prop name="bar_class" type="str" default="" description="Utility classes applied to the fill. Overrides color, so you can use any custom shade or gradient." />
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl']" default="md" description="Track height." />
+        <c-api-prop name=":show_value" type="bool" :options="['True', 'False']" default="False" description="Show the percentage beside the bar." />
+        <c-api-prop name="class" type="str" default="" description="Utility classes applied to the outer wrapper." />
+    </c-api-props>
+
+    </c-section>
+
+</c-layouts.ui>

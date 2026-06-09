@@ -2,32 +2,37 @@
     <c-header>
         Theming
         <c-slot name="subheading">
-            Customize Cotton UI colors using Tailwind CSS v4's theming system.
+            Customize Cotton UI with Tailwind CSS v4's theming system.
         </c-slot>
     </c-header>
 
     <c-slot name="page_index">
         <c-index-sublink section-id="accent-color"><a href="#accent-color" class="no-underline">Accent Color</a></c-index-sublink>
-        <c-index-sublink section-id="accent-props"><a href="#accent-props" class="no-underline">Accent Props</a></c-index-sublink>
-        <c-index-sublink section-id="examples"><a href="#examples" class="no-underline">Examples</a></c-index-sublink>
+        <c-index-sublink section-id="accent-toggle"><a href="#accent-toggle" class="no-underline">Accent Toggle</a></c-index-sublink>
+        <c-index-sublink section-id="radius"><a href="#radius" class="no-underline">Border Radius</a></c-index-sublink>
+        <c-index-sublink section-id="surfaces"><a href="#surfaces" class="no-underline">Surfaces</a></c-index-sublink>
+        <c-index-sublink section-id="tokens"><a href="#tokens" class="no-underline">All Tokens</a></c-index-sublink>
         <c-index-sublink section-id="advanced"><a href="#advanced" class="no-underline">Advanced</a></c-index-sublink>
     </c-slot>
 
-    <p>Cotton UI uses Tailwind's built-in <code>zinc</code> for grays (works out of the box) and a customizable <strong>accent color</strong> (teal by default) for primary buttons, active states, and focus rings.</p>
+    <p>Every part of Cotton UI's look is driven by CSS variables you can override. Grays use Tailwind's built-in <code>zinc</code> and work out of the box. A neutral <strong>accent</strong> ships by default via <code>cotton-ui.css</code>, and radius, surfaces, shadows and the focus ring are all themeable tokens. Start with the main ones below, then see <a href="#tokens">All Tokens</a> for the complete list.</p>
 
     <c-section id="accent-color" title="Changing the Accent Color">
-    <p>The accent color is defined in your <code>app.css</code> using Tailwind v4's <code>@theme</code> directive. Cotton UI uses a 3-value accent system:</p>
+    <p>The accent drives primary buttons, active states and focus rings. Cotton UI uses a 3-value accent system:</p>
 
     <ul>
-        <li><code>--color-accent</code> - Primary button backgrounds</li>
-        <li><code>--color-accent-content</code> - Hover states and readable text</li>
-        <li><code>--color-accent-foreground</code> - Text on accent backgrounds</li>
+        <li><code>--color-accent</code> - primary fills (button backgrounds, active states)</li>
+        <li><code>--color-accent-content</code> - hover states and readable accent text</li>
+        <li><code>--color-accent-foreground</code> - text and icons on accent fills</li>
     </ul>
 
-    <c-sample>
+    <p>A neutral zinc accent is imported from <code>cotton-ui.css</code> by default. To brand the kit, override <code>--color-accent</code> in your own <code>@theme</code> after that import. Define the dark-mode values in <code>@layer theme</code> so they win at the right specificity:</p>
+
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
 @import "tailwindcss";
+@import ".../django_cotton_ui/static/cotton-ui/cotton-ui.css";
 
 @theme {
     --color-accent: var(--color-blue-500);
@@ -47,12 +52,34 @@
     </c-sample>
 
     <p class="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
-        <code>@theme</code> registers colors with Tailwind, enabling utilities like <code>bg-accent</code>. Dark mode uses <code>@layer theme</code> for proper specificity.
+        Defining the accent in <code>@theme</code> registers it with Tailwind, enabling utilities like <code>bg-accent</code> and <code>bg-accent/10</code>. Swap <code>blue</code> for any Tailwind hue, or your own values.
     </p>
+
+    <p class="mt-4">Prefer a live preview? The <a href="{% url 'ui-theme-builder' %}">Theme Builder</a> lets you tweak the accent, radius, surfaces and focus ring, then copies the generated CSS.</p>
     </c-section>
 
-    <c-section id="accent-props" title="Accent Props">
-    <p>Components support an <code>:accent</code> prop to opt out of accent colors for a monochrome style. Set <code>:accent="False"</code> to use zinc-based colors instead.</p>
+    <c-section id="accent-toggle" title="Accent Toggle">
+    <p>By default, a component's selected and active states use your <a href="#accent-color">accent colour</a>: a checked radio, an on switch, a selected card. Adding <code>:accent="False"</code> turns those off for that component and renders them in a neutral tone instead, giving you a monochrome control without touching your theme.</p>
+
+    <p>The neutral tracks the current text colour, so it shows dark on a light background and light on a dark background, switching with light and dark mode on its own. There is nothing to set up.</p>
+
+    <p>If you want the neutral to be a fixed colour rather than the inherited text colour, define the <code>--color-muted</code> token (with a <code>.dark</code> value for dark mode). It is entirely optional: when it is unset, components fall back to the text colour.</p>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
+@theme {
+    --color-muted: var(--color-zinc-900);
+}
+
+@layer theme {
+    .dark {
+        --color-muted: var(--color-zinc-100);
+    }
+}
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
 
     <h3>Radio Button Comparison</h3>
 
@@ -143,74 +170,184 @@
     </c-sample>
     </c-section>
 
-    <c-section id="examples" title="Examples">
-    <h3>Popular Accent Colors</h3>
+    <c-section id="radius" title="Border Radius">
+    <p>Two radius tokens control rounding. Form controls and structural surfaces are kept separate so you can, for example, round cards more than inputs:</p>
 
-    <c-sample>
+    <ul>
+        <li><code>--radius-control</code> - form controls (inputs, buttons, segments)</li>
+        <li><code>--radius-box</code> - structural surfaces (cards, dialogs, menus)</li>
+    </ul>
+
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
-/* Teal (default) */
 @theme {
-    --color-accent: var(--color-teal-500);
-    --color-accent-content: var(--color-teal-600);
-    --color-accent-foreground: var(--color-white);
+    --radius-control: 0.5rem;      /* form controls */
+    --radius-box: 0.75rem;  /* structural surfaces */
 }
-@layer theme {
-    .dark {
-        --color-accent: var(--color-teal-400);
-        --color-accent-content: var(--color-teal-300);
-        --color-accent-foreground: var(--color-teal-950);
-    }
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="surfaces" title="Surfaces">
+    <p>Surface tokens set the page base and the raised surfaces drawn on top of it. The faint tinted base lets white cards and menus read as elevated:</p>
+
+    <ul>
+        <li><code>--color-bg</code> - page base background</li>
+        <li><code>--color-surface</code> - raised surfaces (cards, dialogs, menus)</li>
+        <li><code>--color-input-bg</code> - form field fill (transparent in light so fields are border-defined; a faint lift in dark)</li>
+    </ul>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
+@theme {
+    --color-bg: var(--color-zinc-50);     /* page base */
+    --color-surface: #ffffff;             /* cards, dialogs, menus */
+    --color-input-bg: transparent;        /* form fields (border-defined) */
 }
 
-/* Indigo */
-@theme {
-    --color-accent: var(--color-indigo-500);
-    --color-accent-content: var(--color-indigo-600);
-    --color-accent-foreground: var(--color-white);
-}
 @layer theme {
     .dark {
-        --color-accent: var(--color-indigo-400);
-        --color-accent-content: var(--color-indigo-300);
-        --color-accent-foreground: var(--color-white);
-    }
-}
-
-/* Rose */
-@theme {
-    --color-accent: var(--color-rose-500);
-    --color-accent-content: var(--color-rose-600);
-    --color-accent-foreground: var(--color-white);
-}
-@layer theme {
-    .dark {
-        --color-accent: var(--color-rose-400);
-        --color-accent-content: var(--color-rose-300);
-        --color-accent-foreground: var(--color-white);
+        --color-bg: var(--color-zinc-900);
+        --color-surface: var(--color-zinc-800);
     }
 }
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+    </c-section>
 
-    <h3>How Components Use Colors</h3>
+    <c-section id="tokens" title="All Tokens">
+    <p>The complete set of themeable tokens and their defaults. Override any of them in <code>@theme</code> (or <code>:root</code>), and set dark-mode values in <code>@layer theme</code> under <code>.dark</code>.</p>
 
-    <p>Components use these utility classes that reference your theme:</p>
+    <div class="not-prose border border-zinc-200 dark:border-zinc-700 rounded overflow-hidden px-5 my-6">
+        {# md+: keep Token/Default/Dark (first three columns) on one line; let Purpose wrap. Below md, everything wraps as before. #}
+        <table class="w-full text-sm text-left md:[&_td:nth-child(-n+3)]:whitespace-nowrap md:[&_th:nth-child(-n+3)]:whitespace-nowrap">
+            <thead>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <th class="font-normal text-zinc-500 py-3 pr-4">Token</th>
+                    <th class="font-normal text-zinc-500 py-3 pr-4">Default</th>
+                    <th class="font-normal text-zinc-500 py-3 pr-4">Dark</th>
+                    <th class="font-normal text-zinc-500 py-3">Purpose</th>
+                </tr>
+            </thead>
+            <tbody class="text-zinc-700 dark:text-zinc-300 align-top">
+                <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Accent</td></tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-accent</code></td>
+                    <td class="py-2 pr-4">zinc-900</td>
+                    <td class="py-2 pr-4">zinc-100</td>
+                    <td class="py-2">Primary fills: button backgrounds, active states</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-accent-content</code></td>
+                    <td class="py-2 pr-4">zinc-700</td>
+                    <td class="py-2 pr-4">zinc-300</td>
+                    <td class="py-2">Hover states and readable accent text</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-accent-foreground</code></td>
+                    <td class="py-2 pr-4">white</td>
+                    <td class="py-2 pr-4">zinc-900</td>
+                    <td class="py-2">Text and icons on accent fills</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-muted</code></td>
+                    <td class="py-2 pr-4">currentColor</td>
+                    <td class="py-2 pr-4"></td>
+                    <td class="py-2">Fill and border for <code>:accent="False"</code> controls. Falls back to the foreground when unset.</td>
+                </tr>
 
-    <ul>
-        <li><code>bg-accent</code> - Accent background (primary buttons)</li>
-        <li><code>hover:bg-accent-content</code> - Accent hover state</li>
-        <li><code>text-accent-foreground</code> - Text on accent backgrounds</li>
-        <li><code>ring-accent</code> - Focus rings</li>
-        <li><code>bg-zinc-*</code>, <code>text-zinc-*</code>, <code>border-zinc-*</code> - Base grays (Tailwind built-in)</li>
-    </ul>
+                <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Surfaces</td></tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-bg</code></td>
+                    <td class="py-2 pr-4">zinc-50</td>
+                    <td class="py-2 pr-4">zinc-900</td>
+                    <td class="py-2">Page base background</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-surface</code></td>
+                    <td class="py-2 pr-4">white</td>
+                    <td class="py-2 pr-4">zinc-800</td>
+                    <td class="py-2">Raised surfaces: cards, dialogs, menus</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-input-bg</code></td>
+                    <td class="py-2 pr-4">transparent</td>
+                    <td class="py-2 pr-4">+4% white</td>
+                    <td class="py-2">Form field fill: transparent in light (border-defined), a faint lift in dark</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-box-border</code></td>
+                    <td class="py-2 pr-4">zinc-200</td>
+                    <td class="py-2 pr-4">zinc-700</td>
+                    <td class="py-2">Border on box surfaces: cards, dialogs, menus. Set <code>transparent</code> for a shadow-only look</td>
+                </tr>
+
+                <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Radius</td></tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--radius-control</code></td>
+                    <td class="py-2 pr-4">0.375rem</td>
+                    <td class="py-2 pr-4"></td>
+                    <td class="py-2">Form controls: inputs, buttons, segments</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--radius-box</code></td>
+                    <td class="py-2 pr-4">0.5rem</td>
+                    <td class="py-2 pr-4"></td>
+                    <td class="py-2">Structural surfaces: cards, dialogs, menus</td>
+                </tr>
+
+                <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Shadows</td></tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--shadow-input</code></td>
+                    <td class="py-2 pr-4">0 1px 2px 0 rgb(0 0 0 / 0.05)</td>
+                    <td class="py-2 pr-4"></td>
+                    <td class="py-2">Form input elevation (set to none to flatten)</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--shadow-box</code></td>
+                    <td class="py-2 pr-4">0 1px 2px 0 rgb(0 0 0 / 0.05)</td>
+                    <td class="py-2 pr-4"></td>
+                    <td class="py-2">Card and dialog elevation</td>
+                </tr>
+
+                <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-400">Focus ring</td></tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--focus-ring-width</code></td>
+                    <td class="py-2 pr-4">2px</td>
+                    <td class="py-2 pr-4"></td>
+                    <td class="py-2">Focus ring thickness</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--focus-ring-offset</code></td>
+                    <td class="py-2 pr-4">0px</td>
+                    <td class="py-2 pr-4"></td>
+                    <td class="py-2">Gap between the control and the ring</td>
+                </tr>
+                <tr class="!border-b-zinc-200 dark:!border-b-zinc-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--focus-ring-color</code></td>
+                    <td class="py-2 pr-4">= accent</td>
+                    <td class="py-2 pr-4"></td>
+                    <td class="py-2">Focus ring color</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--focus-ring-offset-color</code></td>
+                    <td class="py-2 pr-4">white</td>
+                    <td class="py-2 pr-4">zinc-900</td>
+                    <td class="py-2">Color behind the offset gap</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     </c-section>
 
     <c-section id="advanced" title="Advanced: Changing the Base Gray">
-    <p>Cotton UI uses Tailwind's built-in <code>zinc</code> for grays, which works with zero configuration. If you prefer a different gray family, you can remap zinc to another palette:</p>
+    <p>Cotton UI uses Tailwind's built-in <code>zinc</code> for grays, which works with zero configuration. If you prefer a different gray family, remap zinc to another palette:</p>
 
-    <c-sample>
+    <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
 /* Remap zinc to slate */

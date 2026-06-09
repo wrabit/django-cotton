@@ -171,7 +171,7 @@ context = { 'today': Weather.objects.get(...) }
 
 <c-snippet label="Generated with template expressions">{% cotton:verbatim %}{% verbatim %}
 <c-mycomp :is_highlighted="{% if important %}True{% endif %}" />
-{# is_valid is False #}
+{# is_highlighted is True when important #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <c-note>

@@ -1,4 +1,4 @@
-{% load static %}<html class="antialiased">
+{% load static %}<html class="">
 <head>
     {{ 'DOCS_HEAD'|env }}
     <title>{{ meta_title }}</title>
@@ -18,9 +18,9 @@
     <script defer src="{% static 'alpine3.min.js' %}"></script>
 
     <script src="{% static 'cotton-ui/cotton-ui.js' %}"></script>
-    <link href="{% static 'cotton-ui/cotton-ui.css' %}" rel="stylesheet" />
 
-    <link href="{% static 'highlight/styles/atom-one-dark.min.css' %}" rel="stylesheet" />
+    <!-- highlight.js theme: Atom One Light + Atom One Dark scoped to .dark -->
+    <link id="hljs-theme" href="{% static 'highlight/styles/cotton-hljs.css' %}" rel="stylesheet" />
     <script>
         hljs.highlightAll();
     </script>
@@ -41,8 +41,10 @@
         div[data-lastpass-icon-root] { display: none !important }
     </style>
 </head>
-<body class="font-sans bg-amber-10/60 dark:bg-zinc-900 min-h-screen bg-fixed">
+<body class="font-sans bg-[var(--color-bg)] min-h-screen bg-fixed">
     <c-navbar />
+    {# Dev-only tool for trialling syntax themes; remove before release. #}
+    <c-hljs-switcher />
 
     <div class="pt-[73px]">
         {{ slot }}
@@ -76,18 +78,21 @@
                         element: section
                     }));
 
-                    // Set initial active section (hash or first)
-                    if (window.location.hash) {
-                        const hashId = window.location.hash.substring(1);
-                        if (this.sections.some(s => s.id === hashId)) {
-                            this.activeSection = hashId;
-                        }
-                    }
-                    if (!this.activeSection && this.sections.length > 0) {
+                    // Honor an incoming deep-link hash; otherwise default to the first section.
+                    const hashId = window.location.hash ? window.location.hash.substring(1) : null;
+                    const hasIncomingHash = hashId && this.sections.some(s => s.id === hashId);
+                    if (hasIncomingHash) {
+                        this.activeSection = hashId;
+                        // After layout / x-cloak settles, scroll to the linked section.
+                        this.$nextTick(() => {
+                            const target = this.sections.find(s => s.id === hashId);
+                            if (target && target.element) target.element.scrollIntoView();
+                        });
+                    } else if (this.sections.length > 0) {
                         this.activeSection = this.sections[0].id;
                     }
 
-                    this.setupScrollHandler();
+                    this.setupScrollHandler(hasIncomingHash);
                     this.handleHashChange();
                 },
 
@@ -97,7 +102,7 @@
                     }
                 },
 
-                setupScrollHandler() {
+                setupScrollHandler(skipInitial) {
                     // Throttle scroll events
                     let ticking = false;
 
@@ -112,8 +117,10 @@
                     };
 
                     window.addEventListener('scroll', this.scrollHandler, { passive: true });
-                    // Initial check
-                    this.updateActiveSection();
+                    // Initial check, skipped when honoring a deep-link hash so we don't override it.
+                    if (!skipInitial) {
+                        this.updateActiveSection();
+                    }
                 },
 
                 updateActiveSection() {

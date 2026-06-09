@@ -12,8 +12,9 @@
         tabs: [],
         activeTab: '',
         register(name) {
+            if (this.tabs.includes(name)) return;
             this.tabs.push(name);
-            if (!this.activeTab && this.tabs.length === 1) {
+            if (!this.activeTab) {
                 this.activeTab = name;
             }
         },

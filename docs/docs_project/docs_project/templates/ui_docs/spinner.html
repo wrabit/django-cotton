@@ -1,0 +1,153 @@
+<c-layouts.ui>
+    <c-header>
+        Spinner
+        <c-slot name="subheading">
+            A simple animated loading indicator for buttons, forms and async states.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="colors"><a href="#colors" class="no-underline">Colors</a></c-index-sublink>
+        <c-index-sublink section-id="button"><a href="#button" class="no-underline">In a Button</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.spinner />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.spinner />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="sizes" title="Sizes">
+
+    <p>Spinners come in sizes from <code>size="xs"</code> to <code>size="2xl"</code>, defaulting to <code>md</code>.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-6">
+            <c-ui.spinner size="xs" />
+            <c-ui.spinner size="sm" />
+            <c-ui.spinner size="md" />
+            <c-ui.spinner size="lg" />
+            <c-ui.spinner size="xl" />
+            <c-ui.spinner size="2xl" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.spinner size="xs" />
+<c-ui.spinner size="sm" />
+<c-ui.spinner size="md" />
+<c-ui.spinner size="lg" />
+<c-ui.spinner size="xl" />
+<c-ui.spinner size="2xl" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="colors" title="Colors">
+
+    <p>Use the <code>color</code> prop to set the spinner color. The <code>current</code> option inherits the text color of its parent, making it easy to match surrounding content.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-6">
+            <c-ui.spinner color="accent" />
+            <c-ui.spinner color="zinc" />
+            <div class="text-rose-500">
+                <c-ui.spinner color="current" />
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.spinner color="accent" />
+<c-ui.spinner color="zinc" />
+
+<div class="text-rose-500">
+    <c-ui.spinner color="current" />
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="button" title="In a Button">
+
+    <p>Place a spinner inside a <code>c-ui.button</code> to communicate a loading state. Use <code>color="current"</code> so the spinner inherits the button text color, and <code>color="white"</code> on solid colored buttons.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-4">
+            <c-ui.button disabled>
+                <span class="inline-flex items-center gap-2">
+                    <c-ui.spinner size="sm" color="current" />
+                    Saving...
+                </span>
+            </c-ui.button>
+
+            <c-ui.button variant="primary" disabled>
+                <span class="inline-flex items-center gap-2">
+                    <c-ui.spinner size="sm" color="white" />
+                    Processing...
+                </span>
+            </c-ui.button>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.button disabled>
+    <span class="inline-flex items-center gap-2">
+        <c-ui.spinner size="sm" color="current" />
+        Saving...
+    </span>
+</c-ui.button>
+
+<c-ui.button variant="primary" disabled>
+    <span class="inline-flex items-center gap-2">
+        <c-ui.spinner size="sm" color="white" />
+        Processing...
+    </span>
+</c-ui.button>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="size"
+            type="str"
+            :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']"
+            default="md"
+            description="Spinner size from xs to 2xl."
+        />
+        <c-api-prop
+            name="color"
+            type="str"
+            :options="['accent', 'zinc', 'white', 'current']"
+            default="accent"
+            description="Spinner color. Use 'current' to inherit the parent's text color."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional CSS classes merged onto the spinner."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

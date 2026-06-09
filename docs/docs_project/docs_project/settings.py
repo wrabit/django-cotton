@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "django_cotton",
     "cotton_icons",
     "heroicons",
-    "cotton_ui",
+    "django_cotton_ui",
     "docs_project",
 ]
 
@@ -79,6 +79,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "docs_project.context_processors.github_stars",
             ],
             "builtins": [
                 "django.templatetags.static",
@@ -143,14 +144,21 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        # In dev, serve static live from the finders (no hashing/manifest) so
+        # Tailwind/CSS/JS rebuilds show up immediately without collectstatic.
+        # In prod, use whitenoise's compressed, hashed manifest storage.
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.StaticFilesStorage"
+            if DEBUG
+            else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        ),
     },
 }
 
 STATIC_URL = "staticfiles/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "docs_project", "static"),
-    # Cotton UI static files are served from the installed cotton_ui app
+    # Cotton UI static files are served from the installed django_cotton_ui app
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 

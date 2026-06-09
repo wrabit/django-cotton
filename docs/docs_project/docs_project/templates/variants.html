@@ -48,15 +48,15 @@
 {% endverbatim %}{% endcotton:verbatim %}
         <c-slot name="preview">
             <div class="flex items-center gap-3 flex-wrap">
-                <c-ui.button theme="subtle">Click me!</c-ui.button>
-                <c-ui.button theme="primary">Submit</c-ui.button>
-                <c-ui.button theme="danger">Delete</c-ui.button>
+                <c-ui.button>Click me!</c-ui.button>
+                <c-ui.button variant="primary">Submit</c-ui.button>
+                <c-ui.button variant="danger">Delete</c-ui.button>
             </div>
         </c-slot>
     </c-snippet>
 
     <c-note>
-        The variable doesn't have to be called <code>variant</code>. This site's own button names its map <code>theme</code> (<code>{{ '<c-button theme="primary" />'|force_escape }}</code>). Use whatever reads best for the component.
+        The variable doesn't have to be called <code>variant</code>. Name the <code>c-vars</code> key whatever reads best for the component (<code>theme</code>, <code>style</code>, <code>kind</code>, ...) and look it up the same way.
     </c-note>
 
     <h3 id="beyond">Beyond styling</h3>

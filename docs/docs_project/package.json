@@ -6,8 +6,8 @@
     "watch": "npx @tailwindcss/cli -i app.css -o docs_project/static/app.css --watch"
   },
   "devDependencies": {
-    "@tailwindcss/cli": "^4.0.0",
+    "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/typography": "^0.5.15",
-    "tailwindcss": "^4.0.0"
+    "tailwindcss": "^4.3.0"
   }
 }

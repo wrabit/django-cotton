@@ -34,7 +34,7 @@
 
     <c-section id="sizes" title="Sizes">
 
-    <p>Choose between three different sizes for your badges with the size prop.</p>
+    <p>Badges come in sizes from <code>size="xs"</code> to <code>size="2xl"</code>, defaulting to <code>md</code>.</p>
 
     <c-sample>
         <div class="flex items-center justify-center gap-4">
@@ -83,9 +83,22 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.badge color="zinc">Zinc</c-ui.badge>
 <c-ui.badge color="red">Red</c-ui.badge>
+<c-ui.badge color="orange">Orange</c-ui.badge>
+<c-ui.badge color="amber">Amber</c-ui.badge>
+<c-ui.badge color="yellow">Yellow</c-ui.badge>
+<c-ui.badge color="lime">Lime</c-ui.badge>
 <c-ui.badge color="green">Green</c-ui.badge>
+<c-ui.badge color="emerald">Emerald</c-ui.badge>
+<c-ui.badge color="teal">Teal</c-ui.badge>
+<c-ui.badge color="cyan">Cyan</c-ui.badge>
+<c-ui.badge color="sky">Sky</c-ui.badge>
 <c-ui.badge color="blue">Blue</c-ui.badge>
-...
+<c-ui.badge color="indigo">Indigo</c-ui.badge>
+<c-ui.badge color="violet">Violet</c-ui.badge>
+<c-ui.badge color="purple">Purple</c-ui.badge>
+<c-ui.badge color="fuchsia">Fuchsia</c-ui.badge>
+<c-ui.badge color="pink">Pink</c-ui.badge>
+<c-ui.badge color="rose">Rose</c-ui.badge>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -140,9 +153,24 @@
 
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.badge variant="solid" color="zinc">Zinc</c-ui.badge>
+<c-ui.badge variant="solid" color="red">Red</c-ui.badge>
+<c-ui.badge variant="solid" color="orange">Orange</c-ui.badge>
+<c-ui.badge variant="solid" color="amber">Amber</c-ui.badge>
+<c-ui.badge variant="solid" color="yellow">Yellow</c-ui.badge>
+<c-ui.badge variant="solid" color="lime">Lime</c-ui.badge>
 <c-ui.badge variant="solid" color="green">Green</c-ui.badge>
+<c-ui.badge variant="solid" color="emerald">Emerald</c-ui.badge>
+<c-ui.badge variant="solid" color="teal">Teal</c-ui.badge>
+<c-ui.badge variant="solid" color="cyan">Cyan</c-ui.badge>
+<c-ui.badge variant="solid" color="sky">Sky</c-ui.badge>
 <c-ui.badge variant="solid" color="blue">Blue</c-ui.badge>
-...
+<c-ui.badge variant="solid" color="indigo">Indigo</c-ui.badge>
+<c-ui.badge variant="solid" color="violet">Violet</c-ui.badge>
+<c-ui.badge variant="solid" color="purple">Purple</c-ui.badge>
+<c-ui.badge variant="solid" color="fuchsia">Fuchsia</c-ui.badge>
+<c-ui.badge variant="solid" color="pink">Pink</c-ui.badge>
+<c-ui.badge variant="solid" color="rose">Rose</c-ui.badge>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -191,6 +219,13 @@
     Users
 </c-ui.badge>
 
+<c-ui.badge color="green">
+    <c-slot name="icon_leading">
+        <svg>...</svg>
+    </c-slot>
+    Complete
+</c-ui.badge>
+
 <c-ui.badge color="purple">
     Notifications
     <c-slot name="icon_trailing">
@@ -231,7 +266,17 @@
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.badge href="/features" color="blue" variant="pill">
+    <c-slot name="icon_leading">
+        <svg>...</svg>
+    </c-slot>
     Features
+</c-ui.badge>
+
+<c-ui.badge href="/categories" color="purple" variant="pill">
+    Categories
+    <c-slot name="icon_trailing">
+        <svg>...</svg>
+    </c-slot>
 </c-ui.badge>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -261,71 +306,6 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
-
-    <h3 class="text-lg font-semibold mb-4">Real-World Examples</h3>
-
-    <p>Badges work great for status indicators, categories, counts, and labels.</p>
-
-    <c-sample>
-        <div class="max-w-2xl mx-auto space-y-6">
-            <div class="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
-                <div>
-                    <div class="font-medium text-zinc-900 dark:text-zinc-100">Production Server</div>
-                    <div class="text-sm text-zinc-600 dark:text-zinc-400">api.example.com</div>
-                </div>
-                <c-ui.badge color="green" variant="solid">
-                    <c-slot name="icon_leading">
-                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                    </c-slot>
-                    Online
-                </c-ui.badge>
-            </div>
-
-            <div class="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-900 rounded-lg">
-                <div>
-                    <div class="font-medium text-zinc-900 dark:text-zinc-100">Deploy #234</div>
-                    <div class="text-sm text-zinc-600 dark:text-zinc-400">Started 2 minutes ago</div>
-                </div>
-                <c-ui.badge color="blue" variant="pill">
-                    <c-slot name="icon_leading">
-                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                        </svg>
-                    </c-slot>
-                    In Progress
-                </c-ui.badge>
-            </div>
-
-            <div class="space-y-3">
-                <div class="font-medium text-zinc-900 dark:text-zinc-100">Article Tags</div>
-                <div class="flex flex-wrap gap-2">
-                    <c-ui.badge href="#inset" color="purple" variant="pill">Django</c-ui.badge>
-                    <c-ui.badge href="#inset" color="blue" variant="pill">Python</c-ui.badge>
-                    <c-ui.badge href="#inset" color="teal" variant="pill">Web Development</c-ui.badge>
-                    <c-ui.badge href="#inset" color="pink" variant="pill">Tutorial</c-ui.badge>
-                </div>
-            </div>
-        </div>
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}
-<div class="flex items-center justify-between">
-    <div>
-        <div>Production Server</div>
-        <div>api.example.com</div>
-    </div>
-    <c-ui.badge color="green" variant="solid">
-        <c-slot name="icon_leading">
-            <svg>...</svg>
-        </c-slot>
-        Online
-    </c-ui.badge>
-</div>
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
     </c-section>
 
     <c-section id="reference" title="API Reference">
@@ -343,9 +323,9 @@
         <c-api-prop
             name="size"
             type="str"
-            :options="['sm', '', 'lg']"
-            default=""
-            description="Badge size. Default is medium (empty string)."
+            :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']"
+            default="md"
+            description="Badge size from xs to 2xl."
         />
         <c-api-prop
             name="variant"

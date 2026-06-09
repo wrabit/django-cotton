@@ -8,6 +8,7 @@
 
     <c-slot name="page_index">
         <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Variants</a></c-index-sublink>
         <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
         <c-index-sublink section-id="outlined"><a href="#outlined" class="no-underline">Outlined</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
@@ -21,19 +22,24 @@
 
         <c-slot name="code">
             <c-snippet>{% cotton:verbatim %}{% verbatim %}
-<c-ui.button>Default</c-ui.button>
+<c-ui.button>button</c-ui.button>
             {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
-    <c-sample>
+    </c-section>
 
+    <c-section id="variants" title="Variants">
+    <p>Pick a visual style with the <code>variant</code> prop. Each one pairs its own fill, hover and text treatment.</p>
+
+    <c-sample>
             <div class="w-full flex items-center justify-center space-x-5">
                 <c-ui.button>Default</c-ui.button>
                 <c-ui.button variant="primary">Primary</c-ui.button>
                 <c-ui.button variant="danger">Danger</c-ui.button>
                 <c-ui.button variant="subtle">Subtle</c-ui.button>
                 <c-ui.button variant="ghost">Ghost</c-ui.button>
+                <c-ui.button variant="text">Text</c-ui.button>
             </div>
 
         <c-slot name="code">
@@ -43,6 +49,7 @@
 <c-ui.button variant="danger">Danger</c-ui.button>
 <c-ui.button variant="subtle">Subtle</c-ui.button>
 <c-ui.button variant="ghost">Ghost</c-ui.button>
+<c-ui.button variant="text">Text</c-ui.button>
             {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
@@ -125,17 +132,17 @@
     <c-api-props>
         <c-api-prop name="variant"
                     type="str"
-                    :options="['default', 'primary', 'danger', 'subtle', 'ghost']"
+                    :options="['default', 'primary', 'danger', 'subtle', 'ghost', 'text']"
                     default="default"
-                    description="The visual style variant of the button." />
+                    description="The visual style variant of the button. 'text' renders a link-like accent button with no fill." />
         <c-api-prop name="outlined"
                     type="bool"
                     default="False"
                     description="Whether to display the button with an outline style." />
         <c-api-prop name="size"
                     type="str"
-                    :options="['xs', 'sm', '', 'lg', 'xl']"
-                    default=""
+                    :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']"
+                    default="md"
                     description="The size of the button. Matches input sizes for consistent form alignment." />
         <c-api-prop name="type"
                     type="str"

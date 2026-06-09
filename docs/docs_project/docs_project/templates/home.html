@@ -1,77 +1,130 @@
 <c-layouts.with-sidebar wide>
 
     <div class="w-full px-0 md:px-8 lg:px-16 xl:px-24">
-        <div class="text-center mx-auto max-w-4xl leading-normal mb-6">
-            <h1 class="text-4xl md:text-5xl mb-15 dark:text-gray-200 font-medium mb-3 inline-flex flex-wrap items-center justify-center space-x-2 md:space-x-3 space-y-3">
-                <span class="w-full md:w-auto">Goodbye</span>
-                <c-tag class="text-xl sm:text-2xl md:text-4xl">
-                    {% verbatim %}{% extends %}{% endverbatim %}
-                </c-tag>
-                <c-tag class="text-xl sm:text-2xl md:text-4xl">
-                    {% verbatim %}{% block %}{% endverbatim %}
-                </c-tag>
-
-                <c-tag class="text-xl sm:text-2xl md:text-4xl">
-                    {% verbatim %}{% include %}{% endverbatim %}
-                </c-tag>
-                <c-tag class="text-xl sm:text-2xl md:text-4xl">
-                    {% verbatim %}{% custom_tag %}{% endverbatim %}
-                </c-tag>
-                <div class="w-full shrink-0"></div>
-                <span class="pt-0 md:pt-5 clear-both flex-wrap inline-flex justify-center items-center space-x-2">
-                    <span class="">Hello</span>
-                    <span class="shrink-0 px-3 py-1 bg-teal-500/10 border-[3px] border-teal-600 font-mono text-xl sm:text-2xl md:text-4xl rounded-3xl text-teal-600 dark:text-white inline-block font-normal leading-normal">{{ '<c-cotton>'|force_escape }}</span>
-                </span>
+        <div class="not-prose text-center mx-auto max-w-3xl mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+                Build reusable components for Django. No Python required.
             </h1>
-
-            <!-- A Faster, More Expressive Approach to Templating in Django-->
-            <h2 class="!text-xl sm:!text-2xl italic !font-normal mt-3 md:mt-8 mb-10 pt-0 dark:!text-teal-300 text-yellow-900 text-opacity-50 brightness-75 dark:opacity-100">
-                Bringing component-based design to django templates
-            </h2>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4">
-            <div class="col-span-1 flex flex-col overflow-x-auto">
-                <h2 class="!font-normal !text-lg mb-3 mt-0 text-center"><span class="font-semibold">Native DTL:</span> Verbose &amp; Limited</h2>
-                <div class="flex h-full rounded-xl overflow-hidden">
-<c-snippet language="django" rounded="rounded-xl" ignore-syntax-choice :hide_label="True" pad_top>{% cotton:verbatim %}{% verbatim %}
-{# ❌ include: HTML is escaped,
-   <b>Bold</b> shows as literal text #}
-{% include "card.html" with
-    content="<b>Bold</b>" %}
-
-{# ❌ extends: only one per template #}
-{% extends "card.html" %}
-{% block content %}Card 1{% endblock %}
-
-{# ❌ templatetags: needs a .py file #}
-{% load card %}
-{% card %}
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-                </div>
-            </div>
-            <div class="col-span-1 flex flex-col overflow-x-auto">
-                <h2 class="!font-normal !text-lg mb-3 mt-0 text-center"><span class="font-semibold">Cotton:</span> Composable &amp; Re-usable</h2>
-                <div class="flex h-full rounded-xl overflow-hidden">
-<c-snippet language="django" rounded="rounded-xl" :hide_label="True">{% cotton:verbatim %}{% verbatim %}
-{# ✅ pass rich HTML content #}
-<c-card title="First Card">
-    <b>Bold</b>, <a href="#">links</a>, anything
-</c-card>
-
-{# ✅ reuse unlimited times #}
-<c-card title="Second Card">
-    <c-slot name="footer">Named slots</c-slot>
-</c-card>
-
-{# ✅ just an HTML file, no Python #}
-<c-alert type="warning">No Python needed</c-alert>
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-                </div>
+            <p class="mt-5 text-lg sm:text-xl text-zinc-600 dark:text-zinc-400">
+                Compose UI from single template files. No build step, fully interoperable with the Django templates you already write.
+            </p>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+                <a href="{% url 'quickstart' %}" class="inline-flex items-center px-5 py-2.5 rounded-lg bg-teal-600 text-white font-medium no-underline hover:bg-teal-700 transition-colors">Quickstart</a>
+                <a href="{% url 'components' %}" class="inline-flex items-center px-5 py-2.5 rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-200 font-medium no-underline hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">Learn to build components</a>
             </div>
         </div>
 
-        <p class="text-center text-sm mt-5 text-gray-500 dark:text-gray-400 prose-a:text-teal-600">
+        <div x-data="{ slide: 0 }" x-cloak>
+            <div class="grid grid-cols-1">
+                {# Slide 1 — Card (component + slot) #}
+                <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 0">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
+<c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="card.html">{% cotton:verbatim %}{% verbatim %}
+<div class="card">
+    <h3>{{ title }}</h3>
+    <p>{{ slot }}</p>
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                        </div>
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">2 &middot; Use it like a tag</h2>
+<c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="view.html">{% cotton:verbatim %}{% verbatim %}
+<c-card title="Pricing">
+    Simple, per-seat billing.
+</c-card>
+
+<c-card title="Support">
+    Help when you need it.
+</c-card>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                        </div>
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">3 &middot; Renders to</h2>
+                            <div class="not-prose mb-3 flex-1 flex flex-col justify-center gap-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/40 p-6">
+                                <c-card title="Pricing">Simple, per-seat billing.</c-card>
+                                <c-card title="Support">Help when you need it.</c-card>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Slide 2 — Field (props drive the output) #}
+                <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 1">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
+<c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="field.html">{% cotton:verbatim %}{% verbatim %}
+<c-vars label type="text" :required="False" />
+
+<div class="field">
+    <label>{{ label }}{% if required %} *{% endif %}</label>
+    <input type="{{ type }}" {{ attrs }} />
+</div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                        </div>
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">2 &middot; Props change the output</h2>
+<c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="view.html">{% cotton:verbatim %}{% verbatim %}
+<c-field label="Email" type="email" required />
+
+<c-field label="Age" type="number"
+    placeholder="18+" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                        </div>
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">3 &middot; Renders to</h2>
+                            <div class="not-prose mb-3 flex-1 flex flex-col justify-center gap-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/40 p-6">
+                                <c-field label="Email" type="email" required />
+                                <c-field label="Age" type="number" placeholder="18+" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Slide 3 — Button (variant prop) #}
+                <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 2 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 2">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
+<c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="button.html">{% cotton:verbatim %}{% verbatim %}
+<c-vars variant="primary" />
+
+<button class="btn btn-{{ variant }}">
+    {{ slot }}
+</button>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                        </div>
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">2 &middot; One prop, many looks</h2>
+<c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="view.html">{% cotton:verbatim %}{% verbatim %}
+<c-button>Save</c-button>
+<c-button variant="default">Cancel</c-button>
+<c-button variant="danger">Delete</c-button>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                        </div>
+                        <div class="flex flex-col">
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">3 &middot; Renders to</h2>
+                            <div class="not-prose mb-3 flex-1 flex flex-col justify-center items-start gap-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/40 p-6">
+                                <c-button>Save</c-button>
+                                <c-button variant="default">Cancel</c-button>
+                                <c-button variant="danger">Delete</c-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# dot nav #}
+            <div class="flex justify-center gap-2 mt-6">
+                <button @click="slide = 0" aria-label="Card example" :class="slide === 0 ? 'bg-teal-600 w-6' : 'bg-zinc-300 dark:bg-zinc-600 w-2.5'" class="h-2.5 rounded-full transition-all cursor-pointer"></button>
+                <button @click="slide = 1" aria-label="Field example" :class="slide === 1 ? 'bg-teal-600 w-6' : 'bg-zinc-300 dark:bg-zinc-600 w-2.5'" class="h-2.5 rounded-full transition-all cursor-pointer"></button>
+                <button @click="slide = 2" aria-label="Button example" :class="slide === 2 ? 'bg-teal-600 w-6' : 'bg-zinc-300 dark:bg-zinc-600 w-2.5'" class="h-2.5 rounded-full transition-all cursor-pointer"></button>
+            </div>
+        </div>
+
+        <p class="text-center text-sm mt-12 text-gray-500 dark:text-gray-400 prose-a:text-teal-600">
             New to components? Start with <a href="{% url 'thinking-in-components' %}">Thinking in Components</a>.
         </p>
 
@@ -84,12 +137,15 @@
                         {% heroicon_outline 'fire' class="shrink-0 text-teal-600 size-16 mr-5 mt-1" stroke_width="1.8" %}
                     </c-slot>
                     Create reusable UI components from a single HTML file, no Python required. Composing from small, modular pieces streamlines your workflow and boosts productivity.
+                    <c-slot name="links">
+                        <a href="{% url 'components' %}" class="text-teal-600 dark:text-teal-400 no-underline hover:underline">Build components &rarr;</a>
+                    </c-slot>
                 </c-feature-tile>
-                <c-feature-tile title="Harmonious with Tailwind CSS">
+                <c-feature-tile title="Style it your way">
                     <c-slot name="icon">
                         <c-icons.tailwind class="shrink-0 text-teal-600 size-14 mr-5 mt-1" />
                     </c-slot>
-                    Tailwind's utility-first approach compliments component based design - isolating style in re-usable components, enhancing maintainability.
+                    Components own their markup, so you can style them however you like: plain CSS, your design system or utility frameworks like Tailwind.
                 </c-feature-tile>
                 <c-feature-tile title="Interoperable with Django Templates">
                     <c-slot name="icon">
@@ -101,25 +157,84 @@
                     <c-slot name="icon">
                         {% heroicon_outline 'code-bracket' class="shrink-0 text-teal-600 size-16 mr-5 mt-1" stroke_width="1.8" %}
                     </c-slot>
-                    Cotton's HTML tag-like syntax allows code editors to recognize its components as HTML elements, enabling features like syntax highlighting and automatic tag completion.
+                    Cotton's optional HTML tag-like syntax allows code editors to recognize its components as HTML elements, enabling features like syntax highlighting and automatic tag completion.
+                    <c-slot name="links">
+                        <a href="{% url 'fundamentals' %}#tag-syntax" class="text-teal-600 dark:text-teal-400 no-underline hover:underline">Tag syntax &rarr;</a>
+                    </c-slot>
                 </c-feature-tile>
                 <c-feature-tile title="Minimal Overhead">
                     <c-slot name="icon">
                         {% heroicon_outline 'presentation-chart-line' class="shrink-0 text-teal-600 size-16 mr-5 mt-1" stroke_width="1.8" %}
                     </c-slot>
-                    Cotton compiles to native Django template tags with built-in compilation caching. Template files are only re-processed when modified, and when used with Django's cached.Loader (applied automatically by default), fully parsed templates are cached for the lifetime of the process.
+                    Cotton compiles to native Django template tags and caches the result, so it adds virtually no runtime overhead.
+                </c-feature-tile>
+                <c-feature-tile title="Plays well with HTMX and Alpine">
+                    <c-slot name="icon">
+                        {% heroicon_outline 'bolt' class="shrink-0 text-teal-600 size-16 mr-5 mt-1" stroke_width="1.8" %}
+                    </c-slot>
+                    Components are just templates, so they drop straight into HTMX swaps and pair naturally with Alpine.js for rich, server-driven interactivity.
+                    <c-slot name="links">
+                        <a href="{% url 'htmx-examples' %}" class="text-teal-600 dark:text-teal-400 no-underline hover:underline">HTMX examples &rarr;</a>
+                        <a href="{% url 'alpine-js' %}" class="text-teal-600 dark:text-teal-400 no-underline hover:underline">Alpine.js &rarr;</a>
+                    </c-slot>
                 </c-feature-tile>
             </c-feature-tiles>
         </div>
 
-        <div class="w-1/2 mt-5 ml-auto justify-end px-0 py-2 border border-yellow-800 dark:border-gray-700 border-opacity-20 rounded no-underline text-right flex items-center">
+        <div class="mt-16">
+            <h3 class="text-center pb-2">Why not just Django templates?</h3>
+            <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+                You still can, and Cotton stays fully interoperable with them. But the native tools for reuse get verbose fast. Here is the same idea, the native way and with Cotton.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="col-span-1 flex flex-col overflow-x-auto">
+                    <h2 class="!font-normal !text-lg mb-3 mt-0 text-center"><span class="font-semibold">Native DTL:</span> Verbose &amp; Limited</h2>
+                    <div class="flex h-full rounded-xl overflow-hidden">
+<c-snippet language="django" rounded="rounded-xl" ignore-syntax-choice hide_label padded_top>{% cotton:verbatim %}{% verbatim %}
+{# ❌ include: HTML is escaped #}
+{% include "card.html" with content="<b>Bold</b>..." %}
+
+{# ❌ extends: only one per template #}
+{% extends "card.html" %}
+{% block content %}Card 1{% endblock %}
+{% extends "card.html" %}
+{% block content %}Card 2{% endblock %}
+
+{# ❌ templatetags: needs a .py file #}
+{% load card %}
+{% card %}
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                    </div>
+                </div>
+                <div class="col-span-1 flex flex-col overflow-x-auto">
+                    <h2 class="!font-normal !text-lg mb-3 mt-0 text-center"><span class="font-semibold">Cotton:</span> Composable &amp; Re-usable</h2>
+                    <div class="flex h-full rounded-xl overflow-hidden">
+<c-snippet language="django" rounded="rounded-xl" hide_label>{% cotton:verbatim %}{% verbatim %}
+{# ✅ pass rich HTML content #}
+<c-card title="First Card">
+    <b>Bold</b>, <a href="#">links</a>, anything
+</c-card>
+
+{# ✅ reuse unlimited times #}
+<c-card title="Card 1">...</c-card>
+<c-card title="Card 1">...</c-card>
+
+{# ✅ just an alert.html file, no Python #}
+<c-alert type="warning">No Python needed</c-alert>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-1/2 mt-5 ml-auto justify-end px-0 py-2 border border-zinc-200 dark:border-zinc-700 rounded no-underline text-right flex items-center">
             <span>
                 <span class="uppercase text-xs tracking-wider block text-gray-400">next</span>
-                <span class="text-white text-lg prose-a:text-gray-900 prose-a:dark:text-white prose-a:no-underline">
-                    <a href="{% url 'thinking-in-components' %}">Thinking in Components</a>
+                <span class="text-white text-base prose-a:text-gray-900 prose-a:dark:text-white prose-a:no-underline">
+                    <a href="{% url 'quickstart' %}">Quickstart</a>
                 </span>
             </span>
-            <c-icons.chevron-right class="size-14 text-yellow-900 opacity-20 dark:text-teal-600 dark:opacity-100" />
+            <c-icons.chevron-right class="size-14 text-zinc-300 dark:text-teal-600" />
         </div>
 
     </div>

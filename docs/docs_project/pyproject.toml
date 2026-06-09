@@ -6,6 +6,7 @@ dependencies = [
     "django~=5.1",
     "heroicons~=2.6.0",
     "cotton-icons",
+    "django-cotton-ui @ file:///app/cotton_ui",
     "gunicorn~=22.0",
     "asgiref>=3.6.0,<4",
     "whitenoise~=6.2.0",
@@ -26,8 +27,9 @@ authors = ["Will Abbott <willabb83@gmail.com>"]
 python = "^3.10"
 Django = "^5.1"
 django-cotton = "*"
-heroicons = "2.6.0"
+django-cotton-ui = { path = "./cotton_ui", develop = true }
 cotton-icons = "*"
+heroicons = "2.6.0"
 gunicorn = "^22.0"
 asgiref = ">=3.6.0,<4"
 whitenoise = "6.2.0"

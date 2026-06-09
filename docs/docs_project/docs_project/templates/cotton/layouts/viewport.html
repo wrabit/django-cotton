@@ -1,0 +1,31 @@
+{% load static %}<!doctype html>
+<html class="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Preview</title>
+
+    <link rel="stylesheet" href="{% static 'app.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script src="{% static 'cotton-ui/cotton-ui.js' %}"></script>
+    <script defer src="{% static 'alpine3.min.js' %}"></script>
+
+    <style>[x-cloak] { display: none }</style>
+    <script>
+        // Match the parent document's light/dark theme (same-origin iframe).
+        (function () {
+            try {
+                var root = window.parent.document.documentElement;
+                var sync = function () { document.documentElement.classList.toggle('dark', root.classList.contains('dark')); };
+                sync();
+                new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ['class'] });
+            } catch (e) { /* standalone: ignore */ }
+        })();
+    </script>
+</head>
+<body class="font-sans bg-[var(--color-bg)] text-zinc-800 dark:text-zinc-200">
+    {{ slot }}
+</body>
+</html>

@@ -1,0 +1,245 @@
+<c-layouts.ui>
+    <c-header>
+        Avatar
+        <c-slot name="subheading">
+            Represent a user or entity with an image, initials, or a fallback icon.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="image"><a href="#image" class="no-underline">With Image</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="color"><a href="#color" class="no-underline">Color</a></c-index-sublink>
+        <c-index-sublink section-id="group"><a href="#group" class="no-underline">Group</a></c-index-sublink>
+        <c-index-sublink section-id="status"><a href="#status" class="no-underline">Status Dot</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+
+    <p>Pass <code>initials</code> to display a text fallback. With no image or initials, a user icon is shown.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-4">
+            <c-ui.avatar initials="JD" />
+            <c-ui.avatar />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.avatar initials="JD" />
+<c-ui.avatar />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="image" title="With Image">
+
+    <p>Provide a <code>src</code> to render a photo. Always include an <code>alt</code> for accessibility.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.avatar src="https://i.pravatar.cc/100?img=5" alt="Jane Doe" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.avatar src="https://i.pravatar.cc/100?img=5" alt="Jane Doe" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="sizes" title="Sizes">
+
+    <p>Avatars come in sizes from <code>size="xs"</code> to <code>size="xl"</code>, defaulting to <code>md</code>.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-4">
+            <c-ui.avatar size="xs" initials="XS" />
+            <c-ui.avatar size="sm" initials="SM" />
+            <c-ui.avatar size="md" initials="MD" />
+            <c-ui.avatar size="lg" initials="LG" />
+            <c-ui.avatar size="xl" initials="XL" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.avatar size="xs" initials="XS" />
+<c-ui.avatar size="sm" initials="SM" />
+<c-ui.avatar size="md" initials="MD" />
+<c-ui.avatar size="lg" initials="LG" />
+<c-ui.avatar size="xl" initials="XL" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="color" title="Color">
+
+    <p>Set <code>color</code> to a Tailwind family for a solid background, or <code>color="auto"</code> to derive a stable colour from the initials.</p>
+
+    <c-sample>
+        <div class="space-y-5">
+            <div>
+                <div class="text-xs font-medium text-zinc-400 dark:text-zinc-500 mb-2 text-center">Manual</div>
+                <div class="flex items-center justify-center gap-3">
+                    <c-ui.avatar initials="JD" color="blue" />
+                    <c-ui.avatar initials="AB" color="rose" />
+                    <c-ui.avatar initials="CT" color="teal" />
+                </div>
+            </div>
+            <div>
+                <div class="text-xs font-medium text-zinc-400 dark:text-zinc-500 mb-2 text-center">Auto (from initials)</div>
+                <div class="flex items-center justify-center gap-3">
+                    <c-ui.avatar initials="SK" color="auto" />
+                    <c-ui.avatar initials="TC" color="auto" />
+                    <c-ui.avatar initials="BL" color="auto" />
+                    <c-ui.avatar initials="KP" color="auto" />
+                    <c-ui.avatar initials="NV" color="auto" />
+                </div>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# manually coloured #}
+<c-ui.avatar initials="JD" color="blue" />
+<c-ui.avatar initials="AB" color="rose" />
+<c-ui.avatar initials="CT" color="teal" />
+
+{# auto, derived from the initials #}
+<c-ui.avatar initials="SK" color="auto" />
+<c-ui.avatar initials="TC" color="auto" />
+<c-ui.avatar initials="BL" color="auto" />
+<c-ui.avatar initials="KP" color="auto" />
+<c-ui.avatar initials="NV" color="auto" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="group" title="Group">
+
+    <p>Wrap avatars in <code>&lt;c-ui.avatar.group&gt;</code> to stack them with an overlapping ring. Add a trailing avatar to show an overflow count.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.avatar.group>
+                <c-ui.avatar src="https://i.pravatar.cc/100?img=5" alt="Jane Doe" />
+                <c-ui.avatar initials="AB" />
+                <c-ui.avatar src="https://i.pravatar.cc/100?img=12" alt="Sam Lee" />
+                <c-ui.avatar initials="+3" />
+            </c-ui.avatar.group>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.avatar.group>
+    <c-ui.avatar src="https://i.pravatar.cc/100?img=5" alt="Jane Doe" />
+    <c-ui.avatar initials="AB" />
+    <c-ui.avatar src="https://i.pravatar.cc/100?img=12" alt="Sam Lee" />
+    <c-ui.avatar initials="+3" />
+</c-ui.avatar.group>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="status" title="Status Dot">
+
+    <p>The default slot renders on top of the avatar, so you can position a status indicator over it.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.avatar src="https://i.pravatar.cc/100?img=8" alt="Online user">
+                <span class="absolute bottom-0 right-0 size-2.5 rounded-full bg-green-500 ring-2 ring-white dark:ring-zinc-900"></span>
+            </c-ui.avatar>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.avatar src="https://i.pravatar.cc/100?img=8" alt="Online user">
+    <span class="absolute bottom-0 right-0 size-2.5 rounded-full bg-green-500 ring-2 ring-white dark:ring-zinc-900"></span>
+</c-ui.avatar>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Avatar</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="src"
+            type="str"
+            default=""
+            description="Image URL. When set, the avatar renders the image."
+        />
+        <c-api-prop
+            name="alt"
+            type="str"
+            default=""
+            description="Alternative text for the image."
+        />
+        <c-api-prop
+            name="initials"
+            type="str"
+            default=""
+            description="Text fallback shown when no image is provided."
+        />
+        <c-api-prop
+            name="size"
+            type="str"
+            :options="['xs', 'sm', 'md', 'lg', 'xl']"
+            default="md"
+            description="Avatar size from xs to xl."
+        />
+        <c-api-prop
+            name="color"
+            type="str"
+            default=""
+            description="Solid background: a Tailwind family (e.g. blue) or 'auto' to derive one from the initials. Empty for neutral."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional classes merged onto the avatar element."
+        />
+    </c-api-props>
+
+    <h4>Avatar Slots</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="Rendered on top of the avatar, useful for a status dot or overlay."
+        />
+    </c-api-props>
+
+    <h4>Avatar.Group</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional classes merged onto the group wrapper."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The avatars to stack."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

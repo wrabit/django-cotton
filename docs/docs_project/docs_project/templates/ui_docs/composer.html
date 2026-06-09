@@ -1,0 +1,124 @@
+<c-layouts.ui>
+    <c-header>
+        Composer
+        <c-slot name="subheading">
+            A chat-style input: a focusable shell wrapping an auto-growing textarea and a row of actions.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic</a></c-index-sublink>
+        <c-index-sublink section-id="prompt"><a href="#prompt" class="no-underline">Prompt box</a></c-index-sublink>
+        <c-index-sublink section-id="how"><a href="#how" class="no-underline">How it works</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic">
+    <p>On its own the composer is an auto-growing textarea inside a shell that takes the focus ring. Type to watch it grow.</p>
+    <c-sample>
+        <div class="w-full max-w-xl">
+            <c-ui.composer placeholder="Write a comment…" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.composer placeholder="Write a comment…" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="prompt" title="Prompt box">
+    <p>Fill the <code>leading</code> and <code>trailing</code> slots to build a prompt box. The whole shell stays lit while any control inside it is focused.</p>
+    <c-sample>
+        <div class="w-full max-w-xl">
+            <c-ui.composer placeholder="Ask anything…">
+                <c-slot name="leading">
+                    <c-ui.dropdown position="top" align="start" min_width="14rem">
+                        <c-slot name="trigger">
+                            <button type="button" aria-label="Add" class="inline-flex items-center justify-center size-8 rounded-control text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer focus-ring">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                            </button>
+                        </c-slot>
+                        <c-ui.dropdown.item>Upload from computer</c-ui.dropdown.item>
+                        <c-ui.dropdown.item>Add photos &amp; files</c-ui.dropdown.item>
+                        <c-ui.dropdown.item>Add from a URL</c-ui.dropdown.item>
+                    </c-ui.dropdown>
+                </c-slot>
+                <c-slot name="trailing">
+                    <div x-data="{ model: 'Opus 4.8' }" class="contents">
+                        <c-ui.dropdown position="top" align="end" min_width="13rem">
+                            <c-slot name="trigger">
+                                <button type="button" class="inline-flex items-center gap-1 px-2 py-1 rounded-control text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer focus-ring">
+                                    <span x-text="model"></span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                </button>
+                            </c-slot>
+                            <c-ui.dropdown.item @click.capture="model = 'Opus 4.8'">Opus 4.8</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'GPT-5'">GPT-5</c-ui.dropdown.item>
+                            <c-ui.dropdown.separator />
+                            <c-ui.dropdown.item @click.capture="model = 'Llama 3.3 70B'">Llama 3.3 70B</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'Mistral Large'">Mistral Large</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'Qwen2.5 72B'">Qwen2.5 72B</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'DeepSeek-V3'">DeepSeek-V3</c-ui.dropdown.item>
+                            <c-ui.dropdown.item @click.capture="model = 'Gemma 2 27B'">Gemma 2 27B</c-ui.dropdown.item>
+                        </c-ui.dropdown>
+                    </div>
+                    <c-ui.button variant="ghost" size="sm" class="!px-2" aria-label="Dictate">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" /></svg>
+                    </c-ui.button>
+                    <c-ui.button variant="primary" size="sm" class="!px-2" aria-label="Send">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7" /></svg>
+                    </c-ui.button>
+                </c-slot>
+            </c-ui.composer>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.composer placeholder="Ask anything…">
+    <c-slot name="leading">
+        <c-ui.button variant="ghost" size="sm" class="!px-2" aria-label="Add">
+            <svg><!-- plus --></svg>
+        </c-ui.button>
+    </c-slot>
+    <c-slot name="trailing">
+        <span class="px-1 text-sm text-zinc-500">Opus 4.8</span>
+        <c-ui.button variant="ghost" size="sm" class="!px-2" aria-label="Dictate">
+            <svg><!-- mic --></svg>
+        </c-ui.button>
+        <c-ui.button variant="primary" size="sm" class="!px-2" aria-label="Send">
+            <svg><!-- arrow-up --></svg>
+        </c-ui.button>
+    </c-slot>
+</c-ui.composer>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="how" title="How it works">
+    <c-ul>
+        <li><strong>One focusable surface.</strong> The shell shows the focus ring with <code>focus-within</code>, so focusing the textarea (or a button inside) lights the whole box like a single input.</li>
+        <li><strong>Transparent textarea.</strong> The textarea is borderless and transparent (<code>--color-input-bg</code>), so it reads as part of the shell rather than a nested field.</li>
+        <li><strong>Auto-grows.</strong> A small Alpine helper resizes the textarea to its content as you type, up to a max height, then scrolls.</li>
+        <li><strong>Plain text.</strong> It is a real <code>&lt;textarea&gt;</code>, so it submits in forms and stays accessible. For rich content (mentions, inline pills) reach for a dedicated editor instead.</li>
+    </c-ul>
+    </c-section>
+
+    <c-section id="reference" title="Reference">
+    <h4>Props</h4>
+    <c-api-props>
+        <c-api-prop name="name" type="str" default="" description="Form field name for the textarea." />
+        <c-api-prop name="placeholder" type="str" default="Send a message…" description="Placeholder text." />
+        <c-api-prop name="value" type="str" default="" description="Initial textarea content." />
+        <c-api-prop name="variant" type="str" :options="['raised', 'flush']" default="raised" description="raised fills the surface so it sits above the page in both light and dark; flush uses the transparent field fill (flat in light, faintly lifted in dark) to match form inputs." />
+        <c-api-prop name="rows" type="str" default="2" description="Initial visible rows before auto-grow takes over." />
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Dim and disable the input." />
+    </c-api-props>
+
+    <h4 class="mt-6">Slots</h4>
+    <c-api-props>
+        <c-api-prop name="leading" type="slot" default="" description="Actions on the left of the toolbar row (e.g. an attach button)." />
+        <c-api-prop name="trailing" type="slot" default="" description="Actions on the right of the toolbar row (e.g. a model picker, mic, send)." />
+    </c-api-props>
+    <p class="mt-3 text-sm text-zinc-500 dark:text-zinc-400">Any extra attributes (e.g. <code>x-model</code>, <code>maxlength</code>, <code>hx-*</code>) are forwarded to the underlying <code>&lt;textarea&gt;</code>.</p>
+    </c-section>
+
+</c-layouts.ui>

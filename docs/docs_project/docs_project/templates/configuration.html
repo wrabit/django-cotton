@@ -1,7 +1,7 @@
 <c-layouts.with-sidebar>
     <h1>Configuration</h1>
 
-    <p>The following configuration can be provided in your `settings.py`:</p>
+    <p>The following configuration can be provided in your <code class="!text-teal-600">settings.py</code>:</p>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
@@ -43,12 +43,12 @@
 
             <div class="mb-4">
                 <h6><code class="!text-teal-600">True</code> (default)</h6>
-                Filepath: `cotton/my_button.html`
+                Filepath: <code class="!text-teal-600">cotton/my_button.html</code>
             </div>
 
             <div>
                 <h6><code class="!text-teal-600">False</code></h6>
-                Filepath: `cotton/my-button.html`
+                Filepath: <code class="!text-teal-600">cotton/my-button.html</code>
             </div>
 
         </div>
@@ -73,5 +73,14 @@
             </div>
         </div>
     </div>
+
+    <c-navigation>
+        <c-slot name="prev">
+            <a href="{% url 'fundamentals' %}">Fundamentals</a>
+        </c-slot>
+        <c-slot name="next">
+            <a href="{% url 'thinking-in-components' %}">Thinking in Components</a>
+        </c-slot>
+    </c-navigation>
 
 </c-layouts.with-sidebar>

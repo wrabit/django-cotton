@@ -1,0 +1,43 @@
+<c-vars hide_intro :wide="False" />
+
+<c-layouts.base>
+    <div class="mx-auto max-w-8xl grid sm:grid-cols-[200px_minmax(0,1fr)] {% if wide %}lg:grid-cols-[230px_minmax(0,1fr)]{% else %}lg:grid-cols-[230px_minmax(0,1fr)_250px]{% endif %} px-5" x-data="scrollspy">
+        <!-- Left sidebar: sticky column. The sidebar's c-ui.navlist is the scroll
+             container and remembers its position (persist_scroll). -->
+        <div class="hidden sm:block sm:sticky sm:top-[73px] sm:self-start pr-10 pl-3 -ml-3">{{ sidebar }}</div>
+        <!-- Main content: scrolls with page. Grid item stays stretchy (min-w-0) so it
+             shrinks with the track; an inner wrapper caps the reading width. -->
+        <div class="min-w-0 pb-10 pt-0 md:pt-6">
+            <div class="{% if not wide %}max-w-3xl mx-auto{% endif %}">
+            <c-layouts.prose-container>
+                {% if page_index %}
+                    <div class="lg:hidden not-prose mb-8">
+                        <c-ui.collapse trigger_text="On this page"
+                                       trigger_class="flex w-full items-center justify-between rounded-control border border-zinc-200 dark:border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                            <div class="pt-4">
+                                {% if not hide_intro %}<c-index-sublink section-id="intro"><a href="#intro" class="no-underline">Intro</a></c-index-sublink>{% endif %}
+                                {{ page_index }}
+                            </div>
+                        </c-ui.collapse>
+                    </div>
+                {% endif %}
+                {{ slot }}
+            </c-layouts.prose-container>
+            </div>
+        </div>
+        {% if not wide %}
+        <!-- Right sidebar: sticky with independent scroll -->
+        <div class="sticky top-[73px] self-start max-h-[calc(100dvh-73px)] overflow-y-auto overscroll-contain pl-10 hidden lg:block text-[14.5px] py-6">
+            {% if page_index %}
+                <div>
+                    <c-sidebar.heading>On this page</c-sidebar.heading>
+                    <ul class="ml-0 pl-0 mt-4">
+                        {% if not hide_intro %}<c-index-sublink section-id="intro"><a href="#intro" class="no-underline">Intro</a></c-index-sublink>{% endif %}
+                        {{ page_index }}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</c-layouts.base>

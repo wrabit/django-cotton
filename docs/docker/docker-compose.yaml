@@ -16,18 +16,29 @@ services:
     volumes:
       - ../docs_project:/app
       - ../../django_cotton:/app/django_cotton
+      - ../../../django-cotton-ui/django_cotton_ui:/app/django_cotton_ui
     ports:
       - 8002:8000
 
   cotton-docs-tailwind:
     container_name: cotton-docs-tailwind
     stop_signal: SIGINT
-    image: node:16
+    image: node:20
     working_dir: /app
     tty: true
     volumes:
       - ../docs_project:/app
-    command: /bin/sh -c "trap 'exit' INT; npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css --watch"
+      - ../../../django-cotton-ui/django_cotton_ui:/app/django_cotton_ui
+    environment:
+      # Native FS events don't cross the macOS bind mount; force watchfiles to poll.
+      - WATCHFILES_FORCE_POLLING=true
+    command: >
+      /bin/sh -c "trap 'exit' INT;
+      npm install &&
+      apt-get update -qq && apt-get install -y -qq python3-pip >/dev/null &&
+      pip install --break-system-packages -q watchfiles &&
+      npm run build &&
+      watchfiles 'npm run build' app.css docs_project/templates django_cotton_ui/templates"
 
   cotton-docs-redis:
     container_name: cotton-docs-redis
@@ -37,7 +48,7 @@ services:
     environment:
       - REDIS_ARGS=--requirepass password
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - cotton-docs-redis-data:/data
 

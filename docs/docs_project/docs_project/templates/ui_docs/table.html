@@ -1,0 +1,167 @@
+<c-layouts.ui>
+    <c-header>
+        Table
+        <c-slot name="subheading">
+            Display tabular data with a styled wrapper around standard table markup.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="alignment"><a href="#alignment" class="no-underline">Alignment</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+
+    <p>Place standard <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> markup inside <code>&lt;c-ui.table&gt;</code>. Cells can hold any content, such as a <code>&lt;c-ui.badge&gt;</code>.</p>
+
+    <c-sample>
+        <c-ui.table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Jane Doe</td>
+                    <td>Engineer</td>
+                    <td><c-ui.badge color="green">Active</c-ui.badge></td>
+                </tr>
+                <tr>
+                    <td>Sam Lee</td>
+                    <td>Designer</td>
+                    <td><c-ui.badge color="green">Active</c-ui.badge></td>
+                </tr>
+                <tr>
+                    <td>Alex Kim</td>
+                    <td>Manager</td>
+                    <td><c-ui.badge color="amber">Away</c-ui.badge></td>
+                </tr>
+                <tr>
+                    <td>Mia Tan</td>
+                    <td>Analyst</td>
+                    <td><c-ui.badge color="zinc">Offline</c-ui.badge></td>
+                </tr>
+            </tbody>
+        </c-ui.table>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Jane Doe</td>
+            <td>Engineer</td>
+            <td><c-ui.badge color="green">Active</c-ui.badge></td>
+        </tr>
+        <tr>
+            <td>Sam Lee</td>
+            <td>Designer</td>
+            <td><c-ui.badge color="green">Active</c-ui.badge></td>
+        </tr>
+        <tr>
+            <td>Alex Kim</td>
+            <td>Manager</td>
+            <td><c-ui.badge color="amber">Away</c-ui.badge></td>
+        </tr>
+        <tr>
+            <td>Mia Tan</td>
+            <td>Analyst</td>
+            <td><c-ui.badge color="zinc">Offline</c-ui.badge></td>
+        </tr>
+    </tbody>
+</c-ui.table>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="alignment" title="Alignment">
+
+    <p>Align a column by adding <code>class="text-right"</code> to both its <code>&lt;th&gt;</code> and <code>&lt;td&gt;</code> cells.</p>
+
+    <c-sample>
+        <c-ui.table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th class="text-right">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Subscription</td>
+                    <td class="text-right">$29.00</td>
+                </tr>
+                <tr>
+                    <td>Add-on</td>
+                    <td class="text-right">$9.00</td>
+                </tr>
+                <tr>
+                    <td>Tax</td>
+                    <td class="text-right">$3.80</td>
+                </tr>
+            </tbody>
+        </c-ui.table>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.table>
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th class="text-right">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Subscription</td>
+            <td class="text-right">$29.00</td>
+        </tr>
+        <tr>
+            <td>Add-on</td>
+            <td class="text-right">$9.00</td>
+        </tr>
+        <tr>
+            <td>Tax</td>
+            <td class="text-right">$3.80</td>
+        </tr>
+    </tbody>
+</c-ui.table>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Table</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional classes merged onto the table element."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="Standard thead, tbody, tr, th and td markup to render inside the table."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

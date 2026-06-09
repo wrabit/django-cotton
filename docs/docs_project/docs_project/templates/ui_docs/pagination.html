@@ -1,0 +1,194 @@
+<c-layouts.ui>
+    <c-header>
+        Pagination
+        <c-slot name="subheading">
+            Let users move through pages of results with numbered links and previous / next controls.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="paginator"><a href="#paginator" class="no-underline">Django Paginator</a></c-index-sublink>
+        <c-index-sublink section-id="prev-next"><a href="#prev-next" class="no-underline">Previous / Next</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">API Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+
+    <p>Compose pagination with <code>c-ui.pagination</code> and place a <code>c-ui.pagination.item</code> for each page number. Mark the active page with <code>:current="True"</code> and use <code>c-ui.pagination.ellipsis</code> to collapse gaps in the range.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.pagination>
+                <c-ui.pagination.prev href="?page=1" />
+                <c-ui.pagination.item href="?page=1">1</c-ui.pagination.item>
+                <c-ui.pagination.item href="?page=2" :current="True">2</c-ui.pagination.item>
+                <c-ui.pagination.item href="?page=3">3</c-ui.pagination.item>
+                <c-ui.pagination.ellipsis />
+                <c-ui.pagination.item href="?page=10">10</c-ui.pagination.item>
+                <c-ui.pagination.next href="?page=3" />
+            </c-ui.pagination>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.pagination>
+    <c-ui.pagination.prev href="?page=1" />
+    <c-ui.pagination.item href="?page=1">1</c-ui.pagination.item>
+    <c-ui.pagination.item href="?page=2" :current="True">2</c-ui.pagination.item>
+    <c-ui.pagination.item href="?page=3">3</c-ui.pagination.item>
+    <c-ui.pagination.ellipsis />
+    <c-ui.pagination.item href="?page=10">10</c-ui.pagination.item>
+    <c-ui.pagination.next href="?page=3" />
+</c-ui.pagination>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="paginator" title="Django Paginator">
+
+    <p>Pass a Django <code>page_obj</code> and the component renders the prev / numbered / next controls itself, with ellipses for large ranges. Set <code>param</code> if your page query string is not <code>page</code>.</p>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.pagination :page_obj="page_obj" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <p>For full control, omit <code>page_obj</code> and compose the sub-components yourself, as shown in the other examples.</p>
+    </c-section>
+
+    <c-section id="prev-next" title="Previous / Next">
+
+    <p>The <code>c-ui.pagination.prev</code> and <code>c-ui.pagination.next</code> arrows accept <code>:disabled="True"</code> to mute them and remove the link, for example on the first or last page.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.pagination>
+                <c-ui.pagination.prev href="?page=1" :disabled="True" />
+                <c-ui.pagination.item href="?page=1" :current="True">1</c-ui.pagination.item>
+                <c-ui.pagination.item href="?page=2">2</c-ui.pagination.item>
+                <c-ui.pagination.item href="?page=3">3</c-ui.pagination.item>
+                <c-ui.pagination.next href="?page=2" />
+            </c-ui.pagination>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.pagination>
+    <c-ui.pagination.prev href="?page=1" :disabled="True" />
+    <c-ui.pagination.item href="?page=1" :current="True">1</c-ui.pagination.item>
+    <c-ui.pagination.item href="?page=2">2</c-ui.pagination.item>
+    <c-ui.pagination.item href="?page=3">3</c-ui.pagination.item>
+    <c-ui.pagination.next href="?page=2" />
+</c-ui.pagination>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Pagination</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="page_obj"
+            type="Page"
+            default="None"
+            description="A Django Page object. When given, the component renders prev / numbered / next controls itself instead of using the slot."
+        />
+        <c-api-prop
+            name="param"
+            type="str"
+            default="page"
+            description="Query string parameter used for page links in auto mode."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Extra classes merged onto the inner list."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The pagination controls: items, ellipses and prev / next arrows."
+        />
+    </c-api-props>
+
+    <h4>Pagination.Item</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="href"
+            type="str"
+            default=""
+            description="Destination URL for the page."
+        />
+        <c-api-prop
+            name="current"
+            type="bool"
+            default="False"
+            description="Mark the item as the active page. Renders with accent styling and aria-current='page'."
+        />
+        <c-api-prop
+            name="disabled"
+            type="bool"
+            default="False"
+            description="Mute the item and remove its link."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Extra classes merged onto the item's link."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The page label, usually the page number."
+        />
+    </c-api-props>
+
+    <h4>Pagination.Prev / Pagination.Next</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="href"
+            type="str"
+            default=""
+            description="Destination URL for the previous or next page."
+        />
+        <c-api-prop
+            name="disabled"
+            type="bool"
+            default="False"
+            description="Mute the arrow and remove its link, for example on the first or last page."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Extra classes merged onto the arrow's link."
+        />
+    </c-api-props>
+
+    <h4>Pagination.Ellipsis</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Extra classes merged onto the ellipsis span."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

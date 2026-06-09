@@ -1,0 +1,482 @@
+<c-layouts.ui>
+    <c-header>
+        Checkbox
+        <c-slot name="subheading">
+            Traditional and versatile checkbox inputs for selecting multiple options.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="with-descriptions"><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
+        <c-index-sublink section-id="horizontal"><a href="#horizontal" class="no-underline">Horizontal</a></c-index-sublink>
+        <c-index-sublink section-id="checked"><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="segmented"><a href="#segmented" class="no-underline">Segmented</a></c-index-sublink>
+        <c-index-sublink section-id="cards"><a href="#cards" class="no-underline">Checkbox Cards</a></c-index-sublink>
+        <c-index-sublink section-id="vertical-cards"><a href="#vertical-cards" class="no-underline">Vertical Cards</a></c-index-sublink>
+        <c-index-sublink section-id="cards-with-icons"><a href="#cards-with-icons" class="no-underline">Cards With Icons</a></c-index-sublink>
+        <c-index-sublink section-id="custom-content"><a href="#custom-content" class="no-underline">Custom Content</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <c-ui.checkbox.group name="features" label="Select features">
+            <c-ui.checkbox value="analytics" label="Analytics dashboard" />
+            <c-ui.checkbox value="reports" label="Custom reports" />
+            <c-ui.checkbox value="api" label="API access" />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="features" label="Select features">
+    <c-ui.checkbox value="analytics" label="Analytics dashboard" />
+    <c-ui.checkbox value="reports" label="Custom reports" />
+    <c-ui.checkbox value="api" label="API access" />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <c-section id="with-descriptions" title="With Descriptions">
+
+    <p>Add contextual information to each option with the <code>description</code> attribute.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="notifications" label="Notification preferences">
+            <c-ui.checkbox
+                value="email"
+                label="Email notifications"
+                description="Receive updates via email" />
+            <c-ui.checkbox
+                value="sms"
+                label="SMS notifications"
+                description="Get text messages for urgent updates" />
+            <c-ui.checkbox
+                value="push"
+                label="Push notifications"
+                description="Browser and mobile push notifications" />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="notifications" label="Notification preferences">
+    <c-ui.checkbox
+        value="email"
+        label="Email notifications"
+        description="Receive updates via email" />
+    <c-ui.checkbox
+        value="sms"
+        label="SMS notifications"
+        description="Get text messages for urgent updates" />
+    <c-ui.checkbox
+        value="push"
+        label="Push notifications"
+        description="Browser and mobile push notifications" />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="horizontal" title="Horizontal Layout">
+
+    <p>Add <code>horizontal</code> to lay the checkboxes out in a wrapping row instead of stacking them.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="days" label="Available days" horizontal>
+            <c-ui.checkbox value="mon" label="Monday" />
+            <c-ui.checkbox value="tue" label="Tuesday" />
+            <c-ui.checkbox value="wed" label="Wednesday" />
+            <c-ui.checkbox value="thu" label="Thursday" />
+            <c-ui.checkbox value="fri" label="Friday" />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="days" label="Available days" horizontal>
+    <c-ui.checkbox value="mon" label="Monday" />
+    <c-ui.checkbox value="tue" label="Tuesday" />
+    <c-ui.checkbox value="wed" label="Wednesday" />
+    <c-ui.checkbox value="thu" label="Thursday" />
+    <c-ui.checkbox value="fri" label="Friday" />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="checked" title="Checked by Default">
+
+    <p>Set initial checked values using the <code>:values</code> prop on the group.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="permissions" label="User permissions" :values="['read', 'write']">
+            <c-ui.checkbox value="read" label="Read" />
+            <c-ui.checkbox value="write" label="Write" />
+            <c-ui.checkbox value="delete" label="Delete" />
+            <c-ui.checkbox value="admin" label="Admin" />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="permissions" label="User permissions" :values="['read', 'write']">
+    <c-ui.checkbox value="read" label="Read" />
+    <c-ui.checkbox value="write" label="Write" />
+    <c-ui.checkbox value="delete" label="Delete" />
+    <c-ui.checkbox value="admin" label="Admin" />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="disabled" title="Disabled">
+
+    <p>Disable individual checkboxes with the <code>disabled</code> attribute.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="services" label="Available services">
+            <c-ui.checkbox value="web" label="Web hosting" />
+            <c-ui.checkbox value="email" label="Email service" />
+            <c-ui.checkbox value="backup" label="Backup service" disabled />
+            <c-ui.checkbox value="ssl" label="SSL certificate" disabled />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="services" label="Available services">
+    <c-ui.checkbox value="web" label="Web hosting" />
+    <c-ui.checkbox value="email" label="Email service" />
+    <c-ui.checkbox value="backup" label="Backup service" disabled />
+    <c-ui.checkbox value="ssl" label="SSL certificate" disabled />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="segmented" title="Segmented">
+
+    <p>Display checkboxes as a horizontal button group with <code>variant="segmented"</code>.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="filters" label="Apply filters" variant="segmented">
+            <c-ui.checkbox value="active" label="Active" />
+            <c-ui.checkbox value="pending" label="Pending" />
+            <c-ui.checkbox value="archived" label="Archived" />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="filters" label="Apply filters" variant="segmented">
+    <c-ui.checkbox value="active" label="Active" />
+    <c-ui.checkbox value="pending" label="Pending" />
+    <c-ui.checkbox value="archived" label="Archived" />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="cards" title="Checkbox Cards">
+
+    <p>Display options as interactive cards with <code>variant="cards"</code>. Perfect for visually distinct choices.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="addons" label="Select add-ons" variant="cards">
+            <c-ui.checkbox
+                value="cdn"
+                label="CDN"
+                description="Global content delivery" />
+            <c-ui.checkbox
+                value="security"
+                label="Security"
+                description="DDoS protection" />
+            <c-ui.checkbox
+                value="monitoring"
+                label="Monitoring"
+                description="24/7 uptime monitoring" />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="addons" label="Select add-ons" variant="cards">
+    <c-ui.checkbox
+        value="cdn"
+        label="CDN"
+        description="Global content delivery" />
+    <c-ui.checkbox
+        value="security"
+        label="Security"
+        description="DDoS protection" />
+    <c-ui.checkbox
+        value="monitoring"
+        label="Monitoring"
+        description="24/7 uptime monitoring" />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="vertical-cards" title="Vertical Cards">
+
+    <p>Stack cards vertically by adding <code>class="flex-col"</code> to the group.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="integrations" label="Enable integrations" variant="cards" class="flex-col">
+            <c-ui.checkbox
+                value="slack"
+                label="Slack"
+                description="Connect your workspace for notifications" />
+            <c-ui.checkbox
+                value="github"
+                label="GitHub"
+                description="Sync repositories and issues" />
+            <c-ui.checkbox
+                value="jira"
+                label="Jira"
+                description="Import tickets and track progress" />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="integrations" label="Enable integrations" variant="cards" class="flex-col">
+    <c-ui.checkbox
+        value="slack"
+        label="Slack"
+        description="Connect your workspace for notifications" />
+    <c-ui.checkbox
+        value="github"
+        label="GitHub"
+        description="Sync repositories and issues" />
+    <c-ui.checkbox
+        value="jira"
+        label="Jira"
+        description="Import tickets and track progress" />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="cards-with-icons" title="Cards With Icons">
+
+    <p>Enhance cards with icons for better visual recognition.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="export" label="Export formats" variant="cards" class="flex-col">
+            <c-ui.checkbox
+                value="pdf"
+                label="PDF"
+                description="Portable Document Format"
+                icon="document" />
+            <c-ui.checkbox
+                value="csv"
+                label="CSV"
+                description="Comma-separated values"
+                icon="table" />
+            <c-ui.checkbox
+                value="json"
+                label="JSON"
+                description="JavaScript Object Notation"
+                icon="code" />
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="export" label="Export formats" variant="cards" class="flex-col">
+    <c-ui.checkbox
+        value="pdf"
+        label="PDF"
+        description="Portable Document Format"
+        icon="document" />
+    <c-ui.checkbox
+        value="csv"
+        label="CSV"
+        description="Comma-separated values"
+        icon="table" />
+    <c-ui.checkbox
+        value="json"
+        label="JSON"
+        description="JavaScript Object Notation"
+        icon="code" />
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="custom-content" title="Custom Content">
+
+    <p>Use slots to create fully custom checkbox content with any HTML structure.</p>
+
+    <c-sample>
+        <c-ui.checkbox.group name="plans" variant="cards" class="flex-col" :values="['pro']">
+            <c-ui.checkbox value="starter">
+                <div class="flex items-start gap-4 flex-1">
+                    <div class="flex items-center h-5">
+                        <div class="flex items-center justify-center w-4 h-4 border-2 rounded transition-all"
+                             :class="isChecked('starter') ? 'border-accent bg-accent' : 'border-zinc-300 dark:border-zinc-600'">
+                            <svg class="w-3 h-3 text-white transition-transform"
+                                 :class="isChecked('starter') ? 'scale-100' : 'scale-0'"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Starter Plan</h3>
+                            <span class="text-sm font-bold text-accent">$9/mo</span>
+                        </div>
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Perfect for individuals</p>
+                        <ul class="mt-3 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                5 GB storage
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                1 user
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </c-ui.checkbox>
+
+            <c-ui.checkbox value="pro">
+                <div class="flex items-start gap-4 flex-1">
+                    <div class="flex items-center h-5">
+                        <div class="flex items-center justify-center w-4 h-4 border-2 rounded transition-all"
+                             :class="isChecked('pro') ? 'border-accent bg-accent' : 'border-zinc-300 dark:border-zinc-600'">
+                            <svg class="w-3 h-3 text-white transition-transform"
+                                 :class="isChecked('pro') ? 'scale-100' : 'scale-0'"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Pro Plan</h3>
+                            <span class="text-sm font-bold text-accent">$29/mo</span>
+                        </div>
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Best for growing teams</p>
+                        <ul class="mt-3 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                50 GB storage
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                10 users
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Priority support
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </c-ui.checkbox>
+        </c-ui.checkbox.group>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="plans" variant="cards" class="flex-col" :values="['pro']">
+    <c-ui.checkbox value="starter">
+        <div class="flex items-start gap-4 flex-1">
+            <!-- Checkbox indicator -->
+            <div class="flex items-center h-5">...</div>
+
+            <!-- Custom content -->
+            <div class="flex-1">
+                <div class="flex items-center justify-between">
+                    <h3>Starter Plan</h3>
+                    <span class="text-accent">$9/mo</span>
+                </div>
+                <p>Perfect for individuals</p>
+                <ul class="mt-3 space-y-1">
+                    <li>5 GB storage</li>
+                    <li>1 user</li>
+                </ul>
+            </div>
+        </div>
+    </c-ui.checkbox>
+    <c-ui.checkbox value="pro">
+        <div class="flex items-start gap-4 flex-1">
+            <!-- Checkbox indicator -->
+            <div class="flex items-center h-5">...</div>
+
+            <!-- Custom content -->
+            <div class="flex-1">
+                <div class="flex items-center justify-between">
+                    <h3>Pro Plan</h3>
+                    <span class="text-accent">$29/mo</span>
+                </div>
+                <p>Best for growing teams</p>
+                <ul class="mt-3 space-y-1">
+                    <li>50 GB storage</li>
+                    <li>10 users</li>
+                    <li>Priority support</li>
+                </ul>
+            </div>
+        </div>
+    </c-ui.checkbox>
+</c-ui.checkbox.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="field" title="As a field">
+    <p>Give the group any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and it wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.checkbox.group name="features" label="Features" description="Choose the features to enable.">
+                <c-ui.checkbox value="analytics" label="Analytics dashboard" />
+                <c-ui.checkbox value="reports" label="Custom reports" />
+            </c-ui.checkbox.group>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.checkbox.group
+    name="features"
+    label="Features"
+    description="Choose the features to enable."
+>
+    <c-ui.checkbox value="analytics" label="Analytics dashboard" />
+    <c-ui.checkbox value="reports" label="Custom reports" />
+</c-ui.checkbox.group>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Checkbox Group Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="name" type="str" default="" description="Form input name for the checkbox group"></c-api-prop>
+        <c-api-prop name="label" type="str" default="" description="Group label displayed above options"></c-api-prop>
+        <c-api-prop name="description" type="str" default="" description="Help text displayed below label"></c-api-prop>
+        <c-api-prop name=":values" type="list" default="[]" description="List of initially checked values (e.g. :values=&quot;['option1', 'option2']&quot;)"></c-api-prop>
+        <c-api-prop name="variant" type="str" :options="['default', 'segmented', 'cards']" default="default" description="Visual style of the checkbox group"></c-api-prop>
+        <c-api-prop name=":horizontal" type="bool" :options="['True', 'False']" default="False" description="With the default variant, lays options out in a wrapping row instead of a vertical stack."></c-api-prop>
+        <c-api-prop name="class" type="str" default="" description="Additional CSS classes for the options container"></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Checkbox Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="value" type="str" default="" description="Value submitted when this checkbox is checked"></c-api-prop>
+        <c-api-prop name="label" type="str" default="" description="Label text for the checkbox"></c-api-prop>
+        <c-api-prop name="description" type="str" default="" description="Additional descriptive text below the label"></c-api-prop>
+        <c-api-prop name="icon" type="str" default="" description="Icon name (for cards variant)"></c-api-prop>
+        <c-api-prop name="name" type="str" default="" description="Form input name (inherited from group if not specified)"></c-api-prop>
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Whether this checkbox is disabled"></c-api-prop>
+        <c-api-prop name=":show_indicator" type="bool" :options="['True', 'False']" default="True" description="Whether to show the checkbox indicator"></c-api-prop>
+        <c-api-prop name=":accent" type="bool" :options="['True', 'False']" default="True" description="Whether to use accent colors (True) or monochrome zinc colors (False)"></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Slots</h4>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="" description="Custom content for the checkbox. When used, you have full control over the markup."></c-api-prop>
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

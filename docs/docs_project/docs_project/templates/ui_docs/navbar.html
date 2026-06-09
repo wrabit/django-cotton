@@ -1,0 +1,335 @@
+<c-layouts.ui>
+    <c-header>
+        Navbar
+        <c-slot name="subheading">
+            A top-level application header with brand, navigation links and right-side actions that collapse into a menu on small screens.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Variants</a></c-index-sublink>
+        <c-index-sublink section-id="dropdowns"><a href="#dropdowns" class="no-underline">Dropdowns</a></c-index-sublink>
+        <c-index-sublink section-id="mobile"><a href="#mobile" class="no-underline">Mobile menu</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+
+    <p>Resize the window to see the links and actions collapse behind a menu button.</p>
+
+    <c-sample>
+        <c-ui.navbar :sticky="False">
+            <c-slot name="brand">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg>
+                <span class="font-semibold">Acme</span>
+            </c-slot>
+
+            <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+            <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+            <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
+            <c-ui.navbar.item href="#">Settings</c-ui.navbar.item>
+
+            <c-slot name="actions">
+                <c-ui.button size="sm">Sign in</c-ui.button>
+            </c-slot>
+        </c-ui.navbar>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.navbar>
+    <c-slot name="brand">
+        <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg>
+        <span class="font-semibold">Acme</span>
+    </c-slot>
+
+    <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+    <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+    <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
+    <c-ui.navbar.item href="#">Settings</c-ui.navbar.item>
+
+    <c-slot name="actions">
+        <c-ui.button size="sm">Sign in</c-ui.button>
+    </c-slot>
+</c-ui.navbar>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="variants" title="Variants">
+
+    <p><code>variant</code> sets how the desktop nav items look: <code>text</code> (default), <code>underline</code>, <code>pill</code> or <code>ghost</code>. The mobile menu always uses a plain stacked style regardless.</p>
+
+    <c-sample>
+        <div class="w-full space-y-6">
+            <div>
+                <p class="text-xs font-medium text-zinc-400 mb-1.5">text (default)</p>
+                <c-ui.navbar :sticky="False" variant="text" class="rounded-box">
+                    <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
+                    <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+                    <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+                    <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
+                </c-ui.navbar>
+            </div>
+            <div>
+                <p class="text-xs font-medium text-zinc-400 mb-1.5">underline</p>
+                <c-ui.navbar :sticky="False" variant="underline" class="rounded-box">
+                    <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
+                    <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+                    <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+                    <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
+                </c-ui.navbar>
+            </div>
+            <div>
+                <p class="text-xs font-medium text-zinc-400 mb-1.5">pill</p>
+                <c-ui.navbar :sticky="False" variant="pill" class="rounded-box">
+                    <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
+                    <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+                    <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+                    <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
+                </c-ui.navbar>
+            </div>
+            <div>
+                <p class="text-xs font-medium text-zinc-400 mb-1.5">ghost</p>
+                <c-ui.navbar :sticky="False" variant="ghost" class="rounded-box">
+                    <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
+                    <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+                    <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+                    <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
+                </c-ui.navbar>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.navbar variant="underline">
+    <c-slot name="brand">...</c-slot>
+    <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+    <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+    <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
+</c-ui.navbar>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="dropdowns" title="Dropdowns">
+
+    <p>Drop a <code>c-ui.dropdown</code> straight into the navbar for menus. Give it a trigger styled to match your nav items; the menu can be a simple list or a multi-column layout.</p>
+
+    <c-sample>
+        <c-ui.navbar :sticky="False" class="rounded-box">
+            <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
+            <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+
+            <c-ui.dropdown align="start">
+                <c-slot name="trigger">
+                    <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        Resources
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                    </button>
+                </c-slot>
+                <c-ui.dropdown.item href="#">Documentation</c-ui.dropdown.item>
+                <c-ui.dropdown.item href="#">Guides</c-ui.dropdown.item>
+                <c-ui.dropdown.item href="#">API reference</c-ui.dropdown.item>
+            </c-ui.dropdown>
+
+            <c-ui.dropdown align="start" min_width="34rem">
+                <c-slot name="trigger">
+                    <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        Solutions
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                    </button>
+                </c-slot>
+                <div class="grid grid-cols-2 gap-1 p-2">
+                    <div>
+                        <p class="px-2 py-1 text-xs font-semibold text-zinc-400 dark:text-zinc-500">By team</p>
+                        <c-ui.dropdown.item href="#">Engineering</c-ui.dropdown.item>
+                        <c-ui.dropdown.item href="#">Design</c-ui.dropdown.item>
+                        <c-ui.dropdown.item href="#">Marketing</c-ui.dropdown.item>
+                    </div>
+                    <div>
+                        <p class="px-2 py-1 text-xs font-semibold text-zinc-400 dark:text-zinc-500">By use case</p>
+                        <c-ui.dropdown.item href="#">Analytics</c-ui.dropdown.item>
+                        <c-ui.dropdown.item href="#">Automation</c-ui.dropdown.item>
+                        <c-ui.dropdown.item href="#">Collaboration</c-ui.dropdown.item>
+                    </div>
+                </div>
+            </c-ui.dropdown>
+
+            <c-slot name="actions"><c-ui.button size="sm">Sign in</c-ui.button></c-slot>
+        </c-ui.navbar>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.navbar>
+    <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+
+    <c-ui.dropdown align="start">
+        <c-slot name="trigger">
+            <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium ...">
+                Resources
+                <svg><!-- chevron --></svg>
+            </button>
+        </c-slot>
+        <c-ui.dropdown.item href="#">Documentation</c-ui.dropdown.item>
+        <c-ui.dropdown.item href="#">Guides</c-ui.dropdown.item>
+    </c-ui.dropdown>
+
+    {# multi-column: any layout in the dropdown body #}
+    <c-ui.dropdown align="start" min_width="34rem">
+        <c-slot name="trigger"> ... Solutions ... </c-slot>
+        <div class="grid grid-cols-2 gap-1 p-2">
+            <div> ...column... </div>
+            <div> ...column... </div>
+        </div>
+    </c-ui.dropdown>
+</c-ui.navbar>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="mobile" title="Mobile menu">
+
+    <p>The links and <code>actions</code> are mirrored into the mobile menu automatically. Use the <code>mobile</code> slot for nav shown only on mobile (for example a <code>c-ui.navlist</code> of secondary links that live in a sidebar on desktop), and set <code>:drawer="True"</code> to open the menu as a slide-over instead of an inline collapse. Resize the window and open the menu to compare.</p>
+
+    <c-sample>
+        <c-ui.navbar :sticky="False" :drawer="True">
+            <c-slot name="brand">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg>
+                <span class="font-semibold">Acme</span>
+            </c-slot>
+
+            <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+            <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+
+            <c-slot name="actions">
+                <c-ui.button size="sm">Sign in</c-ui.button>
+            </c-slot>
+
+            <c-slot name="mobile">
+                <c-ui.navlist variant="sidebar">
+                    <c-ui.navlist.group heading="Resources">
+                        <c-ui.navlist.item href="#">Docs</c-ui.navlist.item>
+                        <c-ui.navlist.item href="#">Changelog</c-ui.navlist.item>
+                    </c-ui.navlist.group>
+                </c-ui.navlist>
+            </c-slot>
+        </c-ui.navbar>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.navbar :drawer="True">
+    <c-slot name="brand">...</c-slot>
+
+    <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
+    <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
+
+    <c-slot name="actions">
+        <c-ui.button size="sm">Sign in</c-ui.button>
+    </c-slot>
+
+    {# shown only in the mobile menu #}
+    <c-slot name="mobile">
+        <c-ui.navlist variant="sidebar">
+            <c-ui.navlist.group heading="Resources">
+                <c-ui.navlist.item href="#">Docs</c-ui.navlist.item>
+                <c-ui.navlist.item href="#">Changelog</c-ui.navlist.item>
+            </c-ui.navlist.group>
+        </c-ui.navlist>
+    </c-slot>
+</c-ui.navbar>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Navbar</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="sticky"
+            type="bool"
+            default="True"
+            description="Pin the header to the top of the viewport while scrolling."
+        />
+        <c-api-prop
+            name="variant"
+            type="str"
+            :options="['text', 'underline', 'pill', 'ghost']"
+            default="text"
+            description="Desktop nav item style. The mobile menu always uses a plain stacked style."
+        />
+        <c-api-prop
+            name=":drawer"
+            type="bool"
+            :options="['True', 'False']"
+            default="False"
+            description="Open the mobile menu as a slide-over (c-ui.drawer) instead of an inline collapse."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional classes merged onto the header element."
+        />
+    </c-api-props>
+
+    <h4>Navbar Slots</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="brand"
+            type="—"
+            default=""
+            description="Left region, typically a logo and product name."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="Primary navigation links, usually Navbar.Item components."
+        />
+        <c-api-prop
+            name="actions"
+            type="—"
+            default=""
+            description="Right region for actions such as buttons or an avatar."
+        />
+        <c-api-prop
+            name="mobile"
+            type="—"
+            default=""
+            description="Content shown only in the mobile menu, below the mirrored links and actions. Ideal for a c-ui.navlist of secondary nav that is hidden on desktop."
+        />
+    </c-api-props>
+
+    <h4>Navbar.Item</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="href"
+            type="str"
+            default="#"
+            description="Link destination."
+        />
+        <c-api-prop
+            name="current"
+            type="bool"
+            default="False"
+            description="Marks the active link and applies the accent style."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional classes merged onto the link."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The link label."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

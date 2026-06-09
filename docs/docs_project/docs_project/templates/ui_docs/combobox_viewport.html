@@ -1,0 +1,21 @@
+<c-layouts.viewport>
+    <div class="min-h-screen pt-[240px] px-8">
+        <div class="mx-auto max-w-72">
+            <c-ui.combobox
+                name="skills"
+                placeholder="Select skills"
+                :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS']" />
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:initialized', function () {
+            var el = document.querySelector('[x-data*="combobox"]');
+            if (!el) return;
+            var data = Alpine.$data(el);
+            var open = function () { if (data && !data.isOpen && data.openDropdown) data.openDropdown(); };
+            open();
+            if (data && data.$watch) data.$watch('isOpen', function (v) { if (!v) setTimeout(open, 60); });
+        });
+    </script>
+</c-layouts.viewport>

@@ -1,0 +1,200 @@
+<c-layouts.ui>
+    <c-header>
+        Alert
+        <c-slot name="subheading">
+            Display an inline contextual banner to communicate status, feedback or important information.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Variants</a></c-index-sublink>
+        <c-index-sublink section-id="appearances"><a href="#appearances" class="no-underline">Appearances</a></c-index-sublink>
+        <c-index-sublink section-id="title"><a href="#title" class="no-underline">With Title</a></c-index-sublink>
+        <c-index-sublink section-id="dismissible"><a href="#dismissible" class="no-underline">Dismissible</a></c-index-sublink>
+        <c-index-sublink section-id="no-icon"><a href="#no-icon" class="no-underline">Without Icon</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+
+    <p>The default <code>info</code> variant renders a tinted, bordered banner with a leading icon and your message in the default slot.</p>
+
+    <c-sample>
+        <div class="max-w-xl mx-auto">
+            <c-ui.alert>A new version of the dashboard is available.</c-ui.alert>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.alert>A new version of the dashboard is available.</c-ui.alert>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="variants" title="Variants">
+
+    <p>Use the <code>variant</code> prop to convey meaning. Choose from <code>info</code>, <code>success</code>, <code>warning</code> and <code>error</code>.</p>
+
+    <c-sample>
+        <div class="max-w-xl mx-auto space-y-3">
+            <c-ui.alert variant="info">Your changes have been saved as a draft.</c-ui.alert>
+            <c-ui.alert variant="success">Your payment was processed successfully.</c-ui.alert>
+            <c-ui.alert variant="warning">Your subscription expires in 3 days.</c-ui.alert>
+            <c-ui.alert variant="error">We could not connect to the server.</c-ui.alert>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.alert variant="info">Your changes have been saved as a draft.</c-ui.alert>
+<c-ui.alert variant="success">Your payment was processed successfully.</c-ui.alert>
+<c-ui.alert variant="warning">Your subscription expires in 3 days.</c-ui.alert>
+<c-ui.alert variant="error">We could not connect to the server.</c-ui.alert>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="appearances" title="Appearances">
+
+    <p>Three visual treatments, shared with toast: <code>soft</code> (default), <code>solid</code> and <code>outline</code>.</p>
+
+    <c-sample>
+        <div class="max-w-xl mx-auto space-y-3">
+            <c-ui.alert variant="success" appearance="soft">Soft tinted panel.</c-ui.alert>
+            <c-ui.alert variant="success" appearance="solid">Solid filled panel.</c-ui.alert>
+            <c-ui.alert variant="success" appearance="outline">Outlined panel.</c-ui.alert>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.alert variant="success" appearance="soft">Soft tinted panel.</c-ui.alert>
+<c-ui.alert variant="success" appearance="solid">Solid filled panel.</c-ui.alert>
+<c-ui.alert variant="success" appearance="outline">Outlined panel.</c-ui.alert>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="title" title="With Title">
+
+    <p>Provide a <code>title</code> prop to render a bold heading above the message.</p>
+
+    <c-sample>
+        <div class="max-w-xl mx-auto">
+            <c-ui.alert variant="warning" title="Storage almost full">
+                You have used 95% of your available storage. Upgrade your plan to avoid interruptions.
+            </c-ui.alert>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.alert variant="warning" title="Storage almost full">
+    You have used 95% of your available storage. Upgrade your plan to avoid interruptions.
+</c-ui.alert>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="dismissible" title="Dismissible">
+
+    <p>Add the <code>:dismissible="True"</code> prop to show a close button. Dismissing is handled with Alpine.js.</p>
+
+    <c-sample>
+        <div class="max-w-xl mx-auto">
+            <c-ui.alert variant="success" title="Invitation sent" :dismissible="True">
+                Your teammate will receive an email shortly.
+            </c-ui.alert>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.alert variant="success" title="Invitation sent" :dismissible="True">
+    Your teammate will receive an email shortly.
+</c-ui.alert>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="no-icon" title="Without Icon">
+
+    <p>Set <code>:icon="False"</code> to hide the leading icon for a more compact banner.</p>
+
+    <c-sample>
+        <div class="max-w-xl mx-auto">
+            <c-ui.alert variant="info" :icon="False">
+                This banner has no leading icon.
+            </c-ui.alert>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.alert variant="info" :icon="False">
+    This banner has no leading icon.
+</c-ui.alert>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="variant"
+            type="str"
+            :options="['info', 'success', 'warning', 'error']"
+            default="info"
+            description="Contextual style that sets the tint, border, text colour and icon."
+        />
+        <c-api-prop
+            name="appearance"
+            type="str"
+            :options="['soft', 'solid', 'outline']"
+            default="soft"
+            description="Visual treatment, shared with toast."
+        />
+        <c-api-prop
+            name="title"
+            type="str"
+            default=""
+            description="Optional bold heading shown above the message."
+        />
+        <c-api-prop
+            name="icon"
+            type="bool"
+            default="True"
+            description="Whether to display the leading variant icon."
+        />
+        <c-api-prop
+            name="dismissible"
+            type="bool"
+            default="False"
+            description="Show a close button that hides the alert. Requires Alpine.js."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional classes merged onto the alert container."
+        />
+    </c-api-props>
+
+    <h4>Slots</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The alert message content (text or elements)."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

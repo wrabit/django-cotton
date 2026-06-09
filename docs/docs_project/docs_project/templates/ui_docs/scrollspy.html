@@ -1,0 +1,129 @@
+<c-layouts.ui>
+    <c-header>
+        Scrollspy
+        <c-slot name="subheading">
+            Highlight the nav link for whichever page section is currently in view.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+
+    <p>Wrap your nav in <code>&lt;c-ui.scrollspy&gt;</code>, mark each section with <code>data-spy-section id="..."</code>, then bind link styling to <code>isActive('id')</code>. It tracks the viewport by default; nest the sections in a <code>data-spy-root</code> scroll container for a self-contained area, as below.</p>
+
+    <p>Clicking a link calls <code>scrollTo('id')</code> to bring its section into view. To land it just below the top instead of flush against it (handy when a sticky header would otherwise cover it), add a <code>scroll-mt-*</code> utility to the section, e.g. <code>scroll-mt-24</code>. The offset is honoured by both native anchor jumps and <code>scrollTo</code>.</p>
+
+    <c-sample>
+        <c-ui.scrollspy>
+            <div class="grid grid-cols-[9rem_1fr] gap-6">
+                <nav class="flex flex-col gap-2 text-sm self-start">
+                    <a href="#spy-one" @click.prevent="scrollTo('spy-one')" class="no-underline cursor-pointer transition-colors" :class="isActive('spy-one') ? 'text-accent font-medium' : 'text-zinc-500 dark:text-zinc-400'">Introduction</a>
+                    <a href="#spy-two" @click.prevent="scrollTo('spy-two')" class="no-underline cursor-pointer transition-colors" :class="isActive('spy-two') ? 'text-accent font-medium' : 'text-zinc-500 dark:text-zinc-400'">Installation</a>
+                    <a href="#spy-three" @click.prevent="scrollTo('spy-three')" class="no-underline cursor-pointer transition-colors" :class="isActive('spy-three') ? 'text-accent font-medium' : 'text-zinc-500 dark:text-zinc-400'">Usage</a>
+                    <a href="#spy-four" @click.prevent="scrollTo('spy-four')" class="no-underline cursor-pointer transition-colors" :class="isActive('spy-four') ? 'text-accent font-medium' : 'text-zinc-500 dark:text-zinc-400'">Summary</a>
+                </nav>
+                <div data-spy-root class="h-72 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 space-y-6">
+                    <section id="spy-one" data-spy-section class="scroll-mt-4">
+                        <h4 class="font-medium mb-2">Introduction</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Scrollspy keeps a table of contents in sync with the reader's position. As each section below crosses the top of this panel, its link on the left lights up automatically. Scroll slowly to watch the active state hand off from one to the next.</p>
+                    </section>
+                    <section id="spy-two" data-spy-section class="scroll-mt-4">
+                        <h4 class="font-medium mb-2">Installation</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Wrap your nav and content in the component, then mark every section you want tracked with <code>data-spy-section</code> and a matching id. There is no scroll-position maths to wire up by hand.</p>
+                    </section>
+                    <section id="spy-three" data-spy-section class="scroll-mt-4">
+                        <h4 class="font-medium mb-2">Usage</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Each section is observed and the topmost one intersecting the panel wins. Bind your link styling to <code>isActive('id')</code> and the highlight follows the scroll, while a click smooth-scrolls that section into view.</p>
+                    </section>
+                    <section id="spy-four" data-spy-section class="scroll-mt-4">
+                        <h4 class="font-medium mb-2">Summary</h4>
+                        <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Mark sections, bind links and the scrollspy does the rest. Add a <code>scroll-mt-*</code> utility, as on each section here, when you want a little breathing room above the heading rather than landing it flush.</p>
+                    </section>
+                    {# Trailing space so the last section can scroll fully to the top of the panel #}
+                    <div aria-hidden="true" class="h-56"></div>
+                </div>
+            </div>
+        </c-ui.scrollspy>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.scrollspy>
+    <nav class="flex flex-col gap-2">
+        <a href="#intro" :class="isActive('intro') ? 'text-accent font-medium' : 'text-zinc-500'">Introduction</a>
+        <a href="#install" :class="isActive('install') ? 'text-accent font-medium' : 'text-zinc-500'">Installation</a>
+        <a href="#usage" :class="isActive('usage') ? 'text-accent font-medium' : 'text-zinc-500'">Usage</a>
+        <a href="#summary" :class="isActive('summary') ? 'text-accent font-medium' : 'text-zinc-500'">Summary</a>
+    </nav>
+    {# Omit data-spy-root to track the page viewport instead #}
+    <div data-spy-root class="h-72 overflow-y-auto">
+        {# scroll-mt-* is optional: it sets the gap above the heading when scrolled to #}
+        <section id="intro" data-spy-section class="scroll-mt-4">...</section>
+        <section id="install" data-spy-section class="scroll-mt-4">...</section>
+        <section id="usage" data-spy-section class="scroll-mt-4">...</section>
+        <section id="summary" data-spy-section class="scroll-mt-4">...</section>
+    </div>
+</c-ui.scrollspy>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Scrollspy</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Additional classes merged onto the wrapper element."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The nav links. Bind each link's active styling to isActive('id')."
+        />
+    </c-api-props>
+
+    <h4>Exposes (Alpine)</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="active"
+            type="str"
+            default="null"
+            description="The id of the section currently in view."
+        />
+        <c-api-prop
+            name="isActive(id)"
+            type="bool"
+            default="—"
+            description="Returns true when the given section id is the active one."
+        />
+    </c-api-props>
+
+    <h4>Sections</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="data-spy-section"
+            type="attr"
+            default="—"
+            description="Mark each watched section with this attribute plus an id matching your links."
+        />
+        <c-api-prop
+            name="scroll-mt-*"
+            type="class"
+            default="—"
+            description="Optional. A scroll-margin-top utility on a section sets how far below the top it lands when scrolled to, so a sticky header won't cover it. Respected by both anchor jumps and scrollTo."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

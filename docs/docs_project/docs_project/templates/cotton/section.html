@@ -1,0 +1,10 @@
+<c-vars id title />
+
+<section data-section-id="{{ id }}" id="{{ id }}" class="scroll-mt-24">
+    {% if title %}
+        <h2>{{ title }}</h2>
+    {% endif %}
+    <div class="mt-4">
+        {{ slot }}
+    </div>
+</section>

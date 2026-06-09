@@ -1,20 +1,31 @@
-{% load static %}<html class="text-[15px]">
+{% load static %}<html class="">
 <head>
     {{ 'DOCS_HEAD'|env }}
     <title>{{ meta_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if meta_description %}<meta name="description" content="{{ meta_description }}">{% endif %}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ meta_title }}">
+    {% if meta_description %}<meta property="og:description" content="{{ meta_description }}">{% endif %}
+    <meta name="twitter:card" content="summary">
     <link rel="stylesheet" href="{% static 'app.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="{% static 'favicon/favicon.svg' %}">
     <link rel="icon" type="image/png" href="{% static 'favicon/favicon.png' %}">
 
     <script src="{% static 'highlight/highlight.min.js' %}"></script>
     <script src="{% static 'highlight/languages/django.min.js' %}"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
     <script defer src="{% static 'alpine3.min.js' %}"></script>
-    <link href="{% static 'highlight/styles/atom-one-dark.min.css' %}" rel="stylesheet" />
+
+    <script src="{% static 'cotton-ui/cotton-ui.js' %}"></script>
+
+    <!-- highlight.js theme: Atom One Light + Atom One Dark scoped to .dark -->
+    <link id="hljs-theme" href="{% static 'highlight/styles/cotton-hljs.css' %}" rel="stylesheet" />
     <script>
         hljs.highlightAll();
     </script>
@@ -28,17 +39,25 @@
           document.documentElement.classList.remove('dark')
         }
     </script>
+
+    <script>
+        // Demo placeholder links (href="#") shouldn't jump the page to the top.
+        // Real anchors (#section) and full URLs are unaffected; any @click still fires.
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('a[href="#"]')) e.preventDefault();
+        });
+    </script>
     <style>
         /* alpine */
         [x-cloak] { display: none }
         /* lastpass */
-        div[data-lastpass-icon-root] { display: none }
+        div[data-lastpass-icon-root] { display: none !important }
     </style>
 </head>
-<body class="bg-amber-50 dark:bg-[#0e1219] flex flex-col min-h-screen bg-fixed text-[16.5px] antialiased">
+<body class="font-sans bg-[var(--color-bg)] min-h-screen bg-fixed">
     <c-navbar />
 
-    <div class="flex-1">
+    <div class="pt-[73px]">
         {{ slot }}
     </div>
 
@@ -54,6 +73,111 @@
                     if (!this.tabs.includes(name)) {
                         this.tabs.push(name)
                     }
+                }
+            }))
+
+            Alpine.data('scrollspy', () => ({
+                activeSection: null,
+                sections: [],
+                scrollHandler: null,
+
+                init() {
+                    this.sections = Array.from(
+                        this.$el.querySelectorAll('[data-section-id]')
+                    ).map(section => ({
+                        id: section.dataset.sectionId,
+                        element: section
+                    }));
+
+                    // Honor an incoming deep-link hash; otherwise default to the first section.
+                    const hashId = window.location.hash ? window.location.hash.substring(1) : null;
+                    const hasIncomingHash = hashId && this.sections.some(s => s.id === hashId);
+                    if (hasIncomingHash) {
+                        this.activeSection = hashId;
+                        // After layout / x-cloak settles, scroll to the linked section.
+                        this.$nextTick(() => {
+                            const target = this.sections.find(s => s.id === hashId);
+                            if (target && target.element) target.element.scrollIntoView();
+                        });
+                    } else if (this.sections.length > 0) {
+                        this.activeSection = this.sections[0].id;
+                    }
+
+                    this.setupScrollHandler(hasIncomingHash);
+                    this.handleHashChange();
+                },
+
+                destroy() {
+                    if (this.scrollHandler) {
+                        window.removeEventListener('scroll', this.scrollHandler);
+                    }
+                },
+
+                setupScrollHandler(skipInitial) {
+                    // Throttle scroll events
+                    let ticking = false;
+
+                    this.scrollHandler = () => {
+                        if (!ticking) {
+                            requestAnimationFrame(() => {
+                                this.updateActiveSection();
+                                ticking = false;
+                            });
+                            ticking = true;
+                        }
+                    };
+
+                    window.addEventListener('scroll', this.scrollHandler, { passive: true });
+                    // Initial check, skipped when honoring a deep-link hash so we don't override it.
+                    if (!skipInitial) {
+                        this.updateActiveSection();
+                    }
+                },
+
+                updateActiveSection() {
+                    const scrollTop = window.scrollY;
+                    const offset = 150; // Account for fixed header + some buffer
+
+                    // Find the section that's currently in view
+                    // We look for the last section whose top is above the offset line
+                    let currentSection = this.sections[0];
+
+                    for (const section of this.sections) {
+                        const rect = section.element.getBoundingClientRect();
+                        const sectionTop = rect.top + scrollTop;
+
+                        if (sectionTop <= scrollTop + offset) {
+                            currentSection = section;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    if (currentSection && currentSection.id !== this.activeSection) {
+                        this.activeSection = currentSection.id;
+                        this.updateHash(currentSection.id);
+                    }
+                },
+
+                handleHashChange() {
+                    window.addEventListener('hashchange', () => {
+                        const hashId = window.location.hash.substring(1);
+                        if (hashId && this.sections.some(s => s.id === hashId)) {
+                            this.activeSection = hashId;
+                        }
+                    });
+                },
+
+                updateHash(sectionId) {
+                    if (history.replaceState) {
+                        history.replaceState(null, null, `#${sectionId}`);
+                    } else {
+                        window.location.hash = sectionId;
+                    }
+                },
+
+                isActive(sectionId) {
+                    return this.activeSection === sectionId;
                 }
             }))
 

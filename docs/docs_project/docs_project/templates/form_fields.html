@@ -1,14 +1,15 @@
 <c-layouts.with-sidebar>
 
     <c-slot name="page_index">
-        <c-index-link><a href="#inputs" class="no-underline">Form Inputs</a></c-index-link>
-        <c-index-sublink><a href="#type" class="no-underline">Changing <code>type</code></a></c-index-sublink>
-        <c-index-sublink><a href="#validation" class="no-underline">Adding validation</a></c-index-sublink>
-        <c-index-sublink><a href="#icons" class="no-underline">Adding icons</a></c-index-sublink>
+        <c-index-sublink section-id="inputs"><a href="#inputs" class="no-underline">Form Inputs</a></c-index-sublink>
+        <c-index-sublink section-id="type"><a href="#type" class="no-underline">Changing <code>type</code></a></c-index-sublink>
+        <c-index-sublink section-id="validation"><a href="#validation" class="no-underline">Adding validation</a></c-index-sublink>
+        <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">Adding icons</a></c-index-sublink>
     </c-slot>
 
-    <h1 id="inputs">Building a re-usable form input field</h1>
+    <c-header>Form Inputs</c-header>
 
+    <c-section id="inputs" title="Building a re-usable form input field">
     <p>Componentizing form fields enable you to easily maintain a consistent style across your whole app. This approach is particularly favourable when using a utility first CSS design system like Tailwind where every aspect of the style is detailed and maintained in isolated component files.</p>
 
     <p>For this example, we're using Tailwind for styling. Let's start with a standard input:</p>
@@ -38,9 +39,9 @@
         <div class="mb-2"><input type="text" placeholder="Age" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
     </c-slot>
 </c-snippet>
+    </c-section>
 
-    <h2 id="type">Change the input type</h2>
-
+    <c-section id="type" title="Change the input type">
     <p>You will probably need more than just a text input in your project. So let's declare an attribute `text` in <code>{{ '<c-vars />'|force_escape }}</code>. Adding it as a var will allow us to set "text" as the default. Additionally, it will be excluded from <code>{% verbatim %}{{ attrs }}{% endverbatim %}</code>:</p>
 
 <c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
@@ -53,7 +54,7 @@
 <c-input name="some_text" placeholder="Just a text field" />
 <c-input type="email" name="email" placeholder="Email" />
 <c-input type="password" name="password" placeholder="Password" />
-<c-input type="number" name="Count" placeholder="Password" />
+<c-input type="number" name="count" placeholder="Count" />
 {% endverbatim %}{% endcotton:verbatim %}
     <c-slot name="preview">
         <div class="mb-2"><input type="text" placeholder="Just a text field" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
@@ -62,9 +63,9 @@
         <div class="mb-2"><input type="number" placeholder="Count" class="border border-gray-300 rounded-md shadow px-3 py-1.5"></div>
     </c-slot>
 </c-snippet>
+    </c-section>
 
-    <h2 id="validation">Adding validation state</h2>
-
+    <c-section id="validation" title="Adding validation state">
     <p>Let's also handle displaying errors when we need to.</p>
 
 <c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
@@ -85,13 +86,13 @@
         <div class="text-red-500 text-sm mt-1">Your surname is required.</div>
     </c-slot>
 </c-snippet>
+    </c-section>
 
-    <h2 id="icons">Bonus - Adding icons</h2>
-
+    <c-section id="icons" title="Bonus - Adding icons">
     <p>To take customization a step further and to demonstrate the flexibility of cotton, let's now give our input component the ability to display icons.</p>
 
 <c-snippet label="cotton/input.html">{% cotton:verbatim %}{% verbatim %}
-<c-vars type="text" leading_icon trailing_icon />
+<c-vars type="text" leading_icon />
 
 <div class="border rounded shadow flex items-center">
     {% if leading_icon %}
@@ -104,13 +105,13 @@
 
 <c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
 
-<c-input name="text" name="username" placeholder="Username">
+<c-input type="text" name="username" placeholder="Username">
     <c-slot name="leading_icon">
         <svg>...</svg>
     </c-slot>
 </c-input>
 
-<c-input type="password" name="password" name="password" placeholder="Password">
+<c-input type="password" name="password" placeholder="Password">
     <c-slot name="leading_icon">
         <svg>...</svg>
     </c-slot>
@@ -137,28 +138,15 @@
         </div>
     </c-slot>
 </c-snippet>
+    </c-section>
 
 <c-navigation>
     <c-slot name="prev">
-        <a href="{% url 'configuration' %}">Configuration</a>
+        <a href="{% url 'thinking-in-components' %}">Thinking in Components</a>
     </c-slot>
     <c-slot name="next">
         <a href="{% url 'alpine-js' %}">Tabs with Alpine.js</a>
     </c-slot>
 </c-navigation>
-
-    <!-- <h2>Adding validation</h2> -->
-    <!-- <h2>Adding icons</h2> -->
-    <!-- <h2>Adding a form group</h2> -->
-    <!-- <h2>Adding a label</h2> -->
-    <!-- <h2>Adding a hint</h2> -->
-    <!-- <h2>Adding a prefix</h2> -->
-    <!-- <h2>Adding a suffix</h2> -->
-    <!-- <h2>Adding a button</h2> -->
-    <!-- <h2>Adding a textarea</h2> -->
-    <!-- <h2>Adding a select</h2> -->
-    <!-- <h2>Adding a checkbox</h2> -->
-
-
 
 </c-layouts.with-sidebar>

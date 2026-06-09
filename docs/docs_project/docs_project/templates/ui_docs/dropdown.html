@@ -1,0 +1,478 @@
+<c-layouts.ui>
+    <c-header>
+        Dropdown
+        <c-slot name="subheading">
+            A dropdown menu component with positioning control, enhanced menu items, and keyboard navigation.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="positioning"><a href="#positioning" class="no-underline">Positioning</a></c-index-sublink>
+        <c-index-sublink section-id="responsive"><a href="#responsive" class="no-underline">Responsive</a></c-index-sublink>
+        <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Item Variants</a></c-index-sublink>
+        <c-index-sublink section-id="custom-trigger"><a href="#custom-trigger" class="no-underline">Custom Trigger</a></c-index-sublink>
+        <c-index-sublink section-id="separators"><a href="#separators" class="no-underline">Separators</a></c-index-sublink>
+        <c-index-sublink section-id="groups"><a href="#groups" class="no-underline">Grouped Menus</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">API Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            The simplest dropdown uses <code>trigger_text</code> to auto-generate a button trigger.
+        </p>
+
+        <c-sample>
+            <c-ui.dropdown trigger_text="Account">
+                <c-ui.dropdown.item>Profile</c-ui.dropdown.item>
+                <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
+                <c-ui.dropdown.item>Logout</c-ui.dropdown.item>
+            </c-ui.dropdown>
+
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dropdown trigger_text="Account">
+    <c-ui.dropdown.item>Profile</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Logout</c-ui.dropdown.item>
+</c-ui.dropdown>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="positioning" title="Positioning">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            Control dropdown placement with <code>position</code>, <code>align</code>, and <code>offset</code> props.
+            By default, dropdowns auto-adjust to stay within the viewport (disable with <code>:auto_position="False"</code>).
+        </p>
+
+        <c-sample>
+            <div class="flex gap-4 flex-wrap">
+                <c-ui.dropdown position="bottom" align="start" offset="8" trigger_text="Bottom Start">
+                    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+                </c-ui.dropdown>
+
+                <c-ui.dropdown position="bottom" align="end" offset="8" trigger_text="Bottom End">
+                    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+                </c-ui.dropdown>
+
+                <c-ui.dropdown position="top" align="start" offset="8" trigger_text="Top Start">
+                    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+                </c-ui.dropdown>
+
+                <c-ui.dropdown position="top" align="end" offset="8" trigger_text="Top End">
+                    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+                </c-ui.dropdown>
+            </div>
+
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dropdown position="bottom" align="start" offset="8" trigger_text="Bottom Start">
+    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+</c-ui.dropdown>
+
+<c-ui.dropdown position="bottom" align="end" offset="8" trigger_text="Bottom End">
+    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+</c-ui.dropdown>
+
+<c-ui.dropdown position="top" align="start" offset="8" trigger_text="Top Start">
+    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+</c-ui.dropdown>
+
+<c-ui.dropdown position="top" align="end" offset="8" trigger_text="Top End">
+    <c-ui.dropdown.item>Option 1</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 2</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Option 3</c-ui.dropdown.item>
+</c-ui.dropdown>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="responsive" title="Responsive positioning">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            With <code>:auto_position</code> (on by default) the menu watches the viewport and flips or realigns to stay
+            visible. Drag the handle to shrink the preview into a mini viewport and watch the open menu reposition.
+        </p>
+
+        <c-demo.viewport src="{% url 'ui-dropdown-viewport' %}" w="480" h="500" />
+    </c-section>
+
+    <c-section id="variants" title="Item Variants">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            Enhance items with icons, keyboard shortcuts, and danger variants.
+        </p>
+
+        <c-sample>
+            <c-ui.dropdown trigger_text="Actions">
+                <c-ui.dropdown.item kbd="⌘E">
+                    <c-slot name="icon">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                    </c-slot>
+                    Edit
+                </c-ui.dropdown.item>
+                <c-ui.dropdown.item kbd="⌘D">
+                    <c-slot name="icon">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                    </c-slot>
+                    Duplicate
+                </c-ui.dropdown.item>
+                <c-ui.dropdown.separator />
+                <c-ui.dropdown.item variant="danger" kbd="⌘⌫">
+                    <c-slot name="icon">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </c-slot>
+                    Delete
+                </c-ui.dropdown.item>
+            </c-ui.dropdown>
+
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dropdown trigger_text="Actions">
+    <c-ui.dropdown.item kbd="⌘E">
+        <c-slot name="icon">
+            <svg>...</svg>
+        </c-slot>
+        Edit
+    </c-ui.dropdown.item>
+    <c-ui.dropdown.item kbd="⌘D">
+        <c-slot name="icon">
+            <svg>...</svg>
+        </c-slot>
+        Duplicate
+    </c-ui.dropdown.item>
+    <c-ui.dropdown.separator />
+    <c-ui.dropdown.item variant="danger" kbd="⌘⌫">
+        <c-slot name="icon">
+            <svg>...</svg>
+        </c-slot>
+        Delete
+    </c-ui.dropdown.item>
+</c-ui.dropdown>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="custom-trigger" title="Custom Trigger">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            Use the <code>trigger</code> slot for complete control over the trigger element. Common uses include icon-only buttons, avatar menus, or custom styled triggers.
+        </p>
+
+        <c-sample>
+            <div class="flex gap-4 items-center">
+                <!-- Icon-only button (common for actions menu) -->
+                <c-ui.dropdown position="bottom" align="end" offset="8">
+                    <c-slot name="trigger">
+                        <button type="button" class="p-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors" aria-label="More options">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                            </svg>
+                        </button>
+                    </c-slot>
+                    <c-ui.dropdown.item>Edit</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Duplicate</c-ui.dropdown.item>
+                    <c-ui.dropdown.separator />
+                    <c-ui.dropdown.item variant="danger">Delete</c-ui.dropdown.item>
+                </c-ui.dropdown>
+
+                <!-- User avatar menu -->
+                <c-ui.dropdown position="bottom" align="end" offset="8">
+                    <c-slot name="trigger">
+                        <button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            <div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-sm font-medium">
+                                JD
+                            </div>
+                            <svg class="w-4 h-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                    </c-slot>
+                    <c-ui.dropdown.item>My Profile</c-ui.dropdown.item>
+                    <c-ui.dropdown.item>Account Settings</c-ui.dropdown.item>
+                    <c-ui.dropdown.separator />
+                    <c-ui.dropdown.item>Sign Out</c-ui.dropdown.item>
+                </c-ui.dropdown>
+            </div>
+
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<!-- Icon-only menu button -->
+<c-ui.dropdown position="bottom" align="end">
+    <c-slot name="trigger">
+        <button type="button" class="p-2 rounded-md hover:bg-zinc-100" aria-label="More options">
+            <svg class="w-5 h-5"><!-- three dots icon --></svg>
+        </button>
+    </c-slot>
+    <c-ui.dropdown.item>Edit</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Duplicate</c-ui.dropdown.item>
+    <c-ui.dropdown.separator />
+    <c-ui.dropdown.item variant="danger">Delete</c-ui.dropdown.item>
+</c-ui.dropdown>
+
+<!-- User avatar menu -->
+<c-ui.dropdown position="bottom" align="end">
+    <c-slot name="trigger">
+        <button class="flex items-center gap-2 rounded-full hover:bg-zinc-100">
+            <div class="w-8 h-8 rounded-full bg-accent text-white">JD</div>
+            <svg><!-- chevron --></svg>
+        </button>
+    </c-slot>
+    <c-ui.dropdown.item>My Profile</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Account Settings</c-ui.dropdown.item>
+    <c-ui.dropdown.separator />
+    <c-ui.dropdown.item>Sign Out</c-ui.dropdown.item>
+</c-ui.dropdown>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="separators" title="Separators & States">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            Use separators to group menu items. Items can be disabled or rendered as links.
+        </p>
+
+        <c-sample>
+            <c-ui.dropdown trigger_text="Menu">
+                <c-ui.dropdown.item href="/profile">View Profile</c-ui.dropdown.item>
+                <c-ui.dropdown.item>Edit Profile</c-ui.dropdown.item>
+                <c-ui.dropdown.separator />
+                <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
+                <c-ui.dropdown.item disabled>Upgrade Plan</c-ui.dropdown.item>
+                <c-ui.dropdown.separator />
+                <c-ui.dropdown.item variant="danger">Sign Out</c-ui.dropdown.item>
+            </c-ui.dropdown>
+
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dropdown trigger_text="Menu">
+    <c-ui.dropdown.item href="/profile">View Profile</c-ui.dropdown.item>
+    <c-ui.dropdown.item>Edit Profile</c-ui.dropdown.item>
+    <c-ui.dropdown.separator />
+    <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
+    <c-ui.dropdown.item disabled>Upgrade Plan</c-ui.dropdown.item>
+    <c-ui.dropdown.separator />
+    <c-ui.dropdown.item variant="danger">Sign Out</c-ui.dropdown.item>
+</c-ui.dropdown>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="groups" title="Grouped Menus">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            Organize menu items into labeled groups using <code>&lt;c-ui.dropdown.group&gt;</code>.
+        </p>
+
+        <c-sample>
+            <c-ui.dropdown trigger_text="File">
+                <c-ui.dropdown.group label="Edit">
+                    <c-ui.dropdown.item kbd="⌘Z">
+                        <c-slot name="icon">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                            </svg>
+                        </c-slot>
+                        Undo
+                    </c-ui.dropdown.item>
+                    <c-ui.dropdown.item kbd="⌘⇧Z">
+                        <c-slot name="icon">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"/>
+                            </svg>
+                        </c-slot>
+                        Redo
+                    </c-ui.dropdown.item>
+                </c-ui.dropdown.group>
+
+                <c-ui.dropdown.separator />
+
+                <c-ui.dropdown.group label="File">
+                    <c-ui.dropdown.item kbd="⌘S">
+                        <c-slot name="icon">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                            </svg>
+                        </c-slot>
+                        Save
+                    </c-ui.dropdown.item>
+                    <c-ui.dropdown.item kbd="⌘O">
+                        <c-slot name="icon">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/>
+                            </svg>
+                        </c-slot>
+                        Open
+                    </c-ui.dropdown.item>
+                </c-ui.dropdown.group>
+
+                <c-ui.dropdown.separator />
+
+                <c-ui.dropdown.item variant="danger" kbd="⌘Q">
+                    <c-slot name="icon">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </c-slot>
+                    Quit
+                </c-ui.dropdown.item>
+            </c-ui.dropdown>
+
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.dropdown trigger_text="File">
+    <c-ui.dropdown.group label="Edit">
+        <c-ui.dropdown.item kbd="⌘Z">
+            <c-slot name="icon">
+                <svg><!-- Undo icon --></svg>
+            </c-slot>
+            Undo
+        </c-ui.dropdown.item>
+        <c-ui.dropdown.item kbd="⌘⇧Z">
+            <c-slot name="icon">
+                <svg><!-- Redo icon --></svg>
+            </c-slot>
+            Redo
+        </c-ui.dropdown.item>
+    </c-ui.dropdown.group>
+
+    <c-ui.dropdown.separator />
+
+    <c-ui.dropdown.group label="File">
+        <c-ui.dropdown.item kbd="⌘S">
+            <c-slot name="icon">
+                <svg><!-- Save icon --></svg>
+            </c-slot>
+            Save
+        </c-ui.dropdown.item>
+        <c-ui.dropdown.item kbd="⌘O">
+            <c-slot name="icon">
+                <svg><!-- Open icon --></svg>
+            </c-slot>
+            Open
+        </c-ui.dropdown.item>
+    </c-ui.dropdown.group>
+
+    <c-ui.dropdown.separator />
+
+    <c-ui.dropdown.item variant="danger" kbd="⌘Q">
+        <c-slot name="icon">
+            <svg><!-- Quit icon --></svg>
+        </c-slot>
+        Quit
+    </c-ui.dropdown.item>
+</c-ui.dropdown>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+        <h5 class="text-lg font-semibold mb-4">Dropdown Props</h5>
+
+        <c-api-props>
+            <c-api-prop name="position" type="str" default="bottom" description="Dropdown position relative to trigger.">
+                <c-slot name="options_content">top, bottom, left, right</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="align" type="str" default="start" description="Dropdown alignment relative to position.">
+                <c-slot name="options_content">start, center, end</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="offset" type="str" default="4" description="Distance in pixels from the trigger.">
+                <c-slot name="options_content">Any number</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="trigger_text" type="str" default="" description="Auto-generates a trigger button with this text. Use this OR the trigger slot, not both.">
+                <c-slot name="options_content">Any text</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="min_width" type="str" default="12rem" description="Minimum width of dropdown content.">
+                <c-slot name="options_content">Any CSS width value</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="auto_position" type="bool" default="True" description="Automatically adjusts position and alignment to keep dropdown in viewport. Detects screen boundaries and intelligently repositions to prevent overflow. Set to False to disable.">
+                <c-slot name="options_content">True (default), False</c-slot>
+            </c-api-prop>
+        </c-api-props>
+
+        <h5 class="text-lg font-semibold mb-4 mt-6">Dropdown Slots</h5>
+
+        <c-api-props>
+            <c-api-prop name="trigger" type="—" default="Optional" description="Custom trigger element. If not provided, trigger_text is required."></c-api-prop>
+            <c-api-prop name="slot (default)" type="—" default="Required" description="Dropdown menu content. Place items directly or wrap in &lt;c-ui.dropdown.group&gt; for organization."></c-api-prop>
+        </c-api-props>
+
+        <h5 class="text-lg font-semibold mb-4 mt-6">Dropdown.item Props</h5>
+
+        <c-api-props>
+            <c-api-prop name="icon" type="slot" default="" description="Icon displayed before item text.">
+                <c-slot name="options_content">Any SVG or icon component</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="kbd" type="str" default="" description="Keyboard shortcut displayed on the right (e.g., ⌘K).">
+                <c-slot name="options_content">Any text</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="variant" type="str" default="" description="Visual variant for the item.">
+                <c-slot name="options_content">danger, (empty for default)</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="disabled" type="bool" default="False" description="Disables the item.">
+                <c-slot name="options_content">True, False</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="href" type="str" default="" description="If provided, renders as a link (&lt;a&gt;) instead of button.">
+                <c-slot name="options_content">Any URL</c-slot>
+            </c-api-prop>
+        </c-api-props>
+
+        <h5 class="text-lg font-semibold mb-4 mt-6">Dropdown.separator</h5>
+        <p class="text-zinc-600 dark:text-zinc-400 mb-4">
+            <code>&lt;c-ui.dropdown.separator /&gt;</code> - Horizontal divider for grouping menu items. No props required.
+        </p>
+
+        <h5 class="text-lg font-semibold mb-4 mt-6">Dropdown.group Props</h5>
+        <c-api-props>
+            <c-api-prop name="label" type="str" default="" description="Group heading displayed above items in uppercase gray text.">
+                <c-slot name="options_content">Any text</c-slot>
+            </c-api-prop>
+
+            <c-api-prop name="slot (default)" type="—" default="Required" description="Group content. Place &lt;c-ui.dropdown.item&gt; components here.">
+                <c-slot name="options_content">Dropdown items</c-slot>
+            </c-api-prop>
+        </c-api-props>
+
+        <h5 class="text-lg font-semibold mb-4 mt-6">Accessibility</h5>
+
+        <ul class="list-disc list-inside space-y-2 text-zinc-600 dark:text-zinc-400 mb-6">
+            <li><strong>Keyboard Navigation:</strong> Arrow up/down to navigate items, Home/End to jump, Escape to close, Tab to close</li>
+            <li><strong>ARIA Roles:</strong> Proper menu/menuitem roles for screen readers</li>
+            <li><strong>Focus Management:</strong> Focus trap when open, auto-focus first item on open</li>
+            <li><strong>Visual Indicators:</strong> Hover and focus states on all interactive elements</li>
+        </ul>
+    </c-section>
+
+</c-layouts.ui>

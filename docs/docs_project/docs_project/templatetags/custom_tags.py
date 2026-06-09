@@ -1,3 +1,4 @@
+import json
 import os
 from django import template
 from django.utils.safestring import mark_safe
@@ -9,6 +10,23 @@ register = template.Library()
 @register.filter
 def env(key):
     return mark_safe(os.environ.get(key, ""))
+
+
+@register.filter
+def json_dumps(value):
+    return json.dumps(value)
+
+
+@register.filter("startswith")
+def startswith(text, starts):
+    if isinstance(text, str):
+        return text.startswith(starts)
+    return False
+
+
+@register.filter
+def json_encode(value):
+    return mark_safe(json.dumps(value))
 
 
 @register.filter

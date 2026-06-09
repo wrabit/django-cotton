@@ -1,0 +1,29 @@
+<c-layouts.viewport>
+    <!-- Trigger is anchored at a fixed point so resizing the frame (not the
+         trigger) changes the available space and drives repositioning. -->
+    <div class="relative min-h-screen">
+        <div class="absolute" style="left: 240px; top: 240px;">
+            <c-ui.dropdown trigger_text="Menu">
+                <c-ui.dropdown.item>Profile</c-ui.dropdown.item>
+                <c-ui.dropdown.item>Billing</c-ui.dropdown.item>
+                <c-ui.dropdown.item>Settings</c-ui.dropdown.item>
+                <c-ui.dropdown.item>Sign out</c-ui.dropdown.item>
+            </c-ui.dropdown>
+        </div>
+    </div>
+
+    <script>
+        // Keep the demo dropdown open so resizing the frame shows it reposition.
+        document.addEventListener('alpine:initialized', function () {
+            var el = document.querySelector('[x-data*="dropdownMenu"]');
+            if (!el) return;
+            var data = Alpine.$data(el);
+            var open = function () { if (data && !data.dropdownMenu && data.open) data.open(); };
+            open();
+            if (data && data.$watch) data.$watch('dropdownMenu', function (v) { if (!v) setTimeout(open, 60); });
+            window.addEventListener('resize', function () {
+                if (data && data.dropdownMenu && data.positionDropdown) data.positionDropdown();
+            });
+        });
+    </script>
+</c-layouts.viewport>

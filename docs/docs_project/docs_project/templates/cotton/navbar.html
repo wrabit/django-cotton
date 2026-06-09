@@ -1,78 +1,141 @@
-<div class="py-5 sticky top-0 bg-amber-50 dark:bg-[#0e1219] md:bg-transparent dark:md:bg-transparent border-opacity-15 z-10" :class="{'bg-white dark:bg-gray-800': isOpen}"
-     x-data="{isOpen: false}"
-     x-init="
-        window.addEventListener('resize', () => {
-            if (window.matchMedia('(min-width: 640px)').matches) {
-                isOpen = false;
+<div x-data="{
+        isOpen: false,
+        scrollPosition: 0,
+        toggleMenu() {
+            this.isOpen = !this.isOpen;
+            if (this.isOpen) {
+                this.scrollPosition = window.pageYOffset;
+                document.body.style.overflow = 'hidden';
+                document.body.style.position = 'fixed';
+                document.body.style.top = `-${this.scrollPosition}px`;
+                document.body.style.width = '100%';
+            } else {
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.width = '';
+                window.scrollTo(0, this.scrollPosition);
             }
-        });
-     "
->
-    <div class="px-5 max-w-8xl mx-auto flex items-center justify-between">
-        <div class="flex item-center items-center">
+        }
+    }"
+    @keydown.escape.window="isOpen && toggleMenu()">
 
-            <!-- Mobile menu button-->
-            <button @click="isOpen = !isOpen"
-                    type="button"
-                    class="sm:hidden relative inline-flex items-center justify-center rounded-md pr-3 text-gray-400 focus:outline-none focus:ring-0"
-                    aria-controls="mobile-menu" aria-expanded="false">
-                <span class="absolute -inset-0.5"></span>
-                <span class="sr-only">Open main menu</span>
-                <!--
-                  Icon when menu is closed.
+    <!-- Fixed navbar -->
+    <header class="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-zinc-200 dark:bg-zinc-900/80 dark:border-zinc-800">
+        <div class="py-2 px-5 max-w-8xl mx-auto flex items-center justify-between">
+            <div class="flex item-center items-center">
+                <!-- Mobile menu button-->
+                <button @click="toggleMenu()"
+                        type="button"
+                        class="sm:hidden relative inline-flex items-center justify-center rounded-md pr-3 text-gray-400 focus:outline-none focus:ring-0"
+                        :aria-expanded="isOpen">
+                    <span class="sr-only">Toggle menu</span>
+                    <svg x-show="!isOpen" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                    </svg>
+                    <svg x-show="isOpen" x-cloak class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
 
-                  Menu open: "hidden", Menu closed: "block"
-                -->
-                <svg x-show="!isOpen" class="h-7 w-7 " fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"
-                     aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
-                </svg>
-                <!--
-                  Icon when menu is open.
+                <a href="/" class="flex item-center items-center space-x-1.5">
+                    <div class="flex items-center space-x-1">
+                        <c-icons.logo class="size-7 text-accent" />
+                        <span class="font-semibold text-[1.6rem] ml-0.5 text-zinc-950 dark:text-gray-100 tracking-tight">cotton</span>
+                    </div>
+                </a>
 
-                  Menu open: "block", Menu closed: "hidden"
-                -->
-                <svg x-show="isOpen" class="h-7 w-7 " fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"
-                     aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-
-            <a href="/" class="flex item-center items-center space-x-1.5">
-                <div class="flex items-center space-x-1">
-                    <c-icons.logo class="size-8 text-teal-600" />
-                    <span class="font-bold text-2xl ml-1.5 text-[#1a384a] dark:text-gray-100">cotton</span>
-                    <div class=" text-gray-700 dark:text-white text-sm opacity-50 mt-0.5 px-1">for</div>
-                    <c-icons.django class=" h-[1.4rem] text-teal-600 mt-1.5" />
+                <div class="hidden sm:flex items-center h-full space-x-1 ml-6">
+                    <c-navbar.nav-item url="{% url 'home' %}" active-exact active-startswith="/docs/">
+                        <c-icons.book class="size-4 mr-1.5" stroke-width="2" />
+                        Core
+                    </c-navbar.nav-item>
+                    <c-navbar.nav-item url="{% url 'ui' %}" active-startswith="/ui">
+                        <c-icons.blocks class="size-4 mr-1.5" stroke-width="2" />
+                        UI Kit
+                    </c-navbar.nav-item>
                 </div>
-            </a>
-        </div>
+            </div>
 
-        <div class="flex items-center space-x-2">
-            <a href="#" class="cursor-pointer" @click.prevent="
-                    localStorage.theme = document.documentElement.classList.toggle('dark') ? 'dark' : 'light'
-                ">
-                <c-icons.sun class="size-7 text-yellow-900/40 dark:text-gray-100/50" />
-            </a>
-            <a href="https://github.com/wrabit/django-cotton" target="_blank" class="text-yellow-900/40 dark:text-gray-100/50 flex items-center space-x-2">
-                <c-icons.github class="size-6" />
-            </a>
-            <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-yellow-900/40 dark:text-gray-100/50 flex items-center space-x-2">
-                <c-icons.discord class="size-7" />
-            </a>
+            <div class="flex items-center space-x-2">
+                {% if request.path|startswith:'/ui' %}
+                    <a href="{{ github_ui_repo }}" target="_blank" aria-label="django-cotton-ui on GitHub" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center gap-2 transition-colors">
+                        <c-icons.github class="size-5 shrink-0" />
+                        {% if github_ui_stars and github_ui_stars != "0" %}<span class="hidden md:inline-block text-[11px] font-medium tabular-nums">{{ github_ui_stars }}</span>{% endif %}
+                    </a>
+                    {% if pypi_ui_version %}<a href="https://pypi.org/project/django-cotton-ui/" target="_blank" aria-label="django-cotton-ui on PyPI" class="hidden md:inline-block text-[11px] font-medium text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_ui_version }}</a>{% endif %}
+                {% else %}
+                    <a href="{{ github_core_repo }}" target="_blank" aria-label="django-cotton on GitHub" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center gap-2 transition-colors">
+                        <c-icons.github class="size-5 shrink-0" />
+                        {% if github_core_stars and github_core_stars != "0" %}<span class="hidden md:inline-block text-[11px] font-medium tabular-nums">{{ github_core_stars }}</span>{% endif %}
+                    </a>
+                    {% if pypi_core_version %}<a href="https://pypi.org/project/django-cotton/" target="_blank" aria-label="django-cotton on PyPI" class="hidden md:inline-block text-[11px] font-medium text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_core_version }}</a>{% endif %}
+                {% endif %}
+                <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors flex items-center space-x-2">
+                    <c-icons.discord class="size-6" />
+                </a>
+                <a href="#" @click.prevent="toggleDark" x-data="{
+                        'dark': false,
+                        init() {
+                            this.dark = document.documentElement.classList.contains('dark')
+                        },
+                        toggleDark() {
+                            this.dark = !this.dark
+                            document.documentElement.classList.toggle('dark')
+                            localStorage.theme = this.dark ? 'dark' : 'light'
+                        }
+                    }">
+                    <c-icons.sun class="size-6 text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors" />
+                </a>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <div x-show="isOpen"
+    <!-- Mobile menu: full-screen panel that fills behind the (frosted, z-50) navbar,
+         so there's no see-through gap below the bar regardless of its exact height -->
+    <nav x-show="isOpen"
          x-cloak
-         x-transition:enter="transition ease-out duration-100"
-         x-transition:enter-start="transform -translate-y-4"
-         x-transition:enter-end="transform translate-y-0"
-         x-transition:leave="transition ease-in duration-100"
-         x-transition:leave-start="transform translate-y-0"
-         x-transition:leave-end="transform -translate-y-4"
-         @click.away="isOpen = false" class="absolute shadow-md bg-white dark:bg-gray-800 top-[67px] inset-x-0 px-5 transition transform origin-top-right md:hidden">
-        <c-sidebar />
-    </div>
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-4"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-4"
+         class="fixed inset-0 z-40 bg-white dark:bg-zinc-900 overflow-y-auto sm:hidden"
+         style="-webkit-overflow-scrolling: touch;">
+        <div class="px-5 pt-[73px] pb-6">
+            <!-- Mobile nav links -->
+            <div class="flex flex-col gap-2 mb-6 pb-6 border-b border-zinc-200 dark:border-zinc-800">
+                <a href="{% url 'home' %}"
+                   class="flex items-center gap-2 px-3 py-2 rounded-md font-medium
+                   {% if request.path == '/' or request.path|startswith:'/docs/' %}
+                       bg-accent text-accent-foreground
+                   {% else %}
+                       text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800
+                   {% endif %}">
+                    <c-icons.book class="size-5" />
+                    Core
+                </a>
+                <a href="{% url 'ui' %}"
+                   class="flex items-center gap-2 px-3 py-2 rounded-md font-medium
+                   {% if request.path|startswith:'/ui' %}
+                       bg-accent text-accent-foreground
+                   {% else %}
+                       text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800
+                   {% endif %}">
+                    <c-icons.blocks class="size-5" />
+                    UI Kit
+                </a>
+            </div>
+
+            <!-- Sidebar content - show UI sidebar on /ui routes, regular sidebar otherwise.
+                 persist=False: the desktop copy owns scroll persistence; two instances
+                 sharing the key would race on restore. -->
+            {% if request.path|startswith:"/ui" %}
+                <c-ui-docs.sidebar :persist="False" />
+            {% else %}
+                <c-sidebar :persist="False" />
+            {% endif %}
+        </div>
+    </nav>
 </div>

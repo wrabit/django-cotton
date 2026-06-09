@@ -1,0 +1,375 @@
+<c-layouts.ui>
+    <c-header>
+        Badge
+        <c-slot name="subheading">
+            Highlight information like status, category, or count.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="colors"><a href="#colors" class="no-underline">Colors</a></c-index-sublink>
+        <c-index-sublink section-id="pill"><a href="#pill" class="no-underline">Pill Variant</a></c-index-sublink>
+        <c-index-sublink section-id="solid"><a href="#solid" class="no-underline">Solid Variant</a></c-index-sublink>
+        <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
+        <c-index-sublink section-id="clickable"><a href="#clickable" class="no-underline">Clickable</a></c-index-sublink>
+        <c-index-sublink section-id="inset"><a href="#inset" class="no-underline">Inset</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.badge color="lime">New</c-ui.badge>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.badge color="lime">New</c-ui.badge>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="sizes" title="Sizes">
+
+    <p>Badges come in sizes from <code>size="xs"</code> to <code>size="2xl"</code>, defaulting to <code>md</code>.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-4">
+            <c-ui.badge size="sm">Small</c-ui.badge>
+            <c-ui.badge>Default</c-ui.badge>
+            <c-ui.badge size="lg">Large</c-ui.badge>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.badge size="sm">Small</c-ui.badge>
+<c-ui.badge>Default</c-ui.badge>
+<c-ui.badge size="lg">Large</c-ui.badge>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="colors" title="Colors">
+
+    <p>Choose from an array of colors to differentiate between badges and convey meaning.</p>
+
+    <c-sample>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+            <c-ui.badge color="zinc">Zinc</c-ui.badge>
+            <c-ui.badge color="red">Red</c-ui.badge>
+            <c-ui.badge color="orange">Orange</c-ui.badge>
+            <c-ui.badge color="amber">Amber</c-ui.badge>
+            <c-ui.badge color="yellow">Yellow</c-ui.badge>
+            <c-ui.badge color="lime">Lime</c-ui.badge>
+            <c-ui.badge color="green">Green</c-ui.badge>
+            <c-ui.badge color="emerald">Emerald</c-ui.badge>
+            <c-ui.badge color="teal">Teal</c-ui.badge>
+            <c-ui.badge color="cyan">Cyan</c-ui.badge>
+            <c-ui.badge color="sky">Sky</c-ui.badge>
+            <c-ui.badge color="blue">Blue</c-ui.badge>
+            <c-ui.badge color="indigo">Indigo</c-ui.badge>
+            <c-ui.badge color="violet">Violet</c-ui.badge>
+            <c-ui.badge color="purple">Purple</c-ui.badge>
+            <c-ui.badge color="fuchsia">Fuchsia</c-ui.badge>
+            <c-ui.badge color="pink">Pink</c-ui.badge>
+            <c-ui.badge color="rose">Rose</c-ui.badge>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.badge color="zinc">Zinc</c-ui.badge>
+<c-ui.badge color="red">Red</c-ui.badge>
+<c-ui.badge color="orange">Orange</c-ui.badge>
+<c-ui.badge color="amber">Amber</c-ui.badge>
+<c-ui.badge color="yellow">Yellow</c-ui.badge>
+<c-ui.badge color="lime">Lime</c-ui.badge>
+<c-ui.badge color="green">Green</c-ui.badge>
+<c-ui.badge color="emerald">Emerald</c-ui.badge>
+<c-ui.badge color="teal">Teal</c-ui.badge>
+<c-ui.badge color="cyan">Cyan</c-ui.badge>
+<c-ui.badge color="sky">Sky</c-ui.badge>
+<c-ui.badge color="blue">Blue</c-ui.badge>
+<c-ui.badge color="indigo">Indigo</c-ui.badge>
+<c-ui.badge color="violet">Violet</c-ui.badge>
+<c-ui.badge color="purple">Purple</c-ui.badge>
+<c-ui.badge color="fuchsia">Fuchsia</c-ui.badge>
+<c-ui.badge color="pink">Pink</c-ui.badge>
+<c-ui.badge color="rose">Rose</c-ui.badge>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="pill" title="Pill Variant">
+
+    <p>Display badges with a fully rounded border radius using the <code>variant="pill"</code> prop.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-4">
+            <c-ui.badge variant="pill" color="green">Active</c-ui.badge>
+            <c-ui.badge variant="pill" color="amber">Pending</c-ui.badge>
+            <c-ui.badge variant="pill" color="red">Inactive</c-ui.badge>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.badge variant="pill" color="green">Active</c-ui.badge>
+<c-ui.badge variant="pill" color="amber">Pending</c-ui.badge>
+<c-ui.badge variant="pill" color="red">Inactive</c-ui.badge>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="solid" title="Solid Variant">
+
+    <p>Bold, high-contrast badges for more important status indicators or alerts.</p>
+
+    <c-sample>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+            <c-ui.badge variant="solid" color="zinc">Zinc</c-ui.badge>
+            <c-ui.badge variant="solid" color="red">Red</c-ui.badge>
+            <c-ui.badge variant="solid" color="orange">Orange</c-ui.badge>
+            <c-ui.badge variant="solid" color="amber">Amber</c-ui.badge>
+            <c-ui.badge variant="solid" color="yellow">Yellow</c-ui.badge>
+            <c-ui.badge variant="solid" color="lime">Lime</c-ui.badge>
+            <c-ui.badge variant="solid" color="green">Green</c-ui.badge>
+            <c-ui.badge variant="solid" color="emerald">Emerald</c-ui.badge>
+            <c-ui.badge variant="solid" color="teal">Teal</c-ui.badge>
+            <c-ui.badge variant="solid" color="cyan">Cyan</c-ui.badge>
+            <c-ui.badge variant="solid" color="sky">Sky</c-ui.badge>
+            <c-ui.badge variant="solid" color="blue">Blue</c-ui.badge>
+            <c-ui.badge variant="solid" color="indigo">Indigo</c-ui.badge>
+            <c-ui.badge variant="solid" color="violet">Violet</c-ui.badge>
+            <c-ui.badge variant="solid" color="purple">Purple</c-ui.badge>
+            <c-ui.badge variant="solid" color="fuchsia">Fuchsia</c-ui.badge>
+            <c-ui.badge variant="solid" color="pink">Pink</c-ui.badge>
+            <c-ui.badge variant="solid" color="rose">Rose</c-ui.badge>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.badge variant="solid" color="zinc">Zinc</c-ui.badge>
+<c-ui.badge variant="solid" color="red">Red</c-ui.badge>
+<c-ui.badge variant="solid" color="orange">Orange</c-ui.badge>
+<c-ui.badge variant="solid" color="amber">Amber</c-ui.badge>
+<c-ui.badge variant="solid" color="yellow">Yellow</c-ui.badge>
+<c-ui.badge variant="solid" color="lime">Lime</c-ui.badge>
+<c-ui.badge variant="solid" color="green">Green</c-ui.badge>
+<c-ui.badge variant="solid" color="emerald">Emerald</c-ui.badge>
+<c-ui.badge variant="solid" color="teal">Teal</c-ui.badge>
+<c-ui.badge variant="solid" color="cyan">Cyan</c-ui.badge>
+<c-ui.badge variant="solid" color="sky">Sky</c-ui.badge>
+<c-ui.badge variant="solid" color="blue">Blue</c-ui.badge>
+<c-ui.badge variant="solid" color="indigo">Indigo</c-ui.badge>
+<c-ui.badge variant="solid" color="violet">Violet</c-ui.badge>
+<c-ui.badge variant="solid" color="purple">Purple</c-ui.badge>
+<c-ui.badge variant="solid" color="fuchsia">Fuchsia</c-ui.badge>
+<c-ui.badge variant="solid" color="pink">Pink</c-ui.badge>
+<c-ui.badge variant="solid" color="rose">Rose</c-ui.badge>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="icons" title="Icons">
+
+    <p>Add icons to badges using the <code>icon_leading</code> and <code>icon_trailing</code> slots.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-4">
+            <c-ui.badge color="blue">
+                <c-slot name="icon_leading">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </c-slot>
+                Users
+            </c-ui.badge>
+
+            <c-ui.badge color="green">
+                <c-slot name="icon_leading">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                </c-slot>
+                Complete
+            </c-ui.badge>
+
+            <c-ui.badge color="purple">
+                Notifications
+                <c-slot name="icon_trailing">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                    </svg>
+                </c-slot>
+            </c-ui.badge>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.badge color="blue">
+    <c-slot name="icon_leading">
+        <svg>...</svg>
+    </c-slot>
+    Users
+</c-ui.badge>
+
+<c-ui.badge color="green">
+    <c-slot name="icon_leading">
+        <svg>...</svg>
+    </c-slot>
+    Complete
+</c-ui.badge>
+
+<c-ui.badge color="purple">
+    Notifications
+    <c-slot name="icon_trailing">
+        <svg>...</svg>
+    </c-slot>
+</c-ui.badge>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="clickable" title="Clickable Badges">
+
+    <p>Make badges clickable by providing an <code>href</code> prop. The badge will render as a link with hover effects.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center gap-4">
+            <c-ui.badge href="#clickable" color="blue" variant="pill">
+                <c-slot name="icon_leading">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                    </svg>
+                </c-slot>
+                Features
+            </c-ui.badge>
+
+            <c-ui.badge href="#clickable" color="purple" variant="pill">
+                Categories
+                <c-slot name="icon_trailing">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </c-slot>
+            </c-ui.badge>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.badge href="/features" color="blue" variant="pill">
+    <c-slot name="icon_leading">
+        <svg>...</svg>
+    </c-slot>
+    Features
+</c-ui.badge>
+
+<c-ui.badge href="/categories" color="purple" variant="pill">
+    Categories
+    <c-slot name="icon_trailing">
+        <svg>...</svg>
+    </c-slot>
+</c-ui.badge>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="inset" title="Inset Positioning">
+
+    <p>When using badges alongside inline text, use the <code>inset</code> prop to add negative margins for better alignment.</p>
+
+    <c-sample>
+        <div class="max-w-xl mx-auto">
+            <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                Page Builder <c-ui.badge color="lime" inset="top bottom">New</c-ui.badge>
+            </h3>
+            <p class="text-zinc-600 dark:text-zinc-400 mt-2">
+                Easily author new pages without leaving your browser.
+            </p>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<h3>
+    Page Builder <c-ui.badge color="lime" inset="top bottom">New</c-ui.badge>
+</h3>
+<p>Easily author new pages without leaving your browser.</p>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="color"
+            type="str"
+            :options="['zinc', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose']"
+            default="zinc"
+            description="Badge color to convey different meanings or categories."
+        />
+        <c-api-prop
+            name="size"
+            type="str"
+            :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']"
+            default="md"
+            description="Badge size from xs to 2xl."
+        />
+        <c-api-prop
+            name="variant"
+            type="str"
+            :options="['', 'pill', 'solid']"
+            default=""
+            description="Badge style variant. 'pill' for fully rounded, 'solid' for high-contrast colors."
+        />
+        <c-api-prop
+            name="href"
+            type="str"
+            default=""
+            description="Make the badge clickable by providing a URL. Renders as an anchor tag with hover effects."
+        />
+        <c-api-prop
+            name="inset"
+            type="str"
+            default=""
+            description="Add negative margins to specific sides for alignment. Options: 'top', 'bottom', 'left', 'right', or combinations like 'top bottom'."
+        />
+    </c-api-props>
+
+    <h4>Slots</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The badge content (text or elements)."
+        />
+        <c-api-prop
+            name="icon_leading"
+            type="slot"
+            default=""
+            description="Optional icon to display before the badge text. Provide an SVG element."
+        />
+        <c-api-prop
+            name="icon_trailing"
+            type="slot"
+            default=""
+            description="Optional icon to display after the badge text. Provide an SVG element."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

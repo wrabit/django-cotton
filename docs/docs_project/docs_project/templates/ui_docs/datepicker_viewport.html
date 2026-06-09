@@ -1,0 +1,20 @@
+<c-layouts.viewport>
+    <div class="relative min-h-screen">
+        <div class="absolute" style="left: 200px; top: 240px;">
+            <div class="w-64">
+                <c-ui.datepicker mode="single" :trap="False" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:initialized', function () {
+            var el = document.querySelector('[x-data*="datePicker"]');
+            if (!el) return;
+            var data = Alpine.$data(el);
+            var open = function () { if (data && !data.open && data.openPicker) data.openPicker(); };
+            open();
+            if (data && data.$watch) data.$watch('open', function (v) { if (!v) setTimeout(open, 60); });
+        });
+    </script>
+</c-layouts.viewport>

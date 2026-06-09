@@ -1,0 +1,6 @@
+<c-vars label type="text" :required="False" />
+
+<div class="field">
+    <label>{{ label }}{% if required %} *{% endif %}</label>
+    <input type="{{ type }}" {{ attrs }} />
+</div>

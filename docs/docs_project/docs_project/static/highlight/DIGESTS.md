@@ -6,12 +6,12 @@ To do this you simply need to add the `integrity` attribute for each JavaScript 
 
 ```html
 <script
-  src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
-  integrity="sha384-xBsHBR6BS/LSlO3cOyY2D/4KkmaHjlNn3NnXUMFFc14HLZD7vwVgS3+6U/WkHAra"></script>
+  src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"
+  integrity="sha384-5xdYoZ0Lt6Jw8GFfRP91J0jaOVUq7DGI1J5wIyNi0D+eHVdfUwHR4gW6kPsw489E"></script>
 <!-- including any other grammars you might need to load -->
 <script
-  src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"
-  integrity="sha384-WmGkHEmwSI19EhTfO1nrSk3RziUQKRWg3vO0Ur3VYZjWvJRdRnX4/scQg+S2w1fI"></script>
+  src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/go.min.js"
+  integrity="sha384-HdearVH8cyfzwBIQOjL/6dSEmZxQ5rJRezN7spps8E7iu+R6utS8c2ab0AgBNFfH"></script>
 ```
 
 The full list of digests for every file can be found below.
@@ -19,23 +19,23 @@ The full list of digests for every file can be found below.
 ### Digests
 
 ```
-sha384-hYnh6bxVnenrhg3HDafFjUPaO4yMWcNa6jjBCbcRJAzOW9RidrTLcmNgEyk1EkqC /es/languages/django.js
-sha384-fYhQZafPWO54UUJ6/TWCLZVfptppoJrgZw8syHnvkUeAf7+lAiBkU3x8UQ7rTmvB /es/languages/django.min.js
-sha384-7m427rj9OYl8KKObOk+aD0QhXmqXy6hU/sHGS6OUwW9hRiiHvr+tLTbLiSJYbIyD /es/languages/http.js
-sha384-GdKwMgTrO0R3SPXhm+DuaN3Qr7WkqYmmTClINAGPuV/BUPE9WUI/WnTEntp522Sl /es/languages/http.min.js
-sha384-+5oyk7Ed3OlvEWGj8xracq/6e52BScKUN4kxcreNwB7kfRTVsAMs/aAJM58dzIFN /es/languages/python.js
-sha384-ND/UH2UkaeWiej5v/oJspfKDz9BGUaVpoDcz4cof0jaiv/mCigjvy7RQ7e+3S6bg /es/languages/python.min.js
-sha384-OFoR8IZ+CFwcY8plx8HSDZNoCwLxc701CwdNGfoIEhSgwAbwhvInaxnEi3HYTt2Q /es/languages/xml.js
-sha384-yFd3InBtG6WtAVgIl6iIdFKis8HmMC7GbbronB4lHJq3OLef3U8K9puak6MuVZqx /es/languages/xml.min.js
-sha384-dFC7/UlAe1aH832WvFmt6fwQFIha+bFdz4Jw/Stp0m65X0P0zgiyaSYVKpRyPCOo /languages/django.js
-sha384-AqTOESQu37Lj9i0LQjA1B5Ju2XOJzwB7RR1NYcpo+JgnUF+UTdQi8km+UzU8uYBZ /languages/django.min.js
-sha384-g/lhU6FXH73RQL4eFwkPk4CuudGpbHg6cyVZCRpXft3EKCrcQTToBVEDRStjYWQb /languages/http.js
-sha384-wt2eEhJoUmjz8wmTq0k9WvI19Pumi9/h7B87i0wc7QMYwnCJ0dcuyfcYo/ui1M6t /languages/http.min.js
-sha384-zdZio5RcGiKQJCpe/1IXujPle3bIY8sbmvCabSU5G5GzWAzZtoRZfg9QAQXCL08q /languages/python.js
-sha384-IP4vv4Aoh9Lyg8QyzVkAmn2JGoDCpgVHzVSrD3Z+rVyn7+s4wx4pRjv+go3TEwfj /languages/python.min.js
-sha384-+PuZYFfVX2UQZU2yKt/FsJUZNUPzZWxW7auXltsaecr1xLvzBYF3c5gYoyOs1++x /languages/xml.js
-sha384-jgkY4GMNWfQcLLIoP1vg3FWXflDrRhcSXGBW6ONIWC2SOIv5H1Pa57sXs+aomCuZ /languages/xml.min.js
-sha384-NEcIIZ1sdwqm163E+KXE/DwJe5GlD1pGB5XH5SBRHtPVz5HNdF3Ctrmqlc86Yer5 /highlight.js
-sha384-xWuEo3so2TxwMB/U1KZiCReufdgsA2YHUmiIDXDzepyfzlFU+kSLVZd1poU9Dpbj /highlight.min.js
+sha384-Gmvct15f4Mo9AXQG5bk5w78N1YjBLXXU3KIV7no+mOVnApXlwfw1dwjfueAwljIV /es/languages/css.js
+sha384-1D7DbOic0Z5nM2ldSO9O/EsBfsg/5x7X7So1qnMgscI2ucDevptcg7cTvrD9rL0D /es/languages/css.min.js
+sha384-IZPwfVGChjxiFn/yRHid99p+81wHZKppqSWzWv3/VpfILbOfX+FBbsAEjyYEz+08 /es/languages/django.js
+sha384-c6VNDV3sM+ivvQX1L4LuDW3MjiYsC6u70/NKATWDBfdRODoECdSJ7oUhpcU/WBUi /es/languages/django.min.js
+sha384-Cmq5lORXzyHraasLNqmfchH07JRXyEmjDF+j6tSggoXjYHwtgX/ySW6kkRytM5uu /es/languages/python.js
+sha384-ZV5sgX70bBgLkDR5Mtox5UsbJedBc39hRKPdvTw6miK4lSkE/wv94cLY2iyZb/sB /es/languages/python.min.js
+sha384-9ECFzM+oWDye4s/MFx3QUXGo4mW43+SyLpWUDeQtWup6GZJ+KHFxVS89PmZt/fzl /es/languages/xml.js
+sha384-PQrsaWeWrBiE1CFRw8K335CaJuQRTjDGm73vn8bXvlwaw6RyqWObdvMTBS8B75NN /es/languages/xml.min.js
+sha384-bsb3QmLtUiyaiHwtrL4YoAVI9yLsjyqxgoAsk4Zd+ass9rSK1WWRiCDSu/hm8QRp /languages/css.js
+sha384-0XGvxIU7Oq1DQMMBr1ORiozzBq3KpZPE/74mJysWRBAop1dZ9Ioq/qRWe8u30Ded /languages/css.min.js
+sha384-JAYZMDzuElX+Ic47jwB+qzCzyKkmmEffC3mBnYYrJp2BlRjSorjliOzKSAG8KKTt /languages/django.js
+sha384-krxOUFgiyevtYl4SsL416jqrUPU3K9W6fDe/TRvWeXwLYKWKq/f+XHL2AHwGYswO /languages/django.min.js
+sha384-ueSSFZFqg7cVD0dpEqIk9EefJiJUYan0PH6I8u/p+bNLLx7dMs4J2keMaFXqCN8P /languages/python.js
+sha384-eXRt+aAa2ig1yFVDQCLis8k9s/1dikTcigj+/R07yNdIxc8BAG/b1uHDyEW3of17 /languages/python.min.js
+sha384-Pgzg6a405W6U1xFjjSs5i8d7V81Tmt/TYn8HFOa+u1psDc8cbs8nC7BuyNXbWWRK /languages/xml.js
+sha384-FQjSArDMJE4WMAJGcCNAV+IXIOljcIxM3UFAD2vxjedWmBnnDaAyqRG7AQHf/uM/ /languages/xml.min.js
+sha384-bqHalAvvvIeqrat+eQRoeACWPWeWt5ZgroEg52FwkWc9IQdtC2W2uREgMS45pq6E /highlight.js
+sha384-peJu78fxSoVFK/7Y7GKg0zxMlc+ziIAmjDz5hQFKMLW1ujAcCH0wubmBqkRlUsSv /highlight.min.js
 ```
 

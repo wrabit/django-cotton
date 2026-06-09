@@ -1,0 +1,117 @@
+<c-layouts.ui>
+    <c-header>
+        Calendar
+        <c-slot name="subheading">
+            An inline, always-visible date grid. It is the same component the Datepicker opens in its dropdown, usable on its own.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="modes"><a href="#modes" class="no-underline">Selection Modes</a></c-index-sublink>
+        <c-index-sublink section-id="form"><a href="#form" class="no-underline">In a Form</a></c-index-sublink>
+        <c-index-sublink section-id="limits"><a href="#limits" class="no-underline">Limits</a></c-index-sublink>
+        <c-index-sublink section-id="vs-datepicker"><a href="#vs-datepicker" class="no-underline">Calendar vs Datepicker</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+    <p>Drop <code>c-ui.calendar</code> straight onto the page for an inline, block calendar. It ships its own surface (border, background, rounding), so it needs no wrapping card. Bind the selected value with <code>x-model</code> and listen for the <code>change</code> event. It is a fixed 280px by default; add <code>full</code> to stretch it to the container width.</p>
+
+    <c-sample>
+        <c-ui.calendar mode="single" />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.calendar mode="single" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="modes" title="Selection Modes">
+    <p>Use <code>mode</code> to pick a single date, a range, or multiple dates.</p>
+
+    <c-sample>
+        <div class="flex flex-wrap gap-6">
+            <c-ui.calendar mode="single" />
+            <c-ui.calendar mode="range" />
+            <c-ui.calendar mode="multiple" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.calendar mode="single" />
+<c-ui.calendar mode="range" />
+<c-ui.calendar mode="multiple" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="form" title="In a Form">
+    <p>Give the calendar a <code>name</code> and it submits with the form, writing a hidden input that holds the selected value formatted by <code>value_format</code> (default <code>yyyy-MM-dd</code>, formatted locally so the date never shifts a day through a UTC round-trip). This is the same serialization the Datepicker uses, so a bare calendar and a datepicker submit identically.</p>
+
+    <c-sample>
+        <c-ui.calendar mode="single" name="event_date" />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}{# single / multiple: one name (multiple submits repeated values) #}
+<c-ui.calendar mode="single" name="event_date" />
+
+{# range: a start and end name #}
+<c-ui.calendar mode="range" fromName="start" toName="end" />
+
+{# custom submitted format #}
+<c-ui.calendar name="event_date" value_format="dd/MM/yyyy" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="limits" title="Limits">
+    <p>Constrain selectable dates with <code>min_date</code> / <code>max_date</code> (YYYY-MM-DD), disable weekdays with <code>:disabled_days</code> (0 = Sunday) or specific dates with <code>:disabled_dates</code>, and in range mode cap the span with <code>:min</code> / <code>:max</code>. These are the same limit props the <a href="{% url 'ui-datepicker' %}">Datepicker</a> exposes; see its Limits section for live examples.</p>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.calendar
+    mode="single"
+    min_date="2026-09-01"
+    max_date="2026-09-30"
+    :disabled_days="[0, 6]"
+    :disabled_dates="['2026-09-11', '2026-09-12']"
+/>
+
+{# range capped to 7 days #}
+<c-ui.calendar mode="range" :max="7" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="vs-datepicker" title="Calendar vs Datepicker">
+    <p>The <a href="{% url 'ui-datepicker' %}">Datepicker</a> is this calendar plus a text trigger: it shows a button, opens the calendar in a popover, positions and focus-traps it, and formats the chosen value for display. Reach for:</p>
+    <ul>
+        <li><strong>Calendar</strong> when you want the grid always visible inline (scheduling panels, booking widgets, dashboards).</li>
+        <li><strong>Datepicker</strong> when space is tight and a compact field that opens on demand fits better.</li>
+    </ul>
+    <p>Both share the same selection modes, limits and form serialization, so you can switch between them without changing how the value is submitted.</p>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="mode" type="str" :options="['single', 'range', 'multiple']" default="single" description="Selection mode." />
+        <c-api-prop name=":selected" type="str|list" default="" description="Initial value: a YYYY-MM-DD string (single), or a list of dates (range/multiple)." />
+        <c-api-prop name="name" type="str" default="" description="Form field name. When set, the calendar renders a hidden input with the serialized value (single/multiple modes)." />
+        <c-api-prop name="fromName" type="str" default="" description="Form field name for the range start (range mode)." />
+        <c-api-prop name="toName" type="str" default="" description="Form field name for the range end (range mode)." />
+        <c-api-prop name="value_format" type="str" default="yyyy-MM-dd" description="date-fns format for the submitted value. Formatted locally, so it never shifts a day via a UTC round-trip." />
+        <c-api-prop name="min_date" type="str" default="" description="Earliest selectable date (YYYY-MM-DD); earlier dates are disabled." />
+        <c-api-prop name="max_date" type="str" default="" description="Latest selectable date (YYYY-MM-DD); later dates are disabled." />
+        <c-api-prop name=":disabled_days" type="list" default="None" description="Weekday numbers to disable (0 = Sunday … 6 = Saturday)." />
+        <c-api-prop name=":disabled_dates" type="list" default="None" description="Specific dates to disable (list of YYYY-MM-DD)." />
+        <c-api-prop name=":min / :max" type="int" default="None" description="In range mode, the minimum / maximum number of days the range may span." />
+        <c-api-prop name=":full" type="bool" :options="['True', 'False']" default="False" description="Stretch to fill the available width (cells expand to fit) instead of the fixed 280px." />
+        <c-api-prop name="class" type="str" default="" description="Utility classes merged onto the calendar surface." />
+    </c-api-props>
+
+    </c-section>
+
+</c-layouts.ui>

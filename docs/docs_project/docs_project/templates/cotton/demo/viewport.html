@@ -1,0 +1,36 @@
+<c-vars
+    src
+    w="480" h="480"
+/>
+
+{# Resizable mini-viewport iframe: a bottom-right corner handle resizes both axes to demo responsive popover positioning. #}
+<div class="not-prose"
+    x-data="{
+        w: {{ w }}, h: {{ h }}, dragging: false,
+        startResize(e) {
+            this.dragging = true;
+            const sx = e.clientX, sy = e.clientY, sw = this.w, sh = this.h;
+            const move = (ev) => {
+                this.w = Math.max(40, sw + (ev.clientX - sx));
+                this.h = Math.max(40, sh + (ev.clientY - sy));
+            };
+            const up = () => { this.dragging = false; window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+            window.addEventListener('pointermove', move);
+            window.addEventListener('pointerup', up);
+        }
+    }">
+    <div class="relative" :style="`width: ${w}px; height: ${h}px; max-width: 100%`">
+        <div class="h-full rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden bg-[var(--color-surface)] dark:bg-[var(--color-bg)]">
+            <iframe src="{{ src }}" title="Responsive preview" class="block w-full h-full" :class="dragging ? 'pointer-events-none select-none' : ''"></iframe>
+        </div>
+
+        <!-- Corner resize handle (bottom-right, both axes) -->
+        <div @pointerdown.prevent="startResize($event)"
+            class="absolute -bottom-3 -right-3 cursor-nwse-resize touch-none group"
+            role="separator" aria-label="Resize preview">
+            <div class="flex items-center justify-center w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-[var(--color-surface)] dark:bg-zinc-800 shadow-sm group-hover:border-accent transition-colors">
+                <c-tablericon.arrows-diagonal-2 class="w-4 h-4 text-zinc-700 dark:text-zinc-300 group-hover:text-accent transition-colors" />
+            </div>
+        </div>
+    </div>
+</div>

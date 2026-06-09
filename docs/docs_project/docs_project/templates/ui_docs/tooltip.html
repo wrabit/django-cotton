@@ -1,0 +1,229 @@
+<c-layouts.ui>
+    <c-header>
+        Tooltip
+        <c-slot name="subheading">
+            Displays informative text when users hover over, focus on, or tap an element.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="positions"><a href="#positions" class="no-underline">Positions</a></c-index-sublink>
+        <c-index-sublink section-id="offset"><a href="#offset" class="no-underline">Offset</a></c-index-sublink>
+        <c-index-sublink section-id="html-content"><a href="#html-content" class="no-underline">HTML Content</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes &amp; Arrow</a></c-index-sublink>
+        <c-index-sublink section-id="pinned-open"><a href="#pinned-open" class="no-underline">Pinned Open</a></c-index-sublink>
+        <c-index-sublink section-id="responsive"><a href="#responsive" class="no-underline">Responsive</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <div class="p-8 flex justify-center">            <c-ui.tooltip>
+                <button class="btn">Hover Me</button>
+                <c-slot name="content">
+                    This is a tooltip!
+                </c-slot>
+            </c-ui.tooltip>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.tooltip>
+    <button class="btn">Hover Me</button>
+    <c-slot name="content">
+        This is a tooltip!
+    </c-slot>
+</c-ui.tooltip>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <c-section id="positions" title="Positions">
+    <p>Control the tooltip position using the <code>position</code> attribute.</p>
+    <c-sample>
+        <div class="p-16 flex justify-center items-center gap-4">            <c-ui.tooltip position="top">
+                <button class="btn">Top</button>
+                <c-slot name="content">Top Tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip position="bottom">
+                <button class="btn">Bottom</button>
+                <c-slot name="content">Bottom Tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip position="left">
+                <button class="btn">Left</button>
+                <c-slot name="content">Left Tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip position="right">
+                <button class="btn">Right</button>
+                <c-slot name="content">Right Tooltip</c-slot>
+            </c-ui.tooltip>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.tooltip position="top">
+    <button class="btn">Top</button>
+    <c-slot name="content">Top Tooltip</c-slot>
+</c-ui.tooltip>
+
+<c-ui.tooltip position="bottom">
+    <button class="btn">Bottom</button>
+    <c-slot name="content">Bottom Tooltip</c-slot>
+</c-ui.tooltip>
+
+<c-ui.tooltip position="left">
+    <button class="btn">Left</button>
+    <c-slot name="content">Left Tooltip</c-slot>
+</c-ui.tooltip>
+
+<c-ui.tooltip position="right">
+    <button class="btn">Right</button>
+    <c-slot name="content">Right Tooltip</c-slot>
+</c-ui.tooltip>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="offset" title="Offset">
+    <p>Adjust the spacing between the trigger and the tooltip using the <code>:offset</code> dynamic attribute (value in pixels).</p>
+    <c-sample>
+        <div class="p-8 flex justify-center gap-4">            <c-ui.tooltip :offset="0">
+                <button class="btn">Offset 0</button>
+                <c-slot name="content">No gap</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip :offset="12">
+                <button class="btn">Offset 12</button>
+                <c-slot name="content">Large gap</c-slot>
+            </c-ui.tooltip>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.tooltip :offset="0">
+    <button class="btn">Offset 0</button>
+    <c-slot name="content">No gap</c-slot>
+</c-ui.tooltip>
+
+<c-ui.tooltip :offset="12">
+    <button class="btn">Offset 12</button>
+    <c-slot name="content">Large gap</c-slot>
+</c-ui.tooltip>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="html-content" title="HTML Content">
+    <p>You can include HTML markup within the <code>content</code> slot.</p>
+    <c-sample>
+        <div class="p-8 flex justify-center">            <c-ui.tooltip>
+                <button class="btn">HTML</button>
+                <c-slot name="content">
+                    <strong>Important:</strong> <em>Check details!</em>
+                </c-slot>
+            </c-ui.tooltip>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.tooltip>
+    <button class="btn">HTML</button>
+    <c-slot name="content">
+        <strong>Important:</strong> <em>Check details!</em>
+    </c-slot>
+</c-ui.tooltip>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="sizes" title="Sizes & Arrow">
+    <p>Use <code>size</code> (<code>xs</code> through <code>2xl</code>, default <code>md</code>) to scale the tooltip. An arrow pointing at the trigger shows by default and follows whichever side the tooltip flips to. Pass <code>:arrow="False"</code> to hide it.</p>
+    <c-sample>
+        <div class="p-16 flex justify-center items-center gap-4">
+            <c-ui.tooltip size="sm">
+                <button class="btn">Small</button>
+                <c-slot name="content">Small tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip>
+                <button class="btn">Default</button>
+                <c-slot name="content">Default tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip size="lg">
+                <button class="btn">Large</button>
+                <c-slot name="content">Large tooltip</c-slot>
+            </c-ui.tooltip>
+            <c-ui.tooltip :arrow="False">
+                <button class="btn">No arrow</button>
+                <c-slot name="content">No arrow</c-slot>
+            </c-ui.tooltip>
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tooltip size="sm">
+    <button class="btn">Small</button>
+    <c-slot name="content">Small tooltip</c-slot>
+</c-ui.tooltip>
+
+<c-ui.tooltip>
+    <button class="btn">Default</button>
+    <c-slot name="content">Default tooltip</c-slot>
+</c-ui.tooltip>
+
+{# the arrow shows by default #}
+<c-ui.tooltip size="lg">
+    <button class="btn">Large</button>
+    <c-slot name="content">Large tooltip</c-slot>
+</c-ui.tooltip>
+
+{# hide it with :arrow="False" #}
+<c-ui.tooltip :arrow="False">
+    <button class="btn">No arrow</button>
+    <c-slot name="content">No arrow</c-slot>
+</c-ui.tooltip>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="pinned-open" title="Pinned Open">
+        <p>Add <code>open</code> to render the tooltip statically, always visible without hovering. Handy for callouts, onboarding hints, labelling a value or building demos.</p>
+        <c-sample>
+            <div class="w-full flex justify-center pt-12 pb-4">
+                <c-ui.tooltip content="Always visible" open arrow>
+                    <c-ui.button variant="default">Pinned</c-ui.button>
+                </c-ui.tooltip>
+            </div>
+            <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.tooltip content="Always visible" open arrow>
+    <c-ui.button>Pinned</c-ui.button>
+</c-ui.tooltip>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="responsive" title="Responsive positioning">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            The tooltip flips to the opposite side and clamps within the viewport so it never runs off screen.
+            Drag the handles to resize the preview and watch it reposition.
+        </p>
+        <c-demo.viewport src="{% url 'ui-tooltip-viewport' %}" w="460" h="420" />
+    </c-section>
+
+    <c-section id="reference" title="Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="position" type="str" :options="['top', 'bottom', 'left', 'right']" default="top" description="The position of the tooltip relative to the trigger element." />
+        <c-api-prop name=":offset" type="int" default="4" description="The gap between the trigger and the tooltip in pixels.">
+            <c-slot name="options_content">Any integer</c-slot>
+        </c-api-prop>
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Padding and text size of the tooltip." />
+        <c-api-prop name=":arrow" type="bool" :options="['True', 'False']" default="True" description="Show a small pointer (tail) on the edge facing the trigger. Shown by default; set to False to hide." />
+        <c-api-prop name=":open" type="bool" :options="['True', 'False']" default="False" description="Render the tooltip permanently open (static) instead of showing it on hover or focus." />
+    </c-api-props>
+
+    <h4 class="mt-6">Slots</h4>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" description="The element that triggers the tooltip (e.g., a button, icon, or text)." default="Required"></c-api-prop>
+        <c-api-prop name="content" type="—" description="The content (text or HTML) to display inside the tooltip." default="Required"></c-api-prop>
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

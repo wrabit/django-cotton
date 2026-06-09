@@ -1,0 +1,156 @@
+<c-layouts.ui>
+    <c-header>
+        Textarea
+        <c-slot name="subheading">
+            A multi-line text input component.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="height"><a href="#height" class="no-underline">Height</a></c-index-sublink>
+        <c-index-sublink section-id="autoresize"><a href="#autoresize" class="no-underline">Autoresize</a></c-index-sublink>
+        <c-index-sublink section-id="non-resizable"><a href="#non-resizable" class="no-underline">Non-resizable</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample>
+        <c-ui.textarea placeholder="Enter your text here..." />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.textarea placeholder="Enter your text here..." />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <c-section id="sizes" title="Sizes">
+    <p>Control the font size and padding using the <code>size</code> attribute.</p>
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.textarea size="xs" placeholder="Extra small" />
+            <c-ui.textarea size="sm" placeholder="Small" />
+            <c-ui.textarea size="md" placeholder="Medium (default)" />
+            <c-ui.textarea size="lg" placeholder="Large" />
+            <c-ui.textarea size="xl" placeholder="Extra large" />
+            <c-ui.textarea size="2xl" placeholder="2XL" />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.textarea size="xs" placeholder="Extra small" />
+<c-ui.textarea size="sm" placeholder="Small" />
+<c-ui.textarea size="md" placeholder="Medium (default)" />
+<c-ui.textarea size="lg" placeholder="Large" />
+<c-ui.textarea size="xl" placeholder="Extra large" />
+<c-ui.textarea size="2xl" placeholder="2XL" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="height" title="Height">
+    <p>Control the initial height using the <code>height</code> attribute. This sets a fixed height, which will be overridden if <code>autoresize</code> is used and the content grows.</p>
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.textarea height="xs" placeholder="Extra small height" />
+            <c-ui.textarea height="sm" placeholder="Small height" />
+            <c-ui.textarea height="md" placeholder="Medium height (default)" />
+            <c-ui.textarea height="lg" placeholder="Large height" />
+            <c-ui.textarea height="xl" placeholder="Extra large height" />
+            <c-ui.textarea height="2xl" placeholder="2XL height" />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.textarea height="xs" placeholder="Extra small height" />
+<c-ui.textarea height="sm" placeholder="Small height" />
+<c-ui.textarea height="md" placeholder="Medium height (default)" />
+<c-ui.textarea height="lg" placeholder="Large height" />
+<c-ui.textarea height="xl" placeholder="Extra large height" />
+<c-ui.textarea height="2xl" placeholder="2XL height" />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="autoresize" title="Autoresize">
+    <p>Use the <code>autoresize</code> attribute to make the textarea automatically adjust its height based on the content. Requires Alpine.js.</p>
+    <c-sample>
+        <c-ui.textarea autoresize placeholder="Type something long here and the textarea will grow..." />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.textarea autoresize placeholder="Type something long here and the textarea will grow..." />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="non-resizable" title="Non-resizable">
+    <p>Prevent the user from manually resizing the textarea using <code>:resizable="False"</code>.</p>
+    <c-sample>
+        <c-ui.textarea :resizable="False" placeholder="You cannot resize me." />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.textarea :resizable="False" placeholder="You cannot resize me." />
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the textarea wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample>
+        <div class="w-full max-w-sm">
+            <c-ui.textarea label="Bio" placeholder="Tell us about yourself..." description="A short description for your profile." />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.textarea
+    label="Bio"
+    placeholder="Tell us about yourself..."
+    description="A short description for your profile."
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name=":autoresize" type="bool" :options="['True', 'False']" default="False" description="Automatically adjusts height to fit content. Requires Alpine.js." />
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Sets the font size and padding." />
+        <c-api-prop name="height" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Sets the initial fixed height. Overridden by autoresize." />
+        <c-api-prop name=":resizable" type="bool" :options="['True', 'False']" default="True" description="Allows or prevents manual resizing by the user via CSS." />
+        <c-api-prop name="label" type="str" default="" description="Shorthand: Automatically wraps the textarea with a label in a field structure.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="description" type="str" default="" description="Shorthand: Adds helper text before the textarea.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="description_trailing" type="str" default="" description="Shorthand: Adds helper text after the textarea.">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="error" type="str" default="" description="Shorthand: Field name for Django form error lookup, or explicit error message.">
+            <c-slot name="options_content">Field name or message text</c-slot>
+        </c-api-prop>
+        <c-api-prop name="badge" type="str" default="" description="Shorthand: Badge text for the label (e.g., 'Required' or 'Optional').">
+            <c-slot name="options_content">Any text</c-slot>
+        </c-api-prop>
+        <c-api-prop name=":form" type="Form" default="None" description="Shorthand: Django form instance for automatic error display.">
+            <c-slot name="options_content">Django form object</c-slot>
+        </c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Slots</h4>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="" description="The initial content/value of the textarea."></c-api-prop>
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui> 

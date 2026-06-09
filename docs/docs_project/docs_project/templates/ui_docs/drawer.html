@@ -1,0 +1,136 @@
+<c-layouts.ui>
+    <c-header>
+        Drawer
+        <c-slot name="subheading">
+            A panel that slides in from any edge of the screen for secondary content, forms or details.
+        </c-slot>
+    </c-header>
+
+    <c-note>
+        Traps focus and locks body scroll while open; requires the Alpine.js <a href="https://alpinejs.dev/plugins/focus" target="_blank">focus</a> plugin.
+    </c-note>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="sides"><a href="#sides" class="no-underline">Sides</a></c-index-sublink>
+        <c-index-sublink section-id="sizing"><a href="#sizing" class="no-underline">Sizing</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+
+    <p>The default slot holds the trigger; open it from any element inside with <code>@click="drawerOpen = true"</code>. Put the body in the <code>content</code> slot and any actions in the <code>footer</code> slot.</p>
+
+    <c-sample>
+        <c-ui.drawer title="Account details" description="Update your profile and preferences.">
+            <c-ui.button @click="drawerOpen = true">Open drawer</c-ui.button>
+            <c-slot name="content">
+                <p class="text-sm text-zinc-600 dark:text-zinc-400">Drawer body content goes here. It scrolls if it grows taller than the panel.</p>
+            </c-slot>
+            <c-slot name="footer">
+                <div class="flex justify-end gap-2">
+                    <c-ui.button @click="drawerOpen = false">Cancel</c-ui.button>
+                    <c-ui.button variant="primary" @click="drawerOpen = false">Save</c-ui.button>
+                </div>
+            </c-slot>
+        </c-ui.drawer>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.drawer title="Account details" description="Update your profile and preferences.">
+    <c-ui.button @click="drawerOpen = true">Open drawer</c-ui.button>
+    <c-slot name="content">
+        Drawer body content goes here.
+    </c-slot>
+    <c-slot name="footer">
+        <div class="flex justify-end gap-2">
+            <c-ui.button @click="drawerOpen = false">Cancel</c-ui.button>
+            <c-ui.button variant="primary" @click="drawerOpen = false">Save</c-ui.button>
+        </div>
+    </c-slot>
+</c-ui.drawer>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="sides" title="Sides">
+
+    <p><code>side</code> opens the drawer from <code>right</code> (default), <code>left</code>, <code>top</code> or <code>bottom</code>.</p>
+
+    <c-sample>
+        <div class="flex flex-wrap gap-2">
+            <c-ui.drawer title="Right" side="right">
+                <c-ui.button @click="drawerOpen = true">Right</c-ui.button>
+                <c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">Slides in from the right.</p></c-slot>
+            </c-ui.drawer>
+            <c-ui.drawer title="Left" side="left">
+                <c-ui.button @click="drawerOpen = true">Left</c-ui.button>
+                <c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">Slides in from the left.</p></c-slot>
+            </c-ui.drawer>
+            <c-ui.drawer title="Top" side="top">
+                <c-ui.button @click="drawerOpen = true">Top</c-ui.button>
+                <c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">Slides in from the top.</p></c-slot>
+            </c-ui.drawer>
+            <c-ui.drawer title="Bottom" side="bottom">
+                <c-ui.button @click="drawerOpen = true">Bottom</c-ui.button>
+                <c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">Slides in from the bottom.</p></c-slot>
+            </c-ui.drawer>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.drawer title="Filters" side="left">
+    <c-ui.button @click="drawerOpen = true">Filters</c-ui.button>
+    <c-slot name="content">...</c-slot>
+</c-ui.drawer>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="sizing" title="Sizing">
+
+    <p><code>size</code> sets the panel width from <code>sm</code> to <code>2xl</code> (for top/bottom drawers it sets the height instead). For a one-off, pass <code>max_size</code> with any CSS length, it applies an inline max-width/height, so it works without a matching Tailwind class.</p>
+
+    <c-sample>
+        <div class="flex flex-wrap gap-2">
+            <c-ui.drawer title="Small" size="sm"><c-ui.button @click="drawerOpen = true">sm</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="sm"</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Medium" size="md"><c-ui.button @click="drawerOpen = true">md</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="md" (default)</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Large" size="lg"><c-ui.button @click="drawerOpen = true">lg</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="lg"</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Extra large" size="xl"><c-ui.button @click="drawerOpen = true">xl</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="xl"</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="2XL" size="2xl"><c-ui.button @click="drawerOpen = true">2xl</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="2xl"</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Custom" max_size="16rem"><c-ui.button @click="drawerOpen = true">Custom</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">A narrow custom width (16rem), smaller than the sm scale, via inline style.</p></c-slot></c-ui.drawer>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}{# named scale #}
+<c-ui.drawer size="lg"> ... </c-ui.drawer>
+
+{# one-off custom width (any CSS length) #}
+<c-ui.drawer max_size="16rem"> ... </c-ui.drawer>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="title" type="str" default="" description="Heading shown at the top of the panel." />
+        <c-api-prop name="description" type="str" default="" description="Sub-text under the title." />
+        <c-api-prop name="side" type="str" :options="['right', 'left', 'top', 'bottom']" default="right" description="Edge the drawer slides in from." />
+        <c-api-prop name="size" type="str" :options="['sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Panel width (left/right) or height (top/bottom)." />
+        <c-api-prop name="max_size" type="str" default="" description="Custom panel size as a CSS length (e.g. 34rem), applied inline. Overrides size." />
+        <c-api-prop name=":dismissible" type="bool" :options="['True', 'False']" default="True" description="Allow closing by clicking the overlay or pressing Escape." />
+        <c-api-prop name=":close_button" type="bool" :options="['True', 'False']" default="True" description="Show the close (X) button in the header." />
+        <c-api-prop name=":open" type="bool" :options="['True', 'False']" default="False" description="Open on load. The open state is exposed via x-modelable for x-model binding." />
+    </c-api-props>
+
+    <h4 class="mt-6">Slots</h4>
+
+    <c-api-props>
+        <c-api-prop name="default" type="slot" description="Holds the trigger. Use @click=&quot;drawerOpen = true&quot; to open." />
+        <c-api-prop name="content" type="slot" description="The panel body (scrolls)." />
+        <c-api-prop name="footer" type="slot" description="Pinned footer for actions." />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

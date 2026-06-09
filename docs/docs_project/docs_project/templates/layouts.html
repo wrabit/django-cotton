@@ -1,13 +1,14 @@
 <c-layouts.with-sidebar>
 
     <c-slot name="page_index">
-        <c-index-link><a href="#layouts" class="no-underline">Composing Layouts</a></c-index-link>
-            <c-index-sublink><a href="#variants" class="no-underline">Layout variants</a></c-index-sublink>
-            <c-index-sublink><a href="#usage" class="no-underline">Usage</a></c-index-sublink>
+        <c-index-sublink section-id="layouts"><a href="#layouts" class="no-underline">Composing Layouts</a></c-index-sublink>
+        <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Layout variants</a></c-index-sublink>
+        <c-index-sublink section-id="usage"><a href="#usage" class="no-underline">Usage</a></c-index-sublink>
     </c-slot>
 
-    <h1 id="layouts">Composing Layouts</h1>
+    <c-header>Composing Layouts</c-header>
 
+    <c-section id="layouts" title="Building a base layout">
     <p>Cottons makes building layouts a piece of cake. Let's start with composing a base layout that contains the base of our view:</p>
 
 <c-snippet label="cotton/layouts/base.html">{% cotton:verbatim %}{% verbatim %}
@@ -20,9 +21,9 @@
     </body>
 </html>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+    </c-section>
 
-<h2 id="variants">Create layout variants</h2>
-
+    <c-section id="variants" title="Create layout variants">
     <p>Imagine that we're creating a web app with an authenticated area, so we'll need areas for guests and users. Let's create these, extending from the base component.</p>
 
 <c-snippet label="cotton/layouts/guest.html">{% cotton:verbatim %}{% verbatim %}
@@ -42,9 +43,9 @@
     </div>
 </c-layouts.base>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+    </c-section>
 
-<h2 id="usage">Using the layouts</h2>
-
+    <c-section id="usage" title="Using the layouts">
 <c-snippet label="login.html">{% cotton:verbatim %}{% verbatim %}
 <c-layouts.guest>
     <div id="loginForm">
@@ -65,6 +66,7 @@
     </div>
 </c-layouts.app>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+    </c-section>
 
     <c-navigation>
         <c-slot name="prev">

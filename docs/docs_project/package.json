@@ -1,11 +1,13 @@
 {
-  "name": "cotton docs",
+  "name": "cotton-docs",
   "version": "1.0.0",
   "scripts": {
-    "build:css": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx @tailwindcss/cli -i app.css -o docs_project/static/app.css --minify",
+    "watch": "npx @tailwindcss/cli -i app.css -o docs_project/static/app.css --watch"
   },
   "devDependencies": {
-    "tailwindcss": "^3.3.3",
-    "@tailwindcss/typography": "^0.5.1"
+    "@tailwindcss/cli": "^4.3.0",
+    "@tailwindcss/typography": "^0.5.15",
+    "tailwindcss": "^4.3.0"
   }
 }

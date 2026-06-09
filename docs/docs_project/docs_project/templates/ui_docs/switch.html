@@ -1,0 +1,254 @@
+<c-layouts.ui>
+    <c-header>
+        Switch
+        <c-slot name="subheading">
+            Toggle switches for immediate state changes and settings.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="with-descriptions"><a href="#with-descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
+        <c-index-sublink section-id="checked"><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <p>On its own, a switch is just the toggle control, so you can pair it with your own label or drop it into a custom layout. Add a field attribute (<code>label</code>, <code>description</code>, ...) and it wraps itself as a <a href="#field">field</a> instead.</p>
+
+    <c-sample>
+        <div class="flex items-center gap-3">
+            <c-ui.switch name="wifi" checked />
+            <span class="text-sm text-zinc-700 dark:text-zinc-300">Wi-Fi</span>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<div class="flex items-center gap-3">
+    <c-ui.switch name="wifi" checked />
+    <span class="text-sm text-zinc-700 dark:text-zinc-300">Wi-Fi</span>
+</div>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <c-section id="with-descriptions" title="With Descriptions">
+
+    <p>Add contextual information with the <code>description</code> attribute.</p>
+
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.switch
+                name="email_notifications"
+                label="Email Notifications"
+                description="Receive updates and alerts via email"
+            />
+            <c-ui.switch
+                name="marketing_emails"
+                label="Marketing Emails"
+                description="Get the latest news and offers"
+            />
+            <c-ui.switch
+                name="security_alerts"
+                label="Security Alerts"
+                description="Important account security notifications"
+                checked
+            />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="email_notifications"
+    label="Email Notifications"
+    description="Receive updates and alerts via email"
+/>
+<c-ui.switch
+    name="marketing_emails"
+    label="Marketing Emails"
+    description="Get the latest news and offers"
+/>
+<c-ui.switch
+    name="security_alerts"
+    label="Security Alerts"
+    description="Important account security notifications"
+    checked
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="checked" title="Checked by Default">
+
+    <p>Set the initial state to checked with <code>checked</code>.</p>
+
+    <c-sample>
+        <c-ui.switch
+            name="dark_mode"
+            label="Dark Mode"
+            description="Enable dark theme"
+            checked
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="dark_mode"
+    label="Dark Mode"
+    description="Enable dark theme"
+    checked
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="disabled" title="Disabled">
+
+    <p>Disable interaction with <code>disabled</code>.</p>
+
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.switch
+                name="feature_disabled_off"
+                label="Premium Feature"
+                description="Upgrade to enable this feature"
+                disabled
+            />
+            <c-ui.switch
+                name="feature_disabled_on"
+                label="Auto-save"
+                description="Automatically save your work"
+                checked
+                disabled
+            />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="feature_disabled_off"
+    label="Premium Feature"
+    description="Upgrade to enable this feature"
+    disabled
+/>
+<c-ui.switch
+    name="feature_disabled_on"
+    label="Auto-save"
+    description="Automatically save your work"
+    checked
+    disabled
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="sizes" title="Sizes">
+
+    <p>Size variants run from <code>size="xs"</code> to <code>size="2xl"</code>. The default is <code>md</code>.</p>
+
+    <c-sample>
+        <div class="space-y-4">
+            <c-ui.switch
+                name="small_switch"
+                label="Small Switch"
+                description="Compact size for dense layouts"
+                size="sm"
+            />
+            <c-ui.switch
+                name="default_switch"
+                label="Default Switch"
+                description="Standard size for most use cases"
+            />
+            <c-ui.switch
+                name="large_switch"
+                label="Large Switch"
+                description="Larger touch target for accessibility"
+                size="lg"
+            />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.switch
+    name="small_switch"
+    label="Small Switch"
+    description="Compact size for dense layouts"
+    size="sm"
+/>
+<c-ui.switch
+    name="default_switch"
+    label="Default Switch"
+    description="Standard size for most use cases"
+/>
+<c-ui.switch
+    name="large_switch"
+    label="Large Switch"
+    description="Larger touch target for accessibility"
+    size="lg"
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the switch wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component with no extra markup. By default the label sits above the control (block layout); add <code>inline</code> to lay it out as a toggle row with the switch on the right.</p>
+    <c-sample>
+        <div class="w-full max-w-sm space-y-6">
+            <c-ui.switch name="n_block" label="Enable notifications" description="Get notified about account activity." />
+            <c-ui.switch name="n_inline" label="Enable notifications" description="Get notified about account activity." inline />
+        </div>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+{# Block layout (default) #}
+<c-ui.switch
+    name="notifications"
+    label="Enable notifications"
+    description="Get notified about account activity."
+/>
+
+{# Toggle row #}
+<c-ui.switch
+    name="notifications"
+    label="Enable notifications"
+    description="Get notified about account activity."
+    inline
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="name" type="str" default="" description="Form field name for submission"></c-api-prop>
+        <c-api-prop name="value" type="str" default="on" description="Value submitted when the switch is checked"></c-api-prop>
+        <c-api-prop name="label" type="str" default="" description="Label text displayed next to the switch"></c-api-prop>
+        <c-api-prop name="description" type="str" default="" description="Helper text displayed below the label"></c-api-prop>
+        <c-api-prop name="description_trailing" type="str" default="" description="Additional helper text displayed after the switch"></c-api-prop>
+        <c-api-prop name="error" type="str" default="" description="Error message to display"></c-api-prop>
+        <c-api-prop name="badge" type="str" default="" description="Badge text to display next to the label"></c-api-prop>
+        <c-api-prop name="form" type="Form" default="" description="Django form object for error handling"></c-api-prop>
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disables the switch and prevents interaction"></c-api-prop>
+        <c-api-prop name=":checked" type="bool" :options="['True', 'False']" default="False" description="Sets the initial checked state of the switch"></c-api-prop>
+        <c-api-prop name=":accent" type="bool" :options="['True', 'False']" default="True" description="Uses accent color when checked. Set to False for neutral colors"></c-api-prop>
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Size variant from xs to 2xl."></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Events</h4>
+
+    <c-api-props>
+        <c-api-prop name="checkedChange" type="CustomEvent" default="" description="Dispatched when the switch state changes. Use @checkedChange to listen"></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Accessibility</h4>
+
+    <p>The switch component is built with accessibility in mind:</p>
+
+    <ul>
+        <li><strong>ARIA Roles:</strong> Uses <code>role="switch"</code> for proper screen reader support</li>
+        <li><strong>ARIA State:</strong> <code>aria-checked</code> automatically reflects the current state</li>
+        <li><strong>ARIA Labels:</strong> <code>aria-label</code> is automatically derived from the associated label</li>
+        <li><strong>Keyboard Support:</strong> Space and Enter keys toggle the switch, Tab for focus navigation</li>
+        <li><strong>Focus States:</strong> Clear visual focus indicators for keyboard navigation</li>
+    </ul>
+    </c-section>
+
+</c-layouts.ui>

@@ -1,0 +1,155 @@
+<c-layouts.ui>
+    <c-header>
+        Breadcrumbs
+        <c-slot name="subheading">
+            Show the user's location within a hierarchy and let them navigate back up.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="links"><a href="#links" class="no-underline">With Links</a></c-index-sublink>
+        <c-index-sublink section-id="separator"><a href="#separator" class="no-underline">Custom Separator</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">API Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+
+    <p>Compose a trail with <code>c-ui.breadcrumbs</code> and one <code>c-ui.breadcrumbs.item</code> per level. Mark the final item with <code>:current="True"</code> so it is styled as the active page and exposed with <code>aria-current</code>.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.breadcrumbs>
+                <c-ui.breadcrumbs.item>Home</c-ui.breadcrumbs.item>
+                <c-ui.breadcrumbs.item>Library</c-ui.breadcrumbs.item>
+                <c-ui.breadcrumbs.item :current="True">Data</c-ui.breadcrumbs.item>
+            </c-ui.breadcrumbs>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.breadcrumbs>
+    <c-ui.breadcrumbs.item>Home</c-ui.breadcrumbs.item>
+    <c-ui.breadcrumbs.item>Library</c-ui.breadcrumbs.item>
+    <c-ui.breadcrumbs.item :current="True">Data</c-ui.breadcrumbs.item>
+</c-ui.breadcrumbs>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="links" title="With Links">
+
+    <p>Pass an <code>href</code> to render an item as a link. The current item is left without an <code>href</code> (or marked <code>:current="True"</code>) so it stays plain text.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.breadcrumbs>
+                <c-ui.breadcrumbs.item href="/">Home</c-ui.breadcrumbs.item>
+                <c-ui.breadcrumbs.item href="/components">Components</c-ui.breadcrumbs.item>
+                <c-ui.breadcrumbs.item :current="True">Breadcrumbs</c-ui.breadcrumbs.item>
+            </c-ui.breadcrumbs>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.breadcrumbs>
+    <c-ui.breadcrumbs.item href="/">Home</c-ui.breadcrumbs.item>
+    <c-ui.breadcrumbs.item href="/components">Components</c-ui.breadcrumbs.item>
+    <c-ui.breadcrumbs.item :current="True">Breadcrumbs</c-ui.breadcrumbs.item>
+</c-ui.breadcrumbs>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="separator" title="Custom Separator">
+
+    <p>Override the default <code>/</code> with a <code>separator</code> slot. It accepts a symbol or an SVG icon, set once for the whole trail.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center">
+            <c-ui.breadcrumbs>
+                <c-slot name="separator">
+                    <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                </c-slot>
+                <c-ui.breadcrumbs.item href="#">Home</c-ui.breadcrumbs.item>
+                <c-ui.breadcrumbs.item href="#">Components</c-ui.breadcrumbs.item>
+                <c-ui.breadcrumbs.item :current="True">Breadcrumbs</c-ui.breadcrumbs.item>
+            </c-ui.breadcrumbs>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.breadcrumbs>
+    <c-slot name="separator">
+        <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+    </c-slot>
+    <c-ui.breadcrumbs.item href="/">Home</c-ui.breadcrumbs.item>
+    <c-ui.breadcrumbs.item href="/components">Components</c-ui.breadcrumbs.item>
+    <c-ui.breadcrumbs.item :current="True">Breadcrumbs</c-ui.breadcrumbs.item>
+</c-ui.breadcrumbs>
+
+{# a plain symbol works too: #}
+<c-slot name="separator">›</c-slot>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Breadcrumbs</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Extra classes merged onto the inner ordered list."
+        />
+        <c-api-prop
+            name="separator (slot)"
+            type="—"
+            default="/"
+            description="Optional. A character or symbol used between items, set once for the whole trail."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The breadcrumb items, one c-ui.breadcrumbs.item per level."
+        />
+    </c-api-props>
+
+    <h4>Breadcrumbs.Item</h4>
+
+    <c-api-props>
+        <c-api-prop
+            name="href"
+            type="str"
+            default=""
+            description="Destination URL. When set and the item is not current, the item renders as a link."
+        />
+        <c-api-prop
+            name="current"
+            type="bool"
+            default="False"
+            description="Mark the item as the active page. Renders as plain text with aria-current='page' and emphasised styling."
+        />
+        <c-api-prop
+            name="class"
+            type="str"
+            default=""
+            description="Extra classes merged onto the item's link or span."
+        />
+        <c-api-prop
+            name="slot (default)"
+            type="—"
+            default=""
+            description="The item label."
+        />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

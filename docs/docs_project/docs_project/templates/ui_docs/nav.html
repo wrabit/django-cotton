@@ -1,0 +1,98 @@
+<c-layouts.ui>
+    <c-header>
+        Nav
+        <c-slot name="subheading">
+            A horizontal row of navigation links, rendered as underline tabs. For vertical navigation see Navlist.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="basic"><a href="#basic" class="no-underline">Basic Usage</a></c-index-sublink>
+        <c-index-sublink section-id="current"><a href="#current" class="no-underline">Current Page</a></c-index-sublink>
+        <c-index-sublink section-id="badges"><a href="#badges" class="no-underline">With Badges</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-section id="basic" title="Basic Usage">
+    <c-sample>
+        <c-ui.nav>
+            <c-ui.nav.item href="#" current>Home</c-ui.nav.item>
+            <c-ui.nav.item href="#">Features</c-ui.nav.item>
+            <c-ui.nav.item href="#">Pricing</c-ui.nav.item>
+            <c-ui.nav.item href="#">About</c-ui.nav.item>
+        </c-ui.nav>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.nav>
+    <c-ui.nav.item href="/" current>Home</c-ui.nav.item>
+    <c-ui.nav.item href="/features">Features</c-ui.nav.item>
+    <c-ui.nav.item href="/pricing">Pricing</c-ui.nav.item>
+    <c-ui.nav.item href="/about">About</c-ui.nav.item>
+</c-ui.nav>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="current" title="Current Page">
+
+    <p>Mark the active item with <code>:current</code> to apply accent styling.</p>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.nav>
+    <c-ui.nav.item href="/" current>Home</c-ui.nav.item>
+    <c-ui.nav.item href="/pricing" :current="{% if request.path == '/pricing' %}True{% endif %}">Pricing</c-ui.nav.item>
+</c-ui.nav>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="badges" title="With Badges">
+
+    <p>Add a trailing badge with the <code>badge</code> prop, styled via <code>badge_color</code> and <code>badge_variant</code>.</p>
+
+    <c-sample>
+        <c-ui.nav>
+            <c-ui.nav.item href="#">Home</c-ui.nav.item>
+            <c-ui.nav.item href="#" badge="12">Inbox</c-ui.nav.item>
+            <c-ui.nav.item href="#">Contacts</c-ui.nav.item>
+            <c-ui.nav.item href="#" badge="Pro" badge_color="purple" badge_variant="solid">Calendar</c-ui.nav.item>
+        </c-ui.nav>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.nav>
+    <c-ui.nav.item href="/">Home</c-ui.nav.item>
+    <c-ui.nav.item href="/inbox" badge="12">Inbox</c-ui.nav.item>
+    <c-ui.nav.item href="/contacts">Contacts</c-ui.nav.item>
+    <c-ui.nav.item href="/calendar" badge="Pro" badge_color="purple" badge_variant="solid">Calendar</c-ui.nav.item>
+</c-ui.nav>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Nav Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="slot (default)" type="—" default="" description="The navigation items."></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Nav.Item Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="href" type="str" default="#" description="URL the item links to." />
+        <c-api-prop name=":current" type="bool" :options="['True', 'False']" default="False" description="Applies active styling to mark the current page." />
+        <c-api-prop name="badge" type="str" default="" description="Trailing badge content." />
+        <c-api-prop name="badge_color" type="str" :options="['zinc', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose']" default="zinc" description="Badge color." />
+        <c-api-prop name="badge_variant" type="str" :options="['', 'pill', 'solid']" default="" description="Badge variant." />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

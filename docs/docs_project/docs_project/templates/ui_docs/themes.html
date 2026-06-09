@@ -1,0 +1,391 @@
+<c-layouts.docs wide hide-intro>
+    <c-slot name="sidebar">
+        <c-ui-docs.sidebar />
+    </c-slot>
+
+    <div x-data="themeStudio">
+
+        <c-header>
+            Theme Builder
+            <c-slot name="subheading">
+                Tune an accent and gray base and watch the whole page re-theme. When it looks right, copy the CSS into your own <code>app.css</code>. Changes here stay on this page.
+            </c-slot>
+        </c-header>
+
+        {# ---- Layout: full-width horizontal controls, preview below ---- #}
+        <div class="not-prose space-y-10 mt-8">
+
+        {# ---- Controls ---- #}
+        <div class="rounded-box border border-zinc-200 dark:border-zinc-700 p-5">
+            {# Prominent row: the colour choices lead #}
+            <div class="flex flex-col sm:flex-row sm:flex-wrap items-start gap-x-10 gap-y-5">
+            <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2.5">Accent</div>
+                <div class="flex flex-wrap gap-2 max-w-2xl">
+                    <template x-for="a in accents" :key="a">
+                        <button type="button"
+                            @click="setAccent(a)"
+                            class="flex font-semibold items-center text-zinc-900 dark:text-white gap-2 pl-2 pr-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 text-sm capitalize cursor-pointer transition-colors"
+                            :style="accent === a ? 'border-color: var(--color-' + a + '-500)' : ''">
+                            <span class="size-4 rounded-full ring-1 ring-black/10 dark:ring-white/15"
+                                  :style="'background-color: var(--color-' + a + '-500)'"></span>
+                            <span x-text="a"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2.5">Gray</div>
+                <div class="flex flex-wrap gap-2">
+                    <template x-for="g in grays" :key="g">
+                        <button type="button"
+                            @click="setGray(g)"
+                            class="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 text-sm capitalize cursor-pointer transition-colors"
+                            :style="gray === g ? 'border-color: var(--color-' + g + '-500)' : ''"
+                            :class="gray === g
+                                ? 'text-zinc-900 dark:text-white'
+                                : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'">
+                            <span class="size-4 rounded-full ring-1 ring-black/10 dark:ring-white/15"
+                                  :style="'background-color: var(--color-' + g + '-400)'"></span>
+                            <span x-text="g"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            </div>{# /prominent row #}
+
+            {# ---- More settings (collapsible, via the kit's own collapse component) ---- #}
+            <div class="mt-5">
+                <c-ui.collapse>
+                    <c-slot name="trigger">
+                        <span class="inline-flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-zinc-400"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" /></svg>
+                            More settings
+                        </span>
+                    </c-slot>
+                    <div class="flex flex-wrap items-start gap-x-8 gap-y-6 pt-5">
+
+            {# ---- Form controls (wider: four inputs) ---- #}
+            <div class="space-y-3">
+                <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Form controls</div>
+                <div class="flex flex-wrap items-start gap-x-6 gap-y-4">
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Radius</div>
+                    <div class="inline-flex rounded-control border border-zinc-200 dark:border-zinc-700 bg-[var(--color-input-bg)] p-0.5">
+                        <template x-for="r in radii" :key="'f'+r[0]">
+                            <button type="button" @click="setRadius(r[1])"
+                                class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                                :class="radius === r[1] ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
+                                x-text="r[0]"></button>
+                        </template>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Shadow</div>
+                    <div class="inline-flex rounded-control border border-zinc-200 dark:border-zinc-700 bg-[var(--color-input-bg)] p-0.5">
+                        <template x-for="s in shadows" :key="'fsh'+s[0]">
+                            <button type="button" @click="setInputShadow(s[1])"
+                                class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                                :class="inputShadow === s[1] ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
+                                x-text="s[0]"></button>
+                        </template>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Focus ring</div>
+                    <div class="inline-flex rounded-control border border-zinc-200 dark:border-zinc-700 bg-[var(--color-input-bg)] p-0.5">
+                        <template x-for="r in rings" :key="r[0]">
+                            <button type="button" @click="setFocusRing(r[1])"
+                                class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                                :class="focusRing === r[1] ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
+                                x-text="r[0]"></button>
+                        </template>
+                    </div>
+                </div>
+                </div>{# /form controls row #}
+            </div>
+
+            {# divider: horizontal rule when stacked (forces the wrap), vertical stretched line side-by-side at lg #}
+            <div class="w-full h-px lg:w-px lg:h-auto self-stretch bg-zinc-200 dark:bg-zinc-700"></div>
+
+            {# ---- Structural ---- #}
+            <div class="space-y-3">
+                <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Structural</div>
+                <div class="flex flex-wrap items-start gap-x-6 gap-y-4">
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Radius</div>
+                    <div class="inline-flex rounded-control border border-zinc-200 dark:border-zinc-700 bg-[var(--color-input-bg)] p-0.5">
+                        <template x-for="r in radii" :key="'s'+r[0]">
+                            <button type="button" @click="setRadiusLg(r[1])"
+                                class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                                :class="radiusLg === r[1] ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
+                                x-text="r[0]"></button>
+                        </template>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Shadow</div>
+                    <div class="inline-flex rounded-control border border-zinc-200 dark:border-zinc-700 bg-[var(--color-input-bg)] p-0.5">
+                        <template x-for="s in shadows" :key="'ssh'+s[0]">
+                            <button type="button" @click="setStructuralShadow(s[1])"
+                                class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                                :class="structuralShadow === s[1] ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
+                                x-text="s[0]"></button>
+                        </template>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Card border</div>
+                    <div class="inline-flex rounded-control border border-zinc-200 dark:border-zinc-700 bg-[var(--color-input-bg)] p-0.5">
+                        <button type="button" @click="setBorders(true)"
+                            class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                            :class="borders ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'">On</button>
+                        <button type="button" @click="setBorders(false)"
+                            class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                            :class="!borders ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'">Off</button>
+                    </div>
+                </div>
+                </div>{# /structural row #}
+            </div>
+
+                </div>{# /settings row #}
+                </c-ui.collapse>
+            </div>{# /more settings #}
+        </div>{# /controls card #}
+
+        {# ---- Right column: live preview + generated CSS ---- #}
+        <div class="space-y-10">
+
+        {# ---- Live specimen: a compact variation study, themed by the controls above ---- #}
+        <c-ui.card>
+            <div class="grid sm:grid-cols-2 gap-x-10 gap-y-7">
+
+                {# Buttons: the variant set (accent + grays + radius) #}
+                <div class="space-y-3">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Buttons</div>
+                    <div class="flex flex-wrap gap-2">
+                        <c-ui.button variant="primary" size="sm">Primary</c-ui.button>
+                        <c-ui.button variant="default" size="sm">Default</c-ui.button>
+                        <c-ui.button variant="subtle" size="sm">Subtle</c-ui.button>
+                        <c-ui.button variant="default" :outlined="True" size="sm">Outline</c-ui.button>
+                        <c-ui.button variant="ghost" size="sm">Ghost</c-ui.button>
+                    </div>
+                </div>
+
+                {# Select #}
+                <div class="space-y-3">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Select</div>
+                    <c-ui.select name="pv_plan_sel" placeholder="Choose a plan" value="pro">
+                        <c-ui.select.option value="starter">Starter</c-ui.select.option>
+                        <c-ui.select.option value="pro">Pro</c-ui.select.option>
+                        <c-ui.select.option value="team">Team</c-ui.select.option>
+                    </c-ui.select>
+                </div>
+
+                {# Radio #}
+                <div class="space-y-3">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Radio</div>
+                    <c-ui.radio.group name="pv_plan" value="pro">
+                        <c-ui.radio value="starter" label="Starter" />
+                        <c-ui.radio value="pro" label="Pro" />
+                        <c-ui.radio value="team" label="Team" />
+                    </c-ui.radio.group>
+                </div>
+
+                {# Checkbox + switch #}
+                <div class="space-y-3">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Checkbox &amp; switch</div>
+                    <c-ui.checkbox.group name="pv_feat" :values="['backups']">
+                        <c-ui.checkbox value="backups" label="Automatic backups" />
+                        <c-ui.checkbox value="audit" label="Audit log" />
+                    </c-ui.checkbox.group>
+                    <c-ui.switch inline name="pv_notify" label="Notifications" checked />
+                </div>
+
+                {# Input #}
+                <div class="space-y-3">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Input</div>
+                    <c-ui.input name="pv_email" type="email" placeholder="you@example.com" />
+                </div>
+
+                {# Badges #}
+                <div class="space-y-3">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400">Badges</div>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <c-ui.badge color="green" size="sm">Operational</c-ui.badge>
+                        <c-ui.badge color="amber" size="sm">Degraded</c-ui.badge>
+                        <c-ui.badge href="#" color="teal" variant="pill">Tag</c-ui.badge>
+                    </div>
+                </div>
+
+            </div>
+        </c-ui.card>
+
+        {# ---- Generated CSS ---- #}
+        <div class="not-prose">
+            <div class="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2">Generated CSS</div>
+            <div class="flex items-start justify-between gap-4 mb-3">
+                <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                    Copy this into your own <code>app.css</code>, just after the <code>@import</code> of Cotton UI, to make this theme yours. It overrides the kit's default tokens, so no component files change. See the <a href="{% url 'ui-theming' %}#accent-color">Theming guide</a> for how it works, or the <a href="{% url 'ui-theming' %}#tokens">full token reference</a>.
+                </p>
+                <button type="button" @click="copy()"
+                    class="shrink-0 cursor-pointer inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-control bg-accent text-accent-foreground text-sm font-medium hover:bg-accent-content transition-colors">
+                    <c-icons.copy class="size-4" />
+                    <span x-text="copied ? 'Copied!' : 'Copy CSS'"></span>
+                </button>
+            </div>
+            <pre class="rounded-box bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-100 text-[13px] leading-[1.6rem] p-5 overflow-x-auto"><code class="hljs language-css !bg-transparent !p-0" x-html="highlightedCss"></code></pre>
+            <p class="text-xs text-zinc-500 mt-2">
+                Cotton UI components are built on the <code>zinc</code> scale, so a non-zinc gray base is applied by remapping those variables.
+            </p>
+        </div>
+        </div>{# /right column #}
+        </div>{# /layout grid #}
+    </div>
+
+    {# Palette priming: forces Tailwind to emit every candidate color variable so the live var() remap works. Hidden, never rendered. #}
+    <div class="hidden" aria-hidden="true">bg-red-50 bg-red-100 bg-red-200 bg-red-300 bg-red-400 bg-red-500 bg-red-600 bg-red-700 bg-red-800 bg-red-900 bg-red-950 bg-orange-50 bg-orange-100 bg-orange-200 bg-orange-300 bg-orange-400 bg-orange-500 bg-orange-600 bg-orange-700 bg-orange-800 bg-orange-900 bg-orange-950 bg-amber-50 bg-amber-100 bg-amber-200 bg-amber-300 bg-amber-400 bg-amber-500 bg-amber-600 bg-amber-700 bg-amber-800 bg-amber-900 bg-amber-950 bg-yellow-50 bg-yellow-100 bg-yellow-200 bg-yellow-300 bg-yellow-400 bg-yellow-500 bg-yellow-600 bg-yellow-700 bg-yellow-800 bg-yellow-900 bg-yellow-950 bg-lime-50 bg-lime-100 bg-lime-200 bg-lime-300 bg-lime-400 bg-lime-500 bg-lime-600 bg-lime-700 bg-lime-800 bg-lime-900 bg-lime-950 bg-green-50 bg-green-100 bg-green-200 bg-green-300 bg-green-400 bg-green-500 bg-green-600 bg-green-700 bg-green-800 bg-green-900 bg-green-950 bg-emerald-50 bg-emerald-100 bg-emerald-200 bg-emerald-300 bg-emerald-400 bg-emerald-500 bg-emerald-600 bg-emerald-700 bg-emerald-800 bg-emerald-900 bg-emerald-950 bg-teal-50 bg-teal-100 bg-teal-200 bg-teal-300 bg-teal-400 bg-teal-500 bg-teal-600 bg-teal-700 bg-teal-800 bg-teal-900 bg-teal-950 bg-cyan-50 bg-cyan-100 bg-cyan-200 bg-cyan-300 bg-cyan-400 bg-cyan-500 bg-cyan-600 bg-cyan-700 bg-cyan-800 bg-cyan-900 bg-cyan-950 bg-sky-50 bg-sky-100 bg-sky-200 bg-sky-300 bg-sky-400 bg-sky-500 bg-sky-600 bg-sky-700 bg-sky-800 bg-sky-900 bg-sky-950 bg-blue-50 bg-blue-100 bg-blue-200 bg-blue-300 bg-blue-400 bg-blue-500 bg-blue-600 bg-blue-700 bg-blue-800 bg-blue-900 bg-blue-950 bg-indigo-50 bg-indigo-100 bg-indigo-200 bg-indigo-300 bg-indigo-400 bg-indigo-500 bg-indigo-600 bg-indigo-700 bg-indigo-800 bg-indigo-900 bg-indigo-950 bg-violet-50 bg-violet-100 bg-violet-200 bg-violet-300 bg-violet-400 bg-violet-500 bg-violet-600 bg-violet-700 bg-violet-800 bg-violet-900 bg-violet-950 bg-purple-50 bg-purple-100 bg-purple-200 bg-purple-300 bg-purple-400 bg-purple-500 bg-purple-600 bg-purple-700 bg-purple-800 bg-purple-900 bg-purple-950 bg-fuchsia-50 bg-fuchsia-100 bg-fuchsia-200 bg-fuchsia-300 bg-fuchsia-400 bg-fuchsia-500 bg-fuchsia-600 bg-fuchsia-700 bg-fuchsia-800 bg-fuchsia-900 bg-fuchsia-950 bg-pink-50 bg-pink-100 bg-pink-200 bg-pink-300 bg-pink-400 bg-pink-500 bg-pink-600 bg-pink-700 bg-pink-800 bg-pink-900 bg-pink-950 bg-rose-50 bg-rose-100 bg-rose-200 bg-rose-300 bg-rose-400 bg-rose-500 bg-rose-600 bg-rose-700 bg-rose-800 bg-rose-900 bg-rose-950 bg-slate-50 bg-slate-100 bg-slate-200 bg-slate-300 bg-slate-400 bg-slate-500 bg-slate-600 bg-slate-700 bg-slate-800 bg-slate-900 bg-slate-950 bg-gray-50 bg-gray-100 bg-gray-200 bg-gray-300 bg-gray-400 bg-gray-500 bg-gray-600 bg-gray-700 bg-gray-800 bg-gray-900 bg-gray-950 bg-zinc-50 bg-zinc-100 bg-zinc-200 bg-zinc-300 bg-zinc-400 bg-zinc-500 bg-zinc-600 bg-zinc-700 bg-zinc-800 bg-zinc-900 bg-zinc-950 bg-neutral-50 bg-neutral-100 bg-neutral-200 bg-neutral-300 bg-neutral-400 bg-neutral-500 bg-neutral-600 bg-neutral-700 bg-neutral-800 bg-neutral-900 bg-neutral-950 bg-stone-50 bg-stone-100 bg-stone-200 bg-stone-300 bg-stone-400 bg-stone-500 bg-stone-600 bg-stone-700 bg-stone-800 bg-stone-900 bg-stone-950 bg-taupe-50 bg-taupe-100 bg-taupe-200 bg-taupe-300 bg-taupe-400 bg-taupe-500 bg-taupe-600 bg-taupe-700 bg-taupe-800 bg-taupe-900 bg-taupe-950 bg-mauve-50 bg-mauve-100 bg-mauve-200 bg-mauve-300 bg-mauve-400 bg-mauve-500 bg-mauve-600 bg-mauve-700 bg-mauve-800 bg-mauve-900 bg-mauve-950 bg-mist-50 bg-mist-100 bg-mist-200 bg-mist-300 bg-mist-400 bg-mist-500 bg-mist-600 bg-mist-700 bg-mist-800 bg-mist-900 bg-mist-950 bg-olive-50 bg-olive-100 bg-olive-200 bg-olive-300 bg-olive-400 bg-olive-500 bg-olive-600 bg-olive-700 bg-olive-800 bg-olive-900 bg-olive-950</div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('themeStudio', () => ({
+                accents: ['red','orange','amber','yellow','lime','green','emerald','teal','cyan','sky','blue','indigo','violet','purple','fuchsia','pink','rose'],
+                grays: ['slate','gray','zinc','neutral','stone','taupe','mauve','mist','olive'],
+                shades: [50,100,200,300,400,500,600,700,800,900,950],
+                radii: [['none','0'],['xs','0.125rem'],['sm','0.25rem'],['md','0.375rem'],['lg','0.5rem'],['xl','0.75rem'],['2xl','1rem']],
+                shadows: [['none','none'],['sm','0 1px 2px 0 rgb(0 0 0 / 0.05)'],['md','0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'],['lg','0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)']],
+                rings: [['0','0px'],['1','1px'],['2','2px'],['4','4px']],
+                accent: 'teal',
+                gray: 'zinc',
+                radius: '0.375rem',
+                radiusLg: '0.5rem',
+                focusRing: '2px',
+                inputShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                structuralShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                borders: true,
+                isDark: false,
+                copied: false,
+                _observer: null,
+
+                init() {
+                    this.isDark = document.documentElement.classList.contains('dark');
+                    // Re-apply when the appearance toggle (or navbar) flips the <html> class.
+                    this._observer = new MutationObserver(() => {
+                        const dark = document.documentElement.classList.contains('dark');
+                        if (dark !== this.isDark) { this.isDark = dark; this.apply(); }
+                    });
+                    this._observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+                    this.apply();
+                },
+
+                // Theme is applied to <html> so the whole page chrome re-themes. It is
+                // not persisted, so navigating away (a full reload) resets it.
+                apply() {
+                    const el = document.documentElement;
+                    if (this.isDark) {
+                        el.style.setProperty('--color-accent', 'var(--color-' + this.accent + '-400)');
+                        el.style.setProperty('--color-accent-content', 'var(--color-' + this.accent + '-300)');
+                        el.style.setProperty('--color-accent-foreground', 'var(--color-' + this.accent + '-950)');
+                    } else {
+                        el.style.setProperty('--color-accent', 'var(--color-' + this.accent + '-500)');
+                        el.style.setProperty('--color-accent-content', 'var(--color-' + this.accent + '-600)');
+                        el.style.setProperty('--color-accent-foreground', '#ffffff');
+                    }
+                    // Remap the zinc scale to the chosen gray base. For 'zinc' we remove the
+                    // overrides entirely so the site's bespoke dark surfaces are preserved.
+                    this.shades.forEach((s) => el.style.removeProperty('--color-zinc-' + s));
+                    if (this.gray !== 'zinc') {
+                        const g = (n) => 'var(--color-' + this.gray + '-' + n + ')';
+                        this.shades.forEach((s) => { el.style.setProperty('--color-zinc-' + s, g(s)); });
+                        // Drive the page surfaces too, so the whole preview follows the gray, not
+                        // just chrome that happens to use zinc utilities. The docs ship a bespoke
+                        // dark surface, so without this the body and cards would not track the gray.
+                        el.style.setProperty('--color-bg', this.isDark ? g(900) : g(50));
+                        el.style.setProperty('--color-surface', this.isDark ? g(800) : '#ffffff');
+                    } else {
+                        el.style.removeProperty('--color-bg');
+                        el.style.removeProperty('--color-surface');
+                    }
+
+                    // Component tokens
+                    el.style.setProperty('--radius-control', this.radius);
+                    el.style.setProperty('--radius-box', this.radiusLg);
+                    el.style.setProperty('--focus-ring-width', this.focusRing);
+                    el.style.setProperty('--shadow-input', this.inputShadow);
+                    el.style.setProperty('--shadow-box', this.structuralShadow);
+                    // Box-role surfaces (cards, dialogs, menus): toggle the structural border.
+                    // On → explicitly restore the gray (mode- and gray-remap-aware) so it overrides this
+                    // site's shadow-only default; off → transparent. (removeProperty wouldn't win over the
+                    // site stylesheet, so set the value directly.)
+                    el.style.setProperty('--color-card-border', this.borders ? (this.isDark ? 'var(--color-zinc-700)' : 'var(--color-zinc-200)') : 'transparent');
+                },
+
+                setAccent(a) { this.accent = a; this.apply(); },
+                setGray(g) { this.gray = g; this.apply(); },
+                setRadius(v) { this.radius = v; this.apply(); },
+                setRadiusLg(v) { this.radiusLg = v; this.apply(); },
+                setFocusRing(v) { this.focusRing = v; this.apply(); },
+                setInputShadow(v) { this.inputShadow = v; this.apply(); },
+                setStructuralShadow(v) { this.structuralShadow = v; this.apply(); },
+                setBorders(v) { this.borders = v; this.apply(); },
+
+                get css() {
+                    const grayBlock = this.gray === 'zinc'
+                        ? ''
+                        : '\n\n    /* Gray base: remap zinc to ' + this.gray + ' (components are built on the zinc scale) */\n' +
+                          this.shades.map((s) =>
+                            '    --color-zinc-' + s + ': var(--color-' + this.gray + '-' + s + ');'
+                          ).join('\n');
+                    return '@theme {\n' +
+                        '    /* Accent: primary buttons, links, focus ring, active states */\n' +
+                        '    --color-accent: var(--color-' + this.accent + '-500);\n' +
+                        '    --color-accent-content: var(--color-' + this.accent + '-600);\n' +
+                        '    --color-accent-foreground: var(--color-white);' + grayBlock + '\n' +
+                        '}\n\n' +
+                        '@layer theme {\n' +
+                        '    /* Dark mode: lighter accent so it stays vivid on dark surfaces */\n' +
+                        '    .dark {\n' +
+                        '        --color-accent: var(--color-' + this.accent + '-400);\n' +
+                        '        --color-accent-content: var(--color-' + this.accent + '-300);\n' +
+                        '        --color-accent-foreground: var(--color-' + this.accent + '-950);\n' +
+                        '    }\n' +
+                        '}\n\n' +
+                        ':root {\n' +
+                        '    /* Corner radius, by role */\n' +
+                        '    --radius-control: ' + this.radius + ';     /* inputs, buttons, segments */\n' +
+                        '    --radius-box: ' + this.radiusLg + ';         /* cards, dialogs, menus */\n\n' +
+                        '    /* Form controls */\n' +
+                        '    --focus-ring-width: ' + this.focusRing + ';\n' +
+                        '    --shadow-input: ' + this.inputShadow + ';\n\n' +
+                        '    /* Structural surfaces */\n' +
+                        '    --shadow-box: ' + this.structuralShadow + ';\n' +
+                        (this.borders ? '' : '    --color-card-border: transparent;  /* shadow-only cards (dialogs, menus, etc. keep --color-box-border) */\n') +
+                        '}';
+                },
+
+                // Syntax-highlight the generated CSS reactively (x-text would wipe the spans on each change).
+                get highlightedCss() {
+                    const code = this.css;
+                    if (window.hljs && hljs.getLanguage && hljs.getLanguage('css')) {
+                        try { return hljs.highlight(code, { language: 'css' }).value; } catch (e) { /* fall through */ }
+                    }
+                    return code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                },
+
+                copy() {
+                    navigator.clipboard.writeText(this.css);
+                    this.copied = true;
+                    setTimeout(() => { this.copied = false; }, 1500);
+                },
+            }));
+        });
+    </script>
+</c-layouts.docs>

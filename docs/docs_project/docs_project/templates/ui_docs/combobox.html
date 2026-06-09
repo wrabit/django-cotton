@@ -1,0 +1,241 @@
+<c-layouts.ui>
+    <c-header>
+        Combobox
+        <c-slot name="subheading">
+            A multi-select component with support for tagging and searching.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="max-tags"><a href="#max-tags" class="no-underline">Max Tags</a></c-index-sublink>
+        <c-index-sublink section-id="searchable"><a href="#searchable" class="no-underline">Searchable</a></c-index-sublink>
+        <c-index-sublink section-id="writable"><a href="#writable" class="no-underline">Writable (Tags)</a></c-index-sublink>
+        <c-index-sublink section-id="single"><a href="#single" class="no-underline">Single Select</a></c-index-sublink>
+        <c-index-sublink section-id="autoclose"><a href="#autoclose" class="no-underline">Autoclose</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="responsive"><a href="#responsive" class="no-underline">Responsive</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <c-sample slim>
+        <c-ui.combobox
+            name="skills"
+            placeholder="Select skills"
+            :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS']"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="skills"
+    placeholder="Select skills"
+    :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS']"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <c-section id="max-tags" title="Max Tags">
+        <p>Limit the number of items that can be selected.</p>
+
+        <c-sample slim>
+            <c-ui.combobox
+                name="top_3"
+                placeholder="Select up to 3 items"
+                :options="['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']"
+                :max_tags="3"
+            />
+
+            <c-slot name="code">
+    <c-snippet>{% cotton:verbatim %}{% verbatim %}
+    <c-ui.combobox
+        name="top_3"
+        placeholder="Select up to 3 items"
+        :options="['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5']"
+        :max_tags="3"
+    />
+    {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="searchable" title="Searchable">
+        <p>Enable searching through options.</p>
+
+        <c-sample slim>
+            <c-ui.combobox
+                name="countries"
+                placeholder="Search countries..."
+                :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
+                searchable
+            />
+
+            <c-slot name="code">
+    <c-snippet>{% cotton:verbatim %}{% verbatim %}
+    <c-ui.combobox
+        name="countries"
+        placeholder="Search countries..."
+        :options="['United States', 'United Kingdom', 'Canada', 'Australia', 'Germany', 'France', 'Japan']"
+        searchable
+    />
+    {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
+
+    <c-section id="writable" title="Writable (Custom Tags)">
+
+    <p>Allow users to enter custom values not in the list.</p>
+
+    <c-sample slim>
+        <c-ui.combobox
+            name="tags"
+            placeholder="Type and press Enter to add tags"
+            :options="['News', 'Updates', 'Alerts']"
+            writable
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="tags"
+    placeholder="Type and press Enter to add tags"
+    :options="['News', 'Updates', 'Alerts']"
+    writable
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="single" title="Single Select">
+
+    <p>Restrict selection to a single item by setting <code>max_tags=1</code>. This behaves like a select but with the tag UI.</p>
+
+    <c-sample slim>
+        <c-ui.combobox
+            name="favorite_color"
+            placeholder="Pick one color"
+            :options="['Red', 'Green', 'Blue', 'Yellow']"
+            :max_tags="1"
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="favorite_color"
+    placeholder="Pick one color"
+    :options="['Red', 'Green', 'Blue', 'Yellow']"
+    :max_tags="1"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="autoclose" title="Autoclose">
+
+    <p>Automatically close the dropdown when the maximum number of tags is reached. This is useful when combined with <code>max_tags</code> to provide a smoother user experience - once the user has selected all allowed items, the dropdown closes automatically.</p>
+
+    <c-sample slim>
+        <c-ui.combobox
+            name="top_skills"
+            placeholder="Pick your top 2 skills"
+            :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS', 'TypeScript']"
+            :max_tags="2"
+            autoclose
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="top_skills"
+    placeholder="Pick your top 2 skills"
+    :options="['Python', 'Django', 'JavaScript', 'Alpine.js', 'Tailwind CSS', 'TypeScript']"
+    :max_tags="2"
+    autoclose
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="disabled" title="Disabled">
+
+    <p>Prevent interaction with the combobox.</p>
+
+    <c-sample slim>
+        <c-ui.combobox
+            name="disabled_example"
+            placeholder="Cannot select"
+            :options="['One', 'Two']"
+            :selected="['One']"
+            disabled
+        />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="disabled_example"
+    placeholder="Cannot select"
+    :options="['One', 'Two']"
+    :selected="['One']"
+    disabled
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="responsive" title="Responsive positioning">
+        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+            The options panel flips above the field when there isn't room below, keeping it in view.
+            Drag the handle to shorten the viewport and watch it flip.
+        </p>
+        <c-demo.viewport src="{% url 'ui-combobox-viewport' %}" w="460" h="560" />
+    </c-section>
+
+    <c-section id="field" title="As a field">
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the combobox wraps itself in a <a href="{% url 'ui-field' %}">Field</a> component, giving you the label, helper text and error styling with no extra markup.</p>
+    <c-sample slim>
+        <c-ui.combobox name="skills" label="Skills" placeholder="Select skills" description="Pick all that apply." :options="['Python', 'Django', 'JavaScript', 'Alpine.js']" />
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.combobox
+    name="skills"
+    label="Skills"
+    placeholder="Select skills"
+    description="Pick all that apply."
+    :options="['Python', 'Django', 'JavaScript', 'Alpine.js']"
+/>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="reference" title="API Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="name" type="str" default="" description="Form input name." />
+        <c-api-prop name=":options" type="list" default="[]" description="List of string options to select from." />
+        <c-api-prop name=":selected" type="list" default="[]" description="List of initially selected values." />
+        <c-api-prop name="placeholder" type="str" default="" description="Placeholder text." />
+        <c-api-prop name=":max_tags" type="int" default="-1" description="Maximum number of items selectable. -1 for unlimited." />
+        <c-api-prop name=":writable" type="bool" :options="['True', 'False']" default="False" description="Allow users to add custom values not in the options list." />
+        <c-api-prop name=":searchable" type="bool" :options="['True', 'False']" default="False" description="Enable searching through the dropdown options." />
+        <c-api-prop name=":close_after_selecting" type="bool" :options="['True', 'False']" default="False" description="Close the dropdown automatically after selecting an item." />
+        <c-api-prop name=":autoclose" type="bool" :options="['True', 'False']" default="False" description="Automatically close the dropdown when the maximum number of tags is reached." />
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disable the component." />
+        <c-api-prop name="size" type="str" :options="['xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Size variant from xs to 2xl." />
+        <c-api-prop name=":required" type="bool" :options="['True', 'False']" default="False" description="Mark the field as required." />
+        <c-api-prop name="label" type="str" default="" description="Shorthand: wraps with a label field." />
+        <c-api-prop name="description" type="str" default="" description="Shorthand: adds description text." />
+        <c-api-prop name="badge" type="str" default="" description="Shorthand: badge text on the label (e.g. 'Required')." />
+        <c-api-prop name="error" type="str" default="" description="Shorthand: displays error message." />
+    </c-api-props>
+    </c-section>
+
+</c-layouts.ui>

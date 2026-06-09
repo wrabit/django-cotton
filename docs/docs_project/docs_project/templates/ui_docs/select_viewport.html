@@ -1,0 +1,28 @@
+<c-layouts.viewport>
+    <div class="min-h-screen pt-[240px] px-8">
+        <div class="mx-auto max-w-72">
+            <c-ui.select name="plan" variant="listbox" placeholder="Choose a plan">
+                <c-ui.menu.item value="free">Free</c-ui.menu.item>
+                <c-ui.menu.item value="starter">Starter</c-ui.menu.item>
+                <c-ui.menu.item value="pro">Professional</c-ui.menu.item>
+                <c-ui.menu.item value="enterprise">Enterprise</c-ui.menu.item>
+            </c-ui.select>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:initialized', function () {
+            var el = document.querySelector('[x-data]');
+            if (!el) return;
+            var data = Alpine.$data(el);
+            var open = function () {
+                if (data && !data.open) {
+                    data.open = true;
+                    data.$nextTick(function () { data.position && data.position(); });
+                }
+            };
+            open();
+            if (data && data.$watch) data.$watch('open', function (v) { if (!v) setTimeout(open, 60); });
+        });
+    </script>
+</c-layouts.viewport>

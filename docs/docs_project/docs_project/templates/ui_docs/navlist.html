@@ -19,10 +19,10 @@
     <c-section id="basic" title="Basic Usage">
     <c-sample>
         <c-ui.navlist class="w-64">
-            <c-ui.navlist.item href="javascript:void(0)" current>Dashboard</c-ui.navlist.item>
-            <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
-            <c-ui.navlist.item href="javascript:void(0)">Team</c-ui.navlist.item>
-            <c-ui.navlist.item href="javascript:void(0)" badge="3">Settings</c-ui.navlist.item>
+            <c-ui.navlist.item href="#" current>Dashboard</c-ui.navlist.item>
+            <c-ui.navlist.item href="#">Projects</c-ui.navlist.item>
+            <c-ui.navlist.item href="#">Team</c-ui.navlist.item>
+            <c-ui.navlist.item href="#" badge="3">Settings</c-ui.navlist.item>
         </c-ui.navlist>
 
         <c-slot name="code">
@@ -47,17 +47,17 @@
             <div>
                 <div class="text-xs font-medium text-zinc-400 dark:text-zinc-500 mb-2">default</div>
                 <c-ui.navlist>
-                    <c-ui.navlist.item href="javascript:void(0)" current>Dashboard</c-ui.navlist.item>
-                    <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
-                    <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+                    <c-ui.navlist.item href="#" current>Dashboard</c-ui.navlist.item>
+                    <c-ui.navlist.item href="#">Projects</c-ui.navlist.item>
+                    <c-ui.navlist.item href="#">Settings</c-ui.navlist.item>
                 </c-ui.navlist>
             </div>
             <div>
                 <div class="text-xs font-medium text-zinc-400 dark:text-zinc-500 mb-2">sidebar</div>
                 <c-ui.navlist variant="sidebar">
-                    <c-ui.navlist.item href="javascript:void(0)" current>Dashboard</c-ui.navlist.item>
-                    <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
-                    <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+                    <c-ui.navlist.item href="#" current>Dashboard</c-ui.navlist.item>
+                    <c-ui.navlist.item href="#">Projects</c-ui.navlist.item>
+                    <c-ui.navlist.item href="#">Settings</c-ui.navlist.item>
                 </c-ui.navlist>
             </div>
         </div>
@@ -88,13 +88,13 @@
 
     <c-sample>
         <c-ui.navlist class="w-64">
-            <c-ui.navlist.item href="javascript:void(0)">Dashboard</c-ui.navlist.item>
-            <c-ui.navlist.item href="javascript:void(0)">Projects</c-ui.navlist.item>
+            <c-ui.navlist.item href="#">Dashboard</c-ui.navlist.item>
+            <c-ui.navlist.item href="#">Projects</c-ui.navlist.item>
 
             <c-ui.navlist.group heading="Account">
-                <c-ui.navlist.item href="javascript:void(0)" current>Profile</c-ui.navlist.item>
-                <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
-                <c-ui.navlist.item href="javascript:void(0)">Billing</c-ui.navlist.item>
+                <c-ui.navlist.item href="#" current>Profile</c-ui.navlist.item>
+                <c-ui.navlist.item href="#">Settings</c-ui.navlist.item>
+                <c-ui.navlist.item href="#">Billing</c-ui.navlist.item>
             </c-ui.navlist.group>
         </c-ui.navlist>
 
@@ -121,16 +121,16 @@
 
     <c-sample>
         <c-ui.navlist class="w-64">
-            <c-ui.navlist.item href="javascript:void(0)">Dashboard</c-ui.navlist.item>
+            <c-ui.navlist.item href="#">Dashboard</c-ui.navlist.item>
 
             <c-ui.navlist.group heading="Account" expandable expanded>
-                <c-ui.navlist.item href="javascript:void(0)">Profile</c-ui.navlist.item>
-                <c-ui.navlist.item href="javascript:void(0)">Settings</c-ui.navlist.item>
+                <c-ui.navlist.item href="#">Profile</c-ui.navlist.item>
+                <c-ui.navlist.item href="#">Settings</c-ui.navlist.item>
             </c-ui.navlist.group>
 
             <c-ui.navlist.group heading="Team" expandable :expanded="False">
-                <c-ui.navlist.item href="javascript:void(0)">Members</c-ui.navlist.item>
-                <c-ui.navlist.item href="javascript:void(0)">Invitations</c-ui.navlist.item>
+                <c-ui.navlist.item href="#">Members</c-ui.navlist.item>
+                <c-ui.navlist.item href="#">Invitations</c-ui.navlist.item>
             </c-ui.navlist.group>
         </c-ui.navlist>
 
@@ -160,10 +160,10 @@
 
     <c-sample>
         <c-ui.navlist class="w-64">
-            <c-ui.navlist.item href="javascript:void(0)">Home</c-ui.navlist.item>
-            <c-ui.navlist.item href="javascript:void(0)" badge="12">Inbox</c-ui.navlist.item>
-            <c-ui.navlist.item href="javascript:void(0)">Contacts</c-ui.navlist.item>
-            <c-ui.navlist.item href="javascript:void(0)" badge="Pro" badge_color="lime" badge_variant="solid">Calendar</c-ui.navlist.item>
+            <c-ui.navlist.item href="#">Home</c-ui.navlist.item>
+            <c-ui.navlist.item href="#" badge="12">Inbox</c-ui.navlist.item>
+            <c-ui.navlist.item href="#">Contacts</c-ui.navlist.item>
+            <c-ui.navlist.item href="#" badge="Pro" badge_color="lime" badge_variant="solid">Calendar</c-ui.navlist.item>
         </c-ui.navlist>
 
         <c-slot name="code">

@@ -2,8 +2,8 @@
 
 {% comment %}persist=False for the mobile menu copy so the two instances don't race on the shared scroll key.{% endcomment %}
 <div class="pb-6 sm:pb-0 sm:flex sm:flex-col sm:max-h-[calc(100dvh-73px)]">
-    <a href="{% url 'home' %}" class="relative block pb-4 border-b border-zinc-200 dark:border-zinc-800 no-underline group overflow-hidden sm:shrink-0">
-        <c-icons.logo class="pointer-events-none absolute -right-3 -top-3 size-24 text-accent opacity-10" />
+    <a href="{% url 'home' %}" class="relative block pb-6 border-b border-zinc-200 dark:border-zinc-800 no-underline group overflow-hidden sm:shrink-0">
+        <c-icons.logo class="pointer-events-none absolute -bottom-2.5 right-4 size-22 text-accent opacity-10" />
         <div class="relative">
             <div class="font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-accent-content">Core</div>
             <div class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">The UI component framework for Django</div>

@@ -3,6 +3,11 @@
     {{ 'DOCS_HEAD'|env }}
     <title>{{ meta_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if meta_description %}<meta name="description" content="{{ meta_description }}">{% endif %}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ meta_title }}">
+    {% if meta_description %}<meta property="og:description" content="{{ meta_description }}">{% endif %}
+    <meta name="twitter:card" content="summary">
     <link rel="stylesheet" href="{% static 'app.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,6 +39,14 @@
           document.documentElement.classList.remove('dark')
         }
     </script>
+
+    <script>
+        // Demo placeholder links (href="#") shouldn't jump the page to the top.
+        // Real anchors (#section) and full URLs are unaffected; any @click still fires.
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('a[href="#"]')) e.preventDefault();
+        });
+    </script>
     <style>
         /* alpine */
         [x-cloak] { display: none }
@@ -43,8 +56,6 @@
 </head>
 <body class="font-sans bg-[var(--color-bg)] min-h-screen bg-fixed">
     <c-navbar />
-    {# Dev-only tool for trialling syntax themes; remove before release. #}
-    <c-hljs-switcher />
 
     <div class="pt-[73px]">
         {{ slot }}

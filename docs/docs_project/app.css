@@ -53,14 +53,14 @@
     :root:not(.dark) {
         /* Light page background a hair deeper than the kit default (zinc-50): midway to zinc-100. */
         --color-bg: color-mix(in oklab, var(--color-zinc-50) 50%, var(--color-zinc-100));
-        /* Shadow-only structural surfaces: drop the border on cards, dialogs, menus. */
-        --color-box-border: transparent;
+        /* Shadow-only cards: drop just the card border. Dialogs, menus, etc. keep --color-box-border. */
+        --color-card-border: transparent;
     }
 
     .dark {
         --color-accent: var(--color-teal-400);
         --color-accent-content: var(--color-teal-300);
-        --color-box-border: transparent;
+        --color-card-border: transparent;
         /* accent-foreground stays white (from :root): white reads on teal in both modes.
            Only flip it if the accent itself becomes light/neutral in dark mode. */
 

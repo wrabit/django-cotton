@@ -15,10 +15,10 @@
         </div>
 
         <div x-data="{ slide: 0 }" x-cloak>
-            <div class="grid">
+            <div class="grid grid-cols-1">
                 {# Slide 1 — Card (component + slot) #}
                 <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 0">
-                    <div class="grid md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="flex flex-col">
                             <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="card.html">{% cotton:verbatim %}{% verbatim %}
@@ -52,7 +52,7 @@
 
                 {# Slide 2 — Field (props drive the output) #}
                 <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 1">
-                    <div class="grid md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="flex flex-col">
                             <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="field.html">{% cotton:verbatim %}{% verbatim %}
@@ -85,7 +85,7 @@
 
                 {# Slide 3 — Button (variant prop) #}
                 <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 2 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 2">
-                    <div class="grid md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="flex flex-col">
                             <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="button.html">{% cotton:verbatim %}{% verbatim %}
@@ -230,8 +230,8 @@
         <div class="w-1/2 mt-5 ml-auto justify-end px-0 py-2 border border-zinc-200 dark:border-zinc-700 rounded no-underline text-right flex items-center">
             <span>
                 <span class="uppercase text-xs tracking-wider block text-gray-400">next</span>
-                <span class="text-white text-lg prose-a:text-gray-900 prose-a:dark:text-white prose-a:no-underline">
-                    <a href="{% url 'thinking-in-components' %}">Thinking in Components</a>
+                <span class="text-white text-base prose-a:text-gray-900 prose-a:dark:text-white prose-a:no-underline">
+                    <a href="{% url 'quickstart' %}">Quickstart</a>
                 </span>
             </span>
             <c-icons.chevron-right class="size-14 text-zinc-300 dark:text-teal-600" />

@@ -21,7 +21,7 @@
     <c-sample>
         <c-ui.navbar :sticky="False">
             <c-slot name="brand">
-                <span class="size-6 rounded-md bg-accent"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg>
                 <span class="font-semibold">Acme</span>
             </c-slot>
 
@@ -39,7 +39,7 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.navbar>
     <c-slot name="brand">
-        <span class="size-6 rounded-md bg-accent"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg>
         <span class="font-semibold">Acme</span>
     </c-slot>
 
@@ -66,7 +66,7 @@
             <div>
                 <p class="text-xs font-medium text-zinc-400 mb-1.5">text (default)</p>
                 <c-ui.navbar :sticky="False" variant="text" class="rounded-box">
-                    <c-slot name="brand"><span class="size-5 rounded bg-accent"></span><span class="font-semibold">Acme</span></c-slot>
+                    <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
                     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
                     <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
                     <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
@@ -75,7 +75,7 @@
             <div>
                 <p class="text-xs font-medium text-zinc-400 mb-1.5">underline</p>
                 <c-ui.navbar :sticky="False" variant="underline" class="rounded-box">
-                    <c-slot name="brand"><span class="size-5 rounded bg-accent"></span><span class="font-semibold">Acme</span></c-slot>
+                    <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
                     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
                     <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
                     <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
@@ -84,7 +84,7 @@
             <div>
                 <p class="text-xs font-medium text-zinc-400 mb-1.5">pill</p>
                 <c-ui.navbar :sticky="False" variant="pill" class="rounded-box">
-                    <c-slot name="brand"><span class="size-5 rounded bg-accent"></span><span class="font-semibold">Acme</span></c-slot>
+                    <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
                     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
                     <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
                     <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
@@ -93,7 +93,7 @@
             <div>
                 <p class="text-xs font-medium text-zinc-400 mb-1.5">ghost</p>
                 <c-ui.navbar :sticky="False" variant="ghost" class="rounded-box">
-                    <c-slot name="brand"><span class="size-5 rounded bg-accent"></span><span class="font-semibold">Acme</span></c-slot>
+                    <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
                     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
                     <c-ui.navbar.item href="#">Projects</c-ui.navbar.item>
                     <c-ui.navbar.item href="#">Team</c-ui.navbar.item>
@@ -118,12 +118,12 @@
 
     <c-sample>
         <c-ui.navbar :sticky="False" class="rounded-box">
-            <c-slot name="brand"><span class="size-5 rounded bg-accent"></span><span class="font-semibold">Acme</span></c-slot>
+            <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
             <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
 
             <c-ui.dropdown align="start">
                 <c-slot name="trigger">
-                    <button type="button" class="inline-flex items-center gap-1 px-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                    <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                         Resources
                         <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                     </button>
@@ -135,7 +135,7 @@
 
             <c-ui.dropdown align="start" min_width="34rem">
                 <c-slot name="trigger">
-                    <button type="button" class="inline-flex items-center gap-1 px-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                    <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                         Solutions
                         <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                     </button>
@@ -165,7 +165,7 @@
 
     <c-ui.dropdown align="start">
         <c-slot name="trigger">
-            <button type="button" class="inline-flex items-center gap-1 px-2 py-2 text-sm font-medium ...">
+            <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium ...">
                 Resources
                 <svg><!-- chevron --></svg>
             </button>
@@ -189,12 +189,12 @@
 
     <c-section id="mobile" title="Mobile menu">
 
-    <p>The links and <code>actions</code> are mirrored into the mobile menu automatically. Use the <code>drawer</code> slot for nav shown only on mobile (for example a <code>c-ui.navlist</code> of secondary links that live in a sidebar on desktop), and set <code>:sheet="True"</code> to open the menu as a slide-over instead of an inline collapse. Resize the window and open the menu to compare.</p>
+    <p>The links and <code>actions</code> are mirrored into the mobile menu automatically. Use the <code>mobile</code> slot for nav shown only on mobile (for example a <code>c-ui.navlist</code> of secondary links that live in a sidebar on desktop), and set <code>:drawer="True"</code> to open the menu as a slide-over instead of an inline collapse. Resize the window and open the menu to compare.</p>
 
     <c-sample>
-        <c-ui.navbar :sticky="False" :sheet="True">
+        <c-ui.navbar :sticky="False" :drawer="True">
             <c-slot name="brand">
-                <span class="size-6 rounded-md bg-accent"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg>
                 <span class="font-semibold">Acme</span>
             </c-slot>
 
@@ -205,7 +205,7 @@
                 <c-ui.button size="sm">Sign in</c-ui.button>
             </c-slot>
 
-            <c-slot name="drawer">
+            <c-slot name="mobile">
                 <c-ui.navlist variant="sidebar">
                     <c-ui.navlist.group heading="Resources">
                         <c-ui.navlist.item href="#">Docs</c-ui.navlist.item>
@@ -216,7 +216,7 @@
         </c-ui.navbar>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.navbar :sheet="True">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.navbar :drawer="True">
     <c-slot name="brand">...</c-slot>
 
     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
@@ -227,7 +227,7 @@
     </c-slot>
 
     {# shown only in the mobile menu #}
-    <c-slot name="drawer">
+    <c-slot name="mobile">
         <c-ui.navlist variant="sidebar">
             <c-ui.navlist.group heading="Resources">
                 <c-ui.navlist.item href="#">Docs</c-ui.navlist.item>
@@ -259,11 +259,11 @@
             description="Desktop nav item style. The mobile menu always uses a plain stacked style."
         />
         <c-api-prop
-            name=":sheet"
+            name=":drawer"
             type="bool"
             :options="['True', 'False']"
             default="False"
-            description="Open the mobile menu as a slide-over panel instead of an inline collapse."
+            description="Open the mobile menu as a slide-over (c-ui.drawer) instead of an inline collapse."
         />
         <c-api-prop
             name="class"
@@ -295,7 +295,7 @@
             description="Right region for actions such as buttons or an avatar."
         />
         <c-api-prop
-            name="drawer"
+            name="mobile"
             type="—"
             default=""
             description="Content shown only in the mobile menu, below the mirrored links and actions. Ideal for a c-ui.navlist of secondary nav that is hidden on desktop."

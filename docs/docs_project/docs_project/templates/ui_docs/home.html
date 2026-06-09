@@ -181,7 +181,7 @@
             <c-ui.card class="space-y-3">
                 <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Article Tags</h3>
                 <div class="flex flex-wrap gap-2">
-                    <c-ui.badge href="javascript:void(0)" color="purple" variant="pill">
+                    <c-ui.badge href="#" color="purple" variant="pill">
                         <c-slot name="icon_leading">
                             <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
@@ -189,7 +189,7 @@
                         </c-slot>
                         Django
                     </c-ui.badge>
-                    <c-ui.badge href="javascript:void(0)" color="blue" variant="pill">
+                    <c-ui.badge href="#" color="blue" variant="pill">
                         <c-slot name="icon_leading">
                             <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
@@ -197,13 +197,13 @@
                         </c-slot>
                         Python
                     </c-ui.badge>
-                    <c-ui.badge href="javascript:void(0)" color="teal" variant="pill">Web Dev</c-ui.badge>
-                    <c-ui.badge href="javascript:void(0)" color="pink" variant="pill">Tutorial</c-ui.badge>
+                    <c-ui.badge href="#" color="teal" variant="pill">Web Dev</c-ui.badge>
+                    <c-ui.badge href="#" color="pink" variant="pill">Tutorial</c-ui.badge>
                 </div>
             </c-ui.card>
 
             {# Tooltip toolbar - imaginary editing studio: free-flowing bar, equal cells (lucide icons) #}
-            <div class="flex items-stretch rounded-box border border-zinc-200 dark:border-zinc-700 bg-[var(--color-surface)] divide-x divide-zinc-200 dark:divide-zinc-700 shadow-[var(--shadow-box)]">
+            <div class="flex items-stretch overflow-hidden rounded-box border border-zinc-200 dark:border-zinc-700 bg-[var(--color-surface)] divide-x divide-zinc-200 dark:divide-zinc-700 shadow-[var(--shadow-box)]">
                 <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
                     <c-ui.tooltip size="sm" content="Capture">
                         <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">

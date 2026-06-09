@@ -63,11 +63,13 @@
                         <c-icons.github class="size-5 shrink-0" />
                         {% if github_ui_stars and github_ui_stars != "0" %}<span class="hidden md:inline-block text-[11px] font-medium tabular-nums">{{ github_ui_stars }}</span>{% endif %}
                     </a>
+                    {% if pypi_ui_version %}<a href="https://pypi.org/project/django-cotton-ui/" target="_blank" aria-label="django-cotton-ui on PyPI" class="hidden md:inline-block text-[11px] font-medium text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_ui_version }}</a>{% endif %}
                 {% else %}
                     <a href="{{ github_core_repo }}" target="_blank" aria-label="django-cotton on GitHub" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center gap-2 transition-colors">
                         <c-icons.github class="size-5 shrink-0" />
                         {% if github_core_stars and github_core_stars != "0" %}<span class="hidden md:inline-block text-[11px] font-medium tabular-nums">{{ github_core_stars }}</span>{% endif %}
                     </a>
+                    {% if pypi_core_version %}<a href="https://pypi.org/project/django-cotton/" target="_blank" aria-label="django-cotton on PyPI" class="hidden md:inline-block text-[11px] font-medium text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_core_version }}</a>{% endif %}
                 {% endif %}
                 <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors flex items-center space-x-2">
                     <c-icons.discord class="size-6" />

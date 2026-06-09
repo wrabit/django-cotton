@@ -89,7 +89,6 @@ INSTALLED_APPS = [
     <!-- Alpine.js plugins, then Alpine core (deferred scripts run in order) -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
@@ -100,9 +99,8 @@ INSTALLED_APPS = [
     <h3>Required Alpine.js Plugins</h3>
     <p>Cotton UI components use these Alpine.js plugins:</p>
     <ul>
-        <li><code>@alpinejs/collapse</code> - For accordion and collapsible content</li>
-        <li><code>@alpinejs/focus</code> - For focus trapping in dialogs and dropdowns</li>
-        <li><code>@alpinejs/mask</code> - For input masking (datepicker, etc.)</li>
+        <li><code>@alpinejs/collapse</code> - Accordions, the collapse component and the mobile navbar menu</li>
+        <li><code>@alpinejs/focus</code> - Focus trapping in dialogs and drawers, and keyboard focus in dropdowns and menus</li>
     </ul>
     <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
         Plugin scripts must be loaded <strong>before</strong> the Alpine.js core script.

@@ -143,7 +143,7 @@
                 </div>
 
                 <div>
-                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Border</div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Card border</div>
                     <div class="inline-flex rounded-control border border-zinc-200 dark:border-zinc-700 bg-[var(--color-input-bg)] p-0.5">
                         <button type="button" @click="setBorders(true)"
                             class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
@@ -222,7 +222,7 @@
                     <div class="flex flex-wrap gap-2 items-center">
                         <c-ui.badge color="green" size="sm">Operational</c-ui.badge>
                         <c-ui.badge color="amber" size="sm">Degraded</c-ui.badge>
-                        <c-ui.badge href="javascript:void(0)" color="teal" variant="pill">Tag</c-ui.badge>
+                        <c-ui.badge href="#" color="teal" variant="pill">Tag</c-ui.badge>
                     </div>
                 </div>
 
@@ -325,7 +325,7 @@
                     // On → explicitly restore the gray (mode- and gray-remap-aware) so it overrides this
                     // site's shadow-only default; off → transparent. (removeProperty wouldn't win over the
                     // site stylesheet, so set the value directly.)
-                    el.style.setProperty('--color-box-border', this.borders ? (this.isDark ? 'var(--color-zinc-700)' : 'var(--color-zinc-200)') : 'transparent');
+                    el.style.setProperty('--color-card-border', this.borders ? (this.isDark ? 'var(--color-zinc-700)' : 'var(--color-zinc-200)') : 'transparent');
                 },
 
                 setAccent(a) { this.accent = a; this.apply(); },
@@ -367,7 +367,7 @@
                         '    --shadow-input: ' + this.inputShadow + ';\n\n' +
                         '    /* Structural surfaces */\n' +
                         '    --shadow-box: ' + this.structuralShadow + ';\n' +
-                        (this.borders ? '' : '    --color-box-border: transparent;  /* shadow-only: cards, dialogs, menus */\n') +
+                        (this.borders ? '' : '    --color-card-border: transparent;  /* shadow-only cards (dialogs, menus, etc. keep --color-box-border) */\n') +
                         '}';
                 },
 

@@ -11,7 +11,7 @@
         <c-index-sublink section-id="horizontal"><a href="#horizontal" class="no-underline">Horizontal</a></c-index-sublink>
         <c-index-sublink section-id="checked"><a href="#checked" class="no-underline">Checked by Default</a></c-index-sublink>
         <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
-        <c-index-sublink section-id="buttons"><a href="#buttons" class="no-underline">Button Style</a></c-index-sublink>
+        <c-index-sublink section-id="segmented"><a href="#segmented" class="no-underline">Segmented</a></c-index-sublink>
         <c-index-sublink section-id="cards"><a href="#cards" class="no-underline">Checkbox Cards</a></c-index-sublink>
         <c-index-sublink section-id="vertical-cards"><a href="#vertical-cards" class="no-underline">Vertical Cards</a></c-index-sublink>
         <c-index-sublink section-id="cards-with-icons"><a href="#cards-with-icons" class="no-underline">Cards With Icons</a></c-index-sublink>
@@ -146,19 +146,19 @@
     </c-sample>
     </c-section>
 
-    <c-section id="buttons" title="Button Style">
+    <c-section id="segmented" title="Segmented">
 
-    <p>Display checkboxes as a horizontal button group with <code>variant="buttons"</code>.</p>
+    <p>Display checkboxes as a horizontal button group with <code>variant="segmented"</code>.</p>
 
     <c-sample>
-        <c-ui.checkbox.group name="filters" label="Apply filters" variant="buttons">
+        <c-ui.checkbox.group name="filters" label="Apply filters" variant="segmented">
             <c-ui.checkbox value="active" label="Active" />
             <c-ui.checkbox value="pending" label="Pending" />
             <c-ui.checkbox value="archived" label="Archived" />
         </c-ui.checkbox.group>
 
         <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="filters" label="Apply filters" variant="buttons">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox.group name="filters" label="Apply filters" variant="segmented">
     <c-ui.checkbox value="active" label="Active" />
     <c-ui.checkbox value="pending" label="Pending" />
     <c-ui.checkbox value="archived" label="Archived" />
@@ -454,7 +454,7 @@
         <c-api-prop name="label" type="str" default="" description="Group label displayed above options"></c-api-prop>
         <c-api-prop name="description" type="str" default="" description="Help text displayed below label"></c-api-prop>
         <c-api-prop name=":values" type="list" default="[]" description="List of initially checked values (e.g. :values=&quot;['option1', 'option2']&quot;)"></c-api-prop>
-        <c-api-prop name="variant" type="str" :options="['default', 'buttons', 'cards']" default="default" description="Visual style of the checkbox group"></c-api-prop>
+        <c-api-prop name="variant" type="str" :options="['default', 'segmented', 'cards']" default="default" description="Visual style of the checkbox group"></c-api-prop>
         <c-api-prop name=":horizontal" type="bool" :options="['True', 'False']" default="False" description="With the default variant, lays options out in a wrapping row instead of a vertical stack."></c-api-prop>
         <c-api-prop name="class" type="str" default="" description="Additional CSS classes for the options container"></c-api-prop>
     </c-api-props>

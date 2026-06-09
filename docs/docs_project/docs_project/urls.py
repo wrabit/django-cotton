@@ -79,7 +79,7 @@ urlpatterns = [
     path("ui", views.build_view("ui_docs/home"), name="ui"),
     path("ui/installation", views.build_view("ui_docs/installation"), name="ui-installation"),
     path("ui/theming", views.build_view("ui_docs/theming"), name="ui-theming"),
-    path("ui/theme-builder", views.build_view("ui_docs/themes", title="Theme Builder - Cotton UI"), name="ui-theme-builder"),
+    path("ui/theme-builder", views.build_view("ui_docs/themes", title="Theme Builder - Django Cotton UI"), name="ui-theme-builder"),
     path("ui/accordion", views.build_view("ui_docs/accordion"), name="ui-accordion"),
     path("ui/alert", views.build_view("ui_docs/alert"), name="ui-alert"),
     path("ui/avatar", views.build_view("ui_docs/avatar"), name="ui-avatar"),

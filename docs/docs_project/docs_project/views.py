@@ -6,11 +6,26 @@ def snake_to_title(snake_str):
     return snake_str.replace("_", " ").title()
 
 
-def build_view(template_name, title=None):
-    title = title or f"{snake_to_title(template_name)} - Django Cotton"
+def build_view(template_name, title=None, description=None):
+    # Derive a clean label from the leaf name (e.g. "ui_docs/navbar" -> "Navbar",
+    # "form_fields" -> "Form Fields") rather than title-casing the whole path.
+    label = snake_to_title(template_name.rsplit("/", 1)[-1])
+    is_ui = template_name.startswith("ui_docs/")
+
+    if title is None:
+        title = f"{label} - Django Cotton UI" if is_ui else f"{label} - Django Cotton"
+
+    if description is None:
+        description = (
+            f"{label} component for Django Cotton UI: an accessible, themeable component "
+            f"built with Tailwind CSS and Alpine.js. Live examples and full API reference."
+            if is_ui else
+            f"{label} - Django Cotton: build reusable server-side UI components in single "
+            f"HTML files, no Python required, fully interoperable with Django templates."
+        )
 
     def view(request):
-        context = {"meta_title": title}
+        context = {"meta_title": title, "meta_description": description}
 
         # Datepicker docs: dynamic limit dates within the current month, so the
         # disabled / min / max examples are always visible in the opened calendar.

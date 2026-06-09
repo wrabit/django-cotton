@@ -58,11 +58,19 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
-            <code class="!text-teal-600">COTTON_ENABLE_CONTEXT_ISOLATION</code>
+            <code class="!text-teal-600">COTTON_ISOLATE_BY_DEFAULT</code>
             <div class="text-sm">bool (default: False)</div>
         </div>
         <div>
-            When enabled, a component receives only the data explicitly passed to it (its attributes and c-vars) instead of inheriting the full parent template context. Turn this on for stricter, more predictable component isolation.
+            <div class="mb-4">When set to <code class="!text-teal-600">True</code>, every component is rendered with <c-highlight>Smart Isolation</c-highlight>: it cannot see variables from the surrounding parent template (preventing accidental context leaks), but it does still receive global context-processor output such as <code>request</code>, <code>user</code>, <code>messages</code>, <code>perms</code> and any of your own custom processors.</div>
+
+            <div class="mb-4">Processor output is captured once per request and reused across every component on the page &mdash; no extra processor invocations regardless of how many components you render.</div>
+
+            <div class="mb-4">For <c-highlight>total isolation</c-highlight> (block context processors too), add the <code>only</code> flag to an individual component.</div>
+
+            <div>
+                <div class="text-sm">This setting replaces the experimental <code>COTTON_ENABLE_CONTEXT_ISOLATION</code> flag, which continues to work but emits a <code>DeprecationWarning</code>.</div>
+            </div>
         </div>
     </div>
 

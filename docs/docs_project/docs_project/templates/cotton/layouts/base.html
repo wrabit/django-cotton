@@ -8,6 +8,9 @@
     <meta property="og:title" content="{{ meta_title }}">
     {% if meta_description %}<meta property="og:description" content="{{ meta_description }}">{% endif %}
     <meta name="twitter:card" content="summary">
+    <!-- Cotton UI precompiled stylesheet, linked exactly as a consumer would (dogfooding).
+         app.css loads after so the docs token overrides win. -->
+    <link rel="stylesheet" href="{% static 'cotton-ui/cotton-ui.css' %}">
     <link rel="stylesheet" href="{% static 'app.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

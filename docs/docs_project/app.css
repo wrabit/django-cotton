@@ -1,9 +1,10 @@
 @import "tailwindcss";
-/* Tokens only (NOT the compiled cotton-ui.css, that ships its own preflight and
-   @layers, which would double up against this build). Kit classes are generated
-   from the @source scan of the kit templates below. */
-@import "./django_cotton_ui/static/cotton-ui/cotton-ui.tokens.css";
 @plugin "@tailwindcss/typography";
+
+/* The kit's components, classes and design tokens come from the precompiled
+   cotton-ui.css linked before this file in the base layout (dogfooding the
+   consumer path). This build scans only the docs' own templates; kit classes are
+   not regenerated here, and token overrides below apply to the linked CSS. */
 
 /* Use class-based dark mode (looks for .dark on html element).
    A nested `.light` scope opts a subtree back out of dark styling, so previews
@@ -20,9 +21,8 @@
     }
 }
 
-/* Content sources for class detection */
+/* Content sources for class detection (docs templates only; kit classes ship in cotton-ui.css) */
 @source "./docs_project/templates/**/*.html";
-@source "./django_cotton_ui/templates/**/*.html";
 
 /* Theme customization (replaces tailwind.config.js theme.extend) */
 @theme {
@@ -114,48 +114,6 @@
     .btn-default { background-color: var(--color-zinc-100); color: var(--color-zinc-800); border: 1px solid var(--color-zinc-200); }
     .dark .btn-default { background-color: var(--color-zinc-700); color: #ffffff; border-color: var(--color-zinc-600); }
     .btn-danger { background-color: var(--color-red-600); color: #ffffff; }
-}
-
-/* Badge component - safelist colors for dynamic class generation */
-/* In v4, we use @variant to force generation of these classes */
-@variant dark {
-    .bg-zinc-100, .text-zinc-700, .bg-zinc-800, .text-zinc-300,
-    .bg-red-100, .text-red-700, .bg-red-900\/30, .text-red-400,
-    .bg-orange-100, .text-orange-700, .bg-orange-900\/30, .text-orange-400,
-    .bg-amber-100, .text-amber-700, .bg-amber-900\/30, .text-amber-400,
-    .bg-yellow-100, .text-yellow-700, .bg-yellow-900\/30, .text-yellow-400,
-    .bg-lime-100, .text-lime-700, .bg-lime-900\/30, .text-lime-400,
-    .bg-green-100, .text-green-700, .bg-green-900\/30, .text-green-400,
-    .bg-emerald-100, .text-emerald-700, .bg-emerald-900\/30, .text-emerald-400,
-    .bg-teal-100, .text-teal-700, .bg-teal-900\/30, .text-teal-400,
-    .bg-cyan-100, .text-cyan-700, .bg-cyan-900\/30, .text-cyan-400,
-    .bg-sky-100, .text-sky-700, .bg-sky-900\/30, .text-sky-400,
-    .bg-blue-100, .text-blue-700, .bg-blue-900\/30, .text-blue-400,
-    .bg-indigo-100, .text-indigo-700, .bg-indigo-900\/30, .text-indigo-400,
-    .bg-violet-100, .text-violet-700, .bg-violet-900\/30, .text-violet-400,
-    .bg-purple-100, .text-purple-700, .bg-purple-900\/30, .text-purple-400,
-    .bg-fuchsia-100, .text-fuchsia-700, .bg-fuchsia-900\/30, .text-fuchsia-400,
-    .bg-pink-100, .text-pink-700, .bg-pink-900\/30, .text-pink-400,
-    .bg-rose-100, .text-rose-700, .bg-rose-900\/30, .text-rose-400,
-    /* Solid variant colors */
-    .bg-zinc-700, .text-white, .bg-zinc-300, .text-zinc-900,
-    .bg-red-600, .bg-red-500,
-    .bg-orange-600, .bg-orange-500,
-    .bg-amber-600, .bg-amber-500,
-    .bg-yellow-600, .bg-yellow-500,
-    .bg-lime-600, .bg-lime-500,
-    .bg-green-600, .bg-green-500,
-    .bg-emerald-600, .bg-emerald-500,
-    .bg-teal-600, .bg-teal-500,
-    .bg-cyan-600, .bg-cyan-500,
-    .bg-sky-600, .bg-sky-500,
-    .bg-blue-600, .bg-blue-500,
-    .bg-indigo-600, .bg-indigo-500,
-    .bg-violet-600, .bg-violet-500,
-    .bg-purple-600, .bg-purple-500,
-    .bg-fuchsia-600, .bg-fuchsia-500,
-    .bg-pink-600, .bg-pink-500,
-    .bg-rose-600, .bg-rose-500 {}
 }
 
 /* Prevent horizontal overflow */

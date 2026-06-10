@@ -1,10 +1,10 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "buildCommand": "npm install && npx tailwindcss -c ./tailwind.config.js -o ./docs_project/static/app.css --minify"
+    "buildCommand": ".venv/bin/python manage.py cotton_ui_sources && npm install && npx @tailwindcss/cli -i app.css -o ./docs_project/static/app.css --minify"
   },
   "deploy": {
-    "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn docs_project.wsgi --bind 0.0.0.0:${PORT:-8000}",
+    "startCommand": "python manage.py migrate && python manage.py collectstatic --noinput --ignore 'cotton-ui.css' --ignore 'cotton-ui.tokens.css' --ignore 'cotton-ui.min.js' --ignore 'cotton-ui.min.js.map' && gunicorn docs_project.wsgi --bind 0.0.0.0:${PORT:-8000}",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }

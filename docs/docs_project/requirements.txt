@@ -1,9 +1,12 @@
+# Generated from pyproject.toml [project.dependencies] by deploy_docs.yml. Do not edit.
+# django-cotton (core) is intentionally absent: it's vendored via `cp -r` at deploy
+# (the in-repo dev copy), and its only dependency, django, is already here.
 django~=5.1
 heroicons~=2.6.0
 cotton-icons
+django-cotton-ui>=0.2.0
 gunicorn~=22.0
 asgiref>=3.6.0,<4
 whitenoise~=6.2.0
 redis~=5.0.1
 djlint~=1.36.2
-django-cotton

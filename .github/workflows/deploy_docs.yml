@@ -25,6 +25,20 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
+      - name: Generate requirements.txt from pyproject
+        run: |
+          cd docs/docs_project
+          python3 - <<'PY'
+          import tomllib
+          deps = tomllib.load(open("pyproject.toml", "rb"))["project"]["dependencies"]
+          header = (
+              "# Generated from pyproject.toml [project.dependencies] by deploy_docs.yml. Do not edit.\n"
+              "# django-cotton (core) is intentionally absent: it's vendored via `cp -r` at deploy\n"
+              "# (the in-repo dev copy), and its only dependency, django, is already here.\n"
+          )
+          open("requirements.txt", "w").write(header + "\n".join(deps) + "\n")
+          PY
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:

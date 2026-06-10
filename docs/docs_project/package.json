@@ -2,7 +2,9 @@
   "name": "cotton-docs",
   "version": "1.0.0",
   "scripts": {
+    "prebuild": "python manage.py cotton_ui_sources",
     "build": "npx @tailwindcss/cli -i app.css -o docs_project/static/app.css --minify",
+    "prewatch": "python manage.py cotton_ui_sources",
     "watch": "npx @tailwindcss/cli -i app.css -o docs_project/static/app.css --watch"
   },
   "devDependencies": {

@@ -15,7 +15,7 @@
         <c-index-sublink section-id="advanced"><a href="#advanced" class="no-underline">Advanced</a></c-index-sublink>
     </c-slot>
 
-    <p>Every part of Cotton UI's look is driven by CSS variables you can override. Grays use Tailwind's built-in <code>zinc</code> and work out of the box. A neutral <strong>accent</strong> ships by default via <code>cotton-ui.css</code>, and radius, surfaces, shadows and the focus ring are all themeable tokens. Start with the main ones below, then see <a href="#tokens">All Tokens</a> for the complete list.</p>
+    <p>Every part of Cotton UI's look is driven by CSS variables you can override. Grays use Tailwind's built-in <code>zinc</code> and work out of the box. A neutral <strong>accent</strong> ships by default, and radius, surfaces, shadows and the focus ring are all themeable tokens. Override any of them with a <code>:root</code> block (and a <code>.dark</code> block for dark mode), wherever you set your tokens. Start with the main ones below, then see <a href="#tokens">All Tokens</a> for the complete list.</p>
 
     <c-section id="accent-color" title="Changing the Accent Color">
     <p>The accent drives primary buttons, active states and focus rings. Cotton UI uses a 3-value accent system:</p>
@@ -26,33 +26,28 @@
         <li><code>--color-accent-foreground</code> - text and icons on accent fills</li>
     </ul>
 
-    <p>A neutral zinc accent is imported from <code>cotton-ui.css</code> by default. To brand the kit, override <code>--color-accent</code> in your own <code>@theme</code> after that import. Define the dark-mode values in <code>@layer theme</code> so they win at the right specificity:</p>
+    <p>A neutral zinc accent ships by default. To brand the kit, override the accent tokens with a <code>:root</code> block and a <code>.dark</code> block for dark mode. This goes in the inline <code>&lt;style&gt;</code> from the no-build setup, or your <code>app.css</code> on a custom build, the same three tokens either way:</p>
 
     <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
-@import "tailwindcss";
-@import ".../django_cotton_ui/static/cotton-ui/cotton-ui.css";
-
-@theme {
+:root {
     --color-accent: var(--color-blue-500);
     --color-accent-content: var(--color-blue-600);
     --color-accent-foreground: var(--color-white);
 }
 
-@layer theme {
-    .dark {
-        --color-accent: var(--color-blue-400);
-        --color-accent-content: var(--color-blue-300);
-        --color-accent-foreground: var(--color-blue-950);
-    }
+.dark {
+    --color-accent: var(--color-blue-400);
+    --color-accent-content: var(--color-blue-300);
+    --color-accent-foreground: var(--color-blue-950);
 }
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
     <p class="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
-        Defining the accent in <code>@theme</code> registers it with Tailwind, enabling utilities like <code>bg-accent</code> and <code>bg-accent/10</code>. Swap <code>blue</code> for any Tailwind hue, or your own values.
+        Use <code>:root</code> / <code>.dark</code>, not <code>@theme</code>: the kit already registers these tokens (so utilities like <code>bg-accent</code> and <code>bg-accent/10</code> work), and a plain <code>:root</code> override beats the kit's baked-in value, where <code>@theme</code> would lose. Swap <code>blue</code> for any Tailwind hue, or your own values.
     </p>
 
     <p class="mt-4">Prefer a live preview? The <a href="{% url 'ui-theme-builder' %}">Theme Builder</a> lets you tweak the accent, radius, surfaces and focus ring, then copies the generated CSS.</p>
@@ -68,106 +63,91 @@
     <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
-@theme {
+:root {
     --color-muted: var(--color-zinc-900);
 }
 
-@layer theme {
-    .dark {
-        --color-muted: var(--color-zinc-100);
-    }
+.dark {
+    --color-muted: var(--color-zinc-100);
 }
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
-    <h3>Radio Button Comparison</h3>
+    <h3>Side by side</h3>
 
-    <c-sample>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div>
-                <h4 class="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">With Accent (default)</h4>
-                <c-ui.radio.group name="notifications_accent" value="all">
-                    <c-ui.radio value="all" label="All notifications" description="Receive all updates" />
-                    <c-ui.radio value="important" label="Important only" description="Only critical updates" />
-                    <c-ui.radio value="none" label="None" description="No notifications" />
-                </c-ui.radio.group>
+    <div class="not-prose mt-6 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-[var(--color-bg)] p-8">
+        <div class="grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-10">
+            <h4 class="text-sm font-medium text-zinc-700 dark:text-zinc-300">With Accent (default)</h4>
+            <h4 class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Without Accent (:accent="False")</h4>
+
+            {# Radio #}
+            <c-ui.radio.group name="notifications_accent" value="all">
+                <c-ui.radio value="all" label="All notifications" description="Receive all updates" />
+                <c-ui.radio value="important" label="Important only" description="Only critical updates" />
+            </c-ui.radio.group>
+            <c-ui.radio.group name="notifications_mono" value="all">
+                <c-ui.radio value="all" label="All notifications" description="Receive all updates" :accent="False" />
+                <c-ui.radio value="important" label="Important only" description="Only critical updates" :accent="False" />
+            </c-ui.radio.group>
+
+            {# Radio cards #}
+            <c-ui.radio.group name="plan_accent" variant="cards" class="flex-col" value="pro">
+                <c-ui.radio value="starter" label="Starter" description="$10/month" />
+                <c-ui.radio value="pro" label="Pro" description="$25/month" />
+            </c-ui.radio.group>
+            <c-ui.radio.group name="plan_mono" variant="cards" class="flex-col" value="pro">
+                <c-ui.radio value="starter" label="Starter" description="$10/month" :accent="False" />
+                <c-ui.radio value="pro" label="Pro" description="$25/month" :accent="False" />
+            </c-ui.radio.group>
+
+            {# Checkbox #}
+            <c-ui.checkbox.group name="features_accent" :values="['analytics']">
+                <c-ui.checkbox value="analytics" label="Analytics" description="Track user behavior" />
+                <c-ui.checkbox value="reports" label="Reports" description="Generate custom reports" />
+            </c-ui.checkbox.group>
+            <c-ui.checkbox.group name="features_mono" :values="['analytics']">
+                <c-ui.checkbox value="analytics" label="Analytics" description="Track user behavior" :accent="False" />
+                <c-ui.checkbox value="reports" label="Reports" description="Generate custom reports" :accent="False" />
+            </c-ui.checkbox.group>
+
+            {# Switch #}
+            <div class="flex items-center gap-3">
+                <c-ui.switch name="wifi_accent" checked />
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Wi-Fi</span>
             </div>
-            <div>
-                <h4 class="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">Without Accent (:accent="False")</h4>
-                <c-ui.radio.group name="notifications_mono" value="all">
-                    <c-ui.radio value="all" label="All notifications" description="Receive all updates" :accent="False" />
-                    <c-ui.radio value="important" label="Important only" description="Only critical updates" :accent="False" />
-                    <c-ui.radio value="none" label="None" description="No notifications" :accent="False" />
-                </c-ui.radio.group>
+            <div class="flex items-center gap-3">
+                <c-ui.switch name="wifi_mono" checked :accent="False" />
+                <span class="text-sm text-zinc-600 dark:text-zinc-400">Wi-Fi</span>
             </div>
+
+            {# Tabs #}
+            <c-ui.tabs>
+                <c-ui.tabs.tab name="Account"><p class="text-sm text-zinc-500 pt-3">Account settings.</p></c-ui.tabs.tab>
+                <c-ui.tabs.tab name="Password"><p class="text-sm text-zinc-500 pt-3">Password settings.</p></c-ui.tabs.tab>
+            </c-ui.tabs>
+            <c-ui.tabs :accent="False">
+                <c-ui.tabs.tab name="Account"><p class="text-sm text-zinc-500 pt-3">Account settings.</p></c-ui.tabs.tab>
+                <c-ui.tabs.tab name="Password"><p class="text-sm text-zinc-500 pt-3">Password settings.</p></c-ui.tabs.tab>
+            </c-ui.tabs>
+
+            {# Progress #}
+            <c-ui.progress :value="60" />
+            <c-ui.progress :value="60" :accent="False" />
+
+            {# Pagination #}
+            <c-ui.pagination>
+                <c-ui.pagination.item href="#">1</c-ui.pagination.item>
+                <c-ui.pagination.item href="#" :current="True">2</c-ui.pagination.item>
+                <c-ui.pagination.item href="#">3</c-ui.pagination.item>
+            </c-ui.pagination>
+            <c-ui.pagination>
+                <c-ui.pagination.item href="#">1</c-ui.pagination.item>
+                <c-ui.pagination.item href="#" :current="True" :accent="False">2</c-ui.pagination.item>
+                <c-ui.pagination.item href="#">3</c-ui.pagination.item>
+            </c-ui.pagination>
         </div>
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}{# With accent (default) #}
-<c-ui.radio value="all" label="All notifications" />
-
-{# Without accent #}
-<c-ui.radio value="all" label="All notifications" :accent="False" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-
-    <h3>Card Variant Comparison</h3>
-
-    <c-sample>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div>
-                <h4 class="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">With Accent (default)</h4>
-                <c-ui.radio.group name="plan_accent" variant="cards" class="flex-col" value="pro">
-                    <c-ui.radio value="starter" label="Starter" description="$10/month" />
-                    <c-ui.radio value="pro" label="Pro" description="$25/month" />
-                    <c-ui.radio value="enterprise" label="Enterprise" description="$100/month" />
-                </c-ui.radio.group>
-            </div>
-            <div>
-                <h4 class="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">Without Accent (:accent="False")</h4>
-                <c-ui.radio.group name="plan_mono" variant="cards" class="flex-col" value="pro">
-                    <c-ui.radio value="starter" label="Starter" description="$10/month" :accent="False" />
-                    <c-ui.radio value="pro" label="Pro" description="$25/month" :accent="False" />
-                    <c-ui.radio value="enterprise" label="Enterprise" description="$100/month" :accent="False" />
-                </c-ui.radio.group>
-            </div>
-        </div>
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.radio.group name="plan" variant="cards" value="pro">
-    <c-ui.radio value="starter" label="Starter" :accent="False" />
-    <c-ui.radio value="pro" label="Pro" :accent="False" />
-</c-ui.radio.group>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-
-    <h3>Checkbox Comparison</h3>
-
-    <c-sample>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div>
-                <h4 class="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">With Accent (default)</h4>
-                <c-ui.checkbox.group name="features_accent" :values="['analytics', 'api']">
-                    <c-ui.checkbox value="analytics" label="Analytics" description="Track user behavior" />
-                    <c-ui.checkbox value="reports" label="Reports" description="Generate custom reports" />
-                    <c-ui.checkbox value="api" label="API Access" description="RESTful API endpoints" />
-                </c-ui.checkbox.group>
-            </div>
-            <div>
-                <h4 class="text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-4">Without Accent (:accent="False")</h4>
-                <c-ui.checkbox.group name="features_mono" :values="['analytics', 'api']">
-                    <c-ui.checkbox value="analytics" label="Analytics" description="Track user behavior" :accent="False" />
-                    <c-ui.checkbox value="reports" label="Reports" description="Generate custom reports" :accent="False" />
-                    <c-ui.checkbox value="api" label="API Access" description="RESTful API endpoints" :accent="False" />
-                </c-ui.checkbox.group>
-            </div>
-        </div>
-
-        <c-slot name="code">
-<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.checkbox value="analytics" label="Analytics" :accent="False" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
+    </div>
     </c-section>
 
     <c-section id="radius" title="Border Radius">
@@ -181,7 +161,7 @@
     <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
-@theme {
+:root {
     --radius-control: 0.5rem;      /* form controls */
     --radius-box: 0.75rem;  /* structural surfaces */
 }
@@ -202,17 +182,15 @@
     <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
-@theme {
+:root {
     --color-bg: var(--color-zinc-50);     /* page base */
     --color-surface: #ffffff;             /* cards, dialogs, menus */
     --color-input-bg: transparent;        /* form fields (border-defined) */
 }
 
-@layer theme {
-    .dark {
-        --color-bg: var(--color-zinc-900);
-        --color-surface: var(--color-zinc-800);
-    }
+.dark {
+    --color-bg: var(--color-zinc-900);
+    --color-surface: var(--color-zinc-800);
 }
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -220,9 +198,9 @@
     </c-section>
 
     <c-section id="tokens" title="All Tokens">
-    <p>The complete set of themeable tokens and their defaults. Override any of them in <code>@theme</code> (or <code>:root</code>), and set dark-mode values in <code>@layer theme</code> under <code>.dark</code>.</p>
+    <p>The complete set of themeable tokens and their defaults. Override any of them in a <code>:root</code> block, and set dark-mode values under <code>.dark</code>.</p>
 
-    <div class="not-prose border border-zinc-200 dark:border-zinc-700 rounded overflow-hidden px-5 my-6">
+    <div class="not-prose border border-zinc-200 dark:border-zinc-700 rounded overflow-x-auto px-5 my-6">
         {# md+: keep Token/Default/Dark (first three columns) on one line; let Purpose wrap. Below md, everything wraps as before. #}
         <table class="w-full text-sm text-left md:[&_td:nth-child(-n+3)]:whitespace-nowrap md:[&_th:nth-child(-n+3)]:whitespace-nowrap">
             <thead>

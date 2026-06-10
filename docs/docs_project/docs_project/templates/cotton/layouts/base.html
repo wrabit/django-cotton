@@ -8,6 +8,7 @@
     <meta property="og:title" content="{{ meta_title }}">
     {% if meta_description %}<meta property="og:description" content="{{ meta_description }}">{% endif %}
     <meta name="twitter:card" content="summary">
+    <!-- Kit is built into app.css (one Tailwind build), so only app.css is linked. -->
     <link rel="stylesheet" href="{% static 'app.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +23,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
     <script defer src="{% static 'alpine3.min.js' %}"></script>
 
-    <script src="{% static 'cotton-ui/cotton-ui.js' %}"></script>
+    <script src="{% static 'django_cotton_ui/cotton-ui.js' %}"></script>
 
     <!-- highlight.js theme: Atom One Light + Atom One Dark scoped to .dark -->
     <link id="hljs-theme" href="{% static 'highlight/styles/cotton-hljs.css' %}" rel="stylesheet" />

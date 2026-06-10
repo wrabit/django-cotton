@@ -234,7 +234,7 @@
             <div class="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2">Generated CSS</div>
             <div class="flex items-start justify-between gap-4 mb-3">
                 <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                    Copy this into your own <code>app.css</code>, just after the <code>@import</code> of Cotton UI, to make this theme yours. It overrides the kit's default tokens, so no component files change. See the <a href="{% url 'ui-theming' %}#accent-color">Theming guide</a> for how it works, or the <a href="{% url 'ui-theming' %}#tokens">full token reference</a>.
+                    Copy this into the inline <code>&lt;style&gt;</code> from your base template (no build) or your <code>app.css</code> after the kit import (custom build), to make this theme yours. It overrides the kit's default tokens, so no component files change. See the <a href="{% url 'ui-theming' %}#accent-color">Theming guide</a> for how it works, or the <a href="{% url 'ui-theming' %}#tokens">full token reference</a>.
                 </p>
                 <button type="button" @click="copy()"
                     class="shrink-0 cursor-pointer inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-control bg-accent text-accent-foreground text-sm font-medium hover:bg-accent-content transition-colors">
@@ -338,27 +338,22 @@
                 setBorders(v) { this.borders = v; this.apply(); },
 
                 get css() {
+                    // Gray base remaps Tailwind's own zinc palette, which only a build can
+                    // regenerate, so it stays in @theme. Accent and the component tokens use
+                    // :root / .dark, which work on both the no-build link path and a custom build.
                     const grayBlock = this.gray === 'zinc'
                         ? ''
-                        : '\n\n    /* Gray base: remap zinc to ' + this.gray + ' (components are built on the zinc scale) */\n' +
+                        : '\n\n@theme {\n' +
+                          '    /* Gray base: remap zinc to ' + this.gray + ' (components are built on the zinc scale; needs your own Tailwind build) */\n' +
                           this.shades.map((s) =>
                             '    --color-zinc-' + s + ': var(--color-' + this.gray + '-' + s + ');'
-                          ).join('\n');
-                    return '@theme {\n' +
+                          ).join('\n') +
+                          '\n}';
+                    return ':root {\n' +
                         '    /* Accent: primary buttons, links, focus ring, active states */\n' +
                         '    --color-accent: var(--color-' + this.accent + '-500);\n' +
                         '    --color-accent-content: var(--color-' + this.accent + '-600);\n' +
-                        '    --color-accent-foreground: var(--color-white);' + grayBlock + '\n' +
-                        '}\n\n' +
-                        '@layer theme {\n' +
-                        '    /* Dark mode: lighter accent so it stays vivid on dark surfaces */\n' +
-                        '    .dark {\n' +
-                        '        --color-accent: var(--color-' + this.accent + '-400);\n' +
-                        '        --color-accent-content: var(--color-' + this.accent + '-300);\n' +
-                        '        --color-accent-foreground: var(--color-' + this.accent + '-950);\n' +
-                        '    }\n' +
-                        '}\n\n' +
-                        ':root {\n' +
+                        '    --color-accent-foreground: var(--color-white);\n\n' +
                         '    /* Corner radius, by role */\n' +
                         '    --radius-control: ' + this.radius + ';     /* inputs, buttons, segments */\n' +
                         '    --radius-box: ' + this.radiusLg + ';         /* cards, dialogs, menus */\n\n' +
@@ -368,7 +363,13 @@
                         '    /* Structural surfaces */\n' +
                         '    --shadow-box: ' + this.structuralShadow + ';\n' +
                         (this.borders ? '' : '    --color-card-border: transparent;  /* shadow-only cards (dialogs, menus, etc. keep --color-box-border) */\n') +
-                        '}';
+                        '}\n\n' +
+                        '.dark {\n' +
+                        '    /* Dark mode: lighter accent so it stays vivid on dark surfaces */\n' +
+                        '    --color-accent: var(--color-' + this.accent + '-400);\n' +
+                        '    --color-accent-content: var(--color-' + this.accent + '-300);\n' +
+                        '    --color-accent-foreground: var(--color-' + this.accent + '-950);\n' +
+                        '}' + grayBlock;
                 },
 
                 // Syntax-highlight the generated CSS reactively (x-text would wipe the spans on each change).

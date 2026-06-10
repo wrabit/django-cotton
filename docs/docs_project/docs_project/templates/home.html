@@ -2,7 +2,7 @@
 
     <div class="w-full px-0 md:px-8 lg:px-16 xl:px-24">
         <div class="not-prose text-center mx-auto max-w-3xl mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-[#1a384a] dark:text-white">
                 Build reusable components for Django. No Python required.
             </h1>
             <p class="mt-5 text-lg sm:text-xl text-zinc-600 dark:text-zinc-400">
@@ -18,9 +18,9 @@
             <div class="grid grid-cols-1">
                 {# Slide 1 — Card (component + slot) #}
                 <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 0">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">1.</span> Define a component</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="card.html">{% cotton:verbatim %}{% verbatim %}
 <div class="card">
     <h3>{{ title }}</h3>
@@ -29,7 +29,7 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
                         </div>
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">2 &middot; Use it like a tag</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">2.</span> Use it like a tag</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-card title="Pricing">
     Simple, per-seat billing.
@@ -41,7 +41,7 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
                         </div>
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">3 &middot; Renders to</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">3.</span> Renders to</h2>
                             <div class="not-prose mb-3 flex-1 flex flex-col justify-center gap-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/40 p-6">
                                 <c-card title="Pricing">Simple, per-seat billing.</c-card>
                                 <c-card title="Support">Help when you need it.</c-card>
@@ -52,9 +52,9 @@
 
                 {# Slide 2 — Field (props drive the output) #}
                 <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 1 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 1">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">1.</span> Define a component</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="field.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars label type="text" :required="False" />
 
@@ -65,7 +65,7 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
                         </div>
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">2 &middot; Props change the output</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">2.</span> Props change the output</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-field label="Email" type="email" required />
 
@@ -74,7 +74,7 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
                         </div>
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">3 &middot; Renders to</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">3.</span> Renders to</h2>
                             <div class="not-prose mb-3 flex-1 flex flex-col justify-center gap-4 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/40 p-6">
                                 <c-field label="Email" type="email" required />
                                 <c-field label="Age" type="number" placeholder="18+" />
@@ -85,9 +85,9 @@
 
                 {# Slide 3 — Button (variant prop) #}
                 <div class="col-start-1 row-start-1 transition-opacity duration-300" :class="slide === 2 ? 'opacity-100' : 'opacity-0 pointer-events-none'" :aria-hidden="slide !== 2">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">1 &middot; Define a component</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">1.</span> Define a component</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="button.html">{% cotton:verbatim %}{% verbatim %}
 <c-vars variant="primary" />
 
@@ -97,7 +97,7 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
                         </div>
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">2 &middot; One prop, many looks</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">2.</span> One prop, many looks</h2>
 <c-snippet language="django" rounded="rounded-xl" hide_copy box_class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700" label="view.html">{% cotton:verbatim %}{% verbatim %}
 <c-button>Save</c-button>
 <c-button variant="default">Cancel</c-button>
@@ -105,7 +105,7 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
                         </div>
                         <div class="flex flex-col">
-                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center">3 &middot; Renders to</h2>
+                            <h2 class="!font-normal !text-sm uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 mt-0 text-center"><span class="text-accent font-bold">3.</span> Renders to</h2>
                             <div class="not-prose mb-3 flex-1 flex flex-col justify-center items-start gap-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/40 p-6">
                                 <c-button>Save</c-button>
                                 <c-button variant="default">Cancel</c-button>

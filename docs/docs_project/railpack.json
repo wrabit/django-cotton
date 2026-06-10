@@ -1,6 +1,7 @@
 {
   "$schema": "https://schema.railpack.com",
   "packages": {
-    "node": "22"
+    "node": "22",
+    "python": "3.13.13"
   }
 }

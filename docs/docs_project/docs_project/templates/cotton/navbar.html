@@ -55,19 +55,47 @@
                         UI Kit
                     </c-navbar.nav-item>
                 </div>
+
+                <!-- Mobile section switcher: the Core / UI Kit nav collapsed into a pill
+                     dropdown styled like the active nav-item, defaulting to the current section. -->
+                <div class="sm:hidden relative ml-3" x-data="{ secOpen: false }"
+                     @click.outside="secOpen = false" @keydown.escape.window="secOpen = false">
+                    <button @click="secOpen = !secOpen" type="button" :aria-expanded="secOpen"
+                            class="flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full font-medium bg-accent/15 dark:bg-accent/20 text-accent-content dark:text-accent">
+                        {% if request.path|startswith:'/ui' %}
+                            <c-icons.blocks class="size-4" stroke-width="2" /> UI Kit
+                        {% else %}
+                            <c-icons.book class="size-4" stroke-width="2" /> Core
+                        {% endif %}
+                        <span class="transition-transform" :class="secOpen && 'rotate-180'"><c-icons.chevron-down class="size-4" /></span>
+                    </button>
+
+                    <div x-show="secOpen" x-cloak
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 -translate-y-1"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         class="absolute left-0 mt-2 w-44 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-lg p-1 z-50">
+                        <a href="{% url 'home' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg font-medium {% if request.path == '/' or request.path|startswith:'/docs/' %}bg-accent/15 dark:bg-accent/20 text-accent-content dark:text-accent{% else %}text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800{% endif %}">
+                            <c-icons.book class="size-4" stroke-width="2" /> Core
+                        </a>
+                        <a href="{% url 'ui' %}" class="flex items-center gap-2 px-3 py-2 rounded-lg font-medium {% if request.path|startswith:'/ui' %}bg-accent/15 dark:bg-accent/20 text-accent-content dark:text-accent{% else %}text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800{% endif %}">
+                            <c-icons.blocks class="size-4" stroke-width="2" /> UI Kit
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <div class="flex items-center space-x-2">
                 {% if request.path|startswith:'/ui' %}
                     <a href="{{ github_ui_repo }}" target="_blank" aria-label="django-cotton-ui on GitHub" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center gap-2 transition-colors">
                         <c-icons.github class="size-5 shrink-0" />
-                        {% if github_ui_stars and github_ui_stars != "0" %}<span class="hidden md:inline-block text-[11px] font-medium tabular-nums">{{ github_ui_stars }}</span>{% endif %}
+                        {% if github_ui_stars and github_ui_stars != "0" %}<span class="inline-block text-[11px] font-medium tabular-nums">{{ github_ui_stars }}</span>{% endif %}
                     </a>
                     {% if pypi_ui_version %}<a href="https://pypi.org/project/django-cotton-ui/" target="_blank" aria-label="django-cotton-ui on PyPI" class="hidden md:inline-block text-[11px] font-medium text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_ui_version }}</a>{% endif %}
                 {% else %}
                     <a href="{{ github_core_repo }}" target="_blank" aria-label="django-cotton on GitHub" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center gap-2 transition-colors">
                         <c-icons.github class="size-5 shrink-0" />
-                        {% if github_core_stars and github_core_stars != "0" %}<span class="hidden md:inline-block text-[11px] font-medium tabular-nums">{{ github_core_stars }}</span>{% endif %}
+                        {% if github_core_stars and github_core_stars != "0" %}<span class="inline-block text-[11px] font-medium tabular-nums">{{ github_core_stars }}</span>{% endif %}
                     </a>
                     {% if pypi_core_version %}<a href="https://pypi.org/project/django-cotton/" target="_blank" aria-label="django-cotton on PyPI" class="hidden md:inline-block text-[11px] font-medium text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_core_version }}</a>{% endif %}
                 {% endif %}
@@ -104,30 +132,8 @@
          class="fixed inset-0 z-40 bg-white dark:bg-zinc-900 overflow-y-auto sm:hidden"
          style="-webkit-overflow-scrolling: touch;">
         <div class="px-5 pt-[73px] pb-6">
-            <!-- Mobile nav links -->
-            <div class="flex flex-col gap-2 mb-6 pb-6 border-b border-zinc-200 dark:border-zinc-800">
-                <a href="{% url 'home' %}"
-                   class="flex items-center gap-2 px-3 py-2 rounded-md font-medium
-                   {% if request.path == '/' or request.path|startswith:'/docs/' %}
-                       bg-accent text-accent-foreground
-                   {% else %}
-                       text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800
-                   {% endif %}">
-                    <c-icons.book class="size-5" />
-                    Core
-                </a>
-                <a href="{% url 'ui' %}"
-                   class="flex items-center gap-2 px-3 py-2 rounded-md font-medium
-                   {% if request.path|startswith:'/ui' %}
-                       bg-accent text-accent-foreground
-                   {% else %}
-                       text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800
-                   {% endif %}">
-                    <c-icons.blocks class="size-5" />
-                    UI Kit
-                </a>
-            </div>
-
+            {# Core / UI Kit switching is handled by the navbar section pill on mobile;
+               this panel is just the page sidebar. #}
             <!-- Sidebar content - show UI sidebar on /ui routes, regular sidebar otherwise.
                  persist=False: the desktop copy owns scroll persistence; two instances
                  sharing the key would race on restore. -->

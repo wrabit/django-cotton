@@ -9,14 +9,23 @@
         w: {{ w }}, h: {{ h }}, dragging: false,
         startResize(e) {
             this.dragging = true;
+            // Capture the pointer so touch-drag keeps firing move events even if the
+            // finger leaves the handle (without this the browser steals it as a scroll).
+            const handle = e.currentTarget;
+            handle.setPointerCapture(e.pointerId);
             const sx = e.clientX, sy = e.clientY, sw = this.w, sh = this.h;
             const move = (ev) => {
                 this.w = Math.max(40, sw + (ev.clientX - sx));
                 this.h = Math.max(40, sh + (ev.clientY - sy));
             };
-            const up = () => { this.dragging = false; window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
-            window.addEventListener('pointermove', move);
-            window.addEventListener('pointerup', up);
+            const up = (ev) => {
+                this.dragging = false;
+                handle.releasePointerCapture?.(ev.pointerId);
+                handle.removeEventListener('pointermove', move);
+                handle.removeEventListener('pointerup', up);
+            };
+            handle.addEventListener('pointermove', move);
+            handle.addEventListener('pointerup', up);
         }
     }">
     <div class="relative" :style="`width: ${w}px; height: ${h}px; max-width: 100%`">

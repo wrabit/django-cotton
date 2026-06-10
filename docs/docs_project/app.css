@@ -1,5 +1,8 @@
 @import "tailwindcss";
-@import "./django_cotton_ui/static/cotton-ui/cotton-ui.css";
+/* Tokens only (NOT the compiled cotton-ui.css, that ships its own preflight and
+   @layers, which would double up against this build). Kit classes are generated
+   from the @source scan of the kit templates below. */
+@import "./django_cotton_ui/static/cotton-ui/cotton-ui.tokens.css";
 @plugin "@tailwindcss/typography";
 
 /* Use class-based dark mode (looks for .dark on html element).

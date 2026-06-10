@@ -8,6 +8,12 @@ media
 **/static/app.css
 staticfiles/
 
+# Docs build/runtime mount points for the cotton packages. Live versions come from
+# the docker-compose bind mounts (dev) or the installed PyPI package (deploy); any
+# host-local copy here is derived and must not be committed.
+docs/docs_project/django_cotton_ui/
+docs/docs_project/django_cotton/
+
 # Backup files #
 *.bak
 

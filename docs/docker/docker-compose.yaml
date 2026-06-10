@@ -6,9 +6,17 @@ services:
     restart: always
     image: cotton-docs-app
     working_dir: /app
-    command: python manage.py runserver 0.0.0.0:8000
+    # Generates cotton-ui.sources.css once (Django + kit live here), then re-runs it when the
+    # kit's compiled CSS changes. The tailwind container only consumes the file.
+    command: >
+      /bin/sh -c "pip install -q watchfiles &&
+      python manage.py cotton_ui_sources &&
+      (watchfiles 'python manage.py cotton_ui_sources' django_cotton_ui/static/django_cotton_ui/cotton-ui.css &) &&
+      python manage.py runserver 0.0.0.0:8000"
     environment:
       - DEBUG=True
+      # Native FS events don't cross the macOS bind mount; force watchfiles to poll.
+      - WATCHFILES_FORCE_POLLING=true
       - REDISHOST=cotton-docs-redis
       - REDISPASSWORD=password
       - REDISPORT=6379
@@ -26,19 +34,22 @@ services:
     image: node:20
     working_dir: /app
     tty: true
+    # No kit mount: the build only consumes cotton-ui.sources.css, like a real consumer.
     volumes:
       - ../docs_project:/app
-      - ../../../django-cotton-ui/django_cotton_ui:/app/django_cotton_ui
     environment:
       # Native FS events don't cross the macOS bind mount; force watchfiles to poll.
       - WATCHFILES_FORCE_POLLING=true
+    # Wait for the web container to write the sources file, then build. Calls tailwindcss
+    # directly, not `npm run build`, since the prebuild step needs Django.
     command: >
       /bin/sh -c "trap 'exit' INT;
       npm install &&
       apt-get update -qq && apt-get install -y -qq python3-pip >/dev/null &&
       pip install --break-system-packages -q watchfiles &&
-      npm run build &&
-      watchfiles 'npm run build' app.css docs_project/templates django_cotton_ui/templates"
+      until [ -f cotton-ui.sources.css ]; do echo 'waiting for cotton-ui.sources.css...'; sleep 1; done &&
+      npx @tailwindcss/cli -i app.css -o docs_project/static/app.css &&
+      watchfiles 'npx @tailwindcss/cli -i app.css -o docs_project/static/app.css' app.css docs_project/templates cotton-ui.sources.css"
 
   cotton-docs-redis:
     container_name: cotton-docs-redis

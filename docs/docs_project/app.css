@@ -1,38 +1,38 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* The kit's components, classes and design tokens come from the precompiled
-   cotton-ui.css linked before this file in the base layout (dogfooding the
-   consumer path). This build scans only the docs' own templates; kit classes are
-   not regenerated here, and token overrides below apply to the linked CSS. */
+/* Cotton UI, consumed exactly as a custom-build user would. `manage.py cotton_ui_sources`
+   (run by the prebuild npm script) writes cotton-ui.sources.css: the kit's tokens, dark
+   variant and class list as @source inline(). We @import it and our own build generates the
+   kit's utilities, dogfooding the documented path instead of @source-ing the package templates. */
+@import "./cotton-ui.sources.css";
 
-/* Use class-based dark mode (looks for .dark on html element).
-   A nested `.light` scope opts a subtree back out of dark styling, so previews
-   can render their components in light mode even while the page is dark. */
+/* Cotton UI uses class-based dark mode (looks for .dark on html element).
+   In core docs, we also display some example in light mode no matter what so we want `.light` descendants to opt out
+   of dark styling, so previews can render their components in light mode even while the page is dark.
+   Defined AFTER the import so it overrides the plain dark variant the sources file ships. */
 @custom-variant dark (&:where(.dark, .dark *):not(:where(.light, .light *)));
 
-/* Bare `border` utilities default to currentColor in v4. Inside a .light preview
+/* Bare `border` utilities default to currentColor in TW v4. Inside a .light preview
    (where text is forced dark) that renders dark borders, so give the scope a
    light-gray default. :where() keeps specificity 0 so explicit border-color
-   utilities (border-gray-300, border-red-500, ...) still win. */
+   utilities (border-gray-300, border-red-500, ...) still have priority. */
 @layer base {
     :where(.light *) {
         border-color: var(--color-zinc-200);
     }
 }
 
-/* Content sources for class detection (docs templates only; kit classes ship in cotton-ui.css) */
+/* Our own templates. The kit's classes come from the @source inline() in cotton-ui.sources.css above. */
 @source "./docs_project/templates/**/*.html";
 
-/* Theme customization (replaces tailwind.config.js theme.extend) */
 @theme {
-    /* Accent colors - Teal (Flux-style pattern) */
-    /* Change these to customize your accent color */
+    /* Accent colors - the Cotton teal */
     --color-accent: var(--color-teal-500);
     --color-accent-content: var(--color-teal-600);
     --color-accent-foreground: var(--color-white);
 
-    /* Font families - Figtree is loaded via Google Fonts */
+    /* Fonts */
     --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "Roboto Mono", ui-monospace, monospace;
     --default-font-family: "Figtree", ui-sans-serif, system-ui, sans-serif;
@@ -41,22 +41,22 @@
     /* Custom spacing */
     --spacing-8xl: 96rem;
 
-    /* Container size used by the docs layout (matches main's max-w-8xl) */
+    /* Wide container the docs layout uses (matches the main site's max-w-8xl) */
     --container-8xl: 96rem;
 
-    /* Docs house style: softer control corners than the kit default (0.375rem).
-       Consumer override of a kit token; the base kit ships unchanged. */
+    /* We like slightly rounder controls in the docs than the kit default (0.375rem).
+       Just us overriding a kit token here, the kit itself ships unchanged. */
     --radius-control: 0.5rem;
 }
 
-/* Per-mode token overrides. Dark tokens go under .dark. For a LIGHT-only override,
-   scope to :root:not(.dark): a bare :root rule sits after the kit's .dark block and
-   wins by source order, so it would leak the light value into dark mode. */
+/* Token overrides per mode. Dark values go under .dark. For a light-only override we
+   scope to :root:not(.dark), a plain :root rule lands after the kit's .dark block and
+   wins by source order, so it'd leak the light value into dark mode. */
 @layer theme {
     :root:not(.dark) {
-        /* Light page background a hair deeper than the kit default (zinc-50): midway to zinc-100. */
+        /* Nudge the light page bg a touch deeper than the kit default (zinc-50), halfway to zinc-100. */
         --color-bg: color-mix(in oklab, var(--color-zinc-50) 50%, var(--color-zinc-100));
-        /* Shadow-only cards: drop just the card border. Dialogs, menus, etc. keep --color-box-border. */
+        /* We want shadow-only cards in light mode, so drop just the card border. Dialogs, menus etc. keep their box border. */
         --color-card-border: transparent;
     }
 
@@ -64,12 +64,12 @@
         --color-accent: var(--color-teal-400);
         --color-accent-content: var(--color-teal-300);
         --color-card-border: transparent;
-        /* accent-foreground stays white (from :root): white reads on teal in both modes.
-           Only flip it if the accent itself becomes light/neutral in dark mode. */
+        /* Leave accent-foreground white (from :root), white reads fine on teal in both modes.
+           Only flip it if we ever make the accent itself light/neutral in dark mode. */
 
-        /* Bespoke dark surface override (main-style deeper, slightly-cool darks)
-           hidden for now so the docs use Tailwind's default zinc darks and the
-           theme builder's gray remap drives every surface. Restore to re-skin.
+        /* Custom darker, slightly-cool dark surfaces like the main site. Off for now so the
+           docs ride Tailwind's default zinc darks and the theme builder's gray remap drives
+           every surface. Uncomment to re-skin.
         --color-zinc-900: #0e1219;
         --color-zinc-800: #171e29;
         --color-bg: #0e1219;
@@ -78,11 +78,11 @@
     }
 }
 
-/* Component tokens (radius, surfaces, shadows, focus ring) now come from the
-   cotton-ui.css import at the top. Override any of them in the @theme / @layer above. */
+/* Component tokens (radius, surfaces, shadows, focus ring) come from the precompiled
+   cotton-ui.css we link in the base template. Override any of them in the @theme / @layer above. */
 
-/* Demo components used in the homepage "define -> use -> render" triptych carousel.
-   Real CSS classes keep the shown component markup short and complete. */
+/* Little demo components for the homepage "define -> use -> render" triptych.
+   Real CSS classes here so the markup we show stays short and self-contained. */
 @layer components {
     .card {
         border-radius: 0.75rem;

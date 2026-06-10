@@ -10,8 +10,8 @@
         <c-index-sublink section-id="requirements"><a href="#requirements" class="no-underline">Requirements</a></c-index-sublink>
         <c-index-sublink section-id="install-packages"><a href="#install-packages" class="no-underline">Install Packages</a></c-index-sublink>
         <c-index-sublink section-id="django-settings"><a href="#django-settings" class="no-underline">Django Settings</a></c-index-sublink>
-        <c-index-sublink section-id="base-template"><a href="#base-template" class="no-underline">Base Template</a></c-index-sublink>
-        <c-index-sublink section-id="tailwind-setup"><a href="#tailwind-setup" class="no-underline">Custom build (optional)</a></c-index-sublink>
+        <c-index-sublink section-id="base-template"><a href="#base-template" class="no-underline">Base Template Example</a></c-index-sublink>
+        <c-index-sublink section-id="tailwind-setup"><a href="#tailwind-setup" class="no-underline">Custom Build Example</a></c-index-sublink>
         <c-index-sublink section-id="accent-colors"><a href="#accent-colors" class="no-underline">Theming &amp; verify</a></c-index-sublink>
     </c-slot>
 
@@ -20,8 +20,6 @@
     <ul>
         <li>Python 3.8+</li>
         <li>Django 4.2+</li>
-        <li><strong>No build step</strong> to use the components, the kit ships a precompiled stylesheet you <code>&lt;link&gt;</code>, and you theme it by overriding CSS variables.</li>
-        <li><a href="https://tailwindcss.com/docs/installation" target="_blank">Tailwind CSS v4</a> is <em>optional</em>, only if your own pages use Tailwind utility classes (the kit never needs it).</li>
         <li><a href="https://alpinejs.dev/" target="_blank">Alpine.js v3</a> for interactive components (loaded from a CDN below).</li>
     </ul>
     </c-section>
@@ -63,7 +61,7 @@ INSTALLED_APPS = [
     </p>
     </c-section>
 
-    <c-section id="base-template" title="Base Template">
+    <c-section id="base-template" title="Base Template Example">
     <p>Link the kit's precompiled stylesheet and the Alpine bundle in your base template, then brand it by overriding the design tokens right in the <code>&lt;head&gt;</code>:</p>
 
     <c-sample code_only>
@@ -78,15 +76,16 @@ INSTALLED_APPS = [
 
     <!-- Cotton UI: precompiled components + design tokens.
          Shipped inside the installed package, served by Django's staticfiles app. -->
-    <link rel="stylesheet" href="{% static 'cotton-ui/cotton-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'django_cotton_ui/cotton-ui.css' %}">
 
-    <!-- Brand it: override the kit's tokens. Any CSS that loads AFTER the link wins,
-         so a plain <style> here is enough, no build required. (Full set: see Theming.) -->
+    <!-- Brand it: override the kit's tokens. Place this after the stylesheet link. -->
     <style>
+        /* default / light mode */
         :root {
             --color-accent: var(--color-teal-500);
             --color-accent-content: var(--color-teal-600);
         }
+        /* dark mode */
         .dark {
             --color-accent: var(--color-teal-400);
             --color-accent-content: var(--color-teal-300);
@@ -97,7 +96,7 @@ INSTALLED_APPS = [
     {{ slot }}
 
     <!-- Cotton UI bundle first: it registers components on Alpine's alpine:init event -->
-    <script defer src="{% static 'cotton-ui/cotton-ui.min.js' %}"></script>
+    <script defer src="{% static 'django_cotton_ui/cotton-ui.min.js' %}"></script>
 
     <!-- Alpine.js plugins, then Alpine core (deferred scripts run in order) -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
@@ -109,51 +108,71 @@ INSTALLED_APPS = [
         </c-slot>
     </c-sample>
 
-    <p class="mt-4">Both files ship inside the installed package. With <code>django.contrib.staticfiles</code> enabled, <code>{% verbatim %}{% static %}{% endverbatim %}</code> resolves them in development; run <code>collectstatic</code> for production. Nothing to copy or build.</p>
+    <p class="mt-4">Both UI kit assets serve from the installed package. With <code>django.contrib.staticfiles</code> enabled, <code>{% verbatim %}{% static %}{% endverbatim %}</code> resolves them in development; run <code>collectstatic</code> for production. Nothing to copy or build.</p>
 
     <h3>Required Alpine.js Plugins</h3>
-    <p>Components need two Alpine.js plugins, loaded <strong>before</strong> Alpine core:</p>
+    <p>Some components need Alpine.js plugins, loaded <strong>before</strong> Alpine core:</p>
     <ul>
-        <li><code>@alpinejs/collapse</code> - Accordions, the collapse component and the mobile navbar menu</li>
-        <li><code>@alpinejs/focus</code> - Focus trapping in dialogs and drawers, and keyboard focus in dropdowns and menus</li>
+        <li><code>@alpinejs/collapse</code> - expand/collapse in the accordion, collapse, navbar mobile menu and navlist groups</li>
+        <li><code>@alpinejs/focus</code> - focus trapping and keyboard navigation in dialogs, drawers, dropdowns, menus, select, popover and the calendar</li>
     </ul>
     </c-section>
 
-    <c-section id="tailwind-setup" title="Custom build (optional)">
-    <p>The precompiled stylesheet covers every component class, and theming is just token overrides (the <code>&lt;style&gt;</code> block above), so a build is optional. You only need one if <em>your own</em> pages use Tailwind utility classes, as most projects do. If you run one, scan only your own templates and link the output <strong>after</strong> the kit's stylesheet. The <code>@custom-variant dark</code> line is required, it keeps your build's class-based dark mode in step with the kit:</p>
+    <c-section id="tailwind-setup" title="Custom Build Example">
+    <p>Running your own Tailwind? You can't just <code>@source</code> the installed package (it lives in a gitignored <code>.venv</code>, which Tailwind skips). Instead, run the bundled command to write a file your build can scan:</p>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet language="bash">{% cotton:verbatim %}{% verbatim %}
+python manage.py cotton_ui_sources
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <p class="mt-4">This writes <code>cotton-ui.sources.css</code> next to your project: the kit's design tokens, dark variant and the full class list as <code>@source inline(...)</code>. <code>@import</code> it into your <code>app.css</code> and your own build generates the kit's utilities, correctly, no preflight clash, dark mode included:</p>
 
     <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
 @import "tailwindcss";
 
-/* Required (if you run a build): match the kit's class-based dark mode. Without
-   this your build's dark: utilities default to a media query, which misfires and
-   overrides the kit's own dark: rules. */
-@custom-variant dark (&:where(.dark, .dark *));
+/* kit tokens + dark variant + class list, from `manage.py cotton_ui_sources`.
+   Your build emits the kit's utilities (it resolves through .gitignore). */
+@import "./cotton-ui.sources.css";
 
-/* Scan only YOUR templates. The kit's classes are already in cotton-ui.css. */
+/* your own @source rules for your own templates (standard Tailwind, nothing kit-specific) */
 @source "./your_app/templates/**/*.html";
 
-/* Optional: token overrides here instead of an inline <style>. */
-@theme {
-    --color-accent: var(--color-teal-500);
+/* brand it: override kit tokens with :root / .dark, NOT @theme
+   (@theme loses to the kit's baked-in value; use @theme only for your own new tokens) */
+:root { --color-accent: var(--color-teal-500); --color-accent-content: var(--color-teal-600); }
+.dark { --color-accent: var(--color-teal-400); --color-accent-content: var(--color-teal-300); }
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <p class="mt-4">The class list only changes when you upgrade the kit. Rather than remember to re-run it, wire it into your build as a pre-step, the command is fast and deterministic, so running it every build keeps the list in sync automatically:</p>
+
+    <c-sample code_only>
+        <c-slot name="code">
+<c-snippet language="json" label="package.json">{% cotton:verbatim %}{% verbatim %}
+{
+  "scripts": {
+    "prebuild": "python manage.py cotton_ui_sources",
+    "build": "tailwindcss -i app.css -o static/app.css --minify"
+  }
 }
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
 
     <p class="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
-        Don't <code>@source</code> the kit's own templates, the linked stylesheet already covers them (and they sit in your gitignored virtualenv, which Tailwind won't scan anyway). Its classes work as-is; you only need the kit's <code>@theme</code> (via <code>@import "cotton-ui.tokens.css"</code>, shipped alongside) to generate <em>new</em> token variants like <code>bg-accent/50</code> in your build.
-    </p>
-
-    <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
-        <strong>Roadmap:</strong> an npm package of the kit's templates and tokens, so a single build can scan the kit from <code>node_modules</code> and purge unused classes.
+        No node build? Chain it the same way in a Makefile or CI step: <code>python manage.py cotton_ui_sources &amp;&amp; ...build...</code>. With <code>django-tailwind-cli</code> or <code>django-tailwind</code>, run <code>cotton_ui_sources</code> just before their build command. You don't <code>&lt;link&gt;</code> the kit's CSS on this path, your build already contains everything.
     </p>
     </c-section>
 
-    <c-section id="accent-colors" title="Theming &amp; verifying">
-    <p>A neutral zinc accent ships by default. Brand it by overriding the accent tokens, in the inline <code>&lt;style&gt;</code> from the base template above (no build) or your own <code>@theme</code> if you build, loaded <em>after</em> the kit stylesheet, with a <code>.dark</code> block for dark mode. The <a href="{% url 'ui-theming' %}">Theming</a> guide covers the full token set, accent presets and gray palettes.</p>
+    <c-section id="accent-colors" title="Theming & verifying">
+    <p>A neutral zinc accent ships by default. Brand it by overriding the accent tokens, in the inline <code>&lt;style&gt;</code> from the base template above (no build) or your <code>app.css</code> after the kit <code>@import</code> (custom build), with a <code>.dark</code> block for dark mode. The <a href="{% url 'ui-theming' %}">Theming</a> guide covers the full token set, accent presets and gray palettes.</p>
 
     <h3>Verify it works</h3>
     <p>Drop a couple of components into a template. They should render styled, with the primary button in your accent colour:</p>

@@ -9,14 +9,36 @@ on:
         required: true
       RAILWAY_SERVICE:
         required: true
-#  push:
-#    branches:
-#      - main
-#    paths:
-#      - 'docs/**'
+  push:
+    branches:
+      - main
 
 jobs:
+  # Decide whether to deploy. On a push/merge to main, only proceed when the landing commit
+  # opts in with 'deploys docs' (case-insensitive). Manual (workflow_dispatch) and called
+  # (workflow_call) runs always proceed. Done in bash because GitHub expressions have no
+  # case-insensitive contains. The commit message is passed via env, never interpolated into
+  # the script, to avoid shell injection from an attacker-controlled message.
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      proceed: ${{ steps.gate.outputs.proceed }}
+    steps:
+      - name: Gate on event and commit message
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+        run: |
+          if [ "$EVENT_NAME" != "push" ] || printf '%s' "$COMMIT_MSG" | grep -qi 'deploys docs'; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+          fi
+
   deploy_docs:
+    needs: gate
+    if: needs.gate.outputs.proceed == 'true'
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_PROJECT_TOKEN }}
     runs-on: ubuntu-latest

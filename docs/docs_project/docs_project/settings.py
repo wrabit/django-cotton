@@ -80,6 +80,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "docs_project.context_processors.github_stars",
+                "docs_project.context_processors.debug_flag",
             ],
             "builtins": [
                 "django.templatetags.static",

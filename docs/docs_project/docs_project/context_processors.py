@@ -2,6 +2,13 @@ import json
 import time
 import urllib.request
 
+from django.conf import settings
+
+
+def debug_flag(request=None):
+    """Expose settings.DEBUG as a reliable boolean (unlike {{ debug }}, which is gated by INTERNAL_IPS)."""
+    return {"DEBUG": settings.DEBUG}
+
 # The two sides of the docs point at two repos / two PyPI packages.
 REPOS = {
     "core": "wrabit/django-cotton",

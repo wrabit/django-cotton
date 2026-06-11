@@ -15,7 +15,7 @@
         <c-index-sublink section-id="advanced"><a href="#advanced" class="no-underline">Advanced</a></c-index-sublink>
     </c-slot>
 
-    <p>Every part of Cotton UI's look is driven by CSS variables you can override. Grays use Tailwind's built-in <code>zinc</code> and work out of the box. A neutral <strong>accent</strong> ships by default, and radius, surfaces, shadows and the focus ring are all themeable tokens. Override any of them with a <code>:root</code> block (and a <code>.dark</code> block for dark mode), wherever you set your tokens. Start with the main ones below, then see <a href="#tokens">All Tokens</a> for the complete list.</p>
+    <p>Cotton UI's look is driven by overridable CSS variables. Grays use Tailwind's <code>zinc</code> out of the box, a neutral <strong>accent</strong> ships by default, and radius, surfaces, shadows and the focus ring are themeable tokens. Override any with a <code>:root</code> block (and a <code>.dark</code> block for dark mode). Start with the main ones below, or see <a href="#tokens">All Tokens</a> for the full list.</p>
 
     <c-section id="accent-color" title="Changing the Accent Color">
     <p>The accent drives primary buttons, active states and focus rings. Cotton UI uses a 3-value accent system:</p>
@@ -46,19 +46,15 @@
         </c-slot>
     </c-sample>
 
-    <p class="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
-        Use <code>:root</code> / <code>.dark</code>, not <code>@theme</code>: the kit already registers these tokens (so utilities like <code>bg-accent</code> and <code>bg-accent/10</code> work), and a plain <code>:root</code> override beats the kit's baked-in value, where <code>@theme</code> would lose. Swap <code>blue</code> for any Tailwind hue, or your own values.
-    </p>
-
-    <p class="mt-4">Prefer a live preview? The <a href="{% url 'ui-theme-builder' %}">Theme Builder</a> lets you tweak the accent, radius, surfaces and focus ring, then copies the generated CSS.</p>
+    <p class="mt-4">Use the <a href="{% url 'ui-theme-builder' %}">Theme Builder</a> to preview and generate the CSS to copy into your <code>app.css</code>.</p>
     </c-section>
 
     <c-section id="accent-toggle" title="Accent Toggle">
-    <p>By default, a component's selected and active states use your <a href="#accent-color">accent colour</a>: a checked radio, an on switch, a selected card. Adding <code>:accent="False"</code> turns those off for that component and renders them in a neutral tone instead, giving you a monochrome control without touching your theme.</p>
+    <p>Add <code>:accent="False"</code> as a property to turn off accent highlights for a component. Its selected and active states (a checked radio, an on switch, a selected card) render in a neutral tone instead, no theme changes needed.</p>
 
-    <p>The neutral tracks the current text colour, so it shows dark on a light background and light on a dark background, switching with light and dark mode on its own. There is nothing to set up.</p>
+    <p>The neutral tracks the current text colour, so it flips with light and dark mode on its own.</p>
 
-    <p>If you want the neutral to be a fixed colour rather than the inherited text colour, define the <code>--color-muted</code> token (with a <code>.dark</code> value for dark mode). It is entirely optional: when it is unset, components fall back to the text colour.</p>
+    <p>Want a fixed neutral instead of the inherited text colour? Set the <code>--color-muted</code> token (with a <code>.dark</code> value). It's optional: unset, components fall back to the text colour.</p>
 
     <c-sample code_only>
         <c-slot name="code">

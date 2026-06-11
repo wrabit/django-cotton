@@ -62,6 +62,9 @@
         {{ slot }}
     </div>
 
+    {# Live theming devtool: dev-only on the docs (DEBUG). Ships as an undocumented kit component. #}
+    {% if DEBUG %}<c-ui.theme-builder-widget />{% endif %}
+
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('snippetTabs', () => ({

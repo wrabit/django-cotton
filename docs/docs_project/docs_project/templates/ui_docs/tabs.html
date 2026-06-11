@@ -10,6 +10,7 @@
         <c-index-sublink section-id="segmented"><a href="#segmented" class="no-underline">Segmented</a></c-index-sublink>
         <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
         <c-index-sublink section-id="sizes"><a href="#sizes" class="no-underline">Sizes</a></c-index-sublink>
+        <c-index-sublink section-id="full-width"><a href="#full-width" class="no-underline">Full Width</a></c-index-sublink>
         <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
     </c-slot>
 
@@ -149,6 +150,34 @@
     </c-sample>
     </c-section>
 
+    <c-section id="full-width" title="Full Width">
+    <p>Add <code>fill</code> to stretch the tab buttons so they share the available width equally, instead of sizing to their labels. Works with either variant.</p>
+
+    <c-sample>
+        <c-ui.tabs fill>
+            <c-ui.tabs.tab name="Overview">
+                <div class="p-4">Overview content...</div>
+            </c-ui.tabs.tab>
+            <c-ui.tabs.tab name="Analytics">
+                <div class="p-4">Analytics content...</div>
+            </c-ui.tabs.tab>
+            <c-ui.tabs.tab name="Reports">
+                <div class="p-4">Reports content...</div>
+            </c-ui.tabs.tab>
+        </c-ui.tabs>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.tabs fill>
+    <c-ui.tabs.tab name="Overview">...</c-ui.tabs.tab>
+    <c-ui.tabs.tab name="Analytics">...</c-ui.tabs.tab>
+    <c-ui.tabs.tab name="Reports">...</c-ui.tabs.tab>
+</c-ui.tabs>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
     <c-section id="reference" title="Reference">
 
     <h4>Tabs Props</h4>
@@ -158,6 +187,7 @@
         <c-api-prop name="variant" type="str" :options="['default', 'segmented']" default="default" description="Visual style of the tabs." />
         <c-api-prop name="size" type="str" :options="['sm', 'md', 'lg']" default="md" description="Size of the tabs." />
         <c-api-prop name=":accent" type="bool" default="True" description="Whether to use accent colors for the active tab." />
+        <c-api-prop name="fill" type="bool" default="False" description="Stretch the tab buttons to share the full width equally." />
     </c-api-props>
 
     <h4 class="mt-6">Tab Props</h4>

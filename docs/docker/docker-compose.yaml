@@ -51,6 +51,29 @@ services:
       npx @tailwindcss/cli -i app.css -o docs_project/static/app.css &&
       watchfiles 'npx @tailwindcss/cli -i app.css -o docs_project/static/app.css' app.css docs_project/templates cotton-ui.sources.css"
 
+  # Kit-maintainer role: recompile the kit's CSS artifact from src/css on change, the same thing
+  # a republish would produce. The web/tailwind containers still only consume the built artifact,
+  # so the consumer simulation is intact. Uses watchfiles (polling) to re-run the one-shot
+  # `build:css` because tailwind --watch's native FS events don't cross the macOS bind mount.
+  cotton-docs-kit-watch:
+    container_name: cotton-docs-kit-watch
+    image: node:20
+    working_dir: /kit/src
+    tty: true
+    environment:
+      - WATCHFILES_FORCE_POLLING=true
+    volumes:
+      - ../../../django-cotton-ui:/kit
+      # Anonymous volume masks the host node_modules so npm installs Linux-native binaries
+      # (tailwind's oxide/lightningcss) instead of reusing the host's macOS build.
+      - /kit/src/node_modules
+    command: >
+      /bin/sh -c "npm install &&
+      apt-get update -qq && apt-get install -y -qq python3-pip >/dev/null &&
+      pip install --break-system-packages -q watchfiles &&
+      npm run build:css &&
+      watchfiles 'npm run build:css' css"
+
   cotton-docs-redis:
     container_name: cotton-docs-redis
     image: redis/redis-stack-server:latest

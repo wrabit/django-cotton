@@ -153,6 +153,19 @@
                             :class="!borders ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'">Off</button>
                     </div>
                 </div>
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">
+                        Surface lift <span class="text-zinc-400" x-text="(isDark ? surfaceDark : surfaceLight) + '%'"></span>
+                    </div>
+                    <div class="w-40">
+                        <input type="range" min="0" max="100" step="1"
+                            :value="isDark ? surfaceDark : surfaceLight"
+                            @input="setSurface($event.target.value)"
+                            :style="`--range-fill: ${isDark ? surfaceDark : surfaceLight}%`"
+                            class="ui-range align-middle" />
+                    </div>
+                </div>
                 </div>{# /structural row #}
             </div>
 
@@ -271,6 +284,8 @@
                 inputShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
                 structuralShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
                 borders: true,
+                surfaceLight: 100,  /* --surface-level per mode: how much lighter cards are than the page */
+                surfaceDark: 8,
                 isDark: false,
                 copied: false,
                 _observer: null,
@@ -305,15 +320,18 @@
                     if (this.gray !== 'zinc') {
                         const g = (n) => 'var(--color-' + this.gray + '-' + n + ')';
                         this.shades.forEach((s) => { el.style.setProperty('--color-zinc-' + s, g(s)); });
-                        // Drive the page surfaces too, so the whole preview follows the gray, not
-                        // just chrome that happens to use zinc utilities. The docs ship a bespoke
-                        // dark surface, so without this the body and cards would not track the gray.
+                        // Drive the page bg so the whole preview follows the gray; --color-surface
+                        // derives from --color-bg + --surface-level, so it tracks the gray for free.
                         el.style.setProperty('--color-bg', this.isDark ? g(900) : g(50));
-                        el.style.setProperty('--color-surface', this.isDark ? g(800) : '#ffffff');
                     } else {
                         el.style.removeProperty('--color-bg');
-                        el.style.removeProperty('--color-surface');
                     }
+
+                    // Surface elevation: set --color-surface directly to the computed mix so the
+                    // preview works without relying on the kit's derivation being in this page's CSS.
+                    // (The copied snippet uses the clean --surface-level token, which the kit derives.)
+                    const level = this.isDark ? this.surfaceDark : this.surfaceLight;
+                    el.style.setProperty('--color-surface', 'color-mix(in oklab, var(--color-bg), white ' + level + '%)');
 
                     // Component tokens
                     el.style.setProperty('--radius-control', this.radius);
@@ -336,6 +354,7 @@
                 setInputShadow(v) { this.inputShadow = v; this.apply(); },
                 setStructuralShadow(v) { this.structuralShadow = v; this.apply(); },
                 setBorders(v) { this.borders = v; this.apply(); },
+                setSurface(v) { if (this.isDark) this.surfaceDark = +v; else this.surfaceLight = +v; this.apply(); },
 
                 get css() {
                     // Gray base remaps Tailwind's own zinc palette, which only a build can
@@ -362,6 +381,7 @@
                         '    --shadow-input: ' + this.inputShadow + ';\n\n' +
                         '    /* Structural surfaces */\n' +
                         '    --shadow-box: ' + this.structuralShadow + ';\n' +
+                        (this.surfaceLight !== 100 ? '    --surface-level: ' + this.surfaceLight + '%;  /* how much lighter cards are than the page */\n' : '') +
                         (this.borders ? '' : '    --color-card-border: transparent;  /* shadow-only cards (dialogs, menus, etc. keep --color-box-border) */\n') +
                         '}\n\n' +
                         '.dark {\n' +
@@ -369,6 +389,7 @@
                         '    --color-accent: var(--color-' + this.accent + '-400);\n' +
                         '    --color-accent-content: var(--color-' + this.accent + '-300);\n' +
                         '    --color-accent-foreground: var(--color-' + this.accent + '-950);\n' +
+                        (this.surfaceDark !== 8 ? '    --surface-level: ' + this.surfaceDark + '%;\n' : '') +
                         '}' + grayBlock;
                 },
 

@@ -130,6 +130,7 @@ urlpatterns = [
     path("ui/popover", views.build_view("ui_docs/popover"), name="ui-popover"),
     path("ui/progress", views.build_view("ui_docs/progress"), name="ui-progress"),
     path("ui/radio", views.build_view("ui_docs/radio"), name="ui-radio"),
+    path("ui/range", views.build_view("ui_docs/range"), name="ui-range"),
     path("ui/scrollspy", views.build_view("ui_docs/scrollspy"), name="ui-scrollspy"),
     path("ui/select", views.build_view("ui_docs/select"), name="ui-select"),
     path("ui/drawer", views.build_view("ui_docs/drawer"), name="ui-drawer"),

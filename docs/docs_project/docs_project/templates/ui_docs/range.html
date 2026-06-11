@@ -1,0 +1,133 @@
+<c-layouts.ui>
+    <c-header>
+        Range
+        <c-slot name="subheading">
+            A themed slider for picking a value across a range.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="value"><a href="#value" class="no-underline">Showing the Value</a></c-index-sublink>
+        <c-index-sublink section-id="bounds"><a href="#bounds" class="no-underline">Min, Max & Step</a></c-index-sublink>
+        <c-index-sublink section-id="field"><a href="#field" class="no-underline">As a field</a></c-index-sublink>
+        <c-index-sublink section-id="disabled"><a href="#disabled" class="no-underline">Disabled</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <p>On its own, range is just the slider control, themed to match the other inputs.</p>
+
+    <c-sample>
+        <c-ui.range name="volume" value="40" />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.range name="volume" value="40" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <c-section id="value" title="Showing the Value">
+
+    <p>Add <code>show_value</code> to display the current value. Position it beside the slider with <code>value_position="right"</code> (default) or under it with <code>value_position="below"</code>.</p>
+
+    <c-sample>
+        <div class="space-y-6 max-w-sm">
+            <c-ui.range name="brightness" value="60" show_value />
+            <c-ui.range name="contrast" value="25" show_value value_position="below" />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.range name="brightness" value="60" show_value />
+
+<c-ui.range name="contrast" value="25" show_value value_position="below" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="bounds" title="Min, Max & Step">
+
+    <p>Control the range and granularity with <code>min</code>, <code>max</code> and <code>step</code>.</p>
+
+    <c-sample>
+        <div class="max-w-sm">
+            <c-ui.range name="temperature" min="15" max="30" step="1.5" value="21" show_value />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.range name="temperature" min="15" max="30" step="1.5" value="21" show_value />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="field" title="As a field">
+
+    <p>Give it any field attribute (<code>label</code>, <code>description</code>, <code>error</code> or <code>badge</code>) and the range wraps itself in a <a href="{% url 'ui-field' %}">Field</a>, no extra markup.</p>
+
+    <c-sample>
+        <div class="max-w-sm">
+            <c-ui.range
+                name="quality"
+                label="Export quality"
+                description="Higher quality means a larger file."
+                value="75"
+                show_value
+            />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.range
+    name="quality"
+    label="Export quality"
+    description="Higher quality means a larger file."
+    value="75"
+    show_value
+/>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="disabled" title="Disabled">
+
+    <p>Add <code>:disabled="True"</code> to prevent interaction.</p>
+
+    <c-sample>
+        <div class="max-w-sm">
+            <c-ui.range name="locked" value="50" :disabled="True" show_value />
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.range name="locked" value="50" :disabled="True" show_value />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="reference" title="Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="name" type="str" default="" description="Form field name for submission"></c-api-prop>
+        <c-api-prop name="value" type="number" default="50" description="Initial value of the slider"></c-api-prop>
+        <c-api-prop name="min" type="number" default="0" description="Minimum value"></c-api-prop>
+        <c-api-prop name="max" type="number" default="100" description="Maximum value"></c-api-prop>
+        <c-api-prop name="step" type="number" default="1" description="Increment between selectable values"></c-api-prop>
+        <c-api-prop name=":show_value" type="bool" :options="['True', 'False']" default="False" description="Display the current value next to the slider"></c-api-prop>
+        <c-api-prop name="value_position" type="str" :options="['right', 'below']" default="right" description="Where the value is shown when show_value is set"></c-api-prop>
+        <c-api-prop name=":accent" type="bool" :options="['True', 'False']" default="True" description="Use the accent for the completed track and handle. False for neutral grey"></c-api-prop>
+        <c-api-prop name=":disabled" type="bool" :options="['True', 'False']" default="False" description="Disables the slider and prevents interaction"></c-api-prop>
+        <c-api-prop name="label" type="str" default="" description="Label text; wraps the slider in a Field"></c-api-prop>
+        <c-api-prop name="description" type="str" default="" description="Helper text displayed below the label"></c-api-prop>
+        <c-api-prop name="description_trailing" type="str" default="" description="Additional helper text displayed after the slider"></c-api-prop>
+        <c-api-prop name="error" type="str" default="" description="Error message to display"></c-api-prop>
+        <c-api-prop name="badge" type="str" default="" description="Badge text to display next to the label"></c-api-prop>
+        <c-api-prop name="form" type="Form" default="" description="Django form object for error handling"></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Binding the value</h4>
+
+    <p>The slider exposes its value via <code>x-modelable</code>, so you can two-way bind it with Alpine using <code>x-model</code>, or read changes with a plain <code>@input</code> listener.</p>
+
+    </c-section>
+</c-layouts.ui>

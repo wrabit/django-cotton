@@ -75,6 +75,11 @@ urlpatterns = [
     path("demo/search", views.demo_search, name="demo-search"),
     # More
     path("docs/configuration", views.build_view("configuration"), name="configuration"),
+    path(
+        "docs/ecosystem",
+        views.build_view("ecosystem", title="Ecosystem - Django Cotton"),
+        name="ecosystem",
+    ),
     # UI
     path("ui", views.build_view("ui_docs/home"), name="ui"),
     path("ui/installation", views.build_view("ui_docs/installation"), name="ui-installation"),

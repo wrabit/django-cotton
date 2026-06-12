@@ -54,8 +54,6 @@
    wins by source order, so it'd leak the light value into dark mode. */
 @layer theme {
     :root:not(.dark) {
-        /* Nudge the light page bg a touch deeper than the kit default (zinc-50), halfway to zinc-100. */
-        --color-bg: color-mix(in oklab, var(--color-zinc-50) 50%, var(--color-zinc-100));
         /* We want shadow-only cards in light mode, so drop just the card border. Dialogs, menus etc. keep their box border. */
         --color-card-border: transparent;
     }

@@ -1,0 +1,118 @@
+<c-layouts.with-sidebar>
+    <c-slot name="page_index">
+        <c-index-sublink section-id="libraries"><a href="#libraries" class="no-underline">Component Libraries</a></c-index-sublink>
+        <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">Icons</a></c-index-sublink>
+        <c-index-sublink section-id="tooling"><a href="#tooling" class="no-underline">Tooling &amp; CLI</a></c-index-sublink>
+        <c-index-sublink section-id="editors"><a href="#editors" class="no-underline">Editor Support</a></c-index-sublink>
+        <c-index-sublink section-id="learning"><a href="#learning" class="no-underline">Tutorials &amp; Articles</a></c-index-sublink>
+        <c-index-sublink section-id="contribute"><a href="#contribute" class="no-underline">Add Yours</a></c-index-sublink>
+    </c-slot>
+
+    <c-header>Ecosystem</c-header>
+
+    <p>A growing set of projects the community has built on top of Cotton, from component libraries to editor tooling. These are third-party and independently maintained, not officially endorsed. Built something? <a href="#contribute">Add it</a>.</p>
+
+    <c-section id="libraries" title="Component Libraries">
+    <p>Pre-built UI kits and component sets you can drop into a Cotton project.</p>
+
+    <div class="not-prose mt-4 divide-y divide-zinc-200/70 dark:divide-zinc-700/50 border-y border-zinc-200/70 dark:border-zinc-700/50">
+        <c-ecosystem-item name="shadcn-django" href="https://github.com/SarthakJariwala/shadcn-django" author="Sarthak Jariwala"
+            description="Copy-paste shadcn/ui components for Django, built with Tailwind and Alpine and HTMX-friendly. Uses Cotton for its component architecture.">
+            <c-ecosystem-link href="https://github.com/SarthakJariwala/shadcn-django">GitHub</c-ecosystem-link>
+            <c-ecosystem-link href="https://shadcn-django.com">Website</c-ecosystem-link>
+        </c-ecosystem-item>
+
+        <c-ecosystem-item name="labb" href="https://github.com/labbhq/labb" author="labbhq"
+            description="A large Tailwind and daisyUI 5 component library where every component is a Cotton tag.">
+            <c-ecosystem-link href="https://github.com/labbhq/labb">GitHub</c-ecosystem-link>
+            <c-ecosystem-link href="https://pypi.org/project/labbui/">PyPI</c-ecosystem-link>
+            <c-ecosystem-link href="https://labb.io">Website</c-ecosystem-link>
+        </c-ecosystem-item>
+
+        <c-ecosystem-item name="django-basecoat" href="https://github.com/IgnaceMaes/django-basecoat" author="Ignace Maes"
+            description="Ready-made Basecoat (shadcn/ui) components for Django, powered by Cotton.">
+            <c-ecosystem-link href="https://github.com/IgnaceMaes/django-basecoat">GitHub</c-ecosystem-link>
+            <c-ecosystem-link href="https://pypi.org/project/django-basecoat/">PyPI</c-ecosystem-link>
+        </c-ecosystem-item>
+
+        <c-ecosystem-item name="django-cotton-components" href="https://github.com/SakariaNdadi/django-cotton-components" author="Sakaria Ndadi"
+            description="An early collection of pre-built Cotton components such as forms, buttons, modals and tables, using Tailwind and Alpine.">
+            <c-ecosystem-link href="https://github.com/SakariaNdadi/django-cotton-components">GitHub</c-ecosystem-link>
+            <c-ecosystem-link href="https://pypi.org/project/django-cotton-components/">PyPI</c-ecosystem-link>
+        </c-ecosystem-item>
+    </div>
+    </c-section>
+
+    <c-section id="icons" title="Icons">
+    <p>Icon sets exposed as Cotton components.</p>
+
+    <div class="not-prose mt-4 divide-y divide-zinc-200/70 dark:divide-zinc-700/50 border-y border-zinc-200/70 dark:border-zinc-700/50">
+        <c-ecosystem-item name="cotton-heroicons" href="https://github.com/snopoke/cotton-heroicons" author="Simon Kelly"
+            description="The Heroicons set exposed as Cotton components, with outline, solid, mini and micro variants.">
+            <c-ecosystem-link href="https://github.com/snopoke/cotton-heroicons">GitHub</c-ecosystem-link>
+            <c-ecosystem-link href="https://pypi.org/project/cotton-heroicons/">PyPI</c-ecosystem-link>
+        </c-ecosystem-item>
+
+        <c-ecosystem-item name="cotton-iconify" href="https://github.com/nklsw/cotton-iconify" author="nklsw"
+            description="A CLI that generates any Iconify icon as a Cotton component.">
+            <c-ecosystem-link href="https://github.com/nklsw/cotton-iconify">GitHub</c-ecosystem-link>
+        </c-ecosystem-item>
+    </div>
+    </c-section>
+
+    <c-section id="tooling" title="Tooling & CLI">
+    <p>Command-line tools that scaffold components into your project.</p>
+
+    <div class="not-prose mt-4 divide-y divide-zinc-200/70 dark:divide-zinc-700/50 border-y border-zinc-200/70 dark:border-zinc-700/50">
+        <c-ecosystem-item name="cotton-daisy" href="https://github.com/Qwizi/cotton-daisy" author="Adrian Ciolek"
+            description="A CLI that scaffolds DaisyUI components for Cotton. Requires DaisyUI and Cotton set up first.">
+            <c-ecosystem-link href="https://github.com/Qwizi/cotton-daisy">GitHub</c-ecosystem-link>
+            <c-ecosystem-link href="https://pypi.org/project/cotton-daisy/">PyPI</c-ecosystem-link>
+        </c-ecosystem-item>
+    </div>
+    </c-section>
+
+    <c-section id="editors" title="Editor Support">
+    <p>Editor extensions that understand Cotton's component tags.</p>
+
+    <div class="not-prose mt-4 divide-y divide-zinc-200/70 dark:divide-zinc-700/50 border-y border-zinc-200/70 dark:border-zinc-700/50">
+        <c-ecosystem-item name="Django Cotton (VS Code)" href="https://marketplace.visualstudio.com/items?itemName=twentyforty.django-cotton" author="twentyforty"
+            description="Autocompletion for component tags, go-to-definition, parameter intellisense from c-vars, and missing-component diagnostics.">
+            <c-ecosystem-link href="https://marketplace.visualstudio.com/items?itemName=twentyforty.django-cotton">VS Code Marketplace</c-ecosystem-link>
+            <c-ecosystem-link href="https://open-vsx.org/extension/twentyforty/django-cotton">Open VSX</c-ecosystem-link>
+        </c-ecosystem-item>
+
+        <c-ecosystem-item name="Django Cotton Highlighting (VS Code)" href="https://marketplace.visualstudio.com/items?itemName=DavidBloomer.django-cotton-highlighting" author="David Bloomer"
+            description="Syntax highlighting for .cotton.html files, plus autocomplete, hover docs, go-to-definition and unknown-component diagnostics.">
+            <c-ecosystem-link href="https://marketplace.visualstudio.com/items?itemName=DavidBloomer.django-cotton-highlighting">VS Code Marketplace</c-ecosystem-link>
+        </c-ecosystem-item>
+    </div>
+    </c-section>
+
+    <c-section id="learning" title="Tutorials & Articles">
+    <p>Community write-ups using Cotton.</p>
+
+    <div class="not-prose mt-4 divide-y divide-zinc-200/70 dark:divide-zinc-700/50 border-y border-zinc-200/70 dark:border-zinc-700/50">
+        <c-ecosystem-item name="Build a Reusable Component with Django Cotton and AlpineJS" href="https://joshkaramuth.com/blog/django-cotton-alpine-component/" author="Josh Karamuth"
+            description="Builds a reusable modal with Cotton and Alpine, with a companion repo.">
+            <c-ecosystem-link href="https://joshkaramuth.com/blog/django-cotton-alpine-component/">Article</c-ecosystem-link>
+            <c-ecosystem-link href="https://github.com/confuzeus/django-cotton-alpine-modal">Repo</c-ecosystem-link>
+        </c-ecosystem-item>
+
+        <c-ecosystem-item name="Organizing Components with Django Cotton" href="https://dev.to/rodbv/creating-a-to-do-app-with-htmx-and-django-part-8-organizing-components-with-django-cotton-424f" author="Rodrigo Viana"
+            description="Part 8 of a To-do app series, refactoring HTMX templates into Cotton components.">
+            <c-ecosystem-link href="https://dev.to/rodbv/creating-a-to-do-app-with-htmx-and-django-part-8-organizing-components-with-django-cotton-424f">Article</c-ecosystem-link>
+        </c-ecosystem-item>
+
+        <c-ecosystem-item name="Personal Finance App with Django, HTMX, Alpine and Tailwind" href="https://dev.to/earthcomfy/personal-finance-management-app-with-django-htmx-alpine-tailwind-and-plaid-2bl0" author="Hana Belay"
+            description="A full app walkthrough that uses Cotton for reusable components alongside HTMX and Alpine.">
+            <c-ecosystem-link href="https://dev.to/earthcomfy/personal-finance-management-app-with-django-htmx-alpine-tailwind-and-plaid-2bl0">Article</c-ecosystem-link>
+        </c-ecosystem-item>
+    </div>
+    </c-section>
+
+    <c-section id="contribute" title="Add Yours">
+    <p>Built a library, tool, extension or tutorial for Cotton? Share it in <a href="https://github.com/wrabit/django-cotton/discussions" target="_blank" rel="noopener">GitHub Discussions</a> and it can be added here.</p>
+    </c-section>
+
+</c-layouts.with-sidebar>

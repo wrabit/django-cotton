@@ -17,8 +17,8 @@
 
         {# ---- Controls ---- #}
         <div class="rounded-box border border-zinc-200 dark:border-zinc-700 p-5">
-            {# Prominent row: the colour choices lead #}
-            <div class="flex flex-col sm:flex-row sm:flex-wrap items-start gap-x-10 gap-y-5">
+            {# Prominent row: the colour choices lead — accent left, gray right #}
+            <div class="flex flex-col sm:flex-row items-start gap-x-10 gap-y-5">
             <div>
                 <div class="text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2.5">Accent</div>
                 <div class="flex flex-wrap gap-2 max-w-2xl">
@@ -65,7 +65,7 @@
                             More settings
                         </span>
                     </c-slot>
-                    <div class="flex flex-wrap items-start gap-x-8 gap-y-6 pt-5">
+                    <div class="flex flex-col gap-6 pt-5">
 
             {# ---- Form controls (wider: four inputs) ---- #}
             <div class="space-y-3">
@@ -81,6 +81,18 @@
                                 :class="radius === r[1] ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'"
                                 x-text="r[0]"></button>
                         </template>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">Button radius</div>
+                    <div class="inline-flex rounded-control border border-zinc-200 dark:border-zinc-700 bg-[var(--color-input-bg)] p-0.5">
+                        <button type="button" @click="setButtonRadius('default')"
+                            class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                            :class="buttonRadius === 'default' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'">Default</button>
+                        <button type="button" @click="setButtonRadius('full')"
+                            class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                            :class="buttonRadius === 'full' ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'">Full</button>
                     </div>
                 </div>
 
@@ -110,8 +122,8 @@
                 </div>{# /form controls row #}
             </div>
 
-            {# divider: horizontal rule when stacked (forces the wrap), vertical stretched line side-by-side at lg #}
-            <div class="w-full h-px lg:w-px lg:h-auto self-stretch bg-zinc-200 dark:bg-zinc-700"></div>
+            {# divider: always a horizontal rule between the two stacked groups #}
+            <div class="w-full h-px bg-zinc-200 dark:bg-zinc-700"></div>
 
             {# ---- Structural ---- #}
             <div class="space-y-3">
@@ -156,13 +168,26 @@
 
                 <div>
                     <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">
-                        Surface lift <span class="text-zinc-400" x-text="(isDark ? surfaceDark : surfaceLight) + '%'"></span>
+                        Surface lift (light) <span class="text-zinc-400" x-text="surfaceLight + '%'"></span>
                     </div>
                     <div class="w-40">
                         <input type="range" min="0" max="100" step="1"
-                            :value="isDark ? surfaceDark : surfaceLight"
-                            @input="setSurface($event.target.value)"
-                            :style="`--range-fill: ${isDark ? surfaceDark : surfaceLight}%`"
+                            :value="surfaceLight"
+                            @input="surfaceLight = +$event.target.value; apply()"
+                            :style="`--range-fill: ${surfaceLight}%`"
+                            class="ui-range align-middle" />
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-xs font-medium text-zinc-600 dark:text-zinc-400 mb-2">
+                        Surface lift (dark) <span class="text-zinc-400" x-text="surfaceDark + '%'"></span>
+                    </div>
+                    <div class="w-40">
+                        <input type="range" min="0" max="100" step="1"
+                            :value="surfaceDark"
+                            @input="surfaceDark = +$event.target.value; apply()"
+                            :style="`--range-fill: ${surfaceDark}%`"
                             class="ui-range align-middle" />
                     </div>
                 </div>
@@ -279,13 +304,14 @@
                 accent: 'teal',
                 gray: 'zinc',
                 radius: '0.375rem',
+                buttonRadius: 'default',
                 radiusLg: '0.5rem',
                 focusRing: '2px',
                 inputShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
                 structuralShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
                 borders: true,
                 surfaceLight: 100,  /* --surface-level per mode: how much lighter cards are than the page */
-                surfaceDark: 8,
+                surfaceDark: 6,
                 isDark: false,
                 copied: false,
                 _observer: null,
@@ -336,6 +362,7 @@
                     // Component tokens
                     el.style.setProperty('--radius-control', this.radius);
                     el.style.setProperty('--radius-box', this.radiusLg);
+                    el.style.setProperty('--radius-button', this.buttonRadius === 'full' ? 'calc(infinity * 1px)' : 'var(--radius-control)');
                     el.style.setProperty('--focus-ring-width', this.focusRing);
                     el.style.setProperty('--shadow-input', this.inputShadow);
                     el.style.setProperty('--shadow-box', this.structuralShadow);
@@ -349,12 +376,12 @@
                 setAccent(a) { this.accent = a; this.apply(); },
                 setGray(g) { this.gray = g; this.apply(); },
                 setRadius(v) { this.radius = v; this.apply(); },
+                setButtonRadius(v) { this.buttonRadius = v; this.apply(); },
                 setRadiusLg(v) { this.radiusLg = v; this.apply(); },
                 setFocusRing(v) { this.focusRing = v; this.apply(); },
                 setInputShadow(v) { this.inputShadow = v; this.apply(); },
                 setStructuralShadow(v) { this.structuralShadow = v; this.apply(); },
                 setBorders(v) { this.borders = v; this.apply(); },
-                setSurface(v) { if (this.isDark) this.surfaceDark = +v; else this.surfaceLight = +v; this.apply(); },
 
                 get css() {
                     // Gray base remaps Tailwind's own zinc palette, which only a build can
@@ -374,8 +401,10 @@
                         '    --color-accent-content: var(--color-' + this.accent + '-600);\n' +
                         '    --color-accent-foreground: var(--color-white);\n\n' +
                         '    /* Corner radius, by role */\n' +
-                        '    --radius-control: ' + this.radius + ';     /* inputs, buttons, segments */\n' +
-                        '    --radius-box: ' + this.radiusLg + ';         /* cards, dialogs, menus */\n\n' +
+                        '    --radius-control: ' + this.radius + ';     /* inputs, segments */\n' +
+                        '    --radius-box: ' + this.radiusLg + ';         /* cards, dialogs, menus */\n' +
+                        (this.buttonRadius === 'full' ? '    --radius-button: calc(infinity * 1px);  /* pill buttons (defaults to --radius-control) */\n' : '') +
+                        '\n' +
                         '    /* Form controls */\n' +
                         '    --focus-ring-width: ' + this.focusRing + ';\n' +
                         '    --shadow-input: ' + this.inputShadow + ';\n\n' +
@@ -389,7 +418,7 @@
                         '    --color-accent: var(--color-' + this.accent + '-400);\n' +
                         '    --color-accent-content: var(--color-' + this.accent + '-300);\n' +
                         '    --color-accent-foreground: var(--color-' + this.accent + '-950);\n' +
-                        (this.surfaceDark !== 8 ? '    --surface-level: ' + this.surfaceDark + '%;\n' : '') +
+                        (this.surfaceDark !== 6 ? '    --surface-level: ' + this.surfaceDark + '%;\n' : '') +
                         '}' + grayBlock;
                 },
 

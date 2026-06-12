@@ -33,6 +33,9 @@
             <c-ui.navlist.item href="{% url 'index-component' %}" :current="{% if request.resolver_match.url_name == 'index-component' %}True{% else %}False{% endif %}">Compound Components</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'htmx-examples' %}" :current="{% if request.resolver_match.url_name == 'htmx-examples' %}True{% else %}False{% endif %}">HTMX Integration</c-ui.navlist.item>
         </c-ui.navlist.group>
+        <c-ui.navlist.group heading="Community">
+            <c-ui.navlist.item href="{% url 'ecosystem' %}" :current="{% if request.resolver_match.url_name == 'ecosystem' %}True{% else %}False{% endif %}">Ecosystem</c-ui.navlist.item>
+        </c-ui.navlist.group>
         </c-ui.navlist>
         <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-5 hidden sm:block bg-gradient-to-t from-[var(--color-bg)] to-transparent"></div>
     </div>

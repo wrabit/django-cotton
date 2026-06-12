@@ -23,7 +23,7 @@
     <!-- Fixed navbar -->
     <header class="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-zinc-200 dark:bg-zinc-900/80 dark:border-zinc-800">
         <div class="py-2 px-5 max-w-8xl mx-auto flex items-center justify-between">
-            <div class="flex item-center items-center">
+            <div class="flex item-center items-center min-w-0">
                 <!-- Mobile menu button-->
                 <button @click="toggleMenu()"
                         type="button"
@@ -38,7 +38,7 @@
                     </svg>
                 </button>
 
-                <a href="{% if request.path|startswith:'/ui' %}{% url 'ui' %}{% else %}{% url 'home' %}{% endif %}" class="flex item-center items-center space-x-1.5">
+                <a href="{% if request.path|startswith:'/ui' %}{% url 'ui' %}{% else %}{% url 'home' %}{% endif %}" class="flex item-center items-center space-x-1.5 shrink-0">
                     <div class="flex items-center space-x-1">
                         <c-icons.logo class="size-7 text-accent" />
                         <span class="font-semibold text-[1.6rem] ml-0.5 text-zinc-950 dark:text-gray-100 tracking-tight">cotton</span>
@@ -58,16 +58,19 @@
 
                 <!-- Mobile section switcher: the Core / UI Kit nav collapsed into a pill
                      dropdown styled like the active nav-item, defaulting to the current section. -->
-                <div class="sm:hidden relative ml-3" x-data="{ secOpen: false }"
+                <div class="sm:hidden relative ml-3 min-w-0" x-data="{ secOpen: false }"
                      @click.outside="secOpen = false" @keydown.escape.window="secOpen = false">
                     <button @click="secOpen = !secOpen" type="button" :aria-expanded="secOpen"
-                            class="flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full font-medium bg-accent/15 dark:bg-accent/20 text-accent-content dark:text-accent">
+                            class="flex items-center gap-1.5 min-w-0 max-w-full pl-3 pr-2 py-1 rounded-full font-medium bg-accent/15 dark:bg-accent/20 text-accent-content dark:text-accent">
                         {% if request.path|startswith:'/ui' %}
-                            <c-icons.blocks class="size-4" stroke-width="2" /> UI Kit
+                            <c-icons.blocks class="size-4 shrink-0" stroke-width="2" />
+                            {# single-line clip: when the pill runs out of room "Kit" wraps to a hidden second line, masked by the fixed one-line height, leaving "UI" #}
+                            <span class="min-w-0 max-h-[1lh] overflow-hidden">UI Kit</span>
                         {% else %}
-                            <c-icons.book class="size-4" stroke-width="2" /> Core
+                            <c-icons.book class="size-4 shrink-0" stroke-width="2" />
+                            <span class="min-w-0 max-h-[1lh] overflow-hidden">Core</span>
                         {% endif %}
-                        <span class="transition-transform" :class="secOpen && 'rotate-180'"><c-icons.chevron-down class="size-4" /></span>
+                        <span class="shrink-0 transition-transform" :class="secOpen && 'rotate-180'"><c-icons.chevron-down class="size-4" /></span>
                     </button>
 
                     <div x-show="secOpen" x-cloak
@@ -85,19 +88,40 @@
                 </div>
             </div>
 
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2 shrink-0">
+                {% comment %}Right cluster: a compact GitHub repo card — mark on the left, repo name on
+                   top, star count + version beneath (repo name and version collapse away on mobile,
+                   leaving the mark and star count). Mirrored on both sides; UI Kit adds an Alpha badge.{% endcomment %}
                 {% if request.path|startswith:'/ui' %}
-                    <a href="{{ github_ui_repo }}" target="_blank" aria-label="django-cotton-ui on GitHub" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center gap-2 transition-colors">
-                        <c-icons.github class="size-5 shrink-0" />
-                        {% if github_ui_stars and github_ui_stars != "0" %}<span class="inline-block text-[11px] font-medium tabular-nums">{{ github_ui_stars }}</span>{% endif %}
-                    </a>
-                    {% if pypi_ui_version %}<a href="https://pypi.org/project/django-cotton-ui/" target="_blank" aria-label="django-cotton-ui on PyPI" class="hidden md:inline-block text-[11px] font-medium text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_ui_version }}</a>{% endif %}
+                    <div class="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+                        <a href="{{ github_ui_repo }}" target="_blank" aria-label="django-cotton-ui on GitHub" class="hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors">
+                            <c-icons.github class="size-5 shrink-0" />
+                        </a>
+                        <div class="flex flex-col leading-tight">
+                            <a href="{{ github_ui_repo }}" target="_blank" class="hidden md:block text-xs font-semibold text-zinc-700 dark:text-zinc-200 hover:text-zinc-900 dark:hover:text-white no-underline transition-colors">django-cotton-ui</a>
+                            <span class="flex items-center gap-2 text-[11px] font-medium">
+                                {% if github_ui_stars and github_ui_stars != "0" %}<a href="{{ github_ui_repo }}" target="_blank" aria-label="Stars on GitHub" class="flex items-center gap-1 hover:text-zinc-700 dark:hover:text-zinc-200 no-underline transition-colors tabular-nums"><c-icons.star class="size-3 shrink-0 -translate-y-[0.5px]" />{{ github_ui_stars }}</a>{% endif %}
+                                {% if pypi_ui_version %}<a href="https://pypi.org/project/django-cotton-ui/" target="_blank" aria-label="django-cotton-ui on PyPI" class="hidden md:inline text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_ui_version }}</a>{% endif %}
+                                {% comment %}Alpha: badge text styling (amber, xs, medium) without the pill bg/padding.{% endcomment %}
+                                <c-ui.tooltip content="Alpha: the kit is pre-1.0, so APIs may still change between releases." position="bottom" size="xs">
+                                    <span class="text-[10px] font-medium text-amber-700 dark:text-amber-400">alpha</span>
+                                </c-ui.tooltip>
+                            </span>
+                        </div>
+                    </div>
                 {% else %}
-                    <a href="{{ github_core_repo }}" target="_blank" aria-label="django-cotton on GitHub" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 flex items-center gap-2 transition-colors">
-                        <c-icons.github class="size-5 shrink-0" />
-                        {% if github_core_stars and github_core_stars != "0" %}<span class="inline-block text-[11px] font-medium tabular-nums">{{ github_core_stars }}</span>{% endif %}
-                    </a>
-                    {% if pypi_core_version %}<a href="https://pypi.org/project/django-cotton/" target="_blank" aria-label="django-cotton on PyPI" class="hidden md:inline-block text-[11px] font-medium text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_core_version }}</a>{% endif %}
+                    <div class="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+                        <a href="{{ github_core_repo }}" target="_blank" aria-label="django-cotton on GitHub" class="hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors">
+                            <c-icons.github class="size-5 shrink-0" />
+                        </a>
+                        <div class="flex flex-col leading-tight">
+                            <a href="{{ github_core_repo }}" target="_blank" class="hidden md:block text-xs font-semibold text-zinc-700 dark:text-zinc-200 hover:text-zinc-900 dark:hover:text-white no-underline transition-colors">django-cotton</a>
+                            <span class="flex items-center gap-2 text-[11px] font-medium">
+                                {% if github_core_stars and github_core_stars != "0" %}<a href="{{ github_core_repo }}" target="_blank" aria-label="Stars on GitHub" class="flex items-center gap-1 hover:text-zinc-700 dark:hover:text-zinc-200 no-underline transition-colors tabular-nums"><c-icons.star class="size-3 shrink-0 -translate-y-[0.5px]" />{{ github_core_stars }}</a>{% endif %}
+                                {% if pypi_core_version %}<a href="https://pypi.org/project/django-cotton/" target="_blank" aria-label="django-cotton on PyPI" class="hidden md:inline text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 tabular-nums no-underline transition-colors">v{{ pypi_core_version }}</a>{% endif %}
+                            </span>
+                        </div>
+                    </div>
                 {% endif %}
                 <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors hidden sm:flex items-center space-x-2">
                     <c-icons.discord class="size-6" />

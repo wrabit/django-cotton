@@ -25,7 +25,7 @@
         <c-ui.drawer title="Account details" description="Update your profile and preferences.">
             <c-ui.button @click="drawerOpen = true">Open drawer</c-ui.button>
             <c-slot name="content">
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">Drawer body content goes here. It scrolls if it grows taller than the panel.</p>
+                <p class="text-sm text-ink-600 dark:text-ink-400">Drawer body content goes here. It scrolls if it grows taller than the panel.</p>
             </c-slot>
             <c-slot name="footer">
                 <div class="flex justify-end gap-2">
@@ -60,19 +60,19 @@
         <div class="flex flex-wrap gap-2">
             <c-ui.drawer title="Right" side="right">
                 <c-ui.button @click="drawerOpen = true">Right</c-ui.button>
-                <c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">Slides in from the right.</p></c-slot>
+                <c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">Slides in from the right.</p></c-slot>
             </c-ui.drawer>
             <c-ui.drawer title="Left" side="left">
                 <c-ui.button @click="drawerOpen = true">Left</c-ui.button>
-                <c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">Slides in from the left.</p></c-slot>
+                <c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">Slides in from the left.</p></c-slot>
             </c-ui.drawer>
             <c-ui.drawer title="Top" side="top">
                 <c-ui.button @click="drawerOpen = true">Top</c-ui.button>
-                <c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">Slides in from the top.</p></c-slot>
+                <c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">Slides in from the top.</p></c-slot>
             </c-ui.drawer>
             <c-ui.drawer title="Bottom" side="bottom">
                 <c-ui.button @click="drawerOpen = true">Bottom</c-ui.button>
-                <c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">Slides in from the bottom.</p></c-slot>
+                <c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">Slides in from the bottom.</p></c-slot>
             </c-ui.drawer>
         </div>
 
@@ -91,12 +91,12 @@
 
     <c-sample>
         <div class="flex flex-wrap gap-2">
-            <c-ui.drawer title="Small" size="sm"><c-ui.button @click="drawerOpen = true">sm</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="sm"</p></c-slot></c-ui.drawer>
-            <c-ui.drawer title="Medium" size="md"><c-ui.button @click="drawerOpen = true">md</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="md" (default)</p></c-slot></c-ui.drawer>
-            <c-ui.drawer title="Large" size="lg"><c-ui.button @click="drawerOpen = true">lg</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="lg"</p></c-slot></c-ui.drawer>
-            <c-ui.drawer title="Extra large" size="xl"><c-ui.button @click="drawerOpen = true">xl</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="xl"</p></c-slot></c-ui.drawer>
-            <c-ui.drawer title="2XL" size="2xl"><c-ui.button @click="drawerOpen = true">2xl</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">size="2xl"</p></c-slot></c-ui.drawer>
-            <c-ui.drawer title="Custom" max_size="16rem"><c-ui.button @click="drawerOpen = true">Custom</c-ui.button><c-slot name="content"><p class="text-sm text-zinc-600 dark:text-zinc-400">A narrow custom width (16rem), smaller than the sm scale, via inline style.</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Small" size="sm"><c-ui.button @click="drawerOpen = true">sm</c-ui.button><c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">size="sm"</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Medium" size="md"><c-ui.button @click="drawerOpen = true">md</c-ui.button><c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">size="md" (default)</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Large" size="lg"><c-ui.button @click="drawerOpen = true">lg</c-ui.button><c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">size="lg"</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Extra large" size="xl"><c-ui.button @click="drawerOpen = true">xl</c-ui.button><c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">size="xl"</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="2XL" size="2xl"><c-ui.button @click="drawerOpen = true">2xl</c-ui.button><c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">size="2xl"</p></c-slot></c-ui.drawer>
+            <c-ui.drawer title="Custom" max_size="16rem"><c-ui.button @click="drawerOpen = true">Custom</c-ui.button><c-slot name="content"><p class="text-sm text-ink-600 dark:text-ink-400">A narrow custom width (16rem), smaller than the sm scale, via inline style.</p></c-slot></c-ui.drawer>
         </div>
 
         <c-slot name="code">

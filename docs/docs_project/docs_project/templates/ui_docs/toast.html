@@ -169,7 +169,7 @@ window.dispatchEvent(new CustomEvent('toast', { detail: { message: 'Saved', posi
 
     <c-sample>
         <div class="flex justify-center">
-            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { title: 'Custom', message: 'Fully restyled toast', appearance: 'outline', class: '!bg-zinc-900 !border-zinc-700 !text-white' } }))">Custom styled</c-ui.button>
+            <c-ui.button onclick="window.dispatchEvent(new CustomEvent('toast', { detail: { title: 'Custom', message: 'Fully restyled toast', appearance: 'outline', class: '!bg-ink-900 !border-ink-700 !text-white' } }))">Custom styled</c-ui.button>
         </div>
 
         <c-slot name="code">
@@ -178,7 +178,7 @@ window.dispatchEvent(new CustomEvent('toast', {
     detail: {
         title: 'Custom',
         message: 'Fully restyled toast',
-        class: '!bg-zinc-900 !border-zinc-700 !text-white'
+        class: '!bg-ink-900 !border-ink-700 !text-white'
     }
 }))
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>

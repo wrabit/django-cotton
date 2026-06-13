@@ -7,7 +7,7 @@
             <c-layouts.prose-container>
                 <div class="text-center max-w-2xl mx-auto mb-12 not-prose">
                     <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-[#1a384a] dark:text-white">Django UI components, woven from Cotton</h1>
-                    <p class="text-lg text-zinc-600 dark:text-zinc-400 mt-4">
+                    <p class="text-lg text-ink-600 dark:text-ink-400 mt-4">
                         An optional kit of accessible, themeable components, built on Cotton with Alpine.js and Tailwind CSS.
                     </p>
                     <div class="flex gap-3 justify-center mt-8">
@@ -31,8 +31,8 @@
             {# Payment Method Card #}
             <c-ui.card x-data class="space-y-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Payment Method</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">All transactions are secure and encrypted</p>
+                    <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100">Payment Method</h3>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">All transactions are secure and encrypted</p>
                 </div>
                 <div class="space-y-4">
                     <c-ui.input
@@ -77,33 +77,33 @@
             {# Status Indicators #}
             <c-ui.card variant="outline" class="space-y-3">
                 <div class="flex items-center gap-1.5">
-                    <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">System Status</h3>
+                    <h3 class="text-base font-semibold text-ink-900 dark:text-ink-100">System Status</h3>
                     <c-ui.popover position="bottom">
                         <c-slot name="trigger">
-                            <button type="button" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors rounded focus-ring" aria-label="About these statuses">
+                            <button type="button" class="text-ink-400 hover:text-ink-600 dark:hover:text-ink-300 transition-colors rounded focus-ring" aria-label="About these statuses">
                                 <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
                             </button>
                         </c-slot>
-                        <p class="font-medium text-zinc-900 dark:text-zinc-100 mb-1">Service health</p>
-                        <p class="text-zinc-600 dark:text-zinc-400">Live status of each service. <span class="text-amber-600 dark:text-amber-400 font-medium">Degraded</span> means slower than usual responses.</p>
+                        <p class="font-medium text-ink-900 dark:text-ink-100 mb-1">Service health</p>
+                        <p class="text-ink-600 dark:text-ink-400">Live status of each service. <span class="text-amber-600 dark:text-amber-400 font-medium">Degraded</span> means slower than usual responses.</p>
                     </c-ui.popover>
                 </div>
                 <div class="space-y-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-zinc-600 dark:text-zinc-400">API Server</span>
+                        <span class="text-sm text-ink-600 dark:text-ink-400">API Server</span>
                         <c-ui.badge color="green" size="sm">Operational</c-ui.badge>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-zinc-600 dark:text-zinc-400">Database</span>
+                        <span class="text-sm text-ink-600 dark:text-ink-400">Database</span>
                         <c-ui.badge color="green" size="sm">Operational</c-ui.badge>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-zinc-600 dark:text-zinc-400">CDN</span>
+                        <span class="text-sm text-ink-600 dark:text-ink-400">CDN</span>
                         <c-ui.badge color="amber" size="sm">Degraded</c-ui.badge>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-zinc-600 dark:text-zinc-400">Backups</span>
-                        <span class="flex items-center gap-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+                        <span class="text-sm text-ink-600 dark:text-ink-400">Backups</span>
+                        <span class="flex items-center gap-1.5 text-sm text-ink-500 dark:text-ink-400">
                             <c-ui.spinner size="xs" color="current" />
                             Syncing
                         </span>
@@ -113,7 +113,7 @@
 
             {# Project Selection #}
             <c-ui.card class="space-y-3">
-                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Active Project</h3>
+                <h3 class="text-base font-semibold text-ink-900 dark:text-ink-100">Active Project</h3>
                 <c-ui.select name="project" variant="listbox" placeholder="Select a project" value="api">
                     <c-ui.menu.item value="website" label="Company Website">
                         <c-slot name="icon">
@@ -141,11 +141,11 @@
 
             {# File Processing #}
             <c-ui.card class="space-y-3">
-                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Processing Status</h3>
+                <h3 class="text-base font-semibold text-ink-900 dark:text-ink-100">Processing Status</h3>
                 <div class="space-y-3">
                     <div>
                         <div class="flex items-center justify-between mb-1">
-                            <span class="text-sm text-zinc-600 dark:text-zinc-400">report.pdf</span>
+                            <span class="text-sm text-ink-600 dark:text-ink-400">report.pdf</span>
                             <c-ui.badge color="blue" size="sm">
                                 <c-slot name="icon_leading">
                                     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -159,7 +159,7 @@
                     </div>
                     <div>
                         <div class="flex items-center justify-between mb-1">
-                            <span class="text-sm text-zinc-600 dark:text-zinc-400">data.csv</span>
+                            <span class="text-sm text-ink-600 dark:text-ink-400">data.csv</span>
                             <c-ui.badge color="green" size="sm">
                                 <c-slot name="icon_leading">
                                     <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -179,7 +179,7 @@
 
             {# Tags/Categories - Clickable Badges #}
             <c-ui.card class="space-y-3">
-                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Article Tags</h3>
+                <h3 class="text-base font-semibold text-ink-900 dark:text-ink-100">Article Tags</h3>
                 <div class="flex flex-wrap gap-2">
                     <c-ui.badge href="#" color="purple" variant="pill">
                         <c-slot name="icon_leading">
@@ -203,45 +203,45 @@
             </c-ui.card>
 
             {# Tooltip toolbar - imaginary editing studio: free-flowing bar, equal cells (lucide icons) #}
-            <div class="flex items-stretch overflow-hidden rounded-box border border-zinc-200 dark:border-zinc-700 bg-[var(--color-surface)] divide-x divide-zinc-200 dark:divide-zinc-700 shadow-[var(--shadow-box)]">
+            <div class="flex items-stretch overflow-hidden rounded-box border border-ink-200 dark:border-ink-700 bg-[var(--color-surface)] divide-x divide-ink-200 dark:divide-ink-700 shadow-[var(--shadow-box)]">
                 <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
                     <c-ui.tooltip size="sm" content="Capture">
-                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus-ring focus-visible:relative">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
                         </button>
                     </c-ui.tooltip>
                 </div>
                 <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
                     <c-ui.tooltip size="sm" content="Crop">
-                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus-ring focus-visible:relative">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>
                         </button>
                     </c-ui.tooltip>
                 </div>
                 <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
                     <c-ui.tooltip size="sm" content="Resize">
-                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus-ring focus-visible:relative">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg>
                         </button>
                     </c-ui.tooltip>
                 </div>
                 <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
                     <c-ui.tooltip size="sm" content="Rotate">
-                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus-ring focus-visible:relative">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
                         </button>
                     </c-ui.tooltip>
                 </div>
                 <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
                     <c-ui.tooltip size="sm" content="Zoom out">
-                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus-ring focus-visible:relative">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
                         </button>
                     </c-ui.tooltip>
                 </div>
                 <div class="flex-1 flex [&>*]:grow [&>*>*]:w-full">
                     <c-ui.tooltip size="sm" content="Zoom in">
-                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring focus-visible:relative">
+                        <button type="button" class="w-full px-3 py-2.5 flex justify-center text-ink-600 dark:text-ink-300 hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors focus-ring focus-visible:relative">
                             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
                         </button>
                     </c-ui.tooltip>
@@ -250,7 +250,7 @@
 
             {# Segmented (pill) radio #}
             <c-ui.card class="space-y-3">
-                <h3 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Billing period</h3>
+                <h3 class="text-base font-semibold text-ink-900 dark:text-ink-100">Billing period</h3>
                 <c-ui.radio.group name="billing" variant="pill" value="yearly">
                     <c-ui.radio value="monthly" label="Monthly" />
                     <c-ui.radio value="yearly" label="Yearly" />
@@ -269,8 +269,8 @@
                         <c-ui.avatar initials="A" color="teal" />
                         <c-ui.avatar initials="+2" class="text-xs" />
                     </c-ui.avatar.group>
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Team Members</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">3 members in this workspace</p>
+                    <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100 mb-1">Team Members</h3>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mb-4">3 members in this workspace</p>
                     <c-ui.dialog>
                         <c-slot name="trigger">
                             <c-ui.button variant="default" class="w-full">+ Invite Members</c-ui.button>
@@ -293,8 +293,8 @@
             {# Notification Preferences #}
             <div class="space-y-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Notifications</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Manage your notification preferences</p>
+                    <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100">Notifications</h3>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Manage your notification preferences</p>
                 </div>
                 <div class="space-y-3">
                     <c-ui.switch
@@ -323,8 +323,8 @@
             {# Skills Combobox #}
             <c-ui.card class="space-y-3">
                 <div>
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Required skills</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Search and tag the skills for this role</p>
+                    <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100">Required skills</h3>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Search and tag the skills for this role</p>
                 </div>
                 <c-ui.combobox
                     name="skills"
@@ -338,25 +338,25 @@
 
             {# Hosting Plan Selection #}
             <c-ui.card variant="outline">
-                <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-1">Choose Your Plan</h3>
-                <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">Select the hosting plan that fits your needs</p>
+                <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100 mb-1">Choose Your Plan</h3>
+                <p class="text-sm text-ink-600 dark:text-ink-400 mb-4">Select the hosting plan that fits your needs</p>
                 <c-ui.radio.group name="hosting" variant="cards" class="flex-col" value="shared">
                     <c-ui.radio value="shared">
                         <div class="flex items-start gap-4 flex-1">
                             <div class="flex items-center h-5">
                                 <div class="flex items-center justify-center w-4 h-4 border-2 rounded-full transition-all"
-                                     :class="$data.isSelected('shared') ? 'border-accent bg-accent' : 'border-zinc-300 dark:border-zinc-600'">
+                                     :class="$data.isSelected('shared') ? 'border-accent bg-accent' : 'border-ink-300 dark:border-ink-600'">
                                     <div class="w-1.5 h-1.5 rounded-full bg-white transition-transform"
                                          :class="$data.isSelected('shared') ? 'scale-100' : 'scale-0'"></div>
                                 </div>
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center justify-between">
-                                    <h4 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">Shared Hosting</h4>
+                                    <h4 class="text-base font-semibold text-ink-900 dark:text-ink-100">Shared Hosting</h4>
                                     <span class="text-sm font-bold text-accent">$5/mo</span>
                                 </div>
-                                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Cost-effective for small websites</p>
-                                <ul class="mt-3 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Cost-effective for small websites</p>
+                                <ul class="mt-3 space-y-1 text-xs text-ink-600 dark:text-ink-400">
                                     <li class="flex items-center gap-2">
                                         <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -378,18 +378,18 @@
                         <div class="flex items-start gap-4 flex-1">
                             <div class="flex items-center h-5">
                                 <div class="flex items-center justify-center w-4 h-4 border-2 rounded-full transition-all"
-                                     :class="$data.isSelected('vps') ? 'border-accent bg-accent' : 'border-zinc-300 dark:border-zinc-600'">
+                                     :class="$data.isSelected('vps') ? 'border-accent bg-accent' : 'border-ink-300 dark:border-ink-600'">
                                     <div class="w-1.5 h-1.5 rounded-full bg-white transition-transform"
                                          :class="$data.isSelected('vps') ? 'scale-100' : 'scale-0'"></div>
                                 </div>
                             </div>
                             <div class="flex-1">
                                 <div class="flex items-center justify-between">
-                                    <h4 class="text-base font-semibold text-zinc-900 dark:text-zinc-100">VPS Hosting</h4>
+                                    <h4 class="text-base font-semibold text-ink-900 dark:text-ink-100">VPS Hosting</h4>
                                     <span class="text-sm font-bold text-accent">$25/mo</span>
                                 </div>
-                                <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Dedicated resources and control</p>
-                                <ul class="mt-3 space-y-1 text-xs text-zinc-600 dark:text-zinc-400">
+                                <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Dedicated resources and control</p>
+                                <ul class="mt-3 space-y-1 text-xs text-ink-600 dark:text-ink-400">
                                     <li class="flex items-center gap-2">
                                         <svg class="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -413,16 +413,16 @@
             <c-ui.card class="space-y-3">
                 <div class="flex items-center gap-2">
                     <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Assistant</h3>
+                    <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100">Assistant</h3>
                 </div>
                 <c-ui.collapse trigger-text="Thought for 4 seconds">
-                    <div class="mt-2 pl-3 border-l-2 border-zinc-200 dark:border-zinc-700 space-y-2 text-sm text-zinc-500 dark:text-zinc-400">
+                    <div class="mt-2 pl-3 border-l-2 border-ink-200 dark:border-ink-700 space-y-2 text-sm text-ink-500 dark:text-ink-400">
                         <p>Splitting the request into discrete steps.</p>
                         <p>Checking the component library for a matching primitive.</p>
                         <p>Drafting and refining the final answer.</p>
                     </div>
                 </c-ui.collapse>
-                <p class="text-sm text-zinc-700 dark:text-zinc-300">Done. Here is a concise summary of what changed and why.</p>
+                <p class="text-sm text-ink-700 dark:text-ink-300">Done. Here is a concise summary of what changed and why.</p>
             </c-ui.card>
         </div>
 
@@ -433,7 +433,7 @@
                 <c-slot name="leading">
                     <c-ui.dropdown position="top" align="start" min_width="14rem">
                         <c-slot name="trigger">
-                            <button type="button" aria-label="Add" class="inline-flex items-center justify-center size-8 rounded-control text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer focus-ring">
+                            <button type="button" aria-label="Add" class="inline-flex items-center justify-center size-8 rounded-control text-ink-500 dark:text-ink-400 hover:text-ink-800 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-800 cursor-pointer focus-ring">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                             </button>
                         </c-slot>
@@ -446,7 +446,7 @@
                     <div x-data="{ model: 'Opus 4.8' }" class="contents">
                         <c-ui.dropdown position="top" align="end" min_width="13rem">
                             <c-slot name="trigger">
-                                <button type="button" class="inline-flex items-center gap-1 px-2 py-1 rounded-control text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer focus-ring">
+                                <button type="button" class="inline-flex items-center gap-1 px-2 py-1 rounded-control text-sm text-ink-500 dark:text-ink-400 hover:text-ink-800 dark:hover:text-ink-200 hover:bg-ink-100 dark:hover:bg-ink-800 cursor-pointer focus-ring">
                                     <span x-text="model"></span>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-4"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                                 </button>
@@ -472,13 +472,13 @@
             {# Security Settings #}
             <c-ui.card class="space-y-4">
                 <div>
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Security</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Manage your account security</p>
+                    <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100">Security</h3>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Manage your account security</p>
                 </div>
                 <div class="flex items-center justify-between py-2">
                     <div>
-                        <div class="font-medium text-zinc-900 dark:text-zinc-100">Two-factor authentication</div>
-                        <div class="text-sm text-zinc-600 dark:text-zinc-400">Add an extra layer of security</div>
+                        <div class="font-medium text-ink-900 dark:text-ink-100">Two-factor authentication</div>
+                        <div class="text-sm text-ink-600 dark:text-ink-400">Add an extra layer of security</div>
                     </div>
                     <c-ui.button variant="default" size="sm">Enable</c-ui.button>
                 </div>
@@ -496,36 +496,36 @@
                     <c-ui.tabs.tab name="Overview">
                         <div class="py-6 space-y-6">
                             <div class="grid grid-cols-3 gap-4">
-                                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
-                                    <div class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">Revenue</div>
-                                    <div class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">$45K</div>
+                                <div class="p-4 bg-ink-50 dark:bg-ink-800/50 rounded-lg">
+                                    <div class="text-xs text-ink-600 dark:text-ink-400 mb-1">Revenue</div>
+                                    <div class="text-2xl font-bold text-ink-900 dark:text-ink-100">$45K</div>
                                     <div class="text-xs text-green-600 dark:text-green-400 mt-1">+20.1%</div>
                                 </div>
-                                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
-                                    <div class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">Users</div>
-                                    <div class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">2.3K</div>
+                                <div class="p-4 bg-ink-50 dark:bg-ink-800/50 rounded-lg">
+                                    <div class="text-xs text-ink-600 dark:text-ink-400 mb-1">Users</div>
+                                    <div class="text-2xl font-bold text-ink-900 dark:text-ink-100">2.3K</div>
                                     <div class="text-xs text-green-600 dark:text-green-400 mt-1">+12.5%</div>
                                 </div>
-                                <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
-                                    <div class="text-xs text-zinc-600 dark:text-zinc-400 mb-1">CVR</div>
-                                    <div class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">3.2%</div>
+                                <div class="p-4 bg-ink-50 dark:bg-ink-800/50 rounded-lg">
+                                    <div class="text-xs text-ink-600 dark:text-ink-400 mb-1">CVR</div>
+                                    <div class="text-2xl font-bold text-ink-900 dark:text-ink-100">3.2%</div>
                                     <div class="text-xs text-red-600 dark:text-red-400 mt-1">-2.4%</div>
                                 </div>
                             </div>
                         </div>
                     </c-ui.tabs.tab>
                     <c-ui.tabs.tab name="Analytics">
-                        <p class="text-zinc-600 dark:text-zinc-400 py-6">Deep dive into user behavior and engagement metrics.</p>
+                        <p class="text-ink-600 dark:text-ink-400 py-6">Deep dive into user behavior and engagement metrics.</p>
                     </c-ui.tabs.tab>
                     <c-ui.tabs.tab name="Reports">
-                        <p class="text-zinc-600 dark:text-zinc-400 py-6">Generate and export custom reports.</p>
+                        <p class="text-ink-600 dark:text-ink-400 py-6">Generate and export custom reports.</p>
                     </c-ui.tabs.tab>
                 </c-ui.tabs>
             </c-ui.card>
 
             {# FAQ Accordion #}
             <c-ui.card>
-                <h3 class="font-semibold text-zinc-900 dark:text-zinc-100 mb-4">Frequently Asked Questions</h3>
+                <h3 class="font-semibold text-ink-900 dark:text-ink-100 mb-4">Frequently Asked Questions</h3>
                 <c-ui.accordion>
                     <c-ui.accordion.item header="What payment methods do you accept?">
                         We accept all major credit cards, PayPal, and bank transfers for enterprise accounts.
@@ -539,10 +539,10 @@
             {# Activity Feed #}
             <c-ui.card variant="outline" class="space-y-4">
                 <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Recent Activity</h3>
+                    <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100">Recent Activity</h3>
                     <c-ui.dropdown position="bottom" align="end" offset="8">
                         <c-slot name="trigger">
-                            <button type="button" class="p-1.5 -mr-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 transition-colors focus-ring" aria-label="More options">
+                            <button type="button" class="p-1.5 -mr-1.5 rounded-md hover:bg-ink-100 dark:hover:bg-ink-800 text-ink-500 dark:text-ink-400 transition-colors focus-ring" aria-label="More options">
                                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
                                 </svg>
@@ -558,22 +558,22 @@
                     <div class="flex gap-3">
                         <div class="w-2 h-2 mt-2 rounded-full bg-blue-500"></div>
                         <div class="flex-1">
-                            <p class="text-sm text-zinc-900 dark:text-zinc-100 font-medium">New user registered</p>
-                            <p class="text-xs text-zinc-600 dark:text-zinc-400">2 minutes ago</p>
+                            <p class="text-sm text-ink-900 dark:text-ink-100 font-medium">New user registered</p>
+                            <p class="text-xs text-ink-600 dark:text-ink-400">2 minutes ago</p>
                         </div>
                     </div>
                     <div class="flex gap-3">
                         <div class="w-2 h-2 mt-2 rounded-full bg-green-500"></div>
                         <div class="flex-1">
-                            <p class="text-sm text-zinc-900 dark:text-zinc-100 font-medium">Payment received</p>
-                            <p class="text-xs text-zinc-600 dark:text-zinc-400">15 minutes ago</p>
+                            <p class="text-sm text-ink-900 dark:text-ink-100 font-medium">Payment received</p>
+                            <p class="text-xs text-ink-600 dark:text-ink-400">15 minutes ago</p>
                         </div>
                     </div>
                     <div class="flex gap-3">
                         <div class="w-2 h-2 mt-2 rounded-full bg-purple-500"></div>
                         <div class="flex-1">
-                            <p class="text-sm text-zinc-900 dark:text-zinc-100 font-medium">Report generated</p>
-                            <p class="text-xs text-zinc-600 dark:text-zinc-400">1 hour ago</p>
+                            <p class="text-sm text-ink-900 dark:text-ink-100 font-medium">Report generated</p>
+                            <p class="text-xs text-ink-600 dark:text-ink-400">1 hour ago</p>
                         </div>
                     </div>
                 </div>

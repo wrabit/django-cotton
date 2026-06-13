@@ -18,7 +18,7 @@
     </c-slot>
 
     <c-section id="basic" title="Basic Usage">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             The simplest dropdown uses <code>trigger_text</code> to auto-generate a button trigger.
         </p>
 
@@ -42,7 +42,7 @@
     </c-section>
 
     <c-section id="positioning" title="Positioning">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             Control dropdown placement with <code>position</code>, <code>align</code>, and <code>offset</code> props.
             By default, dropdowns auto-adjust to stay within the viewport (disable with <code>:auto_position="False"</code>).
         </p>
@@ -105,7 +105,7 @@
     </c-section>
 
     <c-section id="responsive" title="Responsive positioning">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             With <code>:auto_position</code> (on by default) the menu watches the viewport and flips or realigns to stay
             visible. Drag the handle to shrink the preview into a mini viewport and watch the open menu reposition.
         </p>
@@ -114,7 +114,7 @@
     </c-section>
 
     <c-section id="variants" title="Item Variants">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             Enhance items with icons, keyboard shortcuts, and danger variants.
         </p>
 
@@ -176,7 +176,7 @@
     </c-section>
 
     <c-section id="custom-trigger" title="Custom Trigger">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             Use the <code>trigger</code> slot for complete control over the trigger element. Common uses include icon-only buttons, avatar menus, or custom styled triggers.
         </p>
 
@@ -185,7 +185,7 @@
                 <!-- Icon-only button (common for actions menu) -->
                 <c-ui.dropdown position="bottom" align="end" offset="8">
                     <c-slot name="trigger">
-                        <button type="button" class="p-2 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 transition-colors" aria-label="More options">
+                        <button type="button" class="p-2 rounded-md hover:bg-ink-100 dark:hover:bg-ink-800 text-ink-600 dark:text-ink-400 transition-colors" aria-label="More options">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
                             </svg>
@@ -200,11 +200,11 @@
                 <!-- User avatar menu -->
                 <c-ui.dropdown position="bottom" align="end" offset="8">
                     <c-slot name="trigger">
-                        <button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                        <button type="button" class="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-ink-100 dark:hover:bg-ink-800 transition-colors">
                             <div class="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center text-sm font-medium">
                                 JD
                             </div>
-                            <svg class="w-4 h-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-4 h-4 text-ink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
@@ -221,7 +221,7 @@
 <!-- Icon-only menu button -->
 <c-ui.dropdown position="bottom" align="end">
     <c-slot name="trigger">
-        <button type="button" class="p-2 rounded-md hover:bg-zinc-100" aria-label="More options">
+        <button type="button" class="p-2 rounded-md hover:bg-ink-100" aria-label="More options">
             <svg class="w-5 h-5"><!-- three dots icon --></svg>
         </button>
     </c-slot>
@@ -234,7 +234,7 @@
 <!-- User avatar menu -->
 <c-ui.dropdown position="bottom" align="end">
     <c-slot name="trigger">
-        <button class="flex items-center gap-2 rounded-full hover:bg-zinc-100">
+        <button class="flex items-center gap-2 rounded-full hover:bg-ink-100">
             <div class="w-8 h-8 rounded-full bg-accent text-white">JD</div>
             <svg><!-- chevron --></svg>
         </button>
@@ -250,7 +250,7 @@
     </c-section>
 
     <c-section id="separators" title="Separators & States">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             Use separators to group menu items. Items can be disabled or rendered as links.
         </p>
 
@@ -282,7 +282,7 @@
     </c-section>
 
     <c-section id="groups" title="Grouped Menus">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             Organize menu items into labeled groups using <code>&lt;c-ui.dropdown.group&gt;</code>.
         </p>
 
@@ -450,7 +450,7 @@
         </c-api-props>
 
         <h5 class="text-lg font-semibold mb-4 mt-6">Dropdown.separator</h5>
-        <p class="text-zinc-600 dark:text-zinc-400 mb-4">
+        <p class="text-ink-600 dark:text-ink-400 mb-4">
             <code>&lt;c-ui.dropdown.separator /&gt;</code> - Horizontal divider for grouping menu items. No props required.
         </p>
 
@@ -467,7 +467,7 @@
 
         <h5 class="text-lg font-semibold mb-4 mt-6">Accessibility</h5>
 
-        <ul class="list-disc list-inside space-y-2 text-zinc-600 dark:text-zinc-400 mb-6">
+        <ul class="list-disc list-inside space-y-2 text-ink-600 dark:text-ink-400 mb-6">
             <li><strong>Keyboard Navigation:</strong> Arrow up/down to navigate items, Home/End to jump, Escape to close, Tab to close</li>
             <li><strong>ARIA Roles:</strong> Proper menu/menuitem roles for screen readers</li>
             <li><strong>Focus Management:</strong> Focus trap when open, auto-focus first item on open</li>

@@ -4,7 +4,7 @@
     class="py-0.5 pl-4 list-none relative"
     :class="{
         'border-l-2 border-accent text-[#1a384a] dark:text-white font-semibold': isActive('{{ section_id }}'),
-        'border-l text-[#1a384a] dark:text-zinc-400 border-zinc-200 dark:border-zinc-700': !isActive('{{ section_id }}')
+        'border-l text-[#1a384a] dark:text-ink-400 border-ink-200 dark:border-ink-700': !isActive('{{ section_id }}')
     }"
     :aria-current="isActive('{{ section_id }}') ? 'location' : false"
 >

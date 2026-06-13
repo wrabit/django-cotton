@@ -17,8 +17,8 @@
 
     <c-sample>
         <c-ui.card>
-            <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Welcome Back</h3>
-            <p class="text-zinc-600 dark:text-zinc-400">
+            <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100 mb-2">Welcome Back</h3>
+            <p class="text-ink-600 dark:text-ink-400">
                 Your dashboard shows an overview of your recent activity and important metrics.
             </p>
         </c-ui.card>
@@ -27,7 +27,7 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.card>
     <h3 class="text-lg font-semibold mb-2">Welcome Back</h3>
-    <p class="text-zinc-600">
+    <p class="text-ink-600">
         Your dashboard shows an overview of your recent activity and important metrics.
     </p>
 </c-ui.card>
@@ -42,13 +42,13 @@
         <c-sample>
             <div class="grid md:grid-cols-2 gap-4">
                 <c-ui.card padding="sm">
-                    <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">New Message</h4>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">You have 3 unread messages</p>
+                    <h4 class="font-semibold text-ink-900 dark:text-ink-100">New Message</h4>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">You have 3 unread messages</p>
                 </c-ui.card>
 
                 <c-ui.card padding="sm">
-                    <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">Task Complete</h4>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Your export has finished processing</p>
+                    <h4 class="font-semibold text-ink-900 dark:text-ink-100">Task Complete</h4>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Your export has finished processing</p>
                 </c-ui.card>
             </div>
 
@@ -56,12 +56,12 @@
                 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.card padding="sm">
     <h4 class="font-semibold">New Message</h4>
-    <p class="text-sm text-zinc-600 mt-1">You have 3 unread messages</p>
+    <p class="text-sm text-ink-600 mt-1">You have 3 unread messages</p>
 </c-ui.card>
 
 <c-ui.card padding="sm">
     <h4 class="font-semibold">Task Complete</h4>
-    <p class="text-sm text-zinc-600 mt-1">Your export has finished processing</p>
+    <p class="text-sm text-ink-600 mt-1">Your export has finished processing</p>
 </c-ui.card>
                 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
             </c-slot>
@@ -75,23 +75,23 @@
         <c-sample>
             <c-ui.card class="space-y-4">
                 <div>
-                    <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">Team Members</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Manage your team and permissions</p>
+                    <h3 class="text-xl font-bold text-ink-900 dark:text-ink-100">Team Members</h3>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Manage your team and permissions</p>
                 </div>
 
                 <div class="space-y-3">
                     <div class="flex items-center justify-between py-2">
                         <div>
-                            <div class="font-medium text-zinc-900 dark:text-zinc-100">Sarah Chen</div>
-                            <div class="text-sm text-zinc-600 dark:text-zinc-400">sarah@example.com</div>
+                            <div class="font-medium text-ink-900 dark:text-ink-100">Sarah Chen</div>
+                            <div class="text-sm text-ink-600 dark:text-ink-400">sarah@example.com</div>
                         </div>
                         <c-ui.badge>Admin</c-ui.badge>
                     </div>
 
                     <div class="flex items-center justify-between py-2">
                         <div>
-                            <div class="font-medium text-zinc-900 dark:text-zinc-100">Michael Park</div>
-                            <div class="text-sm text-zinc-600 dark:text-zinc-400">michael@example.com</div>
+                            <div class="font-medium text-ink-900 dark:text-ink-100">Michael Park</div>
+                            <div class="text-sm text-ink-600 dark:text-ink-400">michael@example.com</div>
                         </div>
                         <c-ui.badge color="blue">Member</c-ui.badge>
                     </div>
@@ -103,14 +103,14 @@
 <c-ui.card class="space-y-4">
     <div>
         <h3 class="text-xl font-bold">Team Members</h3>
-        <p class="text-sm text-zinc-600 mt-1">Manage your team and permissions</p>
+        <p class="text-sm text-ink-600 mt-1">Manage your team and permissions</p>
     </div>
 
     <div class="space-y-3">
         <div class="flex items-center justify-between py-2">
             <div>
                 <div class="font-medium">Sarah Chen</div>
-                <div class="text-sm text-zinc-600">sarah@example.com</div>
+                <div class="text-sm text-ink-600">sarah@example.com</div>
             </div>
             <c-ui.badge>Admin</c-ui.badge>
         </div>
@@ -118,7 +118,7 @@
         <div class="flex items-center justify-between py-2">
             <div>
                 <div class="font-medium">Michael Park</div>
-                <div class="text-sm text-zinc-600">michael@example.com</div>
+                <div class="text-sm text-ink-600">michael@example.com</div>
             </div>
             <c-ui.badge color="blue">Member</c-ui.badge>
         </div>
@@ -136,8 +136,8 @@
         <c-sample>
             <c-ui.card class="space-y-6">
                 <div>
-                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Export Data</h3>
-                    <p class="text-zinc-600 dark:text-zinc-400 mt-2">
+                    <h3 class="text-lg font-semibold text-ink-900 dark:text-ink-100">Export Data</h3>
+                    <p class="text-ink-600 dark:text-ink-400 mt-2">
                         Download your account data in CSV or JSON format. This may take a few minutes for large datasets.
                     </p>
                 </div>
@@ -153,7 +153,7 @@
 <c-ui.card class="space-y-6">
     <div>
         <h3 class="text-lg font-semibold">Export Data</h3>
-        <p class="text-zinc-600 mt-2">
+        <p class="text-ink-600 mt-2">
             Download your account data in CSV or JSON format. This may take a few minutes for large datasets.
         </p>
     </div>
@@ -176,22 +176,22 @@
             <div class="grid md:grid-cols-3 gap-4">
                 <a href="#" class="block">
                     <c-ui.card padding="sm" class="hover:shadow-md transition-shadow">
-                        <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">Documentation</h4>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Learn how to integrate our API</p>
+                        <h4 class="font-semibold text-ink-900 dark:text-ink-100">Documentation</h4>
+                        <p class="text-sm text-ink-600 dark:text-ink-400 mt-2">Learn how to integrate our API</p>
                     </c-ui.card>
                 </a>
 
                 <a href="#" class="block">
                     <c-ui.card padding="sm" class="hover:shadow-md transition-shadow">
-                        <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">Support</h4>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Get help from our support team</p>
+                        <h4 class="font-semibold text-ink-900 dark:text-ink-100">Support</h4>
+                        <p class="text-sm text-ink-600 dark:text-ink-400 mt-2">Get help from our support team</p>
                     </c-ui.card>
                 </a>
 
                 <a href="#" class="block">
                     <c-ui.card padding="sm" class="hover:shadow-md transition-shadow">
-                        <h4 class="font-semibold text-zinc-900 dark:text-zinc-100">Community</h4>
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-2">Join our developer community</p>
+                        <h4 class="font-semibold text-ink-900 dark:text-ink-100">Community</h4>
+                        <p class="text-sm text-ink-600 dark:text-ink-400 mt-2">Join our developer community</p>
                     </c-ui.card>
                 </a>
             </div>
@@ -201,21 +201,21 @@
 <a href="/docs">
     <c-ui.card padding="sm" class="hover:shadow-md transition-shadow">
         <h4 class="font-semibold">Documentation</h4>
-        <p class="text-sm text-zinc-600 mt-2">Learn how to integrate our API</p>
+        <p class="text-sm text-ink-600 mt-2">Learn how to integrate our API</p>
     </c-ui.card>
 </a>
 
 <a href="/support">
     <c-ui.card padding="sm" class="hover:shadow-md transition-shadow">
         <h4 class="font-semibold">Support</h4>
-        <p class="text-sm text-zinc-600 mt-2">Get help from our support team</p>
+        <p class="text-sm text-ink-600 mt-2">Get help from our support team</p>
     </c-ui.card>
 </a>
 
 <a href="/community">
     <c-ui.card padding="sm" class="hover:shadow-md transition-shadow">
         <h4 class="font-semibold">Community</h4>
-        <p class="text-sm text-zinc-600 mt-2">Join our developer community</p>
+        <p class="text-sm text-ink-600 mt-2">Join our developer community</p>
     </c-ui.card>
 </a>
                 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
@@ -230,8 +230,8 @@
         <c-sample>
             <c-ui.card class="space-y-6 max-w-md">
                 <div>
-                    <h3 class="text-xl font-bold text-zinc-900 dark:text-zinc-100">Account Settings</h3>
-                    <p class="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Update your profile information</p>
+                    <h3 class="text-xl font-bold text-ink-900 dark:text-ink-100">Account Settings</h3>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Update your profile information</p>
                 </div>
 
                 <div class="space-y-4">
@@ -265,7 +265,7 @@
 <c-ui.card class="space-y-6">
     <div>
         <h3 class="text-xl font-bold">Account Settings</h3>
-        <p class="text-sm text-zinc-600 mt-1">Update your profile information</p>
+        <p class="text-sm text-ink-600 mt-1">Update your profile information</p>
     </div>
 
     <div class="space-y-4">

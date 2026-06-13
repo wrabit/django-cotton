@@ -17,7 +17,7 @@
     </c-slot>
 
     <c-section id="basic" title="Basic Usage">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             A popover wraps a <code>trigger</code> slot (the clickable element) and a default slot (the floating panel).
             Clicking the trigger toggles the panel; clicking outside or pressing <kbd>Esc</kbd> closes it.
         </p>
@@ -26,7 +26,7 @@
             <c-ui.popover>
                 <c-slot name="trigger"><c-ui.button>Open popover</c-ui.button></c-slot>
                 <div class="font-medium mb-1">Dimensions</div>
-                <p class="text-zinc-600 dark:text-zinc-400">Set the width and height of the selected layer in pixels.</p>
+                <p class="text-ink-600 dark:text-ink-400">Set the width and height of the selected layer in pixels.</p>
             </c-ui.popover>
 
             <c-slot name="code">
@@ -34,7 +34,7 @@
 <c-ui.popover>
     <c-slot name="trigger"><c-ui.button>Open popover</c-ui.button></c-slot>
     <div class="font-medium mb-1">Dimensions</div>
-    <p class="text-zinc-600 dark:text-zinc-400">Set the width and height of the selected layer in pixels.</p>
+    <p class="text-ink-600 dark:text-ink-400">Set the width and height of the selected layer in pixels.</p>
 </c-ui.popover>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
             </c-slot>
@@ -42,7 +42,7 @@
     </c-section>
 
     <c-section id="positions" title="Positions">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             Use the <code>position</code> prop to place the panel on the <code>top</code>, <code>bottom</code>,
             <code>left</code> or <code>right</code> of the trigger. The panel flips to the opposite side when there is
             not enough room in the viewport. Adjust the gap with <code>:offset</code>.
@@ -98,7 +98,7 @@
     </c-section>
 
     <c-section id="rich-content" title="With Rich Content">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             Unlike a tooltip, a popover can hold any markup: headings, forms, inputs and buttons. Use the
             <code>class</code> prop to widen the panel for richer layouts.
         </p>
@@ -108,7 +108,7 @@
                 <c-slot name="trigger"><c-ui.button>Edit profile</c-ui.button></c-slot>
 
                 <div class="font-medium mb-1">Profile</div>
-                <p class="text-zinc-600 dark:text-zinc-400 mb-4">Update your display name and contact email.</p>
+                <p class="text-ink-600 dark:text-ink-400 mb-4">Update your display name and contact email.</p>
 
                 <div class="space-y-3">
                     <c-ui.input label="Name" name="name" value="Ada Lovelace" />
@@ -127,7 +127,7 @@
     <c-slot name="trigger"><c-ui.button>Edit profile</c-ui.button></c-slot>
 
     <div class="font-medium mb-1">Profile</div>
-    <p class="text-zinc-600 dark:text-zinc-400 mb-4">Update your display name and contact email.</p>
+    <p class="text-ink-600 dark:text-ink-400 mb-4">Update your display name and contact email.</p>
 
     <div class="space-y-3">
         <c-ui.input label="Name" name="name" value="Ada Lovelace" />
@@ -143,14 +143,14 @@
             </c-slot>
         </c-sample>
 
-        <p class="text-zinc-600 dark:text-zinc-400 mt-4">
+        <p class="text-ink-600 dark:text-ink-400 mt-4">
             The panel exposes the popover's Alpine scope, so inner controls can call <code>close()</code> directly,
             for example to dismiss the panel after a Save or Cancel action.
         </p>
     </c-section>
 
     <c-section id="hover" title="Hover Trigger">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             Set <code>open_on="hover"</code> to open the popover on hover instead of click, the "hovercard" pattern
             seen on social profiles. A short intent delay avoids opening on a passing cursor, and a close delay lets you
             move from the trigger into the panel without it snapping shut. Tune them with <code>:open_delay</code> and
@@ -163,8 +163,8 @@
                 <div class="flex items-center gap-3">
                     <c-ui.avatar initials="AL" color="violet" />
                     <div>
-                        <div class="font-medium text-zinc-900 dark:text-zinc-100">Ada Lovelace</div>
-                        <div class="text-zinc-500 dark:text-zinc-400">Mathematician</div>
+                        <div class="font-medium text-ink-900 dark:text-ink-100">Ada Lovelace</div>
+                        <div class="text-ink-500 dark:text-ink-400">Mathematician</div>
                     </div>
                 </div>
             </c-ui.popover>
@@ -176,8 +176,8 @@
     <div class="flex items-center gap-3">
         <c-ui.avatar initials="AL" color="violet" />
         <div>
-            <div class="font-medium text-zinc-900 dark:text-zinc-100">Ada Lovelace</div>
-            <div class="text-zinc-500 dark:text-zinc-400">Mathematician</div>
+            <div class="font-medium text-ink-900 dark:text-ink-100">Ada Lovelace</div>
+            <div class="text-ink-500 dark:text-ink-400">Mathematician</div>
         </div>
     </div>
 </c-ui.popover>
@@ -187,7 +187,7 @@
     </c-section>
 
     <c-section id="lazy" title="Load on Open">
-        <p class="text-zinc-600 dark:text-zinc-400 mb-6">
+        <p class="text-ink-600 dark:text-ink-400 mb-6">
             The popover dispatches a <code>popover-open</code> event (and <code>popover-close</code>) when it opens, so you
             can load the panel's contents only when needed, for example fetching a profile card the first time it is
             shown. Listen for the event on the tag or any ancestor, where your own Alpine scope is in reach. The example
@@ -202,12 +202,12 @@
                 <c-ui.popover open_on="hover" position="top" class="w-64">
                     <c-slot name="trigger"><c-ui.button :outlined="True">Hover to load</c-ui.button></c-slot>
                     <template x-if="loading">
-                        <div class="flex items-center gap-2 text-zinc-500 dark:text-zinc-400"><c-ui.spinner size="sm" color="current" /> Loading...</div>
+                        <div class="flex items-center gap-2 text-ink-500 dark:text-ink-400"><c-ui.spinner size="sm" color="current" /> Loading...</div>
                     </template>
                     <template x-if="loaded">
                         <div>
-                            <div class="font-medium text-zinc-900 dark:text-zinc-100 mb-1">Ada Lovelace</div>
-                            <p class="text-zinc-600 dark:text-zinc-400">Fetched when the popover opened.</p>
+                            <div class="font-medium text-ink-900 dark:text-ink-100 mb-1">Ada Lovelace</div>
+                            <p class="text-ink-600 dark:text-ink-400">Fetched when the popover opened.</p>
                         </div>
                     </template>
                 </c-ui.popover>
@@ -222,7 +222,7 @@
     <c-ui.popover open_on="hover" position="top" class="w-64">
         <c-slot name="trigger"><c-ui.button :outlined="True">Hover to load</c-ui.button></c-slot>
         <template x-if="loading">
-            <div class="flex items-center gap-2 text-zinc-500"><c-ui.spinner size="sm" color="current" /> Loading...</div>
+            <div class="flex items-center gap-2 text-ink-500"><c-ui.spinner size="sm" color="current" /> Loading...</div>
         </template>
         <template x-if="loaded">
             <div x-text="data.name"></div>
@@ -233,7 +233,7 @@
             </c-slot>
         </c-sample>
 
-        <p class="text-zinc-600 dark:text-zinc-400 mt-4">
+        <p class="text-ink-600 dark:text-ink-400 mt-4">
             For an HTMX panel, load on the same event instead: put
             <code>hx-get="/profile/1" hx-trigger="popover-open once from:closest [data-popover]"</code> on the content,
             and it fetches when the popover first opens.
@@ -241,7 +241,7 @@
     </c-section>
 
     <c-section id="comparison" title="Popover vs Tooltip vs Dropdown">
-        <ul class="list-disc list-inside space-y-1 text-zinc-600 dark:text-zinc-400">
+        <ul class="list-disc list-inside space-y-1 text-ink-600 dark:text-ink-400">
             <li><strong>Tooltip</strong> a hint: short read-only text on hover.</li>
             <li><strong>Dropdown</strong> a menu: a list of actions or links to pick from.</li>
             <li><strong>Popover</strong> rich interactive content: a form, settings or a hovercard.</li>
@@ -293,7 +293,7 @@
 
         <h5 class="text-lg font-semibold mb-4 mt-6">Accessibility</h5>
 
-        <p class="text-zinc-600 dark:text-zinc-400">Escape and outside-click close the panel. The trigger sets <code>aria-expanded</code> and the panel uses <code>role="dialog"</code>.</p>
+        <p class="text-ink-600 dark:text-ink-400">Escape and outside-click close the panel. The trigger sets <code>aria-expanded</code> and the panel uses <code>role="dialog"</code>.</p>
     </c-section>
 
 </c-layouts.ui>

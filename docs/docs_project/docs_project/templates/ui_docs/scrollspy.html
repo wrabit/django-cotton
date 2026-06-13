@@ -23,28 +23,28 @@
         <div class="grid grid-cols-[9rem_1fr] gap-6">
             <c-ui.scrollspy class="self-start">
                 <nav class="flex flex-col gap-2 text-sm">
-                    <a href="#basic-one" @click.prevent="scrollTo('basic-one')" class="no-underline cursor-pointer transition-colors" :class="isActive('basic-one') ? 'text-accent font-medium' : 'text-zinc-500 dark:text-zinc-400'">Introduction</a>
-                    <a href="#basic-two" @click.prevent="scrollTo('basic-two')" class="no-underline cursor-pointer transition-colors" :class="isActive('basic-two') ? 'text-accent font-medium' : 'text-zinc-500 dark:text-zinc-400'">Installation</a>
-                    <a href="#basic-three" @click.prevent="scrollTo('basic-three')" class="no-underline cursor-pointer transition-colors" :class="isActive('basic-three') ? 'text-accent font-medium' : 'text-zinc-500 dark:text-zinc-400'">Usage</a>
-                    <a href="#basic-four" @click.prevent="scrollTo('basic-four')" class="no-underline cursor-pointer transition-colors" :class="isActive('basic-four') ? 'text-accent font-medium' : 'text-zinc-500 dark:text-zinc-400'">Summary</a>
+                    <a href="#basic-one" @click.prevent="scrollTo('basic-one')" class="no-underline cursor-pointer transition-colors" :class="isActive('basic-one') ? 'text-accent font-medium' : 'text-ink-500 dark:text-ink-400'">Introduction</a>
+                    <a href="#basic-two" @click.prevent="scrollTo('basic-two')" class="no-underline cursor-pointer transition-colors" :class="isActive('basic-two') ? 'text-accent font-medium' : 'text-ink-500 dark:text-ink-400'">Installation</a>
+                    <a href="#basic-three" @click.prevent="scrollTo('basic-three')" class="no-underline cursor-pointer transition-colors" :class="isActive('basic-three') ? 'text-accent font-medium' : 'text-ink-500 dark:text-ink-400'">Usage</a>
+                    <a href="#basic-four" @click.prevent="scrollTo('basic-four')" class="no-underline cursor-pointer transition-colors" :class="isActive('basic-four') ? 'text-accent font-medium' : 'text-ink-500 dark:text-ink-400'">Summary</a>
                 </nav>
             </c-ui.scrollspy>
-            <div class="h-72 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 space-y-6">
+            <div class="h-72 overflow-y-auto rounded-lg border border-ink-200 dark:border-ink-700 p-4 space-y-6">
                 <section id="basic-one" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Introduction</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Scrollspy keeps a table of contents in sync with the reader's position. As each section below crosses the top of this panel, its link on the left lights up automatically. Scroll slowly to watch the active state hand off from one to the next.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Scrollspy keeps a table of contents in sync with the reader's position. As each section below crosses the top of this panel, its link on the left lights up automatically. Scroll slowly to watch the active state hand off from one to the next.</p>
                 </section>
                 <section id="basic-two" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Installation</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Wrap your nav in the component and give each section a matching <code>id</code>. The sections can sit anywhere, there is no scroll-position maths to wire up by hand.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Wrap your nav in the component and give each section a matching <code>id</code>. The sections can sit anywhere, there is no scroll-position maths to wire up by hand.</p>
                 </section>
                 <section id="basic-three" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Usage</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">The section whose heading last crossed the top of the panel wins. Bind your link styling to <code>isActive('id')</code> and the highlight follows the scroll, while a click smooth-scrolls that section into view.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">The section whose heading last crossed the top of the panel wins. Bind your link styling to <code>isActive('id')</code> and the highlight follows the scroll, while a click smooth-scrolls that section into view.</p>
                 </section>
                 <section id="basic-four" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Summary</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Mark sections, bind links and the scrollspy does the rest. Add a <code>scroll-mt-*</code> utility, as on each section here, when you want a little breathing room above the heading rather than landing it flush.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Mark sections, bind links and the scrollspy does the rest. Add a <code>scroll-mt-*</code> utility, as on each section here, when you want a little breathing room above the heading rather than landing it flush.</p>
                 </section>
                 {# Trailing space so the last section can scroll fully to the top of the panel #}
                 <div aria-hidden="true" class="h-56"></div>
@@ -55,9 +55,9 @@
 <c-snippet>{% cotton:verbatim %}{% verbatim %}
 <c-ui.scrollspy>
     <nav class="flex flex-col gap-2">
-        <a href="#intro" @click.prevent="scrollTo('intro')" :class="isActive('intro') ? 'text-accent font-medium' : 'text-zinc-500'">Introduction</a>
-        <a href="#install" @click.prevent="scrollTo('install')" :class="isActive('install') ? 'text-accent font-medium' : 'text-zinc-500'">Installation</a>
-        <a href="#usage" @click.prevent="scrollTo('usage')" :class="isActive('usage') ? 'text-accent font-medium' : 'text-zinc-500'">Usage</a>
+        <a href="#intro" @click.prevent="scrollTo('intro')" :class="isActive('intro') ? 'text-accent font-medium' : 'text-ink-500'">Introduction</a>
+        <a href="#install" @click.prevent="scrollTo('install')" :class="isActive('install') ? 'text-accent font-medium' : 'text-ink-500'">Installation</a>
+        <a href="#usage" @click.prevent="scrollTo('usage')" :class="isActive('usage') ? 'text-accent font-medium' : 'text-ink-500'">Usage</a>
     </nav>
 </c-ui.scrollspy>
 
@@ -85,22 +85,22 @@
                     <c-ui.navlist.item spy="nl-four">Summary</c-ui.navlist.item>
                 </c-ui.navlist>
             </c-ui.scrollspy>
-            <div class="h-72 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 space-y-6">
+            <div class="h-72 overflow-y-auto rounded-lg border border-ink-200 dark:border-ink-700 p-4 space-y-6">
                 <section id="nl-one" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Introduction</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Same scrollspy, no per-link wiring. Each item carries a <code>spy</code> id and the component handles the active state and the smooth scroll.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Same scrollspy, no per-link wiring. Each item carries a <code>spy</code> id and the component handles the active state and the smooth scroll.</p>
                 </section>
                 <section id="nl-two" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Installation</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">The item's <code>href</code> defaults to <code>#&lt;spy&gt;</code>, so a click scrolls to the matching section and the navlist highlights it as it enters view.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">The item's <code>href</code> defaults to <code>#&lt;spy&gt;</code>, so a click scrolls to the matching section and the navlist highlights it as it enters view.</p>
                 </section>
                 <section id="nl-three" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Usage</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Because the active item just toggles the <code>.is-current</code> marker, it picks up whichever navlist variant you use, here the sidebar rail.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Because the active item just toggles the <code>.is-current</code> marker, it picks up whichever navlist variant you use, here the sidebar rail.</p>
                 </section>
                 <section id="nl-four" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Summary</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Drop the manual <code>@click</code> and <code>:class</code>, mark your sections, and the list stays in sync on its own.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Drop the manual <code>@click</code> and <code>:class</code>, mark your sections, and the list stays in sync on its own.</p>
                 </section>
                 {# Trailing space so the last section can scroll fully to the top of the panel #}
                 <div aria-hidden="true" class="h-56"></div>
@@ -141,22 +141,22 @@
                     <c-ui.nav.item spy="nav-four">Summary</c-ui.nav.item>
                 </c-ui.nav>
             </c-ui.scrollspy>
-            <div class="h-72 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 space-y-6">
+            <div class="h-72 overflow-y-auto rounded-lg border border-ink-200 dark:border-ink-700 p-4 space-y-6">
                 <section id="nav-one" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Introduction</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">A horizontal nav reads the same way: each tab carries a <code>spy</code> id and underlines as its section scrolls into view.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">A horizontal nav reads the same way: each tab carries a <code>spy</code> id and underlines as its section scrolls into view.</p>
                 </section>
                 <section id="nav-two" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Installation</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Wrap the nav in the scrollspy, give your sections matching ids, and the active tab follows the scroll, no manual bindings.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Wrap the nav in the scrollspy, give your sections matching ids, and the active tab follows the scroll, no manual bindings.</p>
                 </section>
                 <section id="nav-three" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Usage</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Clicking a tab smooth-scrolls its section into the panel; scrolling moves the underline to the section you're in.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Clicking a tab smooth-scrolls its section into the panel; scrolling moves the underline to the section you're in.</p>
                 </section>
                 <section id="nav-four" class="scroll-mt-4">
                     <h4 class="font-medium mb-2">Summary</h4>
-                    <p class="text-zinc-500 dark:text-zinc-400 leading-relaxed">Same component, just a different nav shape above the content instead of a list beside it.</p>
+                    <p class="text-ink-500 dark:text-ink-400 leading-relaxed">Same component, just a different nav shape above the content instead of a list beside it.</p>
                 </section>
                 {# Trailing space so the last section can scroll fully to the top of the panel #}
                 <div aria-hidden="true" class="h-56"></div>

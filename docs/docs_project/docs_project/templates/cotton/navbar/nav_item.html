@@ -6,7 +6,7 @@
     {% if active_startswith and request.path|startswith:active_startswith or active_exact and request.path == url %}
         bg-accent/15 dark:bg-accent/20 text-accent-content dark:text-accent
     {% else %}
-        text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800
+        text-ink-600 dark:text-ink-400 hover:text-ink-900 dark:hover:text-ink-100 hover:bg-ink-100 dark:hover:bg-ink-800
     {% endif %}
 ">
     {{ slot }}

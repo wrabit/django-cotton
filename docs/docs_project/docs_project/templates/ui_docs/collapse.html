@@ -23,7 +23,7 @@
         <c-sample>
             <div class="w-full max-w-xs">
                 <c-ui.collapse trigger_text="Show details">
-                    <div class="pt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                    <div class="pt-2 text-sm text-ink-600 dark:text-ink-400">
                         Extra detail that stays out of the way until someone needs it.
                     </div>
                 </c-ui.collapse>
@@ -46,14 +46,14 @@
         <div class="w-full max-w-lg">
             <c-ui.collapse>
                 <c-slot name="trigger">
-                    <span class="inline-flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-zinc-400"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437" /></svg>
-                        Tool called: <span class="font-medium text-zinc-900 dark:text-zinc-100">Knowledge Agent</span>
+                    <span class="inline-flex items-center gap-2 text-sm text-ink-600 dark:text-ink-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-ink-400"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437" /></svg>
+                        Tool called: <span class="font-medium text-ink-900 dark:text-ink-100">Knowledge Agent</span>
                     </span>
                 </c-slot>
-                <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md text-sm text-zinc-600 dark:text-zinc-400 space-y-2">
+                <div class="mt-2 p-4 bg-ink-50 dark:bg-ink-800 rounded-md text-sm text-ink-600 dark:text-ink-400 space-y-2">
                     <p>Searched the knowledge base across 14 documents and ranked the passages most relevant to the billing question.</p>
-                    <p class="font-medium text-zinc-900 dark:text-zinc-100">Key findings</p>
+                    <p class="font-medium text-ink-900 dark:text-ink-100">Key findings</p>
                     <ul class="list-disc pl-5 space-y-1">
                         <li>Accounts are invoiced monthly on their signup anniversary.</li>
                         <li>Seats added mid cycle are prorated automatically.</li>
@@ -67,14 +67,14 @@
         <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse>
     <c-slot name="trigger">
-        <span class="inline-flex items-center gap-2 text-sm text-zinc-600">
+        <span class="inline-flex items-center gap-2 text-sm text-ink-600">
             <svg><!-- wrench --></svg>
             Tool called: <span class="font-medium">Knowledge Agent</span>
         </span>
     </c-slot>
 
     {# the chevron is appended and rotated for you #}
-    <div class="mt-2 p-4 bg-zinc-50 rounded-md text-sm space-y-2">
+    <div class="mt-2 p-4 bg-ink-50 rounded-md text-sm space-y-2">
         <p>Searched the knowledge base across 14 documents and ranked the most relevant passages.</p>
         <p class="font-medium">Key findings</p>
         <ul class="list-disc pl-5 space-y-1">
@@ -95,8 +95,8 @@
         <c-sample>
             <div class="w-full max-w-xs">
                 <c-ui.collapse trigger-text="Hide Details" expanded>
-                    <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md">
-                        <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                    <div class="mt-2 p-4 bg-ink-50 dark:bg-ink-800 rounded-md">
+                        <p class="text-sm text-ink-600 dark:text-ink-400">
                             This content is visible by default and can be collapsed by clicking the trigger.
                         </p>
                     </div>
@@ -105,7 +105,7 @@
 
             <c-slot name="code">
 <c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.collapse trigger-text="Hide Details" expanded>
-    <div class="mt-2 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-md">
+    <div class="mt-2 p-4 bg-ink-50 dark:bg-ink-800 rounded-md">
         <p class="text-sm">
             This content is visible by default and can be collapsed.
         </p>

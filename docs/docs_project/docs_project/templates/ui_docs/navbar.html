@@ -64,7 +64,7 @@
     <c-sample>
         <div class="w-full space-y-6">
             <div>
-                <p class="text-xs font-medium text-zinc-400 mb-1.5">text (default)</p>
+                <p class="text-xs font-medium text-ink-400 mb-1.5">text (default)</p>
                 <c-ui.navbar :sticky="False" variant="text" class="rounded-box">
                     <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
                     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
@@ -73,7 +73,7 @@
                 </c-ui.navbar>
             </div>
             <div>
-                <p class="text-xs font-medium text-zinc-400 mb-1.5">underline</p>
+                <p class="text-xs font-medium text-ink-400 mb-1.5">underline</p>
                 <c-ui.navbar :sticky="False" variant="underline" class="rounded-box">
                     <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
                     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
@@ -82,7 +82,7 @@
                 </c-ui.navbar>
             </div>
             <div>
-                <p class="text-xs font-medium text-zinc-400 mb-1.5">pill</p>
+                <p class="text-xs font-medium text-ink-400 mb-1.5">pill</p>
                 <c-ui.navbar :sticky="False" variant="pill" class="rounded-box">
                     <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
                     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
@@ -91,7 +91,7 @@
                 </c-ui.navbar>
             </div>
             <div>
-                <p class="text-xs font-medium text-zinc-400 mb-1.5">ghost</p>
+                <p class="text-xs font-medium text-ink-400 mb-1.5">ghost</p>
                 <c-ui.navbar :sticky="False" variant="ghost" class="rounded-box">
                     <c-slot name="brand"><svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg><span class="font-semibold">Acme</span></c-slot>
                     <c-ui.navbar.item href="#" :current="True">Dashboard</c-ui.navbar.item>
@@ -123,7 +123,7 @@
 
             <c-ui.dropdown align="start">
                 <c-slot name="trigger">
-                    <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                    <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium text-ink-600 dark:text-ink-400 hover:text-ink-900 dark:hover:text-white transition-colors">
                         Resources
                         <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                     </button>
@@ -135,20 +135,20 @@
 
             <c-ui.dropdown align="start" min_width="34rem">
                 <c-slot name="trigger">
-                    <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                    <button type="button" class="inline-flex items-center gap-1 px-3 md:px-2 py-2 text-sm font-medium text-ink-600 dark:text-ink-400 hover:text-ink-900 dark:hover:text-white transition-colors">
                         Solutions
                         <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                     </button>
                 </c-slot>
                 <div class="grid grid-cols-2 gap-1 p-2">
                     <div>
-                        <p class="px-2 py-1 text-xs font-semibold text-zinc-400 dark:text-zinc-500">By team</p>
+                        <p class="px-2 py-1 text-xs font-semibold text-ink-400 dark:text-ink-500">By team</p>
                         <c-ui.dropdown.item href="#">Engineering</c-ui.dropdown.item>
                         <c-ui.dropdown.item href="#">Design</c-ui.dropdown.item>
                         <c-ui.dropdown.item href="#">Marketing</c-ui.dropdown.item>
                     </div>
                     <div>
-                        <p class="px-2 py-1 text-xs font-semibold text-zinc-400 dark:text-zinc-500">By use case</p>
+                        <p class="px-2 py-1 text-xs font-semibold text-ink-400 dark:text-ink-500">By use case</p>
                         <c-ui.dropdown.item href="#">Analytics</c-ui.dropdown.item>
                         <c-ui.dropdown.item href="#">Automation</c-ui.dropdown.item>
                         <c-ui.dropdown.item href="#">Collaboration</c-ui.dropdown.item>

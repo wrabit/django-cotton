@@ -210,6 +210,20 @@
                             class="ui-range align-middle" />
                     </div>
                 </div>
+
+                {# Dark depth: picks which ink shade the page bg sits on in dark mode (800/900/950).
+                   Deep is the kit default since 0.2.10. Same button-group pattern as Card border. #}
+                <div>
+                    <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Dark depth</div>
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                        <template x-for="d in darkDepths" :key="'dd'+d[1]">
+                            <button type="button" @click="setDarkDepth(d[1])"
+                                class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
+                                :class="darkDepth === d[1] ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'"
+                                x-text="d[0]"></button>
+                        </template>
+                    </div>
+                </div>
                 </div>{# /structural row #}
             </div>
 
@@ -320,6 +334,8 @@
                 radii: [['none','0'],['xs','0.125rem'],['sm','0.25rem'],['md','0.375rem'],['lg','0.5rem'],['xl','0.75rem'],['2xl','1rem']],
                 shadows: [['none','none'],['sm','0 1px 2px 0 rgb(0 0 0 / 0.05)'],['md','0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'],['lg','0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)']],
                 rings: [['0','0px'],['1','1px'],['2','2px'],['4','4px']],
+                // Dark depth: which ink shade drives --color-bg in dark mode. Deep is the kit default (0.2.10+).
+                darkDepths: [['Soft','800'],['Standard','900'],['Deep','950']],
                 accent: 'teal',
                 customAccent: '#14b8a6',  /* used when accent === 'custom'; any CSS colour, normalised to hex */
                 gray: 'zinc',
@@ -332,6 +348,7 @@
                 borders: true,
                 surfaceLight: 100,  /* --surface-level per mode: how much lighter cards are than the page */
                 surfaceDark: 6,
+                darkDepth: '950',  /* ink shade for --color-bg in dark mode: '800' | '900' | '950' */
                 isDark: false,
                 copied: false,
                 _observer: null,
@@ -360,12 +377,18 @@
                     // Re-tone the kit neutral (--color-ink-*) to the chosen gray base. For 'zinc' we
                     // clear the overrides so --color-ink-* falls back to its ink-valued default.
                     this.shades.forEach((s) => el.style.removeProperty('--color-ink-' + s));
+                    // Dark depth chooses which ink shade backs the page in dark mode (800/900/950).
+                    // Kit ships dark=950 since 0.2.10, so for (zinc + deep) we leave --color-bg unset
+                    // to inherit the kit default; any other combo gets an explicit override.
+                    const darkShade = this.darkDepth || '950';
                     if (this.gray !== 'zinc') {
                         const g = (n) => 'var(--color-' + this.gray + '-' + n + ')';
                         this.shades.forEach((s) => { el.style.setProperty('--color-ink-' + s, g(s)); });
                         // Drive the page bg so the whole preview follows the gray; --color-surface
                         // derives from --color-bg + --surface-level, so it tracks the gray for free.
-                        el.style.setProperty('--color-bg', this.isDark ? g(900) : g(50));
+                        el.style.setProperty('--color-bg', this.isDark ? g(darkShade) : g(50));
+                    } else if (this.isDark && darkShade !== '950') {
+                        el.style.setProperty('--color-bg', 'var(--color-ink-' + darkShade + ')');
                     } else {
                         el.style.removeProperty('--color-bg');
                     }
@@ -442,6 +465,7 @@
                 setInputShadow(v) { this.inputShadow = v; this.apply(); },
                 setStructuralShadow(v) { this.structuralShadow = v; this.apply(); },
                 setBorders(v) { this.borders = v; this.apply(); },
+                setDarkDepth(v) { this.darkDepth = v; this.apply(); },
 
                 get css() {
                     // Every token works on the no-build link path: accent AND the gray base both
@@ -454,8 +478,12 @@
                             '    --color-ink-' + s + ': var(--color-' + this.gray + '-' + s + ');'
                           ).join('\n') + '\n' +
                           '    --color-bg: var(--color-' + this.gray + '-50);\n';
-                    const grayDark = this.gray === 'zinc' ? '' :
-                        '    --color-bg: var(--color-' + this.gray + '-900);\n';
+                    const darkShade = this.darkDepth || '950';
+                    // Re-toned palettes always emit their own dark bg so the page tracks the gray;
+                    // zinc only emits when the chosen depth diverges from the kit default ('950').
+                    const grayDark = this.gray !== 'zinc'
+                        ? '    --color-bg: var(--color-' + this.gray + '-' + darkShade + ');\n'
+                        : (darkShade !== '950' ? '    --color-bg: var(--color-ink-' + darkShade + ');\n' : '');
                     const al = this._accentValues(false), ad = this._accentValues(true);
                     return ':root {\n' +
                         '    /* Accent: primary buttons, links, focus ring, active states */\n' +

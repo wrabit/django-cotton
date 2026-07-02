@@ -26,6 +26,8 @@
         </c-slot>
     </c-sample>
 
+    <p>Any extra attribute you set is forwarded to the underlying <code>&lt;input&gt;</code>, so framework value-bindings (<code>x-model</code>, <code>hx-*</code>, <code>data-*</code>) attach straight to the control. This holds across the form components (select, textarea, checkbox, radio, switch, range); those with a hidden value control receive it there, while <code>class</code> stays on the visible wrapper.</p>
+
     <c-section id="types" title="Types">
 
     <p>Use the <code>type</code> attribute to change the input type.</p>

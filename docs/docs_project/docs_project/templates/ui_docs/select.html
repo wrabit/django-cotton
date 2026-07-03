@@ -9,6 +9,7 @@
     <c-slot name="page_index">
         <c-index-sublink section-id="native"><a href="#native" class="no-underline">Native (Default)</a></c-index-sublink>
         <c-index-sublink section-id="listbox"><a href="#listbox" class="no-underline">Listbox Variant</a></c-index-sublink>
+        <c-index-sublink section-id="searchable"><a href="#searchable" class="no-underline">Searchable</a></c-index-sublink>
         <c-index-sublink section-id="grouped"><a href="#grouped" class="no-underline">Grouped Options</a></c-index-sublink>
         <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">With Icons</a></c-index-sublink>
         <c-index-sublink section-id="descriptions"><a href="#descriptions" class="no-underline">With Descriptions</a></c-index-sublink>
@@ -77,6 +78,44 @@
         <c-ui.menu.item value="enterprise">Enterprise</c-ui.menu.item>
     </c-ui.select>
 </div>
+{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+    </c-section>
+
+    <c-section id="searchable" title="Searchable">
+    <p>Drop <code>&lt;c-ui.menu.search /&gt;</code> in as the first item of a listbox to filter options as you type. It sticks to the top of the dropdown, is focused automatically when the menu opens, and matches on the option label and description.</p>
+
+    <c-sample>
+        <div class="flex items-center justify-center w-full ">
+            <div class="w-full max-w-64">
+                <c-ui.select name="country_search" variant="listbox" placeholder="Select a country">
+                    <c-ui.menu.search placeholder="Search countries..." />
+                    <c-ui.menu.item value="us">United States</c-ui.menu.item>
+                    <c-ui.menu.item value="uk">United Kingdom</c-ui.menu.item>
+                    <c-ui.menu.item value="ca">Canada</c-ui.menu.item>
+                    <c-ui.menu.item value="au">Australia</c-ui.menu.item>
+                    <c-ui.menu.item value="de">Germany</c-ui.menu.item>
+                    <c-ui.menu.item value="fr">France</c-ui.menu.item>
+                    <c-ui.menu.item value="jp">Japan</c-ui.menu.item>
+                    <c-ui.menu.item value="br">Brazil</c-ui.menu.item>
+                    <c-ui.menu.item value="in">India</c-ui.menu.item>
+                    <c-ui.menu.item value="za">South Africa</c-ui.menu.item>
+                </c-ui.select>
+            </div>
+        </div>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.select name="country" variant="listbox" placeholder="Select a country">
+    <c-ui.menu.search placeholder="Search countries..." />
+    <c-ui.menu.item value="us">United States</c-ui.menu.item>
+    <c-ui.menu.item value="uk">United Kingdom</c-ui.menu.item>
+    <c-ui.menu.item value="ca">Canada</c-ui.menu.item>
+    <c-ui.menu.item value="au">Australia</c-ui.menu.item>
+    <c-ui.menu.item value="de">Germany</c-ui.menu.item>
+    <c-ui.menu.item value="fr">France</c-ui.menu.item>
+</c-ui.select>
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>

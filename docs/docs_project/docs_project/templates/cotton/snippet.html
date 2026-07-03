@@ -8,12 +8,12 @@
     :flipped="False"
     :padded_top="False"
     :hide_copy="False"
-    box_class="bg-white dark:bg-zinc-800"
+    box_class="bg-white dark:bg-ink-800"
     pre_class="flex-1 flex flex-col !leading-[1.7rem] !p-0 !m-0 rounded-none !bg-transparent !text-[13.5px]"
     code_class="flex-1 !pb-4 !px-6 !m-0 !bg-transparent !text-[13.5px] !leading-[1.7rem]"
 />
 
-<div class="group relative mb-3 flex-1 flex flex-col justify-start w-full overflow-hidden border border-zinc-200 dark:border-zinc-700 {{ box_class }} {{ rounded }}"
+<div class="group relative mb-3 flex-1 flex flex-col justify-start w-full overflow-hidden border border-ink-200 dark:border-ink-700 {{ box_class }} {{ rounded }}"
      x-data="{% verbatim %}{
         get currentCode() {
             const htmlCode = $refs.htmlCode;
@@ -53,8 +53,8 @@
     {% endverbatim %}"
 >
     {% if flipped and preview %}
-        <div class="px-6 py-6 bg-white prose-headings:text-zinc-800 dark:!text-zinc-800 rounded-t-xl border-b border-zinc-200 dark:border-zinc-700">
-            <div class="text-sm text-zinc-400 font-semibold uppercase tracking-wider pb-3">preview</div>
+        <div class="px-6 py-6 bg-white prose-headings:text-ink-800 dark:!text-ink-800 rounded-t-xl border-b border-ink-200 dark:border-ink-700">
+            <div class="text-sm text-ink-400 font-semibold uppercase tracking-wider pb-3">preview</div>
             <div class="light">{{ preview }}</div>
         </div>
     {% endif %}
@@ -62,7 +62,7 @@
     <!-- Top bar: snippet label (left) + syntax switcher & copy (right), vertically centered together -->
     <div class="absolute left-0 top-0 w-full px-5 pt-3 flex items-center justify-between">
         {% if label and not hide_label %}
-            <div class="text-sm text-zinc-500 font-semibold">{{ label }}</div>
+            <div class="text-sm text-ink-500 font-semibold">{{ label }}</div>
         {% else %}
             <div></div>
         {% endif %}
@@ -75,24 +75,24 @@
                         class="cursor-pointer py-0 text-[12px] transition-all duration-200 rounded-md"
                         :class="$store.syntaxPreference === 'html'
                             ? 'text-teal-600 dark:text-teal-400'
-                            : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'"
+                            : 'text-ink-500 hover:text-ink-700 dark:text-ink-400 dark:hover:text-ink-300'"
                     >
                         c-tags
                     </button>
-                    <span class="px-1.5 text-zinc-300 dark:text-zinc-600 select-none" aria-hidden="true">|</span>
+                    <span class="px-1.5 text-ink-300 dark:text-ink-600 select-none" aria-hidden="true">|</span>
                     <button
                         @click="$store.syntaxPreference = 'template'"
                         class="cursor-pointer py-0 text-[12px] transition-all duration-200 rounded-md"
                         :class="$store.syntaxPreference === 'template'
                             ? 'text-teal-600 dark:text-teal-400'
-                            : 'text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300'"
+                            : 'text-ink-500 hover:text-ink-700 dark:text-ink-400 dark:hover:text-ink-300'"
                     >
                         DTL
                     </button>
                 </div>
             {% endif %}
             {% if not hide_copy %}
-            <button @click.prevent="copy" class="transition-opacity text-zinc-500 duration-200 hover:text-zinc-700 dark:hover:text-zinc-300">
+            <button @click.prevent="copy" class="transition-opacity text-ink-500 duration-200 hover:text-ink-700 dark:hover:text-ink-300">
                 <c-icons.copy class="size-[1.1rem]" />
             </button>
             {% endif %}
@@ -115,8 +115,8 @@
     {% endif %}
 
     {% if preview and not flipped %}
-        <div class="text-base px-6 py-6 bg-white prose-headings:text-zinc-800 dark:!text-zinc-800 border-t border-zinc-200 dark:border-zinc-700">
-            <div class="text-sm text-zinc-400 font-semibold uppercase tracking-wider pb-3">preview</div>
+        <div class="text-base px-6 py-6 bg-white prose-headings:text-ink-800 dark:!text-ink-800 border-t border-ink-200 dark:border-ink-700">
+            <div class="text-sm text-ink-400 font-semibold uppercase tracking-wider pb-3">preview</div>
             <div class="light">{{ preview }}</div>
         </div>
     {% endif %}

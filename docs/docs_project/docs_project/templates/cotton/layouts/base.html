@@ -62,8 +62,8 @@
         {{ slot }}
     </div>
 
-    {# Live theming devtool: dev-only on the docs (DEBUG). Ships as an undocumented kit component. #}
-    {% if DEBUG %}<c-ui.theme-builder-widget />{% endif %}
+    {# Live theming devtool on the UI Kit docs only (not the core docs, not the theme-builder page itself). #}
+    {% if request.resolver_match.url_name == 'ui' or request.resolver_match.url_name|slice:':3' == 'ui-' %}{% if request.resolver_match.url_name != 'ui-theme-builder' %}<c-ui.theme-builder-widget />{% endif %}{% endif %}
 
     <script>
         document.addEventListener('alpine:init', () => {

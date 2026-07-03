@@ -21,7 +21,7 @@
             <div class="flex flex-col sm:flex-row items-start gap-x-10 gap-y-5">
             <div>
                 <div class="text-xs font-semibold uppercase tracking-wider text-ink-400 mb-1">Accent</div>
-                <p class="text-xs text-ink-500 mb-2.5 max-w-xs">Your brand colour: buttons, links, focus rings and active states.</p>
+                <p class="text-xs text-ink-500 mb-3">Your brand colour: buttons, links, focus rings and active states. Use it anywhere via <code class="font-mono text-[11px] px-1 py-0.5 rounded bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">*-accent</code> utilities (<code class="font-mono text-[11px] px-1 py-0.5 rounded bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">bg-accent</code>, <code class="font-mono text-[11px] px-1 py-0.5 rounded bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">text-accent</code>).</p>
                 <div class="flex flex-wrap gap-2 max-w-2xl">
                     <template x-for="a in accents" :key="a">
                         <button type="button"
@@ -55,7 +55,7 @@
 
             <div>
                 <div class="text-xs font-semibold uppercase tracking-wider text-ink-400 mb-1">Ink</div>
-                <p class="text-xs text-ink-500 mb-2.5 max-w-xs">The neutral base: text, borders, surfaces and the off-accent fill.</p>
+                <p class="text-xs text-ink-500 mb-3">The neutral base: text, borders, surfaces and the off-accent fill. Re-tones the <code class="font-mono text-[11px] px-1 py-0.5 rounded bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">*-ink-*</code> scale (<code class="font-mono text-[11px] px-1 py-0.5 rounded bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">bg-ink-100</code>, <code class="font-mono text-[11px] px-1 py-0.5 rounded bg-ink-100 dark:bg-ink-800 text-ink-700 dark:text-ink-300">text-ink-500</code>).</p>
                 <div class="flex flex-wrap gap-2">
                     <template x-for="g in grays" :key="g">
                         <button type="button"
@@ -70,6 +70,15 @@
                             <span x-text="g"></span>
                         </button>
                     </template>
+                </div>
+                {# Dark depth: which ink shade the page bg sits on in dark mode; a discrete neutral choice, so it lives with Ink. #}
+                <div class="mt-4">
+                    <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Dark depth</div>
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                        <template x-for="d in darkDepths" :key="'dd'+d[1]">
+                            <button type="button" @click="setDarkDepth(d[1])" class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors" :class="darkDepth === d[1] ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'" x-text="d[0]"></button>
+                        </template>
+                    </div>
                 </div>
             </div>
 
@@ -190,11 +199,7 @@
                         Surface lift (light) <span class="text-ink-400" x-text="surfaceLight + '%'"></span>
                     </div>
                     <div class="w-40">
-                        <input type="range" min="0" max="100" step="1"
-                            :value="surfaceLight"
-                            @input="surfaceLight = +$event.target.value; apply()"
-                            :style="`--range-fill: ${surfaceLight}%`"
-                            class="ui-range align-middle" />
+                        <input type="range" min="0" max="100" step="1" :value="surfaceLight" @input="surfaceLight = +$event.target.value; apply()" :style="`--range-fill: ${surfaceLight}%`" class="ui-range align-middle" />
                     </div>
                 </div>
 
@@ -203,27 +208,10 @@
                         Surface lift (dark) <span class="text-ink-400" x-text="surfaceDark + '%'"></span>
                     </div>
                     <div class="w-40">
-                        <input type="range" min="0" max="100" step="1"
-                            :value="surfaceDark"
-                            @input="surfaceDark = +$event.target.value; apply()"
-                            :style="`--range-fill: ${surfaceDark}%`"
-                            class="ui-range align-middle" />
+                        <input type="range" min="0" max="100" step="1" :value="surfaceDark" @input="surfaceDark = +$event.target.value; apply()" :style="`--range-fill: ${surfaceDark}%`" class="ui-range align-middle" />
                     </div>
                 </div>
 
-                {% comment %}Dark depth: picks which ink shade the page bg sits on in dark mode (800/900/950).
-                   Deep is the kit default since 0.2.10. Same button-group pattern as Card border.{% endcomment %}
-                <div>
-                    <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Dark depth</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
-                        <template x-for="d in darkDepths" :key="'dd'+d[1]">
-                            <button type="button" @click="setDarkDepth(d[1])"
-                                class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
-                                :class="darkDepth === d[1] ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'"
-                                x-text="d[0]"></button>
-                        </template>
-                    </div>
-                </div>
                 </div>{# /structural row #}
             </div>
 

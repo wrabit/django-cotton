@@ -2,7 +2,7 @@
 
 <div class="not-prose" {{ attrs }}>
     {% if not code_only %}
-        <div class="min-h-40 md:px-24 rounded-md rounded-b-none border mt-6 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-[var(--color-bg)] px-8 py-20 flex items-center">
+        <div class="min-h-40 md:px-24 rounded-[var(--radius-box)] rounded-b-none border mt-6 border-ink-200 dark:border-ink-700 bg-white dark:bg-[var(--color-bg)] px-8 py-20 flex items-center">
             <div class="w-full flex items-center justify-center space-x-4 mx-auto {% if slim %}max-w-xs{% endif %}">
                 {{ slot }}
             </div>
@@ -11,7 +11,7 @@
     {% comment %}c-sample owns the border + rounding for the code region, so strip the inner
        snippet's own border/rounding to avoid a double outline (the snippet keeps
        its border when used standalone in the core docs).{% endcomment %}
-    <div class="{% if code_only %}rounded-t{% else %}border-t-0{% endif %} max-h-[400px] overflow-y-auto flex-1 rounded-b m-0 border border-zinc-200 dark:border-zinc-700 w-full [&>*]:mb-0 [&>*]:!border-0 [&>*]:!rounded-none">
+    <div class="{% if code_only %}rounded-t-[var(--radius-box)]{% else %}border-t-0{% endif %} max-h-[400px] overflow-y-auto flex-1 rounded-b-[var(--radius-box)] m-0 border border-ink-200 dark:border-ink-700 w-full [&>*]:mb-0 [&>*]:!border-0 [&>*]:!rounded-none">
         {{ code }}
     </div>
 </div>

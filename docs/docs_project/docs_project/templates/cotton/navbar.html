@@ -91,7 +91,7 @@
             <div class="flex items-center space-x-2 shrink-0">
                 {% comment %}Right cluster: a compact GitHub repo card — mark on the left, repo name on
                    top, star count + version beneath (repo name and version collapse away on mobile,
-                   leaving the mark and star count). Mirrored on both sides; UI Kit adds an Alpha badge.{% endcomment %}
+                   leaving the mark and star count). Mirrored on both sides.{% endcomment %}
                 {% if request.path|startswith:'/ui' %}
                     <div class="flex items-center gap-2 text-ink-500 dark:text-ink-400">
                         <a href="{{ github_ui_repo }}" target="_blank" aria-label="django-cotton-ui on GitHub" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
@@ -102,10 +102,6 @@
                             <span class="flex items-center gap-2 text-[11px] font-medium">
                                 {% if github_ui_stars and github_ui_stars != "0" %}<a href="{{ github_ui_repo }}" target="_blank" aria-label="Stars on GitHub" class="flex items-center gap-1 hover:text-ink-700 dark:hover:text-ink-200 no-underline transition-colors tabular-nums"><c-icons.star class="size-3 shrink-0 -translate-y-[0.5px]" />{{ github_ui_stars }}</a>{% endif %}
                                 {% if pypi_ui_version %}<a href="https://pypi.org/project/django-cotton-ui/" target="_blank" aria-label="django-cotton-ui on PyPI" class="hidden md:inline text-ink-400 dark:text-ink-500 hover:text-ink-600 dark:hover:text-ink-300 tabular-nums no-underline transition-colors">v{{ pypi_ui_version }}</a>{% endif %}
-                                {% comment %}Alpha: badge text styling (amber, xs, medium) without the pill bg/padding.{% endcomment %}
-                                <c-ui.tooltip content="Alpha: the kit is pre-1.0, so APIs may still change between releases." position="bottom" size="xs">
-                                    <span class="text-[10px] font-medium text-amber-700 dark:text-amber-400">alpha</span>
-                                </c-ui.tooltip>
                             </span>
                         </div>
                     </div>
@@ -123,9 +119,6 @@
                         </div>
                     </div>
                 {% endif %}
-                <a href="https://discord.gg/4x8ntQwHMe" target="_blank" class="text-ink-500 dark:text-ink-400 hover:text-ink-700 dark:hover:text-ink-200 transition-colors hidden sm:flex items-center space-x-2">
-                    <c-icons.discord class="size-6" />
-                </a>
                 <a href="#" @click.prevent="toggleDark" x-data="{
                         'dark': false,
                         init() {

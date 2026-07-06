@@ -1,0 +1,176 @@
+<c-layouts.ui>
+    <c-header>
+        Mode Toggle
+        <c-slot name="subheading">
+            A light/dark switch that persists the choice, avoids a flash on load and can follow the system.
+        </c-slot>
+    </c-header>
+
+    <c-slot name="page_index">
+        <c-index-sublink section-id="head"><a href="#head" class="no-underline">Avoiding the flash</a></c-index-sublink>
+        <c-index-sublink section-id="switch"><a href="#switch" class="no-underline">Switch style</a></c-index-sublink>
+        <c-index-sublink section-id="menu"><a href="#menu" class="no-underline">Menu</a></c-index-sublink>
+        <c-index-sublink section-id="default"><a href="#default" class="no-underline">Default scheme</a></c-index-sublink>
+        <c-index-sublink section-id="icons"><a href="#icons" class="no-underline">Custom icons</a></c-index-sublink>
+        <c-index-sublink section-id="headless"><a href="#headless" class="no-underline">Bring your own UI</a></c-index-sublink>
+        <c-index-sublink section-id="reference"><a href="#reference" class="no-underline">Reference</a></c-index-sublink>
+    </c-slot>
+
+    <p>Drop it in for a light/dark toggle with none of the usual boilerplate: it writes the <code>dark</code> class on <code>&lt;html&gt;</code>, remembers the choice in <code>localStorage</code>, and reacts to the OS when set to follow the system. Tailwind's dark mode reads that <code>dark</code> class, so the whole page (and every kit component) re-themes.</p>
+
+    <c-sample>
+        <c-ui.mode-toggle />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.mode-toggle />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    <c-section id="head" title="Avoiding the flash">
+
+    <p>To stop a flash of the wrong theme before your CSS loads, add the head snippet as the <strong>first</strong> thing in <code>&lt;head&gt;</code>. It runs a tiny blocking script that sets the <code>dark</code> class before the first paint. Give it the same <code>storage_key</code> and <code>default</code> as your toggle.</p>
+
+    <c-snippet language="html" hide_copy ignore_syntax_choice>{% cotton:verbatim %}{% verbatim %}<head>
+    <c-ui.mode-toggle.head />
+    <link rel="stylesheet" href="...">
+</head>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+
+    </c-section>
+
+    <c-section id="switch" title="Switch style">
+
+    <p>Prefer a toggle that reads as a switch? Set <code>variant="switch"</code> for a sliding pill whose thumb carries the current icon. Same engine underneath, so it stays in sync with every other control on the page.</p>
+
+    <c-sample>
+        <c-ui.mode-toggle variant="switch" />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.mode-toggle variant="switch" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="menu" title="Menu">
+
+    <p>Set <code>variant="menu"</code> for a dropdown with explicit Light, Dark and System options, the pattern shadcn/ui popularised. In system mode it follows <code>prefers-color-scheme</code> and updates live when the OS changes. Pass <code>:system="False"</code> to drop the System row.</p>
+
+    <c-sample>
+        <c-ui.mode-toggle variant="menu" />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.mode-toggle variant="menu" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="default" title="Default scheme">
+
+    <p>Set <code>default</code> to control what a first-time visitor (no stored choice) sees. <code>"system"</code> follows the OS; use <code>"dark"</code> or <code>"light"</code> to force a starting scheme instead. Keep it in sync with the head snippet.</p>
+
+    <c-sample>
+        <c-ui.mode-toggle variant="menu" default="dark" />
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}<c-ui.mode-toggle.head default="dark" />
+
+<c-ui.mode-toggle variant="menu" default="dark" />{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="icons" title="Custom icons">
+
+    <p>The button ships inline sun/moon icons. Override them with the <code>light</code> and <code>dark</code> slots (and <code>system_icon</code> for the menu's System row). Pass any SVG, or pull a ready-made icon from a set like <a href="https://github.com/wrabit/cotton-icons" target="_blank">cotton-icons</a> (<code>&lt;c-heroicon.sun /&gt;</code>).</p>
+
+    <c-sample>
+        <c-ui.mode-toggle>
+            <c-slot name="light"><svg class="size-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 2ZM10 15a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 15ZM10 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM15.657 5.404a.75.75 0 1 0-1.06-1.06l-1.061 1.06a.75.75 0 0 0 1.06 1.06l1.06-1.06ZM6.464 14.596a.75.75 0 1 0-1.06-1.06l-1.06 1.06a.75.75 0 0 0 1.06 1.06l1.06-1.06ZM18 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 18 10ZM5 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 5 10ZM14.596 15.657a.75.75 0 0 0 1.06-1.06l-1.06-1.061a.75.75 0 0 0-1.06 1.06l1.06 1.06ZM5.404 6.464a.75.75 0 0 0 1.06-1.06l-1.06-1.06a.75.75 0 0 0-1.061 1.06l1.06 1.06Z" clip-rule="evenodd" /></svg></c-slot>
+            <c-slot name="dark"><svg class="size-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7.455 2.004a.75.75 0 0 1 .26.77 7 7 0 0 0 9.958 7.967.75.75 0 0 1 1.067.853A8.5 8.5 0 1 1 6.647 1.921a.75.75 0 0 1 .808.083Z" /></svg></c-slot>
+        </c-ui.mode-toggle>
+
+        <c-slot name="code">
+<c-snippet>{% cotton:verbatim %}{% verbatim %}{# any SVG, or an icon component from cotton-icons #}
+<c-ui.mode-toggle>
+    <c-slot name="light"><c-heroicon.sun class="size-5" /></c-slot>
+    <c-slot name="dark"><c-heroicon.moon class="size-5" /></c-slot>
+</c-ui.mode-toggle>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="headless" title="Bring your own UI">
+
+    <p>Need a structure the built-in variants don't cover? Use <code>variant="headless"</code>: the component renders only the state engine and drops your markup inside its scope. Any element in the slot can call <code>set('light')</code>, <code>set('dark')</code>, <code>set('system')</code> or <code>toggle()</code>, and read <code>mode</code> and <code>isDark</code> for styling. Persistence, the <code>dark</code> class and cross-control sync all still work. The example below rebuilds the menu variant by hand to show the moving parts.</p>
+
+    <c-sample>
+        <c-ui.mode-toggle variant="headless">
+            <div x-data="{ open: false }" @click.outside="open = false" @keydown.escape.window="open = false" class="relative inline-block">
+                <button type="button" @click="open = !open" aria-label="Colour scheme"
+                    class="inline-flex items-center justify-center p-2 rounded-control text-ink-500 hover:text-ink-700 dark:text-ink-400 dark:hover:text-ink-200 focus-ring transition-colors">
+                    <svg class="size-5" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.4" /><path d="M10 2a8 8 0 0 1 0 16V2Z" fill="currentColor" /></svg>
+                </button>
+                <div x-show="open" x-cloak x-transition.origin.top.right
+                    class="absolute right-0 mt-2 w-36 rounded-box border border-ink-200 dark:border-ink-700 bg-white dark:bg-ink-800 shadow-lg p-1 z-10">
+                    <button type="button" @click="set('light'); open = false" class="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-control text-sm hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors" :class="mode === 'light' ? 'text-ink-900 dark:text-white font-medium' : 'text-ink-600 dark:text-ink-300'">
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" /></svg>
+                        Light
+                    </button>
+                    <button type="button" @click="set('dark'); open = false" class="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-control text-sm hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors" :class="mode === 'dark' ? 'text-ink-900 dark:text-white font-medium' : 'text-ink-600 dark:text-ink-300'">
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" /></svg>
+                        Dark
+                    </button>
+                    <button type="button" @click="set('system'); open = false" class="flex items-center gap-2.5 w-full px-2.5 py-1.5 rounded-control text-sm hover:bg-ink-100 dark:hover:bg-ink-700 transition-colors" :class="mode === 'system' ? 'text-ink-900 dark:text-white font-medium' : 'text-ink-600 dark:text-ink-300'">
+                        <svg class="size-4" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.4" /><path d="M10 2a8 8 0 0 1 0 16V2Z" fill="currentColor" /></svg>
+                        Auto
+                    </button>
+                </div>
+            </div>
+        </c-ui.mode-toggle>
+
+        <c-slot name="code">
+<c-snippet language="html">{% cotton:verbatim %}{% verbatim %}<c-ui.mode-toggle variant="headless">
+    {# your markup; set()/mode/isDark come from the component #}
+    <div x-data="{ open: false }" @click.outside="open = false" class="relative">
+        <button @click="open = !open">Theme</button>
+        <div x-show="open" x-cloak>
+            <button @click="set('light'); open = false"
+                    :class="mode === 'light' && 'font-medium'">Light</button>
+            <button @click="set('dark'); open = false"
+                    :class="mode === 'dark' && 'font-medium'">Dark</button>
+            <button @click="set('system'); open = false"
+                    :class="mode === 'system' && 'font-medium'">Auto</button>
+        </div>
+    </div>
+</c-ui.mode-toggle>{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+        </c-slot>
+    </c-sample>
+
+    </c-section>
+
+    <c-section id="reference" title="Reference">
+
+    <h4>Props</h4>
+
+    <c-api-props>
+        <c-api-prop name="variant" type="str" :options="['button', 'switch', 'menu', 'headless']" default="button" description="button: two-way icon button; switch: sliding pill; menu: light/dark/system dropdown; headless: render only the engine and supply your own UI in the slot"></c-api-prop>
+        <c-api-prop name=":system" type="bool" :options="['True', 'False']" default="True" description="Include the System row in the menu variant (ignored by button and switch)"></c-api-prop>
+        <c-api-prop name="default" type="str" :options="['system', 'dark', 'light']" default="system" description="Scheme used before the visitor makes a choice; 'system' follows the OS"></c-api-prop>
+        <c-api-prop name="storage_key" type="str" default="theme" description="localStorage key the choice is saved under (match the head snippet)"></c-api-prop>
+        <c-api-prop name="size" type="str" :options="['sm', 'md', 'lg']" default="md" description="Control size (button and menu variants)"></c-api-prop>
+        <c-api-prop name="class" type="str" default="" description="Extra classes on the control"></c-api-prop>
+    </c-api-props>
+
+    <h4 class="mt-6">Slots</h4>
+
+    <c-api-props>
+        <c-api-prop name="light" type="slot" description="Icon shown in light mode (defaults to a sun)"></c-api-prop>
+        <c-api-prop name="dark" type="slot" description="Icon shown in dark mode (defaults to a moon)"></c-api-prop>
+        <c-api-prop name="system_icon" type="slot" description="Icon for the System row in the menu variant"></c-api-prop>
+    </c-api-props>
+
+    </c-section>
+</c-layouts.ui>

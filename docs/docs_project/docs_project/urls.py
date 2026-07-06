@@ -128,6 +128,7 @@ urlpatterns = [
     ),
     path("ui/field", views.build_view("ui_docs/field"), name="ui-field"),
     path("ui/input", views.build_view("ui_docs/input"), name="ui-input"),
+    path("ui/mode-toggle", views.build_view("ui_docs/mode_toggle"), name="ui-mode-toggle"),
     path("ui/nav", views.build_view("ui_docs/nav"), name="ui-nav"),
     path("ui/navbar", views.build_view("ui_docs/navbar"), name="ui-navbar"),
     path("ui/navlist", views.build_view("ui_docs/navlist"), name="ui-navlist"),

@@ -37,6 +37,7 @@
             <c-ui.navlist.item href="{% url 'ui-dropdown' %}" :current="{% if request.resolver_match.url_name == 'ui-dropdown' %}True{% else %}False{% endif %}">Dropdown</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'ui-field' %}" :current="{% if request.resolver_match.url_name == 'ui-field' %}True{% else %}False{% endif %}">Field</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'ui-input' %}" :current="{% if request.resolver_match.url_name == 'ui-input' %}True{% else %}False{% endif %}">Input</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'ui-mode-toggle' %}" :current="{% if request.resolver_match.url_name == 'ui-mode-toggle' %}True{% else %}False{% endif %}">Mode Toggle</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'ui-nav' %}" :current="{% if request.resolver_match.url_name == 'ui-nav' %}True{% else %}False{% endif %}">Nav</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'ui-navbar' %}" :current="{% if request.resolver_match.url_name == 'ui-navbar' %}True{% else %}False{% endif %}">Navbar</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'ui-navlist' %}" :current="{% if request.resolver_match.url_name == 'ui-navlist' %}True{% else %}False{% endif %}">Navlist</c-ui.navlist.item>

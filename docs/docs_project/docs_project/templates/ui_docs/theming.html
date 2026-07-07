@@ -218,7 +218,7 @@
     <c-section id="tokens" title="All Tokens">
     <p>The complete set of themeable tokens and their defaults. Override any of them in a <code>:root</code> block, and set dark-mode values under <code>.dark</code>.</p>
 
-    <div class="not-prose border border-ink-200 dark:border-ink-700 rounded overflow-x-auto px-5 my-6">
+    <div class="not-prose border border-ink-200 dark:border-ink-700 rounded-box overflow-x-auto px-5 my-6">
         {# md+: keep Token/Default/Dark (first three columns) on one line; let Purpose wrap. Below md, everything wraps as before. #}
         <table class="w-full text-sm text-left md:[&_td:nth-child(-n+3)]:whitespace-nowrap md:[&_th:nth-child(-n+3)]:whitespace-nowrap">
             <thead>
@@ -232,69 +232,69 @@
             <tbody class="text-ink-700 dark:text-ink-300 align-top">
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Neutral (Ink)</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-ink-50…950</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-ink-50…950</code></td>
                     <td class="py-2 pr-4">Tailwind zinc</td>
                     <td class="py-2 pr-4">-</td>
                     <td class="py-2">The neutral scale behind text, borders, dividers and surfaces. Re-tone it to re-skin the UI; defaults to <code>zinc</code> and never touches your own <code>zinc</code> usage.</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-muted</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-muted</code></td>
                     <td class="py-2 pr-4">ink-500</td>
                     <td class="py-2 pr-4">ink-400</td>
                     <td class="py-2">Secondary text, reachable as the <code>text-muted</code> utility: descriptions, meta lines, timestamps.</td>
                 </tr>
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Accent</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-accent</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-accent</code></td>
                     <td class="py-2 pr-4">ink-900</td>
                     <td class="py-2 pr-4">ink-100</td>
                     <td class="py-2">Primary fills: button backgrounds, active states</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-accent-content</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-accent-content</code></td>
                     <td class="py-2 pr-4">ink-700</td>
                     <td class="py-2 pr-4">ink-300</td>
                     <td class="py-2">Hover states and readable accent text</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-accent-foreground</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-accent-foreground</code></td>
                     <td class="py-2 pr-4">white</td>
                     <td class="py-2 pr-4">ink-900</td>
                     <td class="py-2">Text and icons on accent fills</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-accent-muted</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-accent-muted</code></td>
                     <td class="py-2 pr-4">ink-900</td>
                     <td class="py-2 pr-4">ink-100</td>
                     <td class="py-2">Fill and border for <code>:accent="False"</code> controls; defaults to ink.</td>
                 </tr>
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Surfaces</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-bg</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-bg</code></td>
                     <td class="py-2 pr-4">ink-50</td>
                     <td class="py-2 pr-4">ink-900</td>
                     <td class="py-2">Page base background</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-surface</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-surface</code></td>
                     <td class="py-2 pr-4">white</td>
                     <td class="py-2 pr-4">ink-800</td>
                     <td class="py-2">Raised surfaces: cards, dialogs, menus</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-input-bg</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-input-bg</code></td>
                     <td class="py-2 pr-4">transparent</td>
                     <td class="py-2 pr-4">+4% white</td>
                     <td class="py-2">Form field fill: transparent in light (border-defined), a faint lift in dark</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-box-border</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-box-border</code></td>
                     <td class="py-2 pr-4">ink-200</td>
                     <td class="py-2 pr-4">ink-700</td>
                     <td class="py-2">Border on box surfaces: cards, dialogs, menus, popovers. Set <code>transparent</code> for a shadow-only look</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-card-border</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-card-border</code></td>
                     <td class="py-2 pr-4">= box-border</td>
                     <td class="py-2 pr-4">= box-border</td>
                     <td class="py-2">Card border only. Falls back to <code>--color-box-border</code>; override it alone (e.g. <code>transparent</code>) to affect just cards</td>
@@ -302,13 +302,13 @@
 
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Radius</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--radius-control</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--radius-control</code></td>
                     <td class="py-2 pr-4">0.375rem</td>
                     <td class="py-2 pr-4"></td>
                     <td class="py-2">Form controls: inputs, buttons, segments</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--radius-box</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--radius-box</code></td>
                     <td class="py-2 pr-4">0.5rem</td>
                     <td class="py-2 pr-4"></td>
                     <td class="py-2">Structural surfaces: cards, dialogs, menus</td>
@@ -316,13 +316,13 @@
 
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Shadows</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--shadow-input</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--shadow-input</code></td>
                     <td class="py-2 pr-4">0 1px 2px 0 rgb(0 0 0 / 0.05)</td>
                     <td class="py-2 pr-4"></td>
                     <td class="py-2">Form input elevation (set to none to flatten)</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--shadow-box</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--shadow-box</code></td>
                     <td class="py-2 pr-4">0 1px 2px 0 rgb(0 0 0 / 0.05)</td>
                     <td class="py-2 pr-4"></td>
                     <td class="py-2">Card and dialog elevation</td>
@@ -330,25 +330,25 @@
 
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Focus ring</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--focus-ring-width</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--focus-ring-width</code></td>
                     <td class="py-2 pr-4">2px</td>
                     <td class="py-2 pr-4"></td>
                     <td class="py-2">Focus ring thickness</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--focus-ring-offset</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--focus-ring-offset</code></td>
                     <td class="py-2 pr-4">0px</td>
                     <td class="py-2 pr-4"></td>
                     <td class="py-2">Gap between the control and the ring</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--focus-ring-color</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--focus-ring-color</code></td>
                     <td class="py-2 pr-4">= accent</td>
                     <td class="py-2 pr-4"></td>
                     <td class="py-2">Focus ring color</td>
                 </tr>
                 <tr>
-                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--focus-ring-offset-color</code></td>
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--focus-ring-offset-color</code></td>
                     <td class="py-2 pr-4">white</td>
                     <td class="py-2 pr-4">ink-900</td>
                     <td class="py-2">Color behind the offset gap</td>
@@ -359,48 +359,78 @@
     </c-section>
 
     <c-section id="utilities" title="Utility classes">
-    <p>Every token above is a Tailwind <code>@theme</code> colour, so it also generates ordinary utilities (<code>text-*</code>, <code>bg-*</code>, <code>border-*</code>) you can drop straight into your own markup. Use these instead of hard-coded colours and your UI re-tones with the kit, including live edits from the <a href="{% url 'ui-theme-builder' %}">Theme Builder</a>. The ones you'll reach for most:</p>
+    <p>The table above is what you <strong>override</strong>. These are what you <strong>apply</strong>: because every token is a Tailwind <code>@theme</code> colour, it also generates ordinary utilities (<code>text-*</code>, <code>bg-*</code>, <code>border-*</code>). Reach for these in your own markup instead of hard-coded colours and it re-tones with the kit, including live edits from the <a href="{% url 'ui-theme-builder' %}">Theme Builder</a>.</p>
 
     <div class="not-prose grid gap-3 sm:grid-cols-2 my-6">
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-ink-500</code>
-            <span class="text-ink-500 text-sm">Body / neutral text</span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-muted</code>
+                <span class="text-muted text-sm">Secondary text</span>
+            </div>
+            <p class="text-muted text-xs mt-2">Descriptions, meta, timestamps. Same as ink-500 in light; lifts to ink-400 on dark so it stays legible.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-muted</code>
-            <span class="text-muted text-sm">Secondary text</span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-ink-500</code>
+                <span class="text-ink-500 text-sm">Neutral text</span>
+            </div>
+            <p class="text-muted text-xs mt-2">Any fixed step of the ink scale, 50&ndash;950, for text, icons or dividers. Pick the exact shade yourself.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-accent</code>
-            <span class="text-accent text-sm font-medium">Accent text</span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-accent</code>
+                <span class="text-accent text-sm font-medium">Accent text</span>
+            </div>
+            <p class="text-muted text-xs mt-2">Your brand colour as text.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-accent-content</code>
-            <span class="text-accent-content text-sm font-medium">Readable accent text</span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-accent-content</code>
+                <span class="text-accent-content text-sm font-medium">Readable accent</span>
+            </div>
+            <p class="text-muted text-xs mt-2">Accent tuned for text weight: links and hover states.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">bg-accent</code>
-            <span class="inline-flex items-center bg-accent text-accent-foreground text-xs font-medium px-3 py-1.5 rounded-control">Accent fill</span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">bg-accent</code>
+                <span class="inline-flex items-center bg-accent text-accent-foreground text-xs font-medium px-3 py-1.5 rounded-control">Accent fill</span>
+            </div>
+            <p class="text-muted text-xs mt-2">Primary fills: buttons, active states. Put <code>text-accent-foreground</code> on top.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">bg-surface</code>
-            <span class="inline-flex items-center bg-surface border border-box-border text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5 rounded-box shadow-box">Raised surface</span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">bg-surface</code>
+                <span class="inline-flex items-center bg-surface border border-box-border text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5 rounded-box shadow-box">Raised surface</span>
+            </div>
+            <p class="text-muted text-xs mt-2">Raised surfaces lifted off the page: cards, dialogs, menus.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">border-box-border</code>
-            <span class="inline-flex items-center border border-box-border text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5 rounded-box">Box border</span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">border-box-border</code>
+                <span class="inline-flex items-center border border-box-border text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5 rounded-box">Box border</span>
+            </div>
+            <p class="text-muted text-xs mt-2">The matching border for those box surfaces.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">rounded-control</code>
-            <span class="inline-block size-8 bg-ink-200 dark:bg-ink-700 rounded-control"></span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">focus-ring</code>
+                <button type="button" class="focus-ring rounded-control border border-ink-300 dark:border-ink-600 text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5">Tab to focus</button>
+            </div>
+            <p class="text-muted text-xs mt-2">Consistent keyboard focus ring. Tab to the button to see it.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">rounded-box</code>
-            <span class="inline-block size-8 bg-ink-200 dark:bg-ink-700 rounded-box"></span>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">rounded-control</code>
+                <span class="inline-block size-8 bg-ink-200 dark:bg-ink-700 rounded-control"></span>
+            </div>
+            <p class="text-muted text-xs mt-2">Radius for form controls: inputs, buttons, segments.</p>
         </div>
-        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
-            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">focus-ring</code>
-            <button type="button" class="focus-ring rounded-control border border-ink-300 dark:border-ink-600 text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5">Tab to focus</button>
+        <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">rounded-box</code>
+                <span class="inline-block size-8 bg-ink-200 dark:bg-ink-700 rounded-box"></span>
+            </div>
+            <p class="text-muted text-xs mt-2">Radius for structural surfaces: cards, dialogs, menus.</p>
         </div>
     </div>
 

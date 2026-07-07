@@ -16,7 +16,45 @@
         <c-index-sublink section-id="utilities"><a href="#utilities" class="no-underline">Utility classes</a></c-index-sublink>
     </c-slot>
 
-    <p>Cotton UI's look is driven by overridable CSS variables. Two colours carry a theme: an <strong>accent</strong> (your brand) and <strong>ink</strong> (the neutral behind text, borders and surfaces), alongside radius, surfaces, shadows and the focus ring. Override any with a <code>:root</code> block (and a <code>.dark</code> block for dark mode). Start with the main ones below, or see <a href="#tokens">All Tokens</a> for the full list.</p>
+    <p>Cotton UI's look is driven by overridable CSS variables. Override them in a <code>:root</code> block (and a <code>.dark</code> block for dark mode) to reskin the whole kit. Four concept buckets carry a theme:</p>
+
+    <div class="not-prose border border-ink-200 dark:border-ink-700 rounded-box overflow-x-auto px-5 my-6">
+        <table class="w-full text-sm text-left">
+            <thead>
+                <tr class="!border-b-ink-200 dark:!border-b-ink-700">
+                    <th class="font-normal text-ink-500 py-3 pr-4 whitespace-nowrap">Bucket</th>
+                    <th class="font-normal text-ink-500 py-3 pr-4">Role</th>
+                    <th class="font-normal text-ink-500 py-3">Core tokens</th>
+                </tr>
+            </thead>
+            <tbody class="text-ink-700 dark:text-ink-300 align-top">
+                <tr class="!border-b-ink-200 dark:!border-b-ink-700">
+                    <td class="py-2 pr-4"><a href="#accent-color" class="font-medium text-accent-content">Accent</a></td>
+                    <td class="py-2 pr-4">Your brand</td>
+                    <td class="py-2"><code>--color-accent</code>, <code>--color-accent-content</code>, <code>--color-accent-foreground</code></td>
+                </tr>
+                <tr class="!border-b-ink-200 dark:!border-b-ink-700">
+                    <td class="py-2 pr-4"><a href="#ink" class="font-medium text-accent-content">Ink</a></td>
+                    <td class="py-2 pr-4">The neutral</td>
+                    <td class="py-2"><code>--color-ink-50…950</code>, <code>--color-muted</code></td>
+                </tr>
+                <tr class="!border-b-ink-200 dark:!border-b-ink-700">
+                    <td class="py-2 pr-4"><a href="#surfaces" class="font-medium text-accent-content">Surfaces</a></td>
+                    <td class="py-2 pr-4">Depth</td>
+                    <td class="py-2"><code>--color-bg</code>, <code>--surface-level</code></td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4"><a href="#radius" class="font-medium text-accent-content">Radius</a></td>
+                    <td class="py-2 pr-4">Shape</td>
+                    <td class="py-2"><code>--radius-control</code>, <code>--radius-box</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="not-prose rounded-box border border-accent/30 bg-accent/5 px-5 py-4 my-6">
+        <p class="text-sm text-ink-700 dark:text-ink-300"><strong>Two moves, in this doc.</strong> <a href="#tokens" class="text-accent-content">Tokens</a> are what you <strong>override</strong> to reskin. <a href="#utilities" class="text-accent-content">Utility classes</a> are what you <strong>apply</strong> in your own markup so it re-tones with the kit.</p>
+    </div>
 
     <c-section id="accent-color" title="Changing the Accent Color">
     <p>The accent drives primary buttons, active states and focus rings. Cotton UI uses a 3-value accent system:</p>
@@ -27,7 +65,7 @@
         <li><code>--color-accent-foreground</code> - text and icons on accent fills</li>
     </ul>
 
-    <p>A neutral ink accent ships by default. To brand the kit, override the accent tokens with a <code>:root</code> block and a <code>.dark</code> block for dark mode. This goes in the inline <code>&lt;style&gt;</code> from the no-build setup, or your <code>app.css</code> on a custom build, the same three tokens either way:</p>
+    <p>A neutral ink accent ships by default. Brand the kit by overriding the three tokens in a <code>:root</code> block, with matching values under <code>.dark</code>. Same tokens whether you drop them in the inline <code>&lt;style&gt;</code> of the no-build setup or in your <code>app.css</code> on a custom build:</p>
 
     <c-sample code_only>
         <c-slot name="code">
@@ -51,9 +89,7 @@
     </c-section>
 
     <c-section id="ink" title="Ink (the Neutral)">
-    <p>Where the accent is your brand colour, <strong>ink</strong> is the neutral the rest of the UI is built from: text, borders, dividers, surfaces and the off-accent state. It's the <code>--color-ink-50…950</code> scale, defaulting to Tailwind's <code>zinc</code>.</p>
-
-    <p>Re-tone the whole UI by pointing those tokens at another scale in a <code>:root</code> block. It's a plain token override, so it works on the no-build <code>&lt;link&gt;</code> path too, and it never touches your own <code>zinc</code> usage:</p>
+    <p>Where the accent is your brand colour, <strong>ink</strong> is the neutral the rest of the UI is built from: text, borders, dividers, surfaces and the off-accent state. Re-tone the whole UI by pointing the <code>--color-ink-50…950</code> tokens at another scale:</p>
 
     <c-sample code_only>
         <c-slot name="code">
@@ -69,7 +105,7 @@
         </c-slot>
     </c-sample>
 
-    <p class="mt-4">The <a href="{% url 'ui-theme-builder' %}">Theme Builder</a> generates the full block for any tone, including the warm and cool neutrals the kit ships. Together, <strong>accent</strong> and <strong>ink</strong> are the two colours every theme turns on.</p>
+    <p class="mt-4">The <a href="{% url 'ui-theme-builder' %}">Theme Builder</a> generates the full block for any tone, including the warm and cool neutrals the kit ships (taupe, mauve, mist, olive).</p>
     </c-section>
 
     <c-section id="accent-toggle" title="Accent Toggle">
@@ -98,17 +134,7 @@
             <h4 class="text-sm font-medium text-ink-700 dark:text-ink-300">With Accent (default)</h4>
             <h4 class="text-sm font-medium text-ink-700 dark:text-ink-300">Without Accent (:accent="False")</h4>
 
-            {# Radio #}
-            <c-ui.radio.group name="notifications_accent" value="all">
-                <c-ui.radio value="all" label="All notifications" description="Receive all updates" />
-                <c-ui.radio value="important" label="Important only" description="Only critical updates" />
-            </c-ui.radio.group>
-            <c-ui.radio.group name="notifications_mono" value="all">
-                <c-ui.radio value="all" label="All notifications" description="Receive all updates" :accent="False" />
-                <c-ui.radio value="important" label="Important only" description="Only critical updates" :accent="False" />
-            </c-ui.radio.group>
-
-            {# Radio cards #}
+            {# Radio cards — a clear "selected" state to compare accent vs ink #}
             <c-ui.radio.group name="plan_accent" variant="cards" class="flex-col" value="pro">
                 <c-ui.radio value="starter" label="Starter" description="$10/month" />
                 <c-ui.radio value="pro" label="Pro" description="$25/month" />
@@ -118,27 +144,7 @@
                 <c-ui.radio value="pro" label="Pro" description="$25/month" :accent="False" />
             </c-ui.radio.group>
 
-            {# Checkbox #}
-            <c-ui.checkbox.group name="features_accent" :values="['analytics']">
-                <c-ui.checkbox value="analytics" label="Analytics" description="Track user behavior" />
-                <c-ui.checkbox value="reports" label="Reports" description="Generate custom reports" />
-            </c-ui.checkbox.group>
-            <c-ui.checkbox.group name="features_mono" :values="['analytics']">
-                <c-ui.checkbox value="analytics" label="Analytics" description="Track user behavior" :accent="False" />
-                <c-ui.checkbox value="reports" label="Reports" description="Generate custom reports" :accent="False" />
-            </c-ui.checkbox.group>
-
-            {# Switch #}
-            <div class="flex items-center gap-3">
-                <c-ui.switch name="wifi_accent" checked />
-                <span class="text-sm text-ink-600 dark:text-ink-400">Wi-Fi</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <c-ui.switch name="wifi_mono" checked :accent="False" />
-                <span class="text-sm text-ink-600 dark:text-ink-400">Wi-Fi</span>
-            </div>
-
-            {# Tabs #}
+            {# Tabs — the underline colour is the accent vs ink swap in another surface #}
             <c-ui.tabs>
                 <c-ui.tabs.tab name="Account"><p class="text-sm text-ink-500 pt-3">Account settings.</p></c-ui.tabs.tab>
                 <c-ui.tabs.tab name="Password"><p class="text-sm text-ink-500 pt-3">Password settings.</p></c-ui.tabs.tab>
@@ -147,22 +153,6 @@
                 <c-ui.tabs.tab name="Account"><p class="text-sm text-ink-500 pt-3">Account settings.</p></c-ui.tabs.tab>
                 <c-ui.tabs.tab name="Password"><p class="text-sm text-ink-500 pt-3">Password settings.</p></c-ui.tabs.tab>
             </c-ui.tabs>
-
-            {# Progress #}
-            <c-ui.progress :value="60" />
-            <c-ui.progress :value="60" :accent="False" />
-
-            {# Pagination #}
-            <c-ui.pagination>
-                <c-ui.pagination.item href="#">1</c-ui.pagination.item>
-                <c-ui.pagination.item href="#" :current="True">2</c-ui.pagination.item>
-                <c-ui.pagination.item href="#">3</c-ui.pagination.item>
-            </c-ui.pagination>
-            <c-ui.pagination>
-                <c-ui.pagination.item href="#">1</c-ui.pagination.item>
-                <c-ui.pagination.item href="#" :current="True" :accent="False">2</c-ui.pagination.item>
-                <c-ui.pagination.item href="#">3</c-ui.pagination.item>
-            </c-ui.pagination>
         </div>
     </div>
     </c-section>
@@ -175,39 +165,30 @@
         <li><code>--radius-box</code> - structural surfaces (cards, dialogs, menus)</li>
     </ul>
 
-    <c-sample code_only>
-        <c-slot name="code">
-<c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
-:root {
-    --radius-control: 0.5rem;      /* form controls */
-    --radius-box: 0.75rem;  /* structural surfaces */
-}
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
+    <p class="text-sm text-muted">Override in the same <code>:root</code> block as the accent tokens.</p>
     </c-section>
 
     <c-section id="surfaces" title="Surfaces">
-    <p>Surface tokens set the page base and the raised surfaces drawn on top of it. The faint tinted base lets white cards and menus read as elevated:</p>
+    <p>Surfaces are the page base and the raised surfaces (cards, dialogs, menus) that sit on top of it. Two knobs:</p>
 
     <ul>
         <li><code>--color-bg</code> - page base background</li>
-        <li><code>--color-surface</code> - raised surfaces (cards, dialogs, menus)</li>
-        <li><code>--color-input-bg</code> - form field fill (transparent in light so fields are border-defined; a faint lift in dark)</li>
+        <li><code>--surface-level</code> - how much raised surfaces lift off the page (mixed with white). 100% in light gives flat white cards; 6% in dark lifts subtly off <code>ink-950</code></li>
     </ul>
+
+    <p><code>--color-surface</code> is derived from those two — you rarely override it directly. Same for <code>--color-input-bg</code>: transparent in light so form fields are border-defined, a faint lift in dark.</p>
 
     <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
 :root {
-    --color-bg: var(--color-ink-50);     /* page base */
-    --color-surface: #ffffff;             /* cards, dialogs, menus */
-    --color-input-bg: transparent;        /* form fields (border-defined) */
+    --color-bg: var(--color-ink-50);   /* page base */
+    --surface-level: 100%;              /* flat white cards */
 }
 
 .dark {
-    --color-bg: var(--color-ink-900);
-    --color-surface: var(--color-ink-800);
+    --color-bg: var(--color-ink-950);
+    --surface-level: 6%;                /* subtle lift off the dark page */
 }
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -271,14 +252,19 @@
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
                     <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-bg</code></td>
                     <td class="py-2 pr-4">ink-50</td>
-                    <td class="py-2 pr-4">ink-900</td>
+                    <td class="py-2 pr-4">ink-950</td>
                     <td class="py-2">Page base background</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
+                    <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--surface-level</code></td>
+                    <td class="py-2 pr-4">100%</td>
+                    <td class="py-2 pr-4">6%</td>
+                    <td class="py-2">How much raised surfaces lift off the page (mixed with white). Turn this knob to change surface contrast, not <code>--color-surface</code> directly.</td>
+                </tr>
+                <tr class="!border-b-ink-200 dark:!border-b-ink-700">
                     <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-surface</code></td>
-                    <td class="py-2 pr-4">white</td>
-                    <td class="py-2 pr-4">ink-800</td>
-                    <td class="py-2">Raised surfaces: cards, dialogs, menus</td>
+                    <td class="py-2 pr-4" colspan="2">derived from <code>--color-bg</code> + <code>--surface-level</code></td>
+                    <td class="py-2">Raised surfaces (cards, dialogs, menus). Derived, not literal — override <code>--surface-level</code> to move it.</td>
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
                     <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--color-input-bg</code></td>
@@ -330,7 +316,7 @@
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Focus ring</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
                     <td class="py-2 pr-4"><code class="!bg-accent/10 dark:!bg-accent/15 !text-accent-content">--focus-ring-width</code></td>
-                    <td class="py-2 pr-4">2px</td>
+                    <td class="py-2 pr-4">3px</td>
                     <td class="py-2 pr-4"></td>
                     <td class="py-2">Focus ring thickness</td>
                 </tr>
@@ -358,7 +344,7 @@
     </c-section>
 
     <c-section id="utilities" title="Utility classes">
-    <p>The table above is what you <strong>override</strong>. These are what you <strong>apply</strong>: because every token is a Tailwind <code>@theme</code> colour, it also generates ordinary utilities (<code>text-*</code>, <code>bg-*</code>, <code>border-*</code>). Reach for these in your own markup instead of hard-coded colours and it re-tones with the kit, including live edits from the <a href="{% url 'ui-theme-builder' %}">Theme Builder</a>.</p>
+    <p>Because every token is a Tailwind <code>@theme</code> colour, it also generates an ordinary utility (<code>text-*</code>, <code>bg-*</code>, <code>border-*</code>). Reach for these in your own markup instead of hard-coded colours and it re-tones with the kit, including live edits from the <a href="{% url 'ui-theme-builder' %}">Theme Builder</a>.</p>
 
     <div class="not-prose grid gap-3 sm:grid-cols-2 my-6">
         <div class="border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">

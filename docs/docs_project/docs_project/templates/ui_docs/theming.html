@@ -14,7 +14,6 @@
         <c-index-sublink section-id="surfaces"><a href="#surfaces" class="no-underline">Surfaces</a></c-index-sublink>
         <c-index-sublink section-id="tokens"><a href="#tokens" class="no-underline">All Tokens</a></c-index-sublink>
         <c-index-sublink section-id="utilities"><a href="#utilities" class="no-underline">Utility classes</a></c-index-sublink>
-        <c-index-sublink section-id="advanced"><a href="#advanced" class="no-underline">Advanced</a></c-index-sublink>
     </c-slot>
 
     <p>Cotton UI's look is driven by overridable CSS variables. Two colours carry a theme: an <strong>accent</strong> (your brand) and <strong>ink</strong> (the neutral behind text, borders and surfaces), alongside radius, surfaces, shadows and the focus ring. Override any with a <code>:root</code> block (and a <code>.dark</code> block for dark mode). Start with the main ones below, or see <a href="#tokens">All Tokens</a> for the full list.</p>
@@ -435,35 +434,6 @@
     </div>
 
     <p class="text-sm text-muted">Opacity modifiers work too, e.g. <code>bg-accent/10</code> for a faint accent tint.</p>
-    </c-section>
-
-    <c-section id="advanced" title="Advanced: Changing the Base Gray">
-    <p>Cotton UI uses Tailwind's built-in <code>zinc</code> for grays, which works with zero configuration. If you prefer a different gray family, remap zinc to another palette:</p>
-
-    <c-sample code_only>
-        <c-slot name="code">
-<c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
-/* Remap zinc to slate */
-@theme {
-    --color-ink-50: var(--color-slate-50);
-    --color-ink-100: var(--color-slate-100);
-    --color-ink-200: var(--color-slate-200);
-    --color-ink-300: var(--color-slate-300);
-    --color-ink-400: var(--color-slate-400);
-    --color-ink-500: var(--color-slate-500);
-    --color-ink-600: var(--color-slate-600);
-    --color-ink-700: var(--color-slate-700);
-    --color-ink-800: var(--color-slate-800);
-    --color-ink-900: var(--color-slate-900);
-    --color-ink-950: var(--color-slate-950);
-}
-{% endverbatim %}{% endcotton:verbatim %}</c-snippet>
-        </c-slot>
-    </c-sample>
-
-    <p class="mt-6 text-sm opacity-70">
-        Theming approach inspired by <a href="https://fluxui.dev/docs/theming" target="_blank" class="text-accent">Flux UI</a>.
-    </p>
     </c-section>
 
 </c-layouts.ui>

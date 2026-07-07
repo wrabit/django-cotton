@@ -13,6 +13,7 @@
         <c-index-sublink section-id="radius"><a href="#radius" class="no-underline">Border Radius</a></c-index-sublink>
         <c-index-sublink section-id="surfaces"><a href="#surfaces" class="no-underline">Surfaces</a></c-index-sublink>
         <c-index-sublink section-id="tokens"><a href="#tokens" class="no-underline">All Tokens</a></c-index-sublink>
+        <c-index-sublink section-id="utilities"><a href="#utilities" class="no-underline">Utility classes</a></c-index-sublink>
         <c-index-sublink section-id="advanced"><a href="#advanced" class="no-underline">Advanced</a></c-index-sublink>
     </c-slot>
 
@@ -75,17 +76,17 @@
     <c-section id="accent-toggle" title="Accent Toggle">
     <p>Add <code>:accent="False"</code> as a property to turn off accent highlights for a component. Its selected and active states (a checked radio, an on switch, a selected card) render in <strong>ink</strong> instead, no theme changes needed, so they re-tone with your neutral and flip light/dark on their own.</p>
 
-    <p>The off-accent fill is the <code>--color-muted</code> token, which defaults to ink (<code>--color-ink-900</code> / <code>--color-ink-100</code>). Override it for a different neutral, e.g. a softer mid-ink:</p>
+    <p>The off-accent fill is the <code>--color-accent-muted</code> token, which defaults to ink (<code>--color-ink-900</code> / <code>--color-ink-100</code>). Override it for a different neutral, e.g. a softer mid-ink:</p>
 
     <c-sample code_only>
         <c-slot name="code">
 <c-snippet language="css" label="app.css">{% cotton:verbatim %}{% verbatim %}
 :root {
-    --color-muted: var(--color-ink-600);
+    --color-accent-muted: var(--color-ink-600);
 }
 
 .dark {
-    --color-muted: var(--color-ink-400);
+    --color-accent-muted: var(--color-ink-400);
 }
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
@@ -238,9 +239,9 @@
                 </tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
                     <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-muted</code></td>
-                    <td class="py-2 pr-4">ink-900</td>
-                    <td class="py-2 pr-4">ink-100</td>
-                    <td class="py-2">Fill and border for <code>:accent="False"</code> controls; defaults to ink.</td>
+                    <td class="py-2 pr-4">ink-500</td>
+                    <td class="py-2 pr-4">ink-400</td>
+                    <td class="py-2">Secondary text, reachable as the <code>text-muted</code> utility: descriptions, meta lines, timestamps.</td>
                 </tr>
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Accent</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
@@ -260,6 +261,12 @@
                     <td class="py-2 pr-4">white</td>
                     <td class="py-2 pr-4">ink-900</td>
                     <td class="py-2">Text and icons on accent fills</td>
+                </tr>
+                <tr class="!border-b-ink-200 dark:!border-b-ink-700">
+                    <td class="py-2 pr-4"><code class="!bg-teal-500/10 dark:!bg-teal-500/15 !text-teal-700 dark:!text-teal-300">--color-accent-muted</code></td>
+                    <td class="py-2 pr-4">ink-900</td>
+                    <td class="py-2 pr-4">ink-100</td>
+                    <td class="py-2">Fill and border for <code>:accent="False"</code> controls; defaults to ink.</td>
                 </tr>
                 <tr><td colspan="4" class="pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-ink-400">Surfaces</td></tr>
                 <tr class="!border-b-ink-200 dark:!border-b-ink-700">
@@ -349,6 +356,55 @@
             </tbody>
         </table>
     </div>
+    </c-section>
+
+    <c-section id="utilities" title="Utility classes">
+    <p>Every token above is a Tailwind <code>@theme</code> colour, so it also generates ordinary utilities (<code>text-*</code>, <code>bg-*</code>, <code>border-*</code>) you can drop straight into your own markup. Use these instead of hard-coded colours and your UI re-tones with the kit, including live edits from the <a href="{% url 'ui-theme-builder' %}">Theme Builder</a>. The ones you'll reach for most:</p>
+
+    <div class="not-prose grid gap-3 sm:grid-cols-2 my-6">
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-ink-500</code>
+            <span class="text-ink-500 text-sm">Body / neutral text</span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-muted</code>
+            <span class="text-muted text-sm">Secondary text</span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-accent</code>
+            <span class="text-accent text-sm font-medium">Accent text</span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">text-accent-content</code>
+            <span class="text-accent-content text-sm font-medium">Readable accent text</span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">bg-accent</code>
+            <span class="inline-flex items-center bg-accent text-accent-foreground text-xs font-medium px-3 py-1.5 rounded-control">Accent fill</span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">bg-surface</code>
+            <span class="inline-flex items-center bg-surface border border-box-border text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5 rounded-box shadow-box">Raised surface</span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">border-box-border</code>
+            <span class="inline-flex items-center border border-box-border text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5 rounded-box">Box border</span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">rounded-control</code>
+            <span class="inline-block size-8 bg-ink-200 dark:bg-ink-700 rounded-control"></span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">rounded-box</code>
+            <span class="inline-block size-8 bg-ink-200 dark:bg-ink-700 rounded-box"></span>
+        </div>
+        <div class="flex items-center justify-between gap-4 border border-ink-200 dark:border-ink-700 rounded-box px-4 py-3">
+            <code class="rounded bg-ink-100 dark:bg-ink-800 px-1.5 py-0.5 text-xs text-ink-700 dark:text-ink-300">focus-ring</code>
+            <button type="button" class="focus-ring rounded-control border border-ink-300 dark:border-ink-600 text-ink-600 dark:text-ink-300 text-xs px-3 py-1.5">Tab to focus</button>
+        </div>
+    </div>
+
+    <p class="text-sm text-muted">Opacity modifiers work too, e.g. <code>bg-accent/10</code> for a faint accent tint.</p>
     </c-section>
 
     <c-section id="advanced" title="Advanced: Changing the Base Gray">

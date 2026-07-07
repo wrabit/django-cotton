@@ -29,7 +29,7 @@
         }
     }">
     <div class="relative" :style="`width: ${w}px; height: ${h}px; max-width: 100%`">
-        <div class="h-full rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden bg-[var(--color-surface)] dark:bg-[var(--color-bg)]">
+        <div class="h-full rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden bg-surface dark:bg-[var(--color-bg)]">
             <iframe src="{{ src }}" title="Responsive preview" class="block w-full h-full" :class="dragging ? 'pointer-events-none select-none' : ''"></iframe>
         </div>
 
@@ -37,7 +37,7 @@
         <div @pointerdown.prevent="startResize($event)"
             class="absolute -bottom-3 -right-3 cursor-nwse-resize touch-none group"
             role="separator" aria-label="Resize preview">
-            <div class="flex items-center justify-center w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-[var(--color-surface)] dark:bg-zinc-800 shadow-sm group-hover:border-accent transition-colors">
+            <div class="flex items-center justify-center w-7 h-7 rounded-full border border-zinc-200 dark:border-zinc-700 bg-surface dark:bg-zinc-800 shadow-sm group-hover:border-accent transition-colors">
                 <c-tablericon.arrows-diagonal-2 class="w-4 h-4 text-zinc-700 dark:text-zinc-300 group-hover:text-accent transition-colors" />
             </div>
         </div>

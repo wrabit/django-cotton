@@ -49,7 +49,7 @@
                     <input x-show="accent === 'custom'" type="text" :value="customAccent"
                         @change="setCustomAccent($event.target.value)" @keydown.enter.prevent="setCustomAccent($event.target.value)"
                         maxlength="28" spellcheck="false" placeholder="#14b8a6" aria-label="Custom accent value"
-                        class="w-28 text-xs font-mono rounded-lg border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] text-ink-700 dark:text-ink-200 px-2 py-1.5 focus-ring" />
+                        class="w-28 text-xs font-mono rounded-lg border border-ink-200 dark:border-ink-700 bg-input-bg text-ink-700 dark:text-ink-200 px-2 py-1.5 focus-ring" />
                 </div>
             </div>
 
@@ -74,7 +74,7 @@
                 {# Dark depth: which ink shade the page bg sits on in dark mode; a discrete neutral choice, so it lives with Ink. #}
                 <div class="mt-4">
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Dark depth</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <template x-for="d in darkDepths" :key="'dd'+d[1]">
                             <button type="button" @click="setDarkDepth(d[1])" class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors" :class="darkDepth === d[1] ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'" x-text="d[0]"></button>
                         </template>
@@ -102,7 +102,7 @@
 
                 <div>
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Radius</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <template x-for="r in radii" :key="'f'+r[0]">
                             <button type="button" @click="setRadius(r[1])"
                                 class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
@@ -114,7 +114,7 @@
 
                 <div>
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Button radius</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <button type="button" @click="setButtonRadius('default')"
                             class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
                             :class="buttonRadius === 'default' ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'">Default</button>
@@ -126,7 +126,7 @@
 
                 <div>
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Shadow</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <template x-for="s in shadows" :key="'fsh'+s[0]">
                             <button type="button" @click="setInputShadow(s[1])"
                                 class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
@@ -138,7 +138,7 @@
 
                 <div>
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Focus ring</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <template x-for="r in rings" :key="r[0]">
                             <button type="button" @click="setFocusRing(r[1])"
                                 class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
@@ -160,7 +160,7 @@
 
                 <div>
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Radius</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <template x-for="r in radiiBox" :key="'s'+r[0]">
                             <button type="button" @click="setRadiusLg(r[1])"
                                 class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
@@ -172,7 +172,7 @@
 
                 <div>
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Shadow</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <template x-for="s in shadows" :key="'ssh'+s[0]">
                             <button type="button" @click="setStructuralShadow(s[1])"
                                 class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
@@ -184,7 +184,7 @@
 
                 <div>
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Card border</div>
-                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-[var(--color-input-bg)] p-0.5">
+                    <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <button type="button" @click="setBorders(true)"
                             class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
                             :class="borders ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'">On</button>

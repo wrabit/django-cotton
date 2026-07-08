@@ -8,7 +8,7 @@
         <c-header>
             Theme Builder
             <c-slot name="subheading">
-                Tune the two colours a theme is built on, <strong>accent</strong> and <strong>ink</strong>, and watch the whole page re-theme. When it looks right, copy the CSS into your own <code>app.css</code>. Changes here stay on this page.
+                Tune the two colours a theme is built on, <strong>accent</strong> and <strong>ink</strong>, and watch the whole page re-theme. When it looks right, copy the CSS into your own <code>app.css</code>. Your tweaks are saved as you go and shared with the floating theme widget on the other docs pages; hit Reset to clear them.
             </c-slot>
         </c-header>
 
@@ -17,6 +17,11 @@
 
         {# ---- Controls ---- #}
         <div class="rounded-box border border-ink-200 dark:border-ink-700 p-5">
+            {# Reset appears once a token is changed; restores the app's own stylesheet theme #}
+            <div x-show="isModified" x-cloak class="flex justify-end -mt-1 mb-4">
+                <button type="button" @click="reset()"
+                    class="cursor-pointer text-xs font-medium px-2.5 py-1 rounded-control border border-ink-200 dark:border-ink-700 text-ink-600 hover:text-ink-900 hover:bg-ink-100 dark:text-ink-300 dark:hover:text-white dark:hover:bg-ink-800 transition-colors">Reset theme</button>
+            </div>
             {# Prominent row: the colour choices lead, accent left, ink right #}
             <div class="flex flex-col sm:flex-row items-start gap-x-10 gap-y-5">
             <div>
@@ -162,9 +167,9 @@
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Radius</div>
                     <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <template x-for="r in radiiBox" :key="'s'+r[0]">
-                            <button type="button" @click="setRadiusLg(r[1])"
+                            <button type="button" @click="setRadiusBox(r[1])"
                                 class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
-                                :class="radiusLg === r[1] ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'"
+                                :class="radiusBox === r[1] ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'"
                                 x-text="r[0]"></button>
                         </template>
                     </div>
@@ -174,9 +179,9 @@
                     <div class="text-xs font-medium text-ink-600 dark:text-ink-400 mb-2">Shadow</div>
                     <div class="inline-flex rounded-control border border-ink-200 dark:border-ink-700 bg-input-bg p-0.5">
                         <template x-for="s in shadows" :key="'ssh'+s[0]">
-                            <button type="button" @click="setStructuralShadow(s[1])"
+                            <button type="button" @click="setBoxShadow(s[1])"
                                 class="px-2.5 py-1 text-xs rounded-[calc(var(--radius-control)*0.66)] cursor-pointer transition-colors"
-                                :class="structuralShadow === s[1] ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'"
+                                :class="boxShadow === s[1] ? 'bg-ink-900 text-white dark:bg-white dark:text-ink-900' : 'text-ink-500 hover:text-ink-800 dark:hover:text-ink-200'"
                                 x-text="s[0]"></button>
                         </template>
                     </div>
@@ -331,10 +336,10 @@
                 gray: 'zinc',
                 radius: '0.375rem',
                 buttonRadius: 'default',
-                radiusLg: '0.5rem',
-                focusRing: '2px',
+                radiusBox: '0.5rem',
+                focusRing: '3px',
                 inputShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-                structuralShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
                 borders: true,
                 surfaceLight: 100,  /* --surface-level per mode: how much lighter cards are than the page */
                 surfaceDark: 6,
@@ -343,65 +348,136 @@
                 copied: false,
                 _observer: null,
 
+                // --- Shared persistence contract with the c-ui.theme-builder-widget ---
+                // Deliberately NOT code-coupled: we just agree on the same localStorage key and JSON
+                // shape (v2), so a theme set by the floating widget on other docs pages shows up here,
+                // and edits here show up there. Keep persistVersion in lockstep with the widget.
+                storageKey: 'cotton-ui:theme-builder',
+                persistVersion: 2,
+                persistedKeys: ['accent', 'customAccent', 'gray', 'radius', 'buttonRadius', 'radiusBox', 'focusRing', 'inputShadow', 'boxShadow', 'borders', 'surfaceLight', 'surfaceDark', 'darkDepth'],
+                defaults: { accent: 'teal', customAccent: '#14b8a6', gray: 'zinc', radius: '0.375rem', buttonRadius: 'default', radiusBox: '0.5rem', focusRing: '3px', inputShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)', boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)', borders: true, surfaceLight: 100, surfaceDark: 6, darkDepth: '950' },
+                _dirty: {},
+                _last: null,
+                _active: false,
+
                 init() {
                     this.isDark = document.documentElement.classList.contains('dark');
+                    const restored = this.load();  // pull any theme saved here or by the widget
                     // Re-apply when the appearance toggle (or navbar) flips the <html> class.
                     this._observer = new MutationObserver(() => {
                         const dark = document.documentElement.classList.contains('dark');
-                        if (dark !== this.isDark) { this.isDark = dark; this.apply(); }
+                        if (dark !== this.isDark) { this.isDark = dark; if (this._active) this.apply(); }
                     });
                     this._observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-                    this.apply();
+                    // Untouched builder is a no-op: keep the app's own stylesheet theme until a saved
+                    // working theme exists (from here or the widget) or the user changes something.
+                    this._snapshot();
+                    this._active = restored;
+                    if (restored) this.apply();
                 },
 
-                // Theme is applied to <html> so the whole page chrome re-themes. It is
-                // not persisted, so navigating away (a full reload) resets it.
+                // SCOPED apply: only write token groups that changed since the last apply, so untouched
+                // groups keep the app's own theme (matches the widget's no-op behaviour). Saved to the
+                // shared localStorage blob at the end so it carries across pages and to the widget.
                 apply() {
+                    this._active = true;
+                    if (this._last) {
+                        this.persistedKeys.forEach((k) => { if (this[k] !== this._last[k]) this._dirty[k] = true; });
+                    }
+                    this._snapshot();
                     const el = document.documentElement;
-                    const a = this._accentValues(this.isDark);
-                    if (a) {
-                        el.style.setProperty('--color-accent', a.accent);
-                        el.style.setProperty('--color-accent-content', a.content);
-                        el.style.setProperty('--color-accent-foreground', a.fg);
+                    const dirty = (keys) => keys.some((k) => this._dirty[k]);
+
+                    if (dirty(['accent', 'customAccent'])) {
+                        const a = this._accentValues(this.isDark);
+                        if (a) {
+                            el.style.setProperty('--color-accent', a.accent);
+                            el.style.setProperty('--color-accent-content', a.content);
+                            el.style.setProperty('--color-accent-foreground', a.fg);
+                        }
                     }
-                    // Re-tone the kit neutral (--color-ink-*) to the chosen gray base. For 'zinc' we
-                    // clear the overrides so --color-ink-* falls back to its ink-valued default.
-                    this.shades.forEach((s) => el.style.removeProperty('--color-ink-' + s));
-                    // Dark depth chooses which ink shade backs the page in dark mode (800/900/950).
-                    // Kit ships dark=950 since 0.2.10, so for (zinc + deep) we leave --color-bg unset
-                    // to inherit the kit default; any other combo gets an explicit override.
+                    // Gray base: re-tone --color-ink-* to the chosen gray and drive --color-bg. 'zinc'
+                    // clears the overrides so --color-ink-* falls back to its default; dark depth picks
+                    // which ink shade backs the page in dark mode.
                     const darkShade = this.darkDepth || '950';
-                    if (this.gray !== 'zinc') {
-                        const g = (n) => 'var(--color-' + this.gray + '-' + n + ')';
-                        this.shades.forEach((s) => { el.style.setProperty('--color-ink-' + s, g(s)); });
-                        // Drive the page bg so the whole preview follows the gray; --color-surface
-                        // derives from --color-bg + --surface-level, so it tracks the gray for free.
-                        el.style.setProperty('--color-bg', this.isDark ? g(darkShade) : g(50));
-                    } else if (this.isDark && darkShade !== '950') {
-                        el.style.setProperty('--color-bg', 'var(--color-ink-' + darkShade + ')');
-                    } else {
-                        el.style.removeProperty('--color-bg');
+                    if (dirty(['gray', 'darkDepth'])) {
+                        this.shades.forEach((s) => el.style.removeProperty('--color-ink-' + s));
+                        if (this.gray !== 'zinc') {
+                            const g = (n) => 'var(--color-' + this.gray + '-' + n + ')';
+                            this.shades.forEach((s) => el.style.setProperty('--color-ink-' + s, g(s)));
+                            el.style.setProperty('--color-bg', this.isDark ? g(darkShade) : g(50));
+                        } else if (this.isDark && darkShade !== '950') {
+                            el.style.setProperty('--color-bg', 'var(--color-ink-' + darkShade + ')');
+                        } else {
+                            el.style.removeProperty('--color-bg');
+                        }
+                    }
+                    // Surface elevation follows bg; recompute when the levels or bg-driving groups change.
+                    if (dirty(['surfaceLight', 'surfaceDark', 'gray', 'darkDepth'])) {
+                        const level = this.isDark ? this.surfaceDark : this.surfaceLight;
+                        el.style.setProperty('--color-surface', 'color-mix(in oklab, var(--color-bg), white ' + level + '%)');
                     }
 
-                    // Surface elevation: set --color-surface directly to the computed mix so the
-                    // preview works without relying on the kit's derivation being in this page's CSS.
-                    // (The copied snippet uses the clean --surface-level token, which the kit derives.)
-                    const level = this.isDark ? this.surfaceDark : this.surfaceLight;
-                    el.style.setProperty('--color-surface', 'color-mix(in oklab, var(--color-bg), white ' + level + '%)');
+                    if (dirty(['radius'])) el.style.setProperty('--radius-control', this.radius);
+                    if (dirty(['radiusBox'])) el.style.setProperty('--radius-box', this.radiusBox);
+                    if (dirty(['radius', 'buttonRadius'])) el.style.setProperty('--radius-button', this.buttonRadius === 'full' ? 'calc(infinity * 1px)' : 'var(--radius-control)');
+                    if (dirty(['focusRing'])) el.style.setProperty('--focus-ring-width', this.focusRing);
+                    if (dirty(['inputShadow'])) el.style.setProperty('--shadow-input', this.inputShadow);
+                    if (dirty(['boxShadow'])) el.style.setProperty('--shadow-box', this.boxShadow);
+                    // Box-role border (cards): On → restore the gray (mode-aware) over the shadow-only
+                    // default; Off → transparent (removeProperty can't beat the stylesheet).
+                    if (dirty(['borders'])) el.style.setProperty('--color-card-border', this.borders ? (this.isDark ? 'var(--color-ink-700)' : 'var(--color-ink-200)') : 'transparent');
 
-                    // Component tokens
-                    el.style.setProperty('--radius-control', this.radius);
-                    el.style.setProperty('--radius-box', this.radiusLg);
-                    el.style.setProperty('--radius-button', this.buttonRadius === 'full' ? 'calc(infinity * 1px)' : 'var(--radius-control)');
-                    el.style.setProperty('--focus-ring-width', this.focusRing);
-                    el.style.setProperty('--shadow-input', this.inputShadow);
-                    el.style.setProperty('--shadow-box', this.structuralShadow);
-                    // Box-role surfaces (cards, dialogs, menus): toggle the structural border.
-                    // On → explicitly restore the gray (mode- and gray-remap-aware) so it overrides this
-                    // site's shadow-only default; off → transparent. (removeProperty wouldn't win over the
-                    // site stylesheet, so set the value directly.)
-                    el.style.setProperty('--color-card-border', this.borders ? (this.isDark ? 'var(--color-ink-700)' : 'var(--color-ink-200)') : 'transparent');
+                    this.save();
                 },
+
+                _snapshot() { this._last = {}; this.persistedKeys.forEach((k) => { this._last[k] = this[k]; }); },
+
+                load() {
+                    try {
+                        const raw = localStorage.getItem(this.storageKey);
+                        if (!raw) return false;
+                        const data = JSON.parse(raw);
+                        if (!data || data.v !== this.persistVersion) return false;  // ignore incompatible/old blob
+                        this.persistedKeys.forEach((k) => { if (k in data) this[k] = data[k]; });
+                        this._dirty = {};
+                        (data.dirty || []).forEach((k) => { this._dirty[k] = true; });
+                        return true;
+                    } catch (e) { return false; }
+                },
+
+                save() {
+                    try {
+                        // Merge onto the existing blob so keys we don't own (e.g. the widget's panelOpen)
+                        // survive when we write it back.
+                        let data = {};
+                        try { data = JSON.parse(localStorage.getItem(this.storageKey)) || {}; } catch (e) {}
+                        data.v = this.persistVersion;
+                        data.dirty = Object.keys(this._dirty);
+                        this.persistedKeys.forEach((k) => { data[k] = this[k]; });
+                        localStorage.setItem(this.storageKey, JSON.stringify(data));
+                    } catch (e) { /* storage unavailable — preview still works in-page */ }
+                },
+
+                // Restore the app's own stylesheet theme: state back to defaults, inline overrides
+                // removed, shared blob dropped (so the widget resets too on its next load).
+                reset() {
+                    Object.assign(this, this.defaults);
+                    this._dirty = {};
+                    this._snapshot();
+                    const el = document.documentElement;
+                    ['--color-accent', '--color-accent-content', '--color-accent-foreground',
+                     '--color-bg', '--color-surface', '--color-card-border',
+                     '--radius-control', '--radius-button', '--radius-box',
+                     '--focus-ring-width', '--shadow-input', '--shadow-box'
+                    ].forEach((v) => el.style.removeProperty(v));
+                    this.shades.forEach((sh) => el.style.removeProperty('--color-ink-' + sh));
+                    this._active = false;
+                    try { localStorage.removeItem(this.storageKey); } catch (e) { /* ignore */ }
+                },
+
+                // True when any token differs from the app defaults — drives the Reset button.
+                get isModified() { return Object.keys(this._dirty).length > 0; },
 
                 setAccent(a) { this.accent = a; this.apply(); },
                 setCustomAccent(v) {
@@ -450,10 +526,10 @@
                 },
                 setRadius(v) { this.radius = v; this.apply(); },
                 setButtonRadius(v) { this.buttonRadius = v; this.apply(); },
-                setRadiusLg(v) { this.radiusLg = v; this.apply(); },
+                setRadiusBox(v) { this.radiusBox = v; this.apply(); },
                 setFocusRing(v) { this.focusRing = v; this.apply(); },
                 setInputShadow(v) { this.inputShadow = v; this.apply(); },
-                setStructuralShadow(v) { this.structuralShadow = v; this.apply(); },
+                setBoxShadow(v) { this.boxShadow = v; this.apply(); },
                 setBorders(v) { this.borders = v; this.apply(); },
                 setDarkDepth(v) { this.darkDepth = v; this.apply(); },
 
@@ -484,14 +560,14 @@
                         '\n' +
                         '    /* Corner radius, by role */\n' +
                         '    --radius-control: ' + this.radius + ';     /* inputs, segments */\n' +
-                        '    --radius-box: ' + this.radiusLg + ';         /* cards, dialogs, menus */\n' +
+                        '    --radius-box: ' + this.radiusBox + ';         /* cards, dialogs, menus */\n' +
                         (this.buttonRadius === 'full' ? '    --radius-button: calc(infinity * 1px);  /* pill buttons (defaults to --radius-control) */\n' : '') +
                         '\n' +
                         '    /* Form controls */\n' +
                         '    --focus-ring-width: ' + this.focusRing + ';\n' +
                         '    --shadow-input: ' + this.inputShadow + ';\n\n' +
                         '    /* Structural surfaces */\n' +
-                        '    --shadow-box: ' + this.structuralShadow + ';\n' +
+                        '    --shadow-box: ' + this.boxShadow + ';\n' +
                         (this.surfaceLight !== 100 ? '    --surface-level: ' + this.surfaceLight + '%;  /* how much lighter cards are than the page */\n' : '') +
                         (this.borders ? '' : '    --color-card-border: transparent;  /* shadow-only cards (dialogs, menus, etc. keep --color-box-border) */\n') +
                         '}\n\n' +

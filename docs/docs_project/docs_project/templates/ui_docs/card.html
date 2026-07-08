@@ -7,6 +7,7 @@
     </c-header>
 
     <c-slot name="page_index">
+        <c-index-sublink section-id="variants"><a href="#variants" class="no-underline">Variants</a></c-index-sublink>
         <c-index-sublink section-id="compact"><a href="#compact" class="no-underline">Compact</a></c-index-sublink>
         <c-index-sublink section-id="with-header"><a href="#with-header" class="no-underline">With Header</a></c-index-sublink>
         <c-index-sublink section-id="with-actions"><a href="#with-actions" class="no-underline">With Actions</a></c-index-sublink>
@@ -34,6 +35,33 @@
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
         </c-slot>
     </c-sample>
+
+    <c-section id="variants" title="Variants">
+
+        <p>Cards default to <code>variant="raised"</code>: a filled surface (<code>--color-surface</code>) with a subtle shadow that lifts off the page. Use <code>variant="outline"</code> for a flat, border-only card with no fill or shadow.</p>
+
+        <c-sample>
+            <div class="grid md:grid-cols-2 gap-4">
+                <c-ui.card>
+                    <h4 class="font-semibold text-ink-900 dark:text-ink-100">Raised</h4>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Filled surface with a shadow. The default.</p>
+                </c-ui.card>
+
+                <c-ui.card variant="outline">
+                    <h4 class="font-semibold text-ink-900 dark:text-ink-100">Outline</h4>
+                    <p class="text-sm text-ink-600 dark:text-ink-400 mt-1">Border only, sits flat on the page background.</p>
+                </c-ui.card>
+            </div>
+
+            <c-slot name="code">
+                <c-snippet>{% cotton:verbatim %}{% verbatim %}
+<c-ui.card>...</c-ui.card>                    {# raised (default) #}
+
+<c-ui.card variant="outline">...</c-ui.card>
+                {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
+            </c-slot>
+        </c-sample>
+    </c-section>
 
     <c-section id="compact" title="Compact">
 
@@ -288,8 +316,18 @@
         <h4>Props</h4>
 
         <c-api-props>
+            <c-api-prop name="variant" type="str" :options="['raised', 'outline']" default="raised" description="raised: filled surface + shadow that lifts off the page; outline: border only, no fill or shadow." />
             <c-api-prop name="padding" type="str" :options="['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']" default="md" description="Body padding; none gives a flush body so full-width content sits edge to edge." />
-            <c-api-prop name="slot (default)" type="—" default="" description="The card's content."></c-api-prop>
+            <c-api-prop name="title" type="str" default="" description="Optional heading; renders a padded header band with a divider above the body." />
+            <c-api-prop name="subheading" type="str" default="" description="Optional sub-text shown under the title in the header band." />
+            <c-api-prop name="class" type="str" default="" description="Extra classes on the card container." />
+        </c-api-props>
+
+        <h4 class="mt-6">Slots</h4>
+
+        <c-api-props>
+            <c-api-prop name="header" type="slot" description="Custom header content instead of title/subheading; renders the padded header band." />
+            <c-api-prop name="slot (default)" type="slot" description="The card's body content." />
         </c-api-props>
     </c-section>
 

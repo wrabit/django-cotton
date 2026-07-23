@@ -4,9 +4,11 @@
 django~=5.1
 heroicons~=2.6.0
 cotton-icons
-django-cotton-ui>=0.2.0
+django-cotton-ui>=0.3.2
 gunicorn~=22.0
 asgiref>=3.6.0,<4
 whitenoise~=6.2.0
 redis~=5.0.1
 djlint~=1.36.2
+markdown~=3.7
+pygments~=2.18

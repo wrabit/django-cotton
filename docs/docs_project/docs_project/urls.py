@@ -25,7 +25,14 @@ urlpatterns = [
         ),
         name="thinking-in-components",
     ),
-    path("docs/quickstart", views.build_view("quickstart"), name="quickstart"),
+    # Quickstart is authored in markdown (docs_project/docs/quickstart.md) and
+    # served through the markdown pipeline; its raw form lives at the .md route
+    # below. Every other guide still renders from its build_view template.
+    path("docs/quickstart", views.docs_md_page, {"slug": "quickstart"}, name="quickstart"),
+    # Raw markdown (agent-friendly) + llms.txt index. The raw route is restricted
+    # inside the view to slugs present in the markdown page_map.
+    path("docs/<slug:slug>.md", views.docs_raw, name="docs-raw"),
+    path("llms.txt", views.llms_txt, name="llms-txt"),
     path("docs/fundamentals", views.build_view("fundamentals"), name="fundamentals"),
     # Features
     path("docs/components", views.build_view("components"), name="components"),

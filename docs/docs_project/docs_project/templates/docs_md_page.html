@@ -1,0 +1,10 @@
+{% comment %}Markdown-authored docs page. `html` is pre-rendered by docs.render_with_toc (the leading h1 is stripped in the view; <c-header> supplies the title). `toc` drives the right-rail index from the same markdown headings.{% endcomment %}
+<c-layouts.with-sidebar>
+    <c-slot name="page_index">
+        {% for t in toc %}<c-index-sublink section-id="{{ t.id }}"><a href="#{{ t.id }}" class="no-underline">{{ t.name }}</a></c-index-sublink>{% endfor %}
+    </c-slot>
+
+    <c-header>{{ title }}</c-header>
+
+    {{ html|safe }}
+</c-layouts.with-sidebar>

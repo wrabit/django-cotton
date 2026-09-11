@@ -8,6 +8,7 @@ from enum import IntEnum
 from typing import Any, NamedTuple
 
 from django.conf import settings
+from django.core.signals import setting_changed
 from django.template import Library, TemplateDoesNotExist
 from django.template.base import (
     Node,
@@ -50,6 +51,35 @@ def _check_deprecated_isolation_setting():
             stacklevel=2,
         )
     _deprecation_warned = True
+
+
+@functools.lru_cache(maxsize=1)
+def _get_isolation_settings():
+    """Read the isolation settings once per process instead of once per render.
+
+    These settings are usually undefined, and LazySettings only caches lookups
+    that succeed — an uncached getattr for a missing setting raises and catches
+    an AttributeError through the lazy-object chain on every component render.
+    Caching here saves a few microseconds per render and keeps steady-state
+    renders exception-free (less noise in profilers and DEBUG tooling). The
+    cache is cleared on setting_changed so override_settings keeps working.
+    """
+    _check_deprecated_isolation_setting()
+    return (
+        getattr(settings, "COTTON_ISOLATE_BY_DEFAULT", False),
+        # Backward-compat: old experimental setting, deprecated in favour of COTTON_ISOLATE_BY_DEFAULT
+        getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False),
+    )
+
+
+def _clear_settings_caches(sender, setting, **kwargs):
+    _get_isolation_settings.cache_clear()
+    # Also settings-derived: bakes COTTON_DIR / COTTON_SNAKE_CASED_NAMES into
+    # its results, keyed only by component name.
+    CottonComponentNode._generate_component_template_path.cache_clear()
+
+
+setting_changed.connect(_clear_settings_caches)
 
 
 _MISSING = object()
@@ -213,6 +243,9 @@ class CottonComponentNode(Node):
         self.only = only
         self.active_library = active_library
         self._prepared_attrs = _prepare_attrs(attrs, active_library)
+        # Maps requested template path -> resolved path ('<name>.html' or the
+        # '<name>/index.html' fallback); see _get_cached_template.
+        self._resolved_paths = {}
 
     def render(self, context):
         cotton_data = get_cotton_data(context)
@@ -283,10 +316,7 @@ class CottonComponentNode(Node):
             "cotton_data": cotton_data,
         }
 
-        _check_deprecated_isolation_setting()
-        isolate_by_default = getattr(settings, "COTTON_ISOLATE_BY_DEFAULT", False)
-        # Backward-compat: old experimental setting, deprecated in favour of COTTON_ISOLATE_BY_DEFAULT
-        enable_context_isolation = getattr(settings, "COTTON_ENABLE_CONTEXT_ISOLATION", False)
+        isolate_by_default, enable_context_isolation = _get_isolation_settings()
 
         if self.only:
             # Total Isolation (Traditional behavior): No access to any parent or global context.
@@ -314,27 +344,31 @@ class CottonComponentNode(Node):
         if template_path in cache:
             return cache[template_path]
 
-        # Try to get the primary template
-        try:
-            template = get_template(template_path)
-            if hasattr(template, "template"):
-                template = template.template
-            cache[template_path] = template
-            return template
-        except TemplateDoesNotExist:
-            # If the primary template doesn't exist, try the fallback path (index.html)
-            fallback_path = template_path.rsplit(".html", 1)[0] + "/index.html"
+        # The render_context cache above only lives for a single render, so for
+        # '<name>/index.html'-style components the primary-path probe below would
+        # raise TemplateDoesNotExist on every render. Memoize the *resolved path*
+        # (not the template object) per node: the exception is paid once per
+        # compiled template, while loading still goes through get_template so
+        # loader semantics (e.g. uncached loaders in DEBUG re-reading changed
+        # files) are preserved.
+        resolved_path = self._resolved_paths.get(template_path)
+        if resolved_path is not None:
+            template = get_template(resolved_path)
+        else:
+            # Try to get the primary template
+            try:
+                template = get_template(template_path)
+                resolved_path = template_path
+            except TemplateDoesNotExist:
+                # If the primary template doesn't exist, try the fallback path (index.html)
+                resolved_path = template_path.rsplit(".html", 1)[0] + "/index.html"
+                template = get_template(resolved_path)
+            self._resolved_paths[template_path] = resolved_path
 
-            # Check if the fallback template is already cached
-            if fallback_path in cache:
-                return cache[fallback_path]
-
-            # Try to get the fallback template
-            template = get_template(fallback_path)
-            if hasattr(template, "template"):
-                template = template.template
-            cache[fallback_path] = template
-            return template
+        if hasattr(template, "template"):
+            template = template.template
+        cache[template_path] = template
+        return template
 
     def _create_partial_context(self, original_context, component_state):
         # Smart Isolation: block parent template scope, but preserve context

@@ -9,7 +9,7 @@
             <div class="text-sm">str (default: 'cotton')</div>
         </div>
         <div>
-            Change the default path in your templates directory where cotton components can be placed, for example "components".
+            Change the default path in your templates directory where cotton components can be placed, for example "components". If a component is not found there, cotton still falls back to the default <code class="!text-teal-600">cotton</code> directory.
         </div>
     </div>
 
@@ -34,7 +34,7 @@
             <div class="text-sm">bool (default: True)</div>
         </div>
         <div>
-            <div class="mb-4">By default cotton will look for snake case versions of your component names. To turn this behaviour off (useful if you want to permit hyphenated filenames) then set this key to <code class="!text-teal-600">False</code>.</div>
+            <div class="mb-4">By default component filenames are snake_case. Set this to <code class="!text-teal-600">False</code> to use kebab-case filenames instead. If the kebab-case file is not found, cotton still falls back to the snake_case version.</div>
 
             <div class="mb-4">
                 <h6 class="mb-1">Example:</h6>

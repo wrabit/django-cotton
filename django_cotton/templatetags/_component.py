@@ -77,6 +77,7 @@ def _clear_settings_caches(sender, setting, **kwargs):
     # Also settings-derived: bakes COTTON_DIR / COTTON_SNAKE_CASED_NAMES into
     # its results, keyed only by component name.
     CottonComponentNode._generate_component_template_path.cache_clear()
+    CottonComponentNode._candidate_template_paths.cache_clear()
 
 
 setting_changed.connect(_clear_settings_caches)
@@ -355,14 +356,18 @@ class CottonComponentNode(Node):
         if resolved_path is not None:
             template = get_template(resolved_path)
         else:
-            # Try to get the primary template
-            try:
-                template = get_template(template_path)
-                resolved_path = template_path
-            except TemplateDoesNotExist:
-                # If the primary template doesn't exist, try the fallback path (index.html)
-                resolved_path = template_path.rsplit(".html", 1)[0] + "/index.html"
-                template = get_template(resolved_path)
+            candidates = self._candidate_template_paths(self.component_name, attrs.get("is"))
+            for candidate in candidates:
+                try:
+                    template = get_template(candidate)
+                except TemplateDoesNotExist:
+                    continue
+                resolved_path = candidate
+                break
+            else:
+                raise TemplateDoesNotExist(
+                    f"{template_path} (also tried: {', '.join(candidates[1:])})"
+                )
             self._resolved_paths[template_path] = resolved_path
 
         if hasattr(template, "template"):
@@ -439,6 +444,24 @@ class CottonComponentNode(Node):
 
         cotton_dir = getattr(settings, "COTTON_DIR", "cotton")
         return f"{cotton_dir}/{component_tpl_path}.html"
+
+    @staticmethod
+    @functools.lru_cache(maxsize=400)
+    def _candidate_template_paths(component_name: str, is_: str | None) -> tuple[str, ...]:
+        """Template paths to try for a component, in order.
+
+        The configured location comes first, then its '<name>/index.html' form,
+        then the default layout ('cotton/' with snake_case filenames) so that
+        components laid out that way resolve whatever COTTON_DIR or
+        COTTON_SNAKE_CASED_NAMES is set to. The configured location always wins.
+        """
+        configured = CottonComponentNode._generate_component_template_path(component_name, is_)
+        name = is_ if component_name == "component" else component_name
+        default = f"cotton/{name.replace('.', '/').replace('-', '_')}.html"
+        candidates = [configured, configured[: -len(".html")] + "/index.html"]
+        if default != configured:
+            candidates += [default, default[: -len(".html")] + "/index.html"]
+        return tuple(candidates)
 
 
 def cotton_component(parser, token):

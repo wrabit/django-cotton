@@ -1,0 +1,22 @@
+# Deploy config for the docs site on Pyvolt. The app's project path is
+# docs/docs_project, so Pyvolt reads this file from here, not the repo root.
+
+[app]
+serve   = "gunicorn docs_project.wsgi:application --workers 2 --bind $SOCK"
+# collectstatic skips the kit's source CSS and minified bundle: the docs only
+# serve their own built app.css and cotton-ui.js, and manifest storage can't
+# resolve the rest (same ignores as the old Railway start command).
+release = [
+    "python manage.py collectstatic --noinput --ignore cotton-ui.css --ignore cotton-ui.tokens.css --ignore cotton-ui.min.js --ignore cotton-ui.min.js.map",
+    "python manage.py migrate --noinput",
+]
+python  = "3.13"
+
+[build]
+# Runs after `pip install -r requirements.txt`, with the venv and Node on PATH.
+# django-cotton core is deliberately absent from requirements.txt: the docs run
+# the in-repo copy, vendored in from the repo root (what deploy_docs.yml's
+# `cp -r` did before `railway up`). cotton_ui_sources then generates the
+# Tailwind sources from the installed kit, and the CLI builds app.css.
+command = "cp -r ../../django_cotton . && python manage.py cotton_ui_sources && npm install && npx @tailwindcss/cli -i app.css -o docs_project/static/app.css --minify"
+node    = "22"

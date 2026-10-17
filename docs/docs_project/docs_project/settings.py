@@ -33,6 +33,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "django-cotton.com",
     "www.django-cotton.com",
+    # Pyvolt injects the app's domain so the preview host passes before DNS moves.
+    *filter(None, [os.getenv("PYVOLT_HOST")]),
 ]
 
 

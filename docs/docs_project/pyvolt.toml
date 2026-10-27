@@ -20,3 +20,8 @@ python  = "3.13"
 # Tailwind sources from the installed kit, and the CLI builds app.css.
 command = "cp -r ../../django_cotton . && python manage.py cotton_ui_sources && npm install && npx @tailwindcss/cli -i app.css -o docs_project/static/app.css --minify"
 node    = "22"
+
+[env]
+# DOCS_HEAD is the Google Analytics gtag snippet base.html injects via the
+# `env` filter. Set it with `pyvolt env set`; the deploy stops if it's missing.
+required = ["DOCS_HEAD"]

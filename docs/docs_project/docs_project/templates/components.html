@@ -112,12 +112,13 @@ context = { 'today': Weather.objects.get(...) }
 <p>It's {{ today.temperature }}<sup>o</sup>{{ today.unit }} and the condition is {{ today.condition }}.</p>
     {% endcotton:verbatim %}{% endverbatim %}</c-snippet>
 
-    <h3>Passing an object vs building a string</h3>
+    <h3>Passing variables vs strings</h3>
 
-    <p><code>:today="today"</code> and <code>today="{% verbatim %}{{ today }}{% endverbatim %}"</code> do different things. The colon form hands the object itself to the component, so it can read <code>today.temperature</code>. The template expression form renders in place first, so the component receives text. Reach for the colon when the component needs the object, and a template expression when you are composing a string.</p>
+    <p><code>:today="today"</code> and <code>today="{% verbatim %}{{ today }}{% endverbatim %}"</code> do different things. The colon form hands the variable itself to the component, so it can read <code>today.temperature</code>. The template expression form renders in place first, so the component receives a string. Reach for the colon when the component needs the variable, and a template expression when you want a string, whether passed as is or built up.</p>
 
-<c-snippet label="Object vs string">{% cotton:verbatim %}{% verbatim %}
+<c-snippet label="Variable vs string">{% cotton:verbatim %}{% verbatim %}
 <c-weather :today="today" />                 {# today is the Weather object #}
+<c-weather unit="{{ today.unit }}" />        {# unit is the string "c" #}
 <c-weather icon="fa-{{ today.icon }}" />     {# icon is the string "fa-sun" #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 

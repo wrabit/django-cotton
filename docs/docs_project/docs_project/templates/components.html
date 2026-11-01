@@ -118,11 +118,12 @@ context = { 'today': Weather.objects.get(...) }
 
 <c-snippet label="Object vs string">{% cotton:verbatim %}{% verbatim %}
 <c-weather :today="today" />                 {# today is the Weather object #}
+<c-weather today=today />                    {# same, quoteless (like {% include ... with today=today %}) #}
 <c-weather icon="fa-{{ today.icon }}" />     {# icon is the string "fa-sun" #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
     <c-note>
-        <span class="font-semibold">Note:</span> a bare variable or simple literal can also be passed without the colon or quotes, <code>value=my_variable</code> or <code>enabled=True</code>, the same style as Django's <code>{% verbatim %}{% include "x.html" with value=my_variable %}{% endverbatim %}</code>. Anything with spaces or quotes needs the colon form. The same patterns work in <a href="#vars">c-vars</a> for dynamic defaults.
+        <span class="font-semibold">Note:</span> quoteless values can't contain spaces, so lists, dicts and anything with spaces need the colon form. The same patterns work in <a href="#vars">c-vars</a> for dynamic defaults.
     </c-note>
 
     <h3>Python literals</h3>

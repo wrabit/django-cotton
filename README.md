@@ -658,7 +658,7 @@ Whether to search for component filenames in snake_case. If set to False, you ca
 
 When set to True, every component is rendered with **Smart Isolation**: it cannot see variables from the surrounding parent template (preventing accidental context leaks via `{% with %}`, `{% for %}`, the view context, etc.), but it does still receive global context-processor output such as `request`, `user`, `messages`, `perms` and any of your own custom processors.
 
-Context-processor output is captured once per request and reused across every component on the page — processor functions are not re-invoked per component, so DB-backed processors stay cheap regardless of how deeply you nest components.
+Context-processor output is captured once per request and reused across every component on the page. Processor functions are not re-invoked per component, so DB-backed processors stay cheap regardless of how deeply you nest components.
 
 For **total isolation** on an individual component (block context processors too), add the `only` flag on the tag itself.
 

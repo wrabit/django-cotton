@@ -190,7 +190,8 @@ context = { 'today': Weather.objects.get(...) }
     </c-note>
     </c-section>
 
-    <c-section id="attrs" title="5. Working with {{ attrs }}">
+    <c-section id="attrs">
+    <h2>5. Working with {% verbatim %}{{ attrs }}{% endverbatim %}</h2>
     <p>Every attribute passed to a component is collected into <code>attrs</code>, a dictionary the component can print, add to, pass on or trim. The simplest use is to reflect everything onto an element, which is what makes <a href="{% url 'form-fields' %}">form inputs</a> practical.</p>
 
 <c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}

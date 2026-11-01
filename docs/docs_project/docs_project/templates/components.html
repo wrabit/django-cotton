@@ -121,6 +121,10 @@ context = { 'today': Weather.objects.get(...) }
 <c-weather icon="fa-{{ today.icon }}" />     {# icon is the string "fa-sun" #}
 {% endverbatim %}{% endcotton:verbatim %}</c-snippet>
 
+    <c-note>
+        <span class="font-semibold">Note:</span> a bare variable or simple literal can also be passed without the colon or quotes, <code>value=my_variable</code> or <code>enabled=True</code>, the same style as Django's <code>{% verbatim %}{% include "x.html" with value=my_variable %}{% endverbatim %}</code>. Anything with spaces or quotes needs the colon form. The same patterns work in <a href="#vars">c-vars</a> for dynamic defaults.
+    </c-note>
+
     <h3>Python literals</h3>
 
     <p>The colon form evaluates Python literals, so numbers, booleans, <code>None</code>, lists and dicts can be written straight into the template.</p>
@@ -176,14 +180,6 @@ context = { 'today': Weather.objects.get(...) }
 </select>
 {% endcotton:verbatim %}{% endverbatim %}
 </c-snippet>
-
-    <c-note>
-        <span class="font-semibold">Shorthand:</span> for a bare variable or a simple literal with no spaces, the colon and quotes can be dropped: <code>enabled=True</code>, <code>value=my_variable</code>. Anything containing spaces or quotes needs the colon form. This is the same quoteless style as Django's own <code>{% verbatim %}{% include "x.html" with value=my_variable %}{% endverbatim %}</code>.
-    </c-note>
-
-    <c-note>
-        <span class="font-semibold">Note:</span> The same dynamic patterns work in <a href="#vars">c-vars</a> to set dynamic defaults.
-    </c-note>
     </c-section>
 
     <c-section id="attrs">

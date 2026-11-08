@@ -54,9 +54,15 @@ def strip_quotes_with_status(value: Any) -> Tuple[Any, bool]:
 
 def snapshot_parser_library(parser: Parser) -> Library:
     """Capture the parser's active tag and filter table at this parse point."""
+    # Reuse the last snapshot until a {% load %} changes the tables, so a
+    # template's components share one copy instead of holding one each.
+    previous = getattr(parser, "_cotton_library_snapshot", None)
+    if previous is not None and previous.tags == parser.tags and previous.filters == parser.filters:
+        return previous
     active_library = Library()
     active_library.tags.update(parser.tags)
     active_library.filters.update(parser.filters)
+    parser._cotton_library_snapshot = active_library
     return active_library
 
 

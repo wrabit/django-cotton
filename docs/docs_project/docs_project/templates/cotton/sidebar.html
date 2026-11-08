@@ -21,16 +21,16 @@
             <c-ui.navlist.item href="{% url 'thinking-in-components' %}" :current="{% if request.resolver_match.url_name == 'thinking-in-components' %}True{% else %}False{% endif %}">Thinking in Components</c-ui.navlist.item>
         </c-ui.navlist.group>
         <c-ui.navlist.group heading="Tutorials">
-            <c-ui.navlist.item href="{% url 'form-fields' %}" :current="{% if request.resolver_match.url_name == 'form-fields' %}True{% else %}False{% endif %}">Form Inputs</c-ui.navlist.item>
-            <c-ui.navlist.item href="{% url 'alpine-js' %}" :current="{% if request.resolver_match.url_name == 'alpine-js' %}True{% else %}False{% endif %}">Tabs with Alpine.js</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'form-fields' %}" :current="{% if request.resolver_match.url_name == 'form-fields' %}True{% else %}False{% endif %}">Reusable Form Inputs</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'alpine-js' %}" :current="{% if request.resolver_match.url_name == 'alpine-js' %}True{% else %}False{% endif %}">Reusable Tabs with Alpine.js</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'layouts' %}" :current="{% if request.resolver_match.url_name == 'layouts' %}True{% else %}False{% endif %}">Composing Layouts</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'icons' %}" :current="{% if request.resolver_match.url_name == 'icons' %}True{% else %}False{% endif %}">Cotton as SVG Icons</c-ui.navlist.item>
-            <c-ui.navlist.item href="{% url 'component-assets' %}" :current="{% if request.resolver_match.url_name == 'component-assets' %}True{% else %}False{% endif %}">Component Assets</c-ui.navlist.item>
         </c-ui.navlist.group>
         <c-ui.navlist.group heading="Usage Patterns">
             <c-ui.navlist.item href="{% url 'variants' %}" :current="{% if request.resolver_match.url_name == 'variants' %}True{% else %}False{% endif %}">Component Variants</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'attribute-proxying' %}" :current="{% if request.resolver_match.url_name == 'attribute-proxying' %}True{% else %}False{% endif %}">Attribute Proxying</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'index-component' %}" :current="{% if request.resolver_match.url_name == 'index-component' %}True{% else %}False{% endif %}">Compound Components</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'component-assets' %}" :current="{% if request.resolver_match.url_name == 'component-assets' %}True{% else %}False{% endif %}">Component Assets</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'htmx-examples' %}" :current="{% if request.resolver_match.url_name == 'htmx-examples' %}True{% else %}False{% endif %}">HTMX Integration</c-ui.navlist.item>
         </c-ui.navlist.group>
         <c-ui.navlist.group heading="API">

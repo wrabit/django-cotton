@@ -1,4 +1,4 @@
-# Tabs with Alpine.js
+# Reusable Tabs with Alpine.js
 
 ## Introduction {#tabs}
 

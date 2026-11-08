@@ -48,12 +48,12 @@ SECTIONS: list[tuple[str, list[str]]] = [
         "alpine-js.md",
         "layouts.md",
         "icons.md",
-        "component-assets.md",
     ]),
     ("Usage Patterns", [
         "variants.md",
         "attribute-proxying.md",
         "index-component.md",
+        "component-assets.md",
         "htmx-examples.md",
     ]),
     ("API", [

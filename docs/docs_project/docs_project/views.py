@@ -33,6 +33,9 @@ PAGE_CONTEXT: dict[str, callable] = {
     "htmx-examples": lambda: {"demo_tasks": DEMO_TASKS},
 }
 
+# GitHub's edit view forks and opens a PR for a visitor who wants to fix a page.
+DOCS_EDIT_BASE = "https://github.com/wrabit/django-cotton/edit/main/docs/docs_project/docs_project/docs"
+
 # Per-page partial included after the content, for scripts a page's demos need.
 PAGE_EXTRAS: dict[str, str] = {
     "htmx-examples": "docs_extras/htmx_examples.html",
@@ -65,6 +68,7 @@ def docs_md_page(request, slug):
         "prev": prev,
         "next": nxt,
         "extras": PAGE_EXTRAS.get(slug),
+        "edit_url": f"{DOCS_EDIT_BASE}/{slug}.md",
     })
 
 

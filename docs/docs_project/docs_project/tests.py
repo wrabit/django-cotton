@@ -211,6 +211,7 @@ class DocsPagesTests(SimpleTestCase):
         response = self.client.get("/docs/quickstart")
         self.assertContains(response, 'href="/docs/quickstart.md"')
         self.assertContains(response, 'href="/llms.txt"')
+        self.assertContains(response, "/edit/main/docs/docs_project/docs_project/docs/quickstart.md")
 
     def test_pages_have_meta_descriptions(self):
         for slug in docs.page_map():

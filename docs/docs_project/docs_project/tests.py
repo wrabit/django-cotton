@@ -62,6 +62,11 @@ class SnippetFenceTests(SimpleTestCase):
         self.assertIn('class="language-ruby"', out)
         self.assertNotIn(SNIPPET_MARKER, out)
 
+    def test_label_with_markup_is_escaped_once(self):
+        out = docs.render_md('```html label="Rendered <head>"\nx\n```')
+        self.assertIn("Rendered &lt;head&gt;", out)
+        self.assertNotIn("&amp;lt;", out)
+
     def test_unknown_info_keys_are_dropped(self):
         out = docs.render_md('```python onclick="alert(1)" label=ok\nx = 1\n```')
         self.assertNotIn("alert(1)", out)

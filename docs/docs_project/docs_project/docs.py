@@ -217,7 +217,9 @@ def _parse_info(info: str) -> tuple[str, dict[str, str]]:
         key = m.group(1).replace("_", "-")
         val = m.group(2) if m.group(2) is not None else m.group(3)
         if key in _VALUE_ATTRS and val is not None:
-            attrs.append(f'{key}="{escape(val)}"')
+            # Not HTML-escaped here: the widget escapes it when it prints the
+            # label. Only the attribute's own quote character has to go.
+            attrs.append(f'{key}="{val.replace(chr(34), chr(39))}"')
         elif key in _FLAG_ATTRS and val is None:
             attrs.append(key)
         elif key in _OPTIONS and val is not None:

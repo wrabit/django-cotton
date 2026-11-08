@@ -163,7 +163,7 @@ class PipelineTests(SimpleTestCase):
         self.assertIsNone(docs.neighbours(first)[0])
         self.assertIsNone(docs.neighbours(last)[1])
         prev, nxt = docs.neighbours("fundamentals")
-        self.assertEqual((prev["slug"], nxt["slug"]), ("components", "configuration"))
+        self.assertEqual((prev["slug"], nxt["slug"]), ("components", "thinking-in-components"))
 
     def test_list_right_after_text_renders_as_list(self):
         out = docs.render_md("Two options:\n- one\n- two")

@@ -2,7 +2,7 @@
 
 ## Introduction {#tabs}
 
-> Be sure to check out the notes on alpine.js support [here](components.md#alpine-js-support).
+> Be sure to check out the notes on Alpine's `:` shorthand under [Attributes](attributes.md#alpine).
 
 Let's tackle together a common UI requirement: tabs.
 

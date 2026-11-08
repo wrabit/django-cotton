@@ -41,7 +41,6 @@ SECTIONS: list[tuple[str, list[str]]] = [
         "quickstart.md",
         "components.md",
         "fundamentals.md",
-        "configuration.md",
         "thinking-in-components.md",
     ]),
     ("Tutorials", [
@@ -55,6 +54,16 @@ SECTIONS: list[tuple[str, list[str]]] = [
         "attribute-proxying.md",
         "index-component.md",
         "htmx-examples.md",
+    ]),
+    ("API", [
+        "component-tag.md",
+        "attributes.md",
+        "c-vars.md",
+        "c-slot.md",
+        "template-variables.md",
+        "tags-and-filters.md",
+        "python-api.md",
+        "configuration.md",
     ]),
     ("Community", [
         "ecosystem.md",

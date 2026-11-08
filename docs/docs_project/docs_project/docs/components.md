@@ -1,6 +1,6 @@
 # Components
 
-Components are reusable pieces of view template. They can contain native Django template syntax and can be used inside standard Django templates.
+Components are reusable pieces of view template. They can contain native Django template syntax and can be used inside standard Django templates. This page walks through the ideas in the order you'll meet them. The exact rules for each live in the [API](component-tag.md) section.
 
 ## 1. The basic building block: `{{ slot }}` {#slot}
 
@@ -56,6 +56,8 @@ So as with normal attributes, you reference the slot content like normal variabl
 </c-weather-card>
 ```
 
+Reference: [c-slot](c-slot.md).
+
 ## 4. Dynamic Attributes {#dynamic-attributes}
 
 By default, every attribute you pass to a component arrives as a string. To pass anything else, a variable from context, a boolean, a number, a list or a dict, prefix the attribute name with a colon.
@@ -71,53 +73,9 @@ context = { 'today': Weather.objects.get(...) }
 <p>It's {{ today.temperature }}<sup>o</sup>{{ today.unit }} and the condition is {{ today.condition }}.</p>
 ```
 
-### Passing variables vs strings
+`:today="today"` and `today="{{ today }}"` do different things. The colon form hands the variable itself to the component, so it can read `today.temperature`. The template expression form renders in place first, so the component receives a string.
 
-`:today="today"` and `today="{{ today }}"` do different things. The colon form hands the variable itself to the component, so it can read `today.temperature`. The template expression form renders in place first, so the component receives a string. Reach for the colon when the component needs the variable, and a template expression when you want a string, whether passed as is or built up.
-
-```html label="Variable vs string"
-<c-weather :today="today" />                 {# today is the Weather object #}
-<c-weather unit="{{ today.unit }}" />        {# unit is the string "c" #}
-<c-weather icon="fa-{{ today.icon }}" />     {# icon is the string "fa-sun" #}
-```
-
-> **Note:** variables can also be passed Django-style, `today=today`.
-
-### Python literals
-
-The colon form evaluates Python literals, so numbers, booleans, `None`, lists and dicts can be written straight into the template.
-
-```html label="Integers & Floats"
-<c-mycomp :prop="1" />
-{# prop == 1 #}
-```
-
-```html label="Booleans & None"
-<c-mycomp :enabled="True" :prop="None" />
-{# enabled is True, prop is None #}
-```
-
-```html label=Lists
-<c-mycomp :items="['item1','item2','item3']" />
-{# for item in items #}
-```
-
-```html label=Dicts
-<c-mycomp :mydict="{'name': 'Thom', 'products': [1,2]}" />
-{# mydict.name, mydict.products #}
-```
-
-```html label="With template expressions"
-<c-mycomp :slides="['{{ image1 }}', '{{ image2 }}']" />
-{# for image in slides #}
-```
-
-```html label="Generated with template expressions"
-<c-mycomp :is_highlighted="{% if important %}True{% endif %}" />
-{# is_highlighted is True when important #}
-```
-
-A typical use is a select component that takes its options from the parent:
+The colon form also takes Python literals. A typical use is a select component that takes its options from the parent:
 
 ```html label=view.html preview=demo.components.select
 <c-select :options="['no', 'yes', 'maybe']" />
@@ -130,6 +88,8 @@ A typical use is a select component that takes its options from the parent:
     {% endfor %}
 </select>
 ```
+
+Reference: [Attributes](attributes.md) covers every value type, unquoted values and the `:attrs` dictionary.
 
 ## 5. Working with `{{ attrs }}` {#attrs}
 
@@ -149,54 +109,13 @@ Every attribute passed to a component is collected into `attrs`, a dictionary th
 -->
 ```
 
-The next two sections cover the other things you can do with that dictionary: add to it from the outside, and take keys out of it from the inside. Both operate on the same `attrs`.
+A parent can add to `attrs` with a dictionary, `:attrs="widget_attrs"`, and a wrapper component can pass its whole `attrs` on to the component it wraps. See [attribute proxying](attribute-proxying.md) for that pattern.
 
-## 5.1 Adding to attrs with :attrs {#attrs-merging}
-
-Pass a dictionary through the special `:attrs` attribute and its keys are merged into `attrs` alongside anything passed directly. Useful when a view, or another component, already holds the attributes you want applied.
-
-```html label=cotton/input.html
-<input type="text" {{ attrs }} />
-```
-
-```python label=views.py
-def form_view(request):
-    return render(request, "form_view.html", {
-        "widget_attrs": {
-            "placeholder": "Enter your name",
-            "data-validate": "true",
-            "size": "40",
-        }
-    })
-```
-
-```html label=form_view.html
-<c-input :attrs="widget_attrs" required />
-
-<!-- html output
-<input type="text" placeholder="Enter your name" data-validate="true" size="40" required />
--->
-```
-
-### Passing attrs on to another component
-
-Because `attrs` is just a dictionary, a wrapper component can hand the whole thing to the component it wraps, without naming each attribute.
-
-```html label=cotton/outer_wrapper.html
-<c-inner-component :attrs="attrs">
-    {{ slot }}
-</c-inner-component>
-```
-
-See [attribute proxying](attribute-proxying.md) for the full pattern.
+Reference: [Template variables](template-variables.md).
 
 ## 6. Claiming attributes with c-vars {#vars}
 
 Some attributes are for the component to use, not for its HTML. Declare those in a single `<c-vars />` at the top of the component. A declared key is removed from `attrs` and becomes an ordinary template variable, with a default if you give one.
-
-### Defaults
-
-Set a value in `<c-vars />` and it applies whenever the parent does not pass that attribute.
 
 ```html label=cotton/alert.html
 <c-vars type="success" />
@@ -210,8 +129,6 @@ Set a value in `<c-vars />` and it applies whenever the parent does not pass tha
 <c-alert>All good!</c-alert>
 <c-alert type="danger">Oh no!</c-alert>
 ```
-
-### Keeping configuration out of `{{ attrs }}`
 
 Declaring a key with no value claims it without setting a default. Here `label` and `errors` are claimed, so they never reach the input, while `placeholder` is not, so it does.
 
@@ -234,26 +151,9 @@ Declaring a key with no value claims it without setting a default. Here `label` 
 <c-input-group label="Last name" placeholder="Last name" :errors="errors.last_name" />
 ```
 
-### Merging classes
+For `class` you usually want the parent's classes added to the component's own rather than replacing them. `class:merge="btn btn-primary"` does that.
 
-A plain default is replaced when the parent passes the attribute. For `class` you usually want to add to it instead, so the component keeps its own classes and the parent can tweak the layout. Add `:merge` to the key and the parent's classes are appended to the default.
-
-```html label=cotton/button.html
-<c-vars class:merge="btn btn-primary" />
-
-<button class="{{ class }}" {{ attrs }}>{{ slot }}</button>
-```
-
-```html label=form_view.html
-<c-button>Save</c-button>
-<c-button class="w-full">Save</c-button>
-
-<!-- renders -->
-<button class="btn btn-primary">Save</button>
-<button class="btn btn-primary w-full">Save</button>
-```
-
-A dynamic `:class` from the parent is merged the same way. Only `class` can be merged for now. The classes are joined as they are, so conflicting utility classes (say `bg-red-500` from the parent and `bg-blue-500` in the default) are both kept and the stylesheet decides which one wins.
+Reference: [c-vars](c-vars.md) covers dynamic defaults, template expressions in defaults and merging.
 
 ## 7. Boolean attributes {#boolean-attributes}
 
@@ -291,34 +191,8 @@ The `is` attribute is similar to other attributes so we have a number of possibi
 <c-component is="icon_{{ icon_name }}" />
 ```
 
-## 9. Context Isolation {#context-isolation}
+Reference: [Component tag](component-tag.md), which also covers `only` and context isolation.
 
-By default, components inherit the parent template's full context. There are two ways to opt out:
+## Where next {#where-next}
 
-#### `only`: total isolation per component
-
-Add the `only` attribute to an individual component to block *all* outside context. The component sees nothing except its directly passed attributes: no parent template variables, no context processors (no `request`, no `user`, etc).
-
-#### `COTTON_ISOLATE_BY_DEFAULT`: smart isolation project-wide
-
-Set `COTTON_ISOLATE_BY_DEFAULT = True` in `settings.py` to make every component *silently scoped*: parent template variables (from `{% with %}`, `{% for %}`, the view context, etc.) do not leak in, but global context-processor output is preserved. Useful when you want isolation as the default but still want components to see `request`, `user`, `messages`, etc.
-
-You can still add `only` on a per-component basis to also block context-processor output. See [configuration](configuration.md).
-
-## 10. Alpine.js support {#alpine-js-support}
-
-The following key features allow you to build re-usable components with alpine.js:
-
-- `x-data` is accessible as `{{ x_data }}` inside the component as cotton makes available snake_case versions of all kebab-cased attributes. (If you use `{{ attrs }}` then the output will already be in the correct case).
-- [Shorthand x-bind](https://alpinejs.dev/directives/bind) support (`:example`). Because single `:` attribute prefixing is reserved for cotton's [dynamic attributes](#dynamic-attributes), we can escape the first colon using `::`. This will ensure the attribute maintains a single `:` inside `{{ attrs }}`.
-
-## Summary of Concepts {#summary}
-
-- `{{ slot }}` - Default content injection.
-- **Attributes** - Simple, straightforward customization.
-- **Named Slots** - Provide HTML or template partial as a variable in the component.
-- **`:` Dynamic Attributes** - Pass variables and other data types other than strings.
-- `{{ attrs }}` - Prints attributes as HTML attributes.
-- `<c-vars />` - Set default values and other component state.
-- **Boolean attributes** - Attributes without values are passed down as `True`.
-- **Dynamic Components** - Insert a component where the name is generated by a variable or template expression: `<c-component :is="my_variable" />`
+That's the whole model: a slot, attributes, named slots and `<c-vars />` to say which attributes are the component's own. The [tutorials](form-fields.md) build real components with it, and the API section has the precise rules for the [component tag](component-tag.md), [attributes](attributes.md), [c-vars](c-vars.md), [c-slot](c-slot.md) and the [template variables](template-variables.md), including Alpine.js support and context isolation.

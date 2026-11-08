@@ -18,7 +18,6 @@
             <c-ui.navlist.item href="{% url 'quickstart' %}" :current="{% if request.resolver_match.url_name == 'quickstart' %}True{% else %}False{% endif %}">Quickstart</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'components' %}" :current="{% if request.resolver_match.url_name == 'components' %}True{% else %}False{% endif %}">Components</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'fundamentals' %}" :current="{% if request.resolver_match.url_name == 'fundamentals' %}True{% else %}False{% endif %}">Fundamentals</c-ui.navlist.item>
-            <c-ui.navlist.item href="{% url 'configuration' %}" :current="{% if request.resolver_match.url_name == 'configuration' %}True{% else %}False{% endif %}">Configuration</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'thinking-in-components' %}" :current="{% if request.resolver_match.url_name == 'thinking-in-components' %}True{% else %}False{% endif %}">Thinking in Components</c-ui.navlist.item>
         </c-ui.navlist.group>
         <c-ui.navlist.group heading="Tutorials">
@@ -32,6 +31,16 @@
             <c-ui.navlist.item href="{% url 'attribute-proxying' %}" :current="{% if request.resolver_match.url_name == 'attribute-proxying' %}True{% else %}False{% endif %}">Attribute Proxying</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'index-component' %}" :current="{% if request.resolver_match.url_name == 'index-component' %}True{% else %}False{% endif %}">Compound Components</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'htmx-examples' %}" :current="{% if request.resolver_match.url_name == 'htmx-examples' %}True{% else %}False{% endif %}">HTMX Integration</c-ui.navlist.item>
+        </c-ui.navlist.group>
+        <c-ui.navlist.group heading="API">
+            <c-ui.navlist.item href="{% url 'component-tag' %}" :current="{% if request.resolver_match.url_name == 'component-tag' %}True{% else %}False{% endif %}">Component tag</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'attributes' %}" :current="{% if request.resolver_match.url_name == 'attributes' %}True{% else %}False{% endif %}">Attributes</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'c-vars' %}" :current="{% if request.resolver_match.url_name == 'c-vars' %}True{% else %}False{% endif %}">c-vars</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'c-slot' %}" :current="{% if request.resolver_match.url_name == 'c-slot' %}True{% else %}False{% endif %}">c-slot</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'template-variables' %}" :current="{% if request.resolver_match.url_name == 'template-variables' %}True{% else %}False{% endif %}">Template variables</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'tags-and-filters' %}" :current="{% if request.resolver_match.url_name == 'tags-and-filters' %}True{% else %}False{% endif %}">Tags and filters</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'python-api' %}" :current="{% if request.resolver_match.url_name == 'python-api' %}True{% else %}False{% endif %}">Python API</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'configuration' %}" :current="{% if request.resolver_match.url_name == 'configuration' %}True{% else %}False{% endif %}">Settings</c-ui.navlist.item>
         </c-ui.navlist.group>
         <c-ui.navlist.group heading="Community">
             <c-ui.navlist.item href="{% url 'ecosystem' %}" :current="{% if request.resolver_match.url_name == 'ecosystem' %}True{% else %}False{% endif %}">Ecosystem</c-ui.navlist.item>

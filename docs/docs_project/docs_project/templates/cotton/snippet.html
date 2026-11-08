@@ -8,12 +8,14 @@
     :flipped="False"
     :padded_top="False"
     :hide_copy="False"
+    :embedded="False"
     box_class="bg-white dark:bg-ink-800"
     pre_class="flex-1 flex flex-col !leading-[1.7rem] !p-0 !m-0 rounded-none !bg-transparent !text-[13.5px]"
     code_class="flex-1 !pb-4 !px-6 !m-0 !bg-transparent !text-[13.5px] !leading-[1.7rem]"
 />
 
-<div class="group relative mb-3 flex-1 flex flex-col justify-start w-full overflow-hidden border border-ink-200 dark:border-ink-700 {{ box_class }} {{ rounded }}"
+{% comment %}embedded: inside <c-demo.snippet-tabs>, which draws the frame, so no border, radius or margin of its own.{% endcomment %}
+<div class="group relative flex-1 flex flex-col justify-start w-full overflow-hidden {{ box_class }} {% if embedded %}rounded-none{% else %}mb-3 border border-ink-200 dark:border-ink-700 {{ rounded }}{% endif %}"
      x-data="{% verbatim %}{
         get currentCode() {
             const htmlCode = $refs.htmlCode;

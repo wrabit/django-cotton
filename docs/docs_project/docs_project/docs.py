@@ -324,7 +324,7 @@ def _render_tabs(fences: list[re.Match], request, context) -> str:
         preview = preview or _preview_component(options)
         tabs.append(
             f'<c-demo.snippet-tab name="{escape(options["tab"])}">'
-            f'<c-snippet language="{LANGUAGES[lang]}" rounded="rounded-b-xl" hide-label>'
+            f'<c-snippet language="{LANGUAGES[lang]}" embedded hide-label>'
             + _literal(body)
             + "</c-snippet></c-demo.snippet-tab>"
         )

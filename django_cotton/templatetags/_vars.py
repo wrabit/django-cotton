@@ -4,6 +4,8 @@ from typing import Any, NamedTuple
 
 from django.template import Library, TemplateSyntaxError
 from django.template.base import Node
+from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
 
 from django_cotton.templatetags import (
     Attrs,
@@ -143,7 +145,10 @@ class CottonVarsNode(Node):
             self._resolve_default(var, context),
             attrs.exclude_unprocessable().get(var.exclude_key),
         )
-        return " ".join(str(p) for p in parts if p not in (_UNRESOLVED, None, True, ""))
+        # Rendered parts are already escaped; a plain join would escape them a second time
+        return mark_safe(
+            " ".join(conditional_escape(p) for p in parts if p not in (_UNRESOLVED, None, True, ""))
+        )
 
     def render(self, context):
         # When rendered standalone (not as part of a component extraction),

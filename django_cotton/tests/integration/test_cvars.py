@@ -841,6 +841,24 @@ class CvarTests(CottonTestCase):
         rendered = get_rendered('<c-merged-class-variable class="w-full" />', {"size": "lg"})
         self.assertIn('class="btn btn-lg w-full"', rendered)
 
+    def test_merged_class_escaped_once(self):
+        self.create_template(
+            "cotton/merged_class_escaping.html",
+            """<c-vars class:merge="btn before:content-['{{ icon }}']" /><b class="{{ class }}" {{ attrs }}></b>""",
+        )
+
+        context = {"icon": "x", "extra": "after:content-['y']"}
+        cases = [
+            '<c-merged-class-escaping class="{{ extra }}" />',
+            '<c-merged-class-escaping :class="extra" />',
+            "<c-merged-class-escaping class=\"after:content-['y']\" />",
+        ]
+        for html in cases:
+            with self.subTest(html=html):
+                rendered = get_rendered(html, context)
+                self.assertIn("after:content-[&#x27;y&#x27;]", rendered)
+                self.assertNotIn("&amp;", rendered)
+
     def test_merged_class_in_attrs(self):
         self.create_template(
             "cotton/merged_class_in_attrs.html",

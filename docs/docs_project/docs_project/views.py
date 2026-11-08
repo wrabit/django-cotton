@@ -13,26 +13,58 @@ def snake_to_title(snake_str):
 _LEADING_H1_RE = re.compile(r"(?s)^\s*<h1[^>]*>.*?</h1>")
 
 
+DEMO_TASKS = [
+    {
+        "id": 1,
+        "title": "Implement user authentication",
+        "description": "Add login and registration functionality",
+    },
+    {
+        "id": 2,
+        "title": "Design homepage layout",
+        "description": "Create responsive homepage with hero section",
+    },
+]
+
+# Per-page view data for live demos, keyed by slug. A fence's preview renders
+# with the request plus this dict, the same way build_view hands template pages
+# their sample data.
+PAGE_CONTEXT: dict[str, callable] = {
+    "htmx-examples": lambda: {"demo_tasks": DEMO_TASKS},
+}
+
+# Per-page partial included after the content, for scripts a page's demos need.
+PAGE_EXTRAS: dict[str, str] = {
+    "htmx-examples": "docs_extras/htmx_examples.html",
+}
+
+
 def docs_md_page(request, slug):
     """Render a markdown-backed docs page into the existing docs chrome.
 
     The page title comes from the markdown's first `# H1`, rendered via
     `<c-header>`; that leading <h1> is stripped from the body so it isn't shown
-    twice. Everything else (sidebar, prose styling, snippet widgets) is the
-    same chrome the template pages use."""
+    twice. Everything else (sidebar, prose styling, snippet widgets, prev/next)
+    is the same chrome the template pages use."""
     from docs_project import docs
 
     path = docs.page_map().get(slug)
     if not path or not path.exists():
         raise Http404
-    html, toc = docs.render_with_toc(path)
+    context = PAGE_CONTEXT.get(slug, dict)()
+    html, toc = docs.render_page(path, request, context)
     html = _LEADING_H1_RE.sub("", html, count=1)
+    prev, nxt = docs.neighbours(slug)
     return render(request, "docs_md_page.html", {
         "meta_title": f"{docs.title_of(path)} - Django Cotton",
+        "meta_description": docs.description_of(path),
         "title": docs.title_of(path),
         "html": html,
         "toc": toc,
         "slug": slug,
+        "prev": prev,
+        "next": nxt,
+        "extras": PAGE_EXTRAS.get(slug),
     })
 
 
@@ -103,20 +135,6 @@ def build_view(template_name, title=None, description=None):
             context["dp_max"] = f"{ym}-20"
             context["dp_disabled_dates"] = [f"{ym}-11", f"{ym}-12", f"{ym}-18"]
 
-        # Add demo data for HTMX examples page
-        if template_name == "htmx_examples":
-            context["demo_tasks"] = [
-                {
-                    "id": 1,
-                    "title": "Implement user authentication",
-                    "description": "Add login and registration functionality",
-                },
-                {
-                    "id": 2,
-                    "title": "Design homepage layout",
-                    "description": "Create responsive homepage with hero section",
-                },
-            ]
 
         return render(request, f"{template_name}.html", context)
 

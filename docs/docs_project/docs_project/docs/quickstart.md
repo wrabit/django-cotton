@@ -1,10 +1,10 @@
 # Quickstart
 
-## Install Cotton
+## Install Cotton {#install}
 
 Run the following command:
 
-```cotton language=python hide-label
+```bash
 pip install django-cotton
 ```
 
@@ -12,7 +12,7 @@ Then update your settings.py:
 
 #### For automatic configuration:
 
-```cotton language=python label=settings.py
+```python label=settings.py
 INSTALLED_APPS = [
     'django_cotton',
 ]
@@ -24,7 +24,7 @@ This will attempt to automatically handle the settings.py by adding the required
 
 If your project requires any non-default loaders or you do not wish Cotton to manage your settings, you should instead provide `django_cotton.apps.SimpleAppConfig` in your INSTALLED_APPS:
 
-```cotton language=python label=settings.py
+```python label=settings.py
 INSTALLED_APPS = [
     'django_cotton.apps.SimpleAppConfig',
 ]
@@ -54,7 +54,7 @@ TEMPLATES = [
 
 Create a new directory in your templates directory called `cotton`. Inside this directory create a new file called `card.html` with the following content:
 
-```cotton label=templates/cotton/card.html
+```html label=templates/cotton/card.html
 <div class="bg-white shadow rounded border p-4">
     <h2>{{ title }}</h2>
     <p>{{ slot }}</p>
@@ -73,12 +73,12 @@ Any style will allow you to include your component the same way.
 
 ## Include a component
 
-```cotton language=python label=views.py
+```python label=views.py
 def dashboard_view(request):
     return render(request, "dashboard.html")
 ```
 
-```cotton label=templates/dashboard.html
+```html label=templates/dashboard.html
 <c-card title="Trees" url="trees">
     We have the best trees
 </c-card>

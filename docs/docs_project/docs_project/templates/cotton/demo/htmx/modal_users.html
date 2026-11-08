@@ -1,0 +1,18 @@
+<div class="not-prose">
+    <c-examples.htmx.modal />
+
+    <div class="space-y-2">
+        <div class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded">
+            <span class="text-gray-900">Alice Johnson</span>
+            <button hx-get="/demo/users/1/details" hx-target="#modal-content" @click="$dispatch('open-modal')" class="px-3 py-1 text-sm text-teal-600 hover:bg-teal-50 rounded">View Details</button>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded">
+            <span class="text-gray-900">Bob Smith</span>
+            <button hx-get="/demo/users/2/details" hx-target="#modal-content" @click="$dispatch('open-modal')" class="px-3 py-1 text-sm text-teal-600 hover:bg-teal-50 rounded">View Details</button>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded">
+            <span class="text-gray-900">Carol White</span>
+            <button hx-get="/demo/users/3/details" hx-target="#modal-content" @click="$dispatch('open-modal')" class="px-3 py-1 text-sm text-teal-600 hover:bg-teal-50 rounded">View Details</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="not-prose">
+    <input
+        type="search"
+        name="q"
+        placeholder="Search articles..."
+        hx-get="/demo/search"
+        hx-trigger="keyup changed delay:500ms"
+        hx-target="#search-results"
+        hx-include="this"
+        class="w-full px-4 py-2 border border-gray-300 bg-white text-gray-900 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
+    >
+
+    <c-examples.htmx.search_results />
+</div>

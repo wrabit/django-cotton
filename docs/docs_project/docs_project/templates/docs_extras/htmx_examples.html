@@ -1,0 +1,7 @@
+{% comment %}Page-specific scripts for the HTMX examples. Alpine is already loaded by the base layout; only htmx is page-specific here.{% endcomment %}
+<script src="https://unpkg.com/htmx.org@2.0.0"></script>
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    });
+</script>

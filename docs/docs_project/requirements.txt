@@ -11,4 +11,3 @@ whitenoise~=6.2.0
 redis~=5.0.1
 djlint~=1.36.2
 markdown~=3.7
-pygments~=2.18

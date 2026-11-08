@@ -1,4 +1,4 @@
-# Form Inputs
+# Reusable Form Inputs
 
 ## Building a re-usable form input field {#inputs}
 

@@ -85,6 +85,7 @@ class CottonCompiler:
             r"{{.*?}}|{%.*?%})",
             re.DOTALL,
         )
+        self.placeholder_pattern = re.compile(r"__COTTON_IGNORE_(\d+)__")
         self.cotton_verbatim_pattern = re.compile(
             r"{%\s*cotton:verbatim\s*%}(.*?){%\s*endcotton:verbatim\s*%}", re.DOTALL
         )
@@ -101,30 +102,27 @@ class CottonCompiler:
         return processed_html, ignorables
 
     def restore_ignorables(self, html: str, ignorables: List[Tuple[str, str]]) -> str:
-        for placeholder, content in ignorables:
+        def restore(match):
+            content = ignorables[int(match.group(1))][1]
             if content.strip().startswith("{% cotton:verbatim %}"):
                 # Extract content between cotton:verbatim tags, we don't want to leave these in
-                match = self.cotton_verbatim_pattern.search(content)
-                if match:
-                    content = match.group(1)
-            html = html.replace(placeholder, content)
-        return html
+                verbatim = self.cotton_verbatim_pattern.search(content)
+                if verbatim:
+                    content = verbatim.group(1)
+            return content
 
-    def get_replacements(self, html: str) -> List[Tuple[str, str]]:
-        replacements = []
-        for match in Tag.tag_pattern.finditer(html):
-            tag = Tag(match)
+        # One pass: a str.replace per placeholder is quadratic on large templates
+        return self.placeholder_pattern.sub(restore, html)
+
+    def replace_tags(self, html: str) -> str:
+        def replace(match):
             try:
-                template_tag = tag.get_template_tag()
-                if template_tag != tag.html:
-                    replacements.append((tag.html, template_tag))
+                return Tag(match).get_template_tag()
             except ValueError as e:
-                # Find the line number of the error
-                position = match.start()
-                line_number = html[:position].count("\n") + 1
+                line_number = html.count("\n", 0, match.start()) + 1
                 raise ValueError(f"Error in template at line {line_number}: {str(e)}") from e
 
-        return replacements
+        return Tag.tag_pattern.sub(replace, html)
 
     def process_c_vars(self, html: str) -> Tuple[str, str]:
         """
@@ -154,9 +152,7 @@ class CottonCompiler:
         """Putting it all together"""
         processed_html, ignorables = self.exclude_ignorables(html)
         vars_content, processed_html = self.process_c_vars(processed_html)
-        replacements = self.get_replacements(processed_html)
-        for original, replacement in replacements:
-            processed_html = processed_html.replace(original, replacement)
+        processed_html = self.replace_tags(processed_html)
         processed_html = self.restore_ignorables(processed_html, ignorables)
         if vars_content:
             vars_content = self.restore_ignorables(vars_content, ignorables)

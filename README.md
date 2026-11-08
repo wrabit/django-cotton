@@ -386,6 +386,25 @@ Now we have a default theme for our button, but it is overridable:
 </a>
 ```
 
+#### Merging classes with `class:merge`
+
+A default is replaced when the parent passes the attribute. For `class` you can add `:merge` to the key instead, and the parent's classes are appended to the component's own:
+
+```html
+<!-- cotton/button.html -->
+<c-vars class:merge="btn btn-primary" />
+
+<button class="{{ class }}" {{ attrs }}>{{ slot }}</button>
+```
+```html
+<!-- in view -->
+<c-button class="w-full">Save</c-button>
+```
+```html
+<!-- html output -->
+<button class="btn btn-primary w-full">Save</button>
+```
+
 #### Using `<c-vars>` to govern `{{ attrs }}`
 
 Using `{{ attrs }}` to pass all attributes from parent scope onto an element in the component, you'll sometimes want to provide additional properties to the component which are not intended to be an attributes. In this case you can declare them in `<c-vars />` and it will prevent it from being in `{{ attrs }}`

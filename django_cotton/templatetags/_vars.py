@@ -22,6 +22,12 @@ class PreparedVar(NamedTuple):
     kind: AttrKind
     value: Any
     compiled: Any
+    merge: bool = False
+
+
+MERGE_SUFFIX = ":merge"
+MERGEABLE_KEYS = {"class"}
+_UNRESOLVED = object()
 
 
 class CottonVarsNode(Node):
@@ -39,19 +45,27 @@ class CottonVarsNode(Node):
         for key, raw_value in var_dict.items():
             value, was_quoted = strip_quotes_with_status(raw_value)
 
+            merge = key.endswith(MERGE_SUFFIX)
+            if merge:
+                key = key[: -len(MERGE_SUFFIX)]
+                if key.lstrip(":") not in MERGEABLE_KEYS:
+                    raise TemplateSyntaxError(
+                        f"'{key}{MERGE_SUFFIX}' in c-vars: only 'class' can be merged."
+                    )
+
             if key.startswith(":"):
                 exclude_key = key[1:]
                 accessible_key = exclude_key.replace("-", "_")
                 pv = PreparedValue(value, active_library=active_library)
                 self._prepared_vars.append(PreparedVar(
-                    key, exclude_key, accessible_key, AttrKind.DYNAMIC, value, pv,
+                    key, exclude_key, accessible_key, AttrKind.DYNAMIC, value, pv, merge,
                 ))
 
             elif not was_quoted and isinstance(value, str) and value:
                 accessible_key = key.replace("-", "_")
                 pv = PreparedValue(value, active_library=active_library)
                 self._prepared_vars.append(PreparedVar(
-                    key, key, accessible_key, AttrKind.UNQUOTED, value, pv,
+                    key, key, accessible_key, AttrKind.UNQUOTED, value, pv, merge,
                 ))
 
             else:
@@ -59,7 +73,7 @@ class CottonVarsNode(Node):
                 compiled = _try_compile_template(value, active_library)
                 kind = AttrKind.ESCAPED if compiled else AttrKind.STATIC
                 self._prepared_vars.append(PreparedVar(
-                    key, key, accessible_key, kind, value, compiled,
+                    key, key, accessible_key, kind, value, compiled, merge,
                 ))
 
     def extract_vars(self, context: "Context", attrs: Attrs, slots: dict[str, str]) -> dict[str, Any]:
@@ -69,6 +83,14 @@ class CottonVarsNode(Node):
         for var in self._prepared_vars:
             attrs.exclude_from_string_output(var.exclude_key)
 
+            if var.merge:
+                merged = self._merge(var, context, attrs)
+                vars[var.accessible_key] = merged
+                # The parent's attrs go into the context after the vars and would replace it
+                if var.exclude_key in attrs:
+                    attrs[var.exclude_key] = merged
+                continue
+
             # Parent already set this attr, skip the default
             if var.key in attrs.exclude_unprocessable():
                 continue
@@ -76,36 +98,49 @@ class CottonVarsNode(Node):
             if var.exclude_key in slots:
                 continue
 
-            # : prefix — explicit dynamic binding
-            if var.kind == AttrKind.DYNAMIC:
-                try:
-                    vars[var.accessible_key] = var.compiled.resolve(context)
-                except UnprocessableDynamicAttr:
-                    pass  # Var couldn't be resolved, skip it
-
-            # No quotes — treated as dynamic, falls back to string literal
-            elif var.kind == AttrKind.UNQUOTED:
-                try:
-                    vars[var.accessible_key] = var.compiled.resolve(context)
-                except UnprocessableDynamicAttr:
-                    vars[var.accessible_key] = var.value
-
-            # Quoted value containing {{ }} or {% %} — render the template
-            elif var.kind == AttrKind.ESCAPED:
-                try:
-                    vars[var.accessible_key] = var.compiled.render(context) if var.compiled else var.value
-                except (TemplateSyntaxError, ValueError, SyntaxError):
-                    vars[var.accessible_key] = var.value
-
-            # Plain static value
-            else:
-                vars[var.accessible_key] = var.value
+            value = self._resolve_default(var, context)
+            if value is not _UNRESOLVED:
+                vars[var.accessible_key] = value
 
         # Process cvars without values
         for empty_var in self.empty_vars:
             attrs.exclude_from_string_output(empty_var)
 
         return vars
+
+    @staticmethod
+    def _resolve_default(var: PreparedVar, context: "Context") -> Any:
+        # : prefix — explicit dynamic binding
+        if var.kind == AttrKind.DYNAMIC:
+            try:
+                return var.compiled.resolve(context)
+            except UnprocessableDynamicAttr:
+                return _UNRESOLVED  # Var couldn't be resolved, skip it
+
+        # No quotes — treated as dynamic, falls back to string literal
+        if var.kind == AttrKind.UNQUOTED:
+            try:
+                return var.compiled.resolve(context)
+            except UnprocessableDynamicAttr:
+                return var.value
+
+        # Quoted value containing {{ }} or {% %} — render the template
+        if var.kind == AttrKind.ESCAPED:
+            try:
+                return var.compiled.render(context) if var.compiled else var.value
+            except (TemplateSyntaxError, ValueError, SyntaxError):
+                return var.value
+
+        # Plain static value
+        return var.value
+
+    def _merge(self, var: PreparedVar, context: "Context", attrs: Attrs) -> str:
+        """The component's own classes first, then the parent's."""
+        parts = (
+            self._resolve_default(var, context),
+            attrs.exclude_unprocessable().get(var.exclude_key),
+        )
+        return " ".join(str(p) for p in parts if p not in (_UNRESOLVED, None, True, ""))
 
     def render(self, context):
         # When rendered standalone (not as part of a component extraction),

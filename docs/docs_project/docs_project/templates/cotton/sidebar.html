@@ -14,7 +14,7 @@
         <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 z-10 h-5 hidden sm:block bg-gradient-to-b from-[var(--color-bg)] to-transparent"></div>
         <c-ui.navlist variant="sidebar" :persist_scroll="persist"
                   class="py-5 sm:flex-1 sm:min-h-0 sm:overflow-y-auto sm:overscroll-contain sm:pr-2">
-        <c-ui.navlist.group heading="Getting Started">
+        <c-ui.navlist.group>
             <c-ui.navlist.item href="{% url 'quickstart' %}" :current="{% if request.resolver_match.url_name == 'quickstart' %}True{% else %}False{% endif %}">Quickstart</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'components' %}" :current="{% if request.resolver_match.url_name == 'components' %}True{% else %}False{% endif %}">Components</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'fundamentals' %}" :current="{% if request.resolver_match.url_name == 'fundamentals' %}True{% else %}False{% endif %}">Fundamentals</c-ui.navlist.item>
@@ -31,6 +31,7 @@
             <c-ui.navlist.item href="{% url 'variants' %}" :current="{% if request.resolver_match.url_name == 'variants' %}True{% else %}False{% endif %}">Component Variants</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'attribute-proxying' %}" :current="{% if request.resolver_match.url_name == 'attribute-proxying' %}True{% else %}False{% endif %}">Attribute Proxying</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'index-component' %}" :current="{% if request.resolver_match.url_name == 'index-component' %}True{% else %}False{% endif %}">Compound Components</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'portals' %}" :current="{% if request.resolver_match.url_name == 'portals' %}True{% else %}False{% endif %}">Portals</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'htmx-examples' %}" :current="{% if request.resolver_match.url_name == 'htmx-examples' %}True{% else %}False{% endif %}">HTMX Integration</c-ui.navlist.item>
         </c-ui.navlist.group>
         <c-ui.navlist.group heading="Community">

@@ -36,7 +36,8 @@ DOCS_ROOT = Path(__file__).resolve().parent / "docs"
 # Editorial nav / reading order. Mirrors the sidebar (cotton/sidebar.html); the
 # home page is not prose and stays as a template.
 SECTIONS: list[tuple[str, list[str]]] = [
-    ("Getting Started", [
+    # The first group has no heading: those pages are the top of the docs.
+    ("", [
         "quickstart.md",
         "components.md",
         "fundamentals.md",
@@ -53,6 +54,7 @@ SECTIONS: list[tuple[str, list[str]]] = [
         "variants.md",
         "attribute-proxying.md",
         "index-component.md",
+        "portals.md",
         "htmx-examples.md",
     ]),
     ("Community", [

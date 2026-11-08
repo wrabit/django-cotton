@@ -94,8 +94,9 @@ def llms_txt(request):
     for group in docs.nav():
         if not group["pages"]:
             continue
-        lines.append(f"## {group['section']}")
-        lines.append("")
+        if group["section"]:
+            lines.append(f"## {group['section']}")
+            lines.append("")
         for page in group["pages"]:
             lines.append(
                 f"- [{page['title']}](https://django-cotton.com/docs/{page['slug']}.md)"

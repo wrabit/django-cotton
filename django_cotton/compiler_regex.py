@@ -22,6 +22,8 @@ class Tag:
             return ""  # c-vars tags will be handled separately
         elif self.tag_name == "c-slot":
             return self._process_slot()
+        elif self.tag_name == "c-portal":
+            return self._process_portal()
         elif self.tag_name.startswith("c-"):
             return self._process_component()
         else:
@@ -36,6 +38,22 @@ class Tag:
             raise ValueError(f"c-slot tag must have a name attribute: {self.html}")
         slot_name = name_match.group(2)
         return f"{{% cotton:slot {slot_name} %}}"
+
+    def _process_portal(self) -> str:
+        """<c-portal name="x" />  -> {% cotton:portal name="x" %}
+        <c-portal to="x">...</c-portal> -> {% cotton:portal to="x" %}...{% endcotton:portal %}"""
+        if self.is_closing:
+            return "{% endcotton:portal %}"
+        to = re.search(r'\bto=(["\'])(.*?)\1', self.attrs, re.DOTALL)
+        name = re.search(r'\bname=(["\'])(.*?)\1', self.attrs, re.DOTALL)
+        if to:
+            if self.is_self_closing:
+                raise ValueError(f"c-portal with to= needs content to send: {self.html}")
+            multiple = " multiple" if re.search(r"\bmultiple\b", self.attrs) else ""
+            return f'{{% cotton:portal to="{to.group(2)}"{multiple} %}}'
+        if name:
+            return f'{{% cotton:portal name="{name.group(2)}" %}}'
+        raise ValueError(f'c-portal needs either name="..." or to="...": {self.html}')
 
     def _process_component(self) -> str:
         """Convert a c- component tag to a Django template component tag"""

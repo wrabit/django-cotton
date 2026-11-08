@@ -65,9 +65,11 @@ class LoaderAppConfig(AppConfig):
 
     def ready(self):
         from django_cotton.nested_tag_support import enable_nested_tag_support
+        from django_cotton.portals import enable_portals
 
         # Enable nested template tags in {% cotton %} and {% cotton:vars %} attributes
         enable_nested_tag_support()
+        enable_portals()
 
         wrap_loaders("django")
 
@@ -82,6 +84,8 @@ class SimpleAppConfig(AppConfig):
 
     def ready(self):
         from django_cotton.nested_tag_support import enable_nested_tag_support
+        from django_cotton.portals import enable_portals
 
         # Enable nested template tags in {% cotton %} and {% cotton:vars %} attributes
         enable_nested_tag_support()
+        enable_portals()

@@ -48,6 +48,7 @@ SECTIONS: list[tuple[str, list[str]]] = [
         "alpine-js.md",
         "layouts.md",
         "icons.md",
+        "component-assets.md",
     ]),
     ("Usage Patterns", [
         "variants.md",
@@ -60,6 +61,7 @@ SECTIONS: list[tuple[str, list[str]]] = [
         "attributes.md",
         "c-vars.md",
         "c-slot.md",
+        "c-portal.md",
         "template-variables.md",
         "tags-and-filters.md",
         "python-api.md",

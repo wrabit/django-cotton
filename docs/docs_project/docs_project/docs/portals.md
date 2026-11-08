@@ -43,9 +43,27 @@ Push to it from any component with `to`:
 
 Three tooltips, one script tag. Pushes are unique by default: identical content sent from any number of places lands once. Differences in whitespace don't count as different.
 
+## Using context {#context}
+
+A push renders with the component's context, so it can use attributes and anything else in scope:
+
+```html label=cotton/chart.html
+<canvas id="chart-{{ id }}"></canvas>
+
+<c-portal to="head">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            drawChart("chart-{{ id }}", {{ data }});
+        });
+    </script>
+</c-portal>
+```
+
+Two charts on a page push two different scripts, because the rendered content differs. Only pushes that come out identical are collapsed.
+
 ## Pushing from a page {#pages}
 
-Sources don't have to be components, and a push can use anything in context. Here the layout renders the breadcrumb trail and each page pushes its own crumb:
+Sources don't have to be components. Here the layout renders the breadcrumb trail and each page pushes its own crumb:
 
 ```html label=cotton/layouts/base.html
 <nav>

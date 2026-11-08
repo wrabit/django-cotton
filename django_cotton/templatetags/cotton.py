@@ -4,11 +4,13 @@ from django.utils.html import format_html_join
 from django_cotton.templatetags._component import cotton_component
 from django_cotton.templatetags._vars import cotton_cvars
 from django_cotton.templatetags._slot import cotton_slot
+from django_cotton.templatetags._portal import cotton_portal
 
 register = template.Library()
 register.tag("cotton", cotton_component)
 register.tag("cotton:slot", cotton_slot)
 register.tag("cotton:vars", cotton_cvars)
+register.tag("cotton:portal", cotton_portal)
 
 
 @register.filter

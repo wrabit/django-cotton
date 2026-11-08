@@ -494,6 +494,30 @@ You can also provide a template expression, should the component be inside a sub
 
 <hr>
 
+### Portals: send markup elsewhere on the page
+
+A component that needs a script, a stylesheet or an `Alpine.data` definition can keep it in its own file and send it to the layout with a portal. Mark the destination once:
+
+```html
+<!-- cotton/layouts/base.html -->
+<head>
+    <c-portal name="head" />
+</head>
+```
+
+Then push to it from anywhere, as often as you like:
+
+```html
+<!-- cotton/tooltip.html -->
+<span {{ attrs }}>{{ slot }}</span>
+
+<c-portal to="head">
+    <script src="/static/tooltip.js"></script>
+</c-portal>
+```
+
+A push block renders once per page, so a component used fifty times loads its script once. Add `multiple` to push on every render instead, for per-instance scripts or anything list-like. Pushes resolve when the outermost template finishes rendering, so a push can use the component's context, and it works for full pages, `render_to_string` and partials alike. A push with no matching destination on the page is dropped.
+
 ### An example with HTMX
 
 Cotton helps you build re-usable HTMX-powered components. Define your styles and markup once, then pass different HTMX attributes via attributes:

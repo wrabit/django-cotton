@@ -25,6 +25,7 @@
             <c-ui.navlist.item href="{% url 'alpine-js' %}" :current="{% if request.resolver_match.url_name == 'alpine-js' %}True{% else %}False{% endif %}">Tabs with Alpine.js</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'layouts' %}" :current="{% if request.resolver_match.url_name == 'layouts' %}True{% else %}False{% endif %}">Composing Layouts</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'icons' %}" :current="{% if request.resolver_match.url_name == 'icons' %}True{% else %}False{% endif %}">Cotton as SVG Icons</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'component-assets' %}" :current="{% if request.resolver_match.url_name == 'component-assets' %}True{% else %}False{% endif %}">Component Assets</c-ui.navlist.item>
         </c-ui.navlist.group>
         <c-ui.navlist.group heading="Usage Patterns">
             <c-ui.navlist.item href="{% url 'variants' %}" :current="{% if request.resolver_match.url_name == 'variants' %}True{% else %}False{% endif %}">Component Variants</c-ui.navlist.item>
@@ -37,6 +38,7 @@
             <c-ui.navlist.item href="{% url 'attributes' %}" :current="{% if request.resolver_match.url_name == 'attributes' %}True{% else %}False{% endif %}">Attributes</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'c-vars' %}" :current="{% if request.resolver_match.url_name == 'c-vars' %}True{% else %}False{% endif %}">c-vars</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'c-slot' %}" :current="{% if request.resolver_match.url_name == 'c-slot' %}True{% else %}False{% endif %}">c-slot</c-ui.navlist.item>
+            <c-ui.navlist.item href="{% url 'c-portal' %}" :current="{% if request.resolver_match.url_name == 'c-portal' %}True{% else %}False{% endif %}">c-portal</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'template-variables' %}" :current="{% if request.resolver_match.url_name == 'template-variables' %}True{% else %}False{% endif %}">Template variables</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'tags-and-filters' %}" :current="{% if request.resolver_match.url_name == 'tags-and-filters' %}True{% else %}False{% endif %}">Tags and filters</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'python-api' %}" :current="{% if request.resolver_match.url_name == 'python-api' %}True{% else %}False{% endif %}">Python API</c-ui.navlist.item>

@@ -54,7 +54,6 @@ SECTIONS: list[tuple[str, list[str]]] = [
         "variants.md",
         "attribute-proxying.md",
         "index-component.md",
-        "portals.md",
         "htmx-examples.md",
     ]),
     ("Community", [

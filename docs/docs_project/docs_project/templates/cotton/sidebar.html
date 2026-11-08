@@ -31,7 +31,6 @@
             <c-ui.navlist.item href="{% url 'variants' %}" :current="{% if request.resolver_match.url_name == 'variants' %}True{% else %}False{% endif %}">Component Variants</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'attribute-proxying' %}" :current="{% if request.resolver_match.url_name == 'attribute-proxying' %}True{% else %}False{% endif %}">Attribute Proxying</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'index-component' %}" :current="{% if request.resolver_match.url_name == 'index-component' %}True{% else %}False{% endif %}">Compound Components</c-ui.navlist.item>
-            <c-ui.navlist.item href="{% url 'portals' %}" :current="{% if request.resolver_match.url_name == 'portals' %}True{% else %}False{% endif %}">Portals</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'htmx-examples' %}" :current="{% if request.resolver_match.url_name == 'htmx-examples' %}True{% else %}False{% endif %}">HTMX Integration</c-ui.navlist.item>
         </c-ui.navlist.group>
         <c-ui.navlist.group heading="Community">

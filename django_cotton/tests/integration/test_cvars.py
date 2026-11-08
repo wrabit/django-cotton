@@ -850,6 +850,17 @@ class CvarTests(CottonTestCase):
         rendered = get_rendered('<c-merged-class-in-attrs class="w-full" />')
         self.assertIn("<span>btn w-full</span>", rendered)
 
+    def test_merged_class_without_default(self):
+        self.create_template(
+            "cotton/merged_class_empty.html",
+            """<c-vars class:merge /><button class="{{ class }}" {{ attrs }}>x</button>""",
+        )
+
+        rendered = get_rendered('<c-merged-class-empty class="w-full" id="save" />')
+        self.assertIn('class="w-full"', rendered)
+        self.assertIn('id="save"', rendered)
+        self.assertEqual(rendered.count("class="), 1)
+
     def test_merge_only_for_class(self):
         self.create_template(
             "cotton/merged_style.html",

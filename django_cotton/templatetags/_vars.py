@@ -30,6 +30,15 @@ MERGEABLE_KEYS = {"class"}
 _UNRESOLVED = object()
 
 
+def _strip_merge(key: str) -> tuple[str, bool]:
+    if not key.endswith(MERGE_SUFFIX):
+        return key, False
+    key = key[: -len(MERGE_SUFFIX)]
+    if key.lstrip(":") not in MERGEABLE_KEYS:
+        raise TemplateSyntaxError(f"'{key}{MERGE_SUFFIX}' in c-vars: only 'class' can be merged.")
+    return key, True
+
+
 class CottonVarsNode(Node):
     def __init__(
         self,
@@ -37,7 +46,7 @@ class CottonVarsNode(Node):
         empty_vars: list[str],
         active_library: Library | None = None,
     ):
-        self.empty_vars = empty_vars
+        self.empty_vars = [_strip_merge(key)[0] for key in empty_vars]
         self.active_library = active_library
 
         self._prepared_vars = []
@@ -45,13 +54,7 @@ class CottonVarsNode(Node):
         for key, raw_value in var_dict.items():
             value, was_quoted = strip_quotes_with_status(raw_value)
 
-            merge = key.endswith(MERGE_SUFFIX)
-            if merge:
-                key = key[: -len(MERGE_SUFFIX)]
-                if key.lstrip(":") not in MERGEABLE_KEYS:
-                    raise TemplateSyntaxError(
-                        f"'{key}{MERGE_SUFFIX}' in c-vars: only 'class' can be merged."
-                    )
+            key, merge = _strip_merge(key)
 
             if key.startswith(":"):
                 exclude_key = key[1:]

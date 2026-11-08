@@ -15,7 +15,7 @@ def eval_string(value):
 
 def ensure_quoted(value):
     value = str(value)
-    if value.startswith('"') and value.endswith('"'):
+    if len(value) >= 2 and value[0] == value[-1] == '"' and '"' not in value[1:-1]:
         return value  # already quoted
 
     has_double = '"' in value

@@ -1,6 +1,7 @@
 import copy
 
 from django.conf import settings
+from django.template import Context, Template
 
 from django_cotton.tests.utils import CottonTestCase
 from django_cotton.tests.utils import get_compiled
@@ -1004,3 +1005,18 @@ class AttributeInjectionTests(CottonTestCase):
             self.assertNotIn('placeholder="x"', content)
             # The whole payload must be contained in one attribute value
             self.assertRegex(content, r'''placeholder=["']x.+alert\(1\)["']''')
+
+    def test_dynamic_attr_wrapped_in_double_quotes_cannot_inject(self):
+        """A value that starts and ends with " is not "already quoted" if it has more quotes inside"""
+        self.create_template("cotton/injection_quoted.html", "<input {{ attrs }} />")
+        template = Template(get_compiled('<c-injection-quoted :placeholder="payload" />'))
+
+        cases = {
+            '"x" onmouseover="alert(1)"': """<input placeholder='"x" onmouseover="alert(1)"' />""",
+            '"': """<input placeholder='"' />""",
+            '"x"': '<input placeholder="x" />',
+        }
+        for payload, expected in cases.items():
+            with self.subTest(payload=payload):
+                html = template.render(Context({"payload": payload})).strip()
+                self.assertEqual(html, expected)

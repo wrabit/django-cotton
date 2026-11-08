@@ -313,6 +313,29 @@ def form_view(request):
     </div>
 </c-slot>
 </c-snippet>
+
+    <h3>Merging classes</h3>
+
+    <p>A plain default is replaced when the parent passes the attribute. For <code>class</code> you usually want to add to it instead, so the component keeps its own classes and the parent can tweak the layout. Add <code>:merge</code> to the key and the parent's classes are appended to the default.</p>
+
+<c-snippet label="cotton/button.html">{% cotton:verbatim %}{% verbatim %}
+<c-vars class:merge="btn btn-primary" />
+
+<button class="{{ class }}" {{ attrs }}>{{ slot }}</button>
+{% endcotton:verbatim %}{% endverbatim %}
+</c-snippet>
+
+<c-snippet label="form_view.html">{% cotton:verbatim %}{% verbatim %}
+<c-button>Save</c-button>
+<c-button class="w-full">Save</c-button>
+
+<!-- renders -->
+<button class="btn btn-primary">Save</button>
+<button class="btn btn-primary w-full">Save</button>
+{% endcotton:verbatim %}{% endverbatim %}
+</c-snippet>
+
+    <p>A dynamic <code>:class</code> from the parent is merged the same way. Only <code>class</code> can be merged for now. The classes are joined as they are, so conflicting utility classes (say <code>bg-red-500</code> from the parent and <code>bg-blue-500</code> in the default) are both kept and the stylesheet decides which one wins.</p>
     </c-section>
 
     <c-section id="boolean-attributes" title="7. Boolean attributes">

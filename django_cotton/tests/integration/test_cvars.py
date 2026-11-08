@@ -1,9 +1,10 @@
 import copy
 
 from django.conf import settings
+from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 
-from django_cotton.tests.utils import CottonTestCase
+from django_cotton.tests.utils import CottonTestCase, get_rendered
 
 
 class CvarTests(CottonTestCase):
@@ -790,3 +791,99 @@ class CvarTests(CottonTestCase):
             response = self.client.get("/override/")
             self.assertContains(response, "enabled is True")
             self.assertNotContains(response, "enabled is False")
+
+    def test_merged_class(self):
+        self.create_template(
+            "cotton/merged_class.html",
+            """<c-vars class:merge="btn btn-primary" /><button class="{{ class }}" {{ attrs }}>{{ slot }}</button>""",
+        )
+
+        cases = [
+            ("<c-merged-class>Save</c-merged-class>", 'class="btn btn-primary"'),
+            (
+                '<c-merged-class class="w-full">Save</c-merged-class>',
+                'class="btn btn-primary w-full"',
+            ),
+            (
+                '<c-merged-class :class="extra">Save</c-merged-class>',
+                'class="btn btn-primary mt-2"',
+            ),
+            (
+                '<c-merged-class class="{{ extra }}">Save</c-merged-class>',
+                'class="btn btn-primary mt-2"',
+            ),
+            ('<c-merged-class :class="missing">Save</c-merged-class>', 'class="btn btn-primary"'),
+        ]
+        for html, expected in cases:
+            with self.subTest(html=html):
+                rendered = get_rendered(html, {"extra": "mt-2"})
+                self.assertIn(expected, rendered)
+                self.assertEqual(rendered.count("class="), 1)
+
+    def test_merged_class_keeps_other_attrs(self):
+        self.create_template(
+            "cotton/merged_class_attrs.html",
+            """<c-vars class:merge="btn" type="button" /><button class="{{ class }}" type="{{ type }}" {{ attrs }}></button>""",
+        )
+
+        rendered = get_rendered('<c-merged-class-attrs class="w-full" type="submit" id="save" />')
+        self.assertIn('class="btn w-full"', rendered)
+        self.assertIn('type="submit"', rendered)
+        self.assertIn('id="save"', rendered)
+        self.assertEqual(rendered.count("class="), 1)
+
+    def test_merged_class_default_with_template_variable(self):
+        self.create_template(
+            "cotton/merged_class_variable.html",
+            """<c-vars class:merge="btn btn-{{ size }}" /><button class="{{ class }}"></button>""",
+        )
+
+        rendered = get_rendered('<c-merged-class-variable class="w-full" />', {"size": "lg"})
+        self.assertIn('class="btn btn-lg w-full"', rendered)
+
+    def test_merged_class_escaped_once(self):
+        self.create_template(
+            "cotton/merged_class_escaping.html",
+            """<c-vars class:merge="btn before:content-['{{ icon }}']" /><b class="{{ class }}" {{ attrs }}></b>""",
+        )
+
+        context = {"icon": "x", "extra": "after:content-['y']"}
+        cases = [
+            '<c-merged-class-escaping class="{{ extra }}" />',
+            '<c-merged-class-escaping :class="extra" />',
+            "<c-merged-class-escaping class=\"after:content-['y']\" />",
+        ]
+        for html in cases:
+            with self.subTest(html=html):
+                rendered = get_rendered(html, context)
+                self.assertIn("after:content-[&#x27;y&#x27;]", rendered)
+                self.assertNotIn("&amp;", rendered)
+
+    def test_merged_class_in_attrs(self):
+        self.create_template(
+            "cotton/merged_class_in_attrs.html",
+            """<c-vars class:merge="btn" /><span>{{ attrs.class }}</span>""",
+        )
+
+        rendered = get_rendered('<c-merged-class-in-attrs class="w-full" />')
+        self.assertIn("<span>btn w-full</span>", rendered)
+
+    def test_merged_class_without_default(self):
+        self.create_template(
+            "cotton/merged_class_empty.html",
+            """<c-vars class:merge /><button class="{{ class }}" {{ attrs }}>x</button>""",
+        )
+
+        rendered = get_rendered('<c-merged-class-empty class="w-full" id="save" />')
+        self.assertIn('class="w-full"', rendered)
+        self.assertIn('id="save"', rendered)
+        self.assertEqual(rendered.count("class="), 1)
+
+    def test_merge_only_for_class(self):
+        self.create_template(
+            "cotton/merged_style.html",
+            """<c-vars style:merge="color: red" /><div style="{{ style }}"></div>""",
+        )
+
+        with self.assertRaisesMessage(TemplateSyntaxError, "only 'class' can be merged"):
+            get_rendered("<c-merged-style />")

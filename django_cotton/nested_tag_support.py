@@ -10,6 +10,15 @@ For example:
 from django.template import base as template_base
 
 
+def _shift_tokens(tokens, lineno_offset, char_offset):
+    """Make tokens from a sub-lexer relative to the whole template."""
+    for token in tokens:
+        token.lineno += lineno_offset
+        # DebugLexer sets positions; the debug page needs them for the full source
+        if token.position is not None:
+            token.position = (token.position[0] + char_offset, token.position[1] + char_offset)
+
+
 def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokenize):
     """Create a smart tokenizer that handles {% cotton %} and {% cotton:vars %} tags specially."""
 
@@ -75,8 +84,7 @@ def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokeniz
                         tokens = lexer_tokenize(temp_lexer)
                     # Adjust line numbers for the tokens
                     lineno_offset = template_string[:position].count("\n")
-                    for token in tokens:
-                        token.lineno += lineno_offset
+                    _shift_tokens(tokens, lineno_offset, position)
                     result.extend(tokens)
                 break
 
@@ -91,8 +99,7 @@ def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokeniz
                     tokens = lexer_tokenize(temp_lexer)
                 # Adjust line numbers for the tokens
                 lineno_offset = template_string[:position].count("\n")
-                for token in tokens:
-                    token.lineno += lineno_offset
+                _shift_tokens(tokens, lineno_offset, position)
                 result.extend(tokens)
 
             # Now handle the Cotton tag specially
@@ -185,7 +192,7 @@ def _create_smart_tokenize(original_lexer_tokenize, original_debug_lexer_tokeniz
             token_string = template_string[tag_start:position]
             if token_string:
                 lineno = template_string[:tag_start].count("\n") + 1
-                result.append(self.create_token(token_string, None, lineno, True))
+                result.append(self.create_token(token_string, (tag_start, position), lineno, True))
 
         return result
 

@@ -1,9 +1,108 @@
+import re
+
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 
 
 def snake_to_title(snake_str):
     return snake_str.replace("_", " ").title()
+
+
+# --- Markdown-authored docs (single source of truth = docs_project/docs/*.md) ---
+
+_LEADING_H1_RE = re.compile(r"(?s)^\s*<h1[^>]*>.*?</h1>")
+
+
+DEMO_TASKS = [
+    {
+        "id": 1,
+        "title": "Implement user authentication",
+        "description": "Add login and registration functionality",
+    },
+    {
+        "id": 2,
+        "title": "Design homepage layout",
+        "description": "Create responsive homepage with hero section",
+    },
+]
+
+# Per-page view data for live demos, keyed by slug. A fence's preview renders
+# with the request plus this dict, the same way build_view hands template pages
+# their sample data.
+PAGE_CONTEXT: dict[str, callable] = {
+    "htmx-examples": lambda: {"demo_tasks": DEMO_TASKS},
+}
+
+# Per-page partial included after the content, for scripts a page's demos need.
+PAGE_EXTRAS: dict[str, str] = {
+    "htmx-examples": "docs_extras/htmx_examples.html",
+}
+
+
+def docs_md_page(request, slug):
+    """Render a markdown-backed docs page into the existing docs chrome.
+
+    The page title comes from the markdown's first `# H1`, rendered via
+    `<c-header>`; that leading <h1> is stripped from the body so it isn't shown
+    twice. Everything else (sidebar, prose styling, snippet widgets, prev/next)
+    is the same chrome the template pages use."""
+    from docs_project import docs
+
+    path = docs.page_map().get(slug)
+    if not path or not path.exists():
+        raise Http404
+    context = PAGE_CONTEXT.get(slug, dict)()
+    html, toc = docs.render_page(path, request, context)
+    html = _LEADING_H1_RE.sub("", html, count=1)
+    prev, nxt = docs.neighbours(slug)
+    return render(request, "docs_md_page.html", {
+        "meta_title": f"{docs.title_of(path)} - Django Cotton",
+        "meta_description": docs.description_of(path),
+        "title": docs.title_of(path),
+        "html": html,
+        "toc": toc,
+        "slug": slug,
+        "prev": prev,
+        "next": nxt,
+        "extras": PAGE_EXTRAS.get(slug),
+    })
+
+
+def docs_raw(request, slug):
+    """The same page as clean markdown - agent/LLM-friendly. Restricted to
+    slugs in the markdown page_map so template-only routes never reach here."""
+    from docs_project import docs
+
+    path = docs.page_map().get(slug)
+    if not path or not path.exists():
+        raise Http404
+    return HttpResponse(path.read_text(), content_type="text/markdown; charset=utf-8")
+
+
+def llms_txt(request):
+    """llms.txt convention: a markdown index of the raw docs URLs."""
+    from docs_project import docs
+
+    lines = [
+        "# Django Cotton",
+        "",
+        "> Modern UI composition for Django: build reusable server-side",
+        "> components in single HTML files. These docs are also served as",
+        "> rendered pages under /docs/.",
+        "",
+    ]
+    for group in docs.nav():
+        if not group["pages"]:
+            continue
+        if group["section"]:
+            lines.append(f"## {group['section']}")
+            lines.append("")
+        for page in group["pages"]:
+            lines.append(
+                f"- [{page['title']}](https://django-cotton.com/docs/{page['slug']}.md)"
+            )
+        lines.append("")
+    return HttpResponse("\n".join(lines), content_type="text/plain; charset=utf-8")
 
 
 def build_view(template_name, title=None, description=None):
@@ -37,20 +136,6 @@ def build_view(template_name, title=None, description=None):
             context["dp_max"] = f"{ym}-20"
             context["dp_disabled_dates"] = [f"{ym}-11", f"{ym}-12", f"{ym}-18"]
 
-        # Add demo data for HTMX examples page
-        if template_name == "htmx_examples":
-            context["demo_tasks"] = [
-                {
-                    "id": 1,
-                    "title": "Implement user authentication",
-                    "description": "Add login and registration functionality",
-                },
-                {
-                    "id": 2,
-                    "title": "Design homepage layout",
-                    "description": "Create responsive homepage with hero section",
-                },
-            ]
 
         return render(request, f"{template_name}.html", context)
 

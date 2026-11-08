@@ -142,3 +142,26 @@ html.dark {
     background: var(--color-zinc-600);
 }
 
+
+/* Markdown-authored docs pages (docs_project/docs/*.md). Markdown emits bare
+   <table>/<td>, so give them the look the hand-written pages gave their cells.
+   Unlayered on purpose: the typography plugin's table rules sit in the utilities
+   layer and would otherwise win (it strips the inline padding on edge cells). */
+.md-content {
+    & table { border: 1px solid var(--color-ink-200); }
+    & th, & td { padding: 0.75rem 1rem; font-size: 0.875rem; color: var(--color-ink-700); }
+    & th { text-align: left; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--color-ink-200); }
+    & tr { border-bottom: 1px solid var(--color-ink-200); }
+    .dark & table, .dark & th, .dark & tr { border-color: var(--color-ink-700); }
+    .dark & th, .dark & td { color: var(--color-ink-300); }
+
+    /* A blockquote is the markdown spelling of the <c-note> callout. */
+    & blockquote {
+        margin: 1.5rem 0; padding: 1.25rem 2rem; font-style: normal; font-weight: inherit;
+        color: inherit; /* typography's quote colour is near-black, invisible in dark mode */
+        border: 2px solid var(--color-accent); border-radius: var(--radius-box, 0.75rem);
+        background-color: color-mix(in oklab, var(--color-accent) 10%, transparent);
+    }
+    & blockquote p { margin: 0; }
+    & blockquote p::before, & blockquote p::after { content: none; }
+}

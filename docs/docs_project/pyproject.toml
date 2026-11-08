@@ -12,6 +12,7 @@ dependencies = [
     "whitenoise~=6.2.0",
     "redis~=5.0.1",
     "djlint~=1.36.2",
+    "markdown~=3.7",
 ]
 authors = [
   { name = "Will Abbott", email = "willabb83@gmail.com" }
@@ -34,3 +35,4 @@ gunicorn = "^22.0"
 asgiref = ">=3.6.0,<4"
 whitenoise = "6.2.0"
 djlint = "^1.36.2"
+markdown = "^3.7"

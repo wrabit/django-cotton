@@ -14,7 +14,7 @@
         <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 z-10 h-5 hidden sm:block bg-gradient-to-b from-[var(--color-bg)] to-transparent"></div>
         <c-ui.navlist variant="sidebar" :persist_scroll="persist"
                   class="py-5 sm:flex-1 sm:min-h-0 sm:overflow-y-auto sm:overscroll-contain sm:pr-2">
-        <c-ui.navlist.group heading="Getting Started">
+        <c-ui.navlist.group>
             <c-ui.navlist.item href="{% url 'quickstart' %}" :current="{% if request.resolver_match.url_name == 'quickstart' %}True{% else %}False{% endif %}">Quickstart</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'components' %}" :current="{% if request.resolver_match.url_name == 'components' %}True{% else %}False{% endif %}">Components</c-ui.navlist.item>
             <c-ui.navlist.item href="{% url 'fundamentals' %}" :current="{% if request.resolver_match.url_name == 'fundamentals' %}True{% else %}False{% endif %}">Fundamentals</c-ui.navlist.item>

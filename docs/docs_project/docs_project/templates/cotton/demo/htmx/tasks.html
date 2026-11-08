@@ -1,0 +1,5 @@
+<div class="not-prose">
+    {% for task in demo_tasks %}
+        <c-examples.htmx.task_display :id="task.id" :title="task.title" :description="task.description" />
+    {% endfor %}
+</div>

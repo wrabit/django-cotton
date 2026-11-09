@@ -19,7 +19,7 @@ Attributes, `only` and `is` work the same in both forms.
 
 Stops the compiler turning `<c-` tags inside it into components, so component markup can be shown as text. It is removed from the output. Pair it with Django's `{% verbatim %}` when the sample also contains `{{ }}` or `{% %}`:
 
-```django ignore-syntax-choice
+```django
 {% cotton:verbatim %}{% verbatim %}
 <c-button title="{{ title }}">Save</c-button>
 {% endverbatim %}{% endcotton:verbatim %}

@@ -5,6 +5,9 @@ import re
 from django_cotton.compiler_regex import CottonCompiler
 from djlint.reformat import formatter
 
+_CV_OPEN = "<!--docs-cv-open-->"
+_CV_CLOSE = "<!--docs-cv-close-->"
+
 
 def compile_to_template_tags(html_code):
     """
@@ -25,9 +28,17 @@ def compile_to_template_tags(html_code):
             # No Cotton tags - just format the HTML
             return format_template(html_code)
 
-        # Run through Cotton's compiler
+        # The compiler removes {% cotton:verbatim %} wrappers and leaves what's
+        # inside untouched, which is right for rendering but wrong for showing
+        # the DTL form of a sample about that very tag. Hide the wrappers from
+        # the compiler so the inner tags still convert, then put them back.
+        protected = (
+            html_code.replace("{% cotton:verbatim %}", _CV_OPEN)
+            .replace("{% endcotton:verbatim %}", _CV_CLOSE)
+        )
         compiler = CottonCompiler()
-        compiled = compiler.process(html_code)
+        compiled = compiler.process(protected)
+        compiled = compiled.replace(_CV_OPEN, "{% cotton:verbatim %}").replace(_CV_CLOSE, "{% endcotton:verbatim %}")
 
         # The compiler emits the block form for self-closing components
         # ({% cotton x %}{% endcotton %}). Cotton's tag parser also accepts the

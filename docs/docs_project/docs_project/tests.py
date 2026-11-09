@@ -122,6 +122,16 @@ class TabFenceTests(SimpleTestCase):
         self.assertIn("<p>text</p>", out)
 
 
+class DtlToggleTests(SimpleTestCase):
+    def test_cotton_verbatim_wrapper_survives_the_dtl_view(self):
+        from docs_project.utils.syntax_formatter import compile_to_template_tags
+
+        out = compile_to_template_tags("{% cotton:verbatim %}<c-button>Save</c-button>{% endcotton:verbatim %}")
+        self.assertIn("{% cotton:verbatim %}", out)
+        self.assertIn("{% endcotton:verbatim %}", out)
+        self.assertIn("{% cotton button %}Save{% endcotton %}", out)
+
+
 class PipelineTests(SimpleTestCase):
     def test_render_with_toc_returns_h2_headings(self):
         html, toc = docs.render_md_with_toc("# Title\n\n## Alpha\n\ntext\n\n## Beta\n\ntext")

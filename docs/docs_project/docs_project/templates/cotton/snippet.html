@@ -61,7 +61,7 @@
         </div>
     {% endif %}
 
-    {% comment %}The c-tags/DTL toggle only appears when the DTL form differs, e.g. not for tags inside {% verbatim %}, which the compiler leaves alone.{% endcomment %}
+    {% comment %}The c-tags/DTL toggle only appears when the DTL form differs, e.g. not for tags inside a verbatim block, which the compiler leaves alone.{% endcomment %}
     <!-- Top bar: snippet label (left) + syntax switcher & copy (right), vertically centered together -->
     <div class="absolute left-0 top-0 w-full px-5 pt-3 flex items-center justify-between">
         {% if label and not hide_label %}

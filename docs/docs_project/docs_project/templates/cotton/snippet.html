@@ -61,6 +61,7 @@
         </div>
     {% endif %}
 
+    {% comment %}The c-tags/DTL toggle only appears when the DTL form differs, e.g. not for tags inside {% verbatim %}, which the compiler leaves alone.{% endcomment %}
     <!-- Top bar: snippet label (left) + syntax switcher & copy (right), vertically centered together -->
     <div class="absolute left-0 top-0 w-full px-5 pt-3 flex items-center justify-between">
         {% if label and not hide_label %}
@@ -70,7 +71,7 @@
         {% endif %}
 
         <div class="flex items-center gap-3">
-            {% if "<c-" in slot and not ignore_syntax_choice %}
+            {% if "<c-" in slot and not ignore_syntax_choice and slot|strip|to_template_tags != slot|strip %}
                 <div class="inline-flex items-center gap-0.5 font-mono">
                     <button
                         @click="$store.syntaxPreference = 'html'"
@@ -101,7 +102,7 @@
         </div>
     </div>
 
-    {% if "<c-" in slot and not ignore_syntax_choice %}
+    {% if "<c-" in slot and not ignore_syntax_choice and slot|strip|to_template_tags != slot|strip %}
         <!-- HTML Syntax Version -->
         <div x-show="$store.syntaxPreference === 'html'">
             <pre class="{{ pre_class }}"><code x-ref="htmlCode" class="language-{{ language }} {{ code_class }} !pt-12">{{ slot|strip }}</code></pre>

@@ -1,0 +1,20 @@
+<c-vars url title />
+
+{% comment %}Share links for the current page. Plain share URLs, no third-party scripts, local brand marks. `copied` drives the tick on the copy button.{% endcomment %}
+<div class="flex items-center gap-3 text-ink-400 dark:text-ink-500" x-data="{ copied: false }">
+    <span class="text-xs uppercase tracking-wider">Share</span>
+
+    <a href="https://x.com/intent/post?url={{ url|urlencode:'' }}&text={{ title|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Share on X" title="X" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors"><c-icons.brand.x class="size-4" /></a>
+    <a href="https://bsky.app/intent/compose?text={{ title|urlencode:'' }}%20{{ url|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Share on Bluesky" title="Bluesky" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors"><c-icons.brand.bluesky class="size-4" /></a>
+    <a href="https://www.reddit.com/submit?url={{ url|urlencode:'' }}&title={{ title|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Share on Reddit" title="Reddit" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors"><c-icons.brand.reddit class="size-4" /></a>
+    <a href="https://news.ycombinator.com/submitlink?u={{ url|urlencode:'' }}&t={{ title|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Share on Hacker News" title="Hacker News" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors"><c-icons.brand.hackernews class="size-4" /></a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ url|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Share on LinkedIn" title="LinkedIn" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors"><c-icons.brand.linkedin class="size-4" /></a>
+    <a href="https://wa.me/?text={{ title|urlencode:'' }}%20{{ url|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Share on WhatsApp" title="WhatsApp" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors"><c-icons.brand.whatsapp class="size-4" /></a>
+    <a href="https://t.me/share/url?url={{ url|urlencode:'' }}&text={{ title|urlencode:'' }}" target="_blank" rel="noopener" aria-label="Share on Telegram" title="Telegram" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors"><c-icons.brand.telegram class="size-4" /></a>
+    <a href="mailto:?subject={{ title|urlencode:'' }}&body={{ url|urlencode:'' }}" aria-label="Share by email" title="Email" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors"><c-heroicon.envelope class="size-4" /></a>
+
+    <button type="button" @click="navigator.clipboard.writeText('{{ url|escapejs }}'); copied = true; setTimeout(() => copied = false, 1500)" aria-label="Copy link" title="Copy link" class="hover:text-ink-700 dark:hover:text-ink-200 transition-colors">
+        <c-heroicon.link x-show="!copied" class="size-4" />
+        <c-heroicon.check x-show="copied" x-cloak class="size-4 text-accent" />
+    </button>
+</div>

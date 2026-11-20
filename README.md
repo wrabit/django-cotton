@@ -194,7 +194,7 @@ Boolean attributes reduce boilerplate when we just want to indicate a certain at
 <!-- in view -->
 <c-button url="/contact" external>Contact</c-button>
 ```
-By passing just the attribute name without a value, it will automatically be provided to the component as `True`
+By passing just the attribute name without a value, it will automatically be provided to the component as `True`. To set it from a variable, pass it dynamically: `<c-input :required="field.required" />`. In `{{ attrs }}` the HTML boolean attributes (`required`, `disabled`, `checked` and friends) print as the bare name when truthy and are left out when falsy, and `None` leaves any attribute out.
 
 ```html
 <!-- cotton/button.html -->

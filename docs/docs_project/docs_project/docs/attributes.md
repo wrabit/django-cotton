@@ -51,6 +51,14 @@ An attribute with no value is `True`:
 
 In `{{ attrs }}` it prints as the bare name, `required`.
 
+To set one from a variable, pass it dynamically:
+
+```html
+<c-input name="email" :required="field.required" />
+```
+
+`{{ attrs }}` follows the browser's rules for the HTML boolean attributes (`required`, `disabled`, `checked`, `selected`, `readonly`, `multiple`, `hidden` and the rest): a truthy value prints the bare name and a falsy one leaves the attribute out, so `required="False"` can't slip through. `None` leaves any attribute out.
+
 ## Passing a dictionary with `:attrs`
 
 `:attrs` takes a dictionary and merges its keys in alongside the other attributes. Useful when a view, or a wrapping component, already holds them:

@@ -171,6 +171,12 @@ Sometimes you just want to pass a simple boolean to a component. Cotton supports
 <c-input name="telephone" required />
 ```
 
+When the value comes from a variable, pass it dynamically. `{{ attrs }}` prints the bare `required` when it is truthy and leaves it out when it isn't:
+
+```html
+<c-input name="telephone" :required="field.required" />
+```
+
 ## 8. Dynamic Components {#dynamic-components}
 
 There can be times where components need to be included dynamically. For these cases we can reach for a special `<c-component>` tag with an `is` attribute:

@@ -1020,3 +1020,37 @@ class AttributeInjectionTests(CottonTestCase):
             with self.subTest(payload=payload):
                 html = template.render(Context({"payload": payload})).strip()
                 self.assertEqual(html, expected)
+
+    def test_short_attribute_syntax_binds_same_named_variable(self):
+        self.create_template(
+            "cotton/short_attr.html",
+            """<input {{ attrs }} />[required={{ required }}][data_id={{ data_id }}]""",
+        )
+
+        self.create_template(
+            "short_attr_view.html",
+            """<c-short-attr name="a" :required :data-id />""",
+            "view/",
+            context={"required": True, "data_id": 7},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<input name="a" required data-id="7" />')
+            self.assertContains(response, "[required=True][data_id=7]")
+
+    def test_short_attribute_syntax_with_missing_variable_is_left_out(self):
+        self.create_template(
+            "cotton/short_attr_missing.html",
+            """<input {{ attrs }} />[{{ required|default:"unset" }}]""",
+        )
+
+        self.create_template(
+            "short_attr_missing_view.html",
+            """<c-short-attr-missing name="a" :required />""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<input name="a" />[unset]')

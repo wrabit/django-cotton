@@ -22,6 +22,13 @@ A `:` prefix passes the value itself rather than a string. The value is a contex
 <c-table :config="{'sortable': True, 'page_size': 20}" />
 ```
 
+When the attribute and the variable share a name, leave the value off. `:required` is `:required="required"`, and a hyphenated name looks up the snake_case variable, so `:data-id` binds `data_id`:
+
+```html
+<c-input name="email" :required :placeholder />
+<!-- same as :required="required" :placeholder="placeholder" -->
+```
+
 Template expressions work inside literals too, rendered before the literal is evaluated:
 
 ```html

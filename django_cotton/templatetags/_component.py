@@ -198,7 +198,15 @@ def _prepare_attrs(attrs: dict[str, Any], active_library: Library | None) -> lis
     for key, raw_value in attrs.items():
         value, was_quoted = strip_quotes_with_status(raw_value)
 
-        if value is True:
+        # Short attribute syntax: a bare `:name` binds the variable of the same
+        # name, so `:required` is `:required="required"` (hyphens become
+        # underscores to match how attributes are exposed in the component).
+        if value is True and key.startswith(":") and not key.startswith("::"):
+            name = key[1:]
+            pv = PreparedValue(name.replace("-", "_"), active_library=active_library)
+            prepared.append(PreparedAttr(name, AttrKind.DYNAMIC, name, pv))
+
+        elif value is True:
             prepared.append(PreparedAttr(key, AttrKind.BOOLEAN, True, None))
 
         elif key.startswith("::"):

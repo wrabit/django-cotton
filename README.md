@@ -210,6 +210,8 @@ Cotton supports two syntaxes for passing dynamic values:
 1. **Quoteless values**: `attr=value` - for simple values without spaces (like native Django)
 2. **Colon prefix**: `:attr="value"` - works for any expression
 
+When the attribute and the variable share a name, the value can be left off: `<c-button :enabled />` is `<c-button :enabled="enabled" />`.
+
 ```html
 <!-- Quoteless: for simple literals and variables -->
 <c-button enabled=True />

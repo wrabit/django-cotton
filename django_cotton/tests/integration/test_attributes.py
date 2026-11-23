@@ -1054,3 +1054,19 @@ class AttributeInjectionTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, '<input name="a" />[unset]')
+
+    def test_bare_double_colon_prints_a_bare_single_colon_attribute(self):
+        self.create_template(
+            "cotton/bare_escaped.html",
+            """<div {{ attrs }}></div>""",
+        )
+
+        self.create_template(
+            "bare_escaped_view.html",
+            """<c-bare-escaped ::open />""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "<div :open></div>")

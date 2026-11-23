@@ -206,6 +206,11 @@ def _prepare_attrs(attrs: dict[str, Any], active_library: Library | None) -> lis
             pv = PreparedValue(name.replace("-", "_"), active_library=active_library)
             prepared.append(PreparedAttr(name, AttrKind.DYNAMIC, name, pv))
 
+        # A bare `::name` is the escaped form of a bare `:name` for Alpine, so
+        # one colon is dropped like it is for `::name="..."`.
+        elif value is True and key.startswith("::"):
+            prepared.append(PreparedAttr(key[1:], AttrKind.BOOLEAN, True, None))
+
         elif value is True:
             prepared.append(PreparedAttr(key, AttrKind.BOOLEAN, True, None))
 

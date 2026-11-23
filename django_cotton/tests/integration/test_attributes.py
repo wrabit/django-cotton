@@ -1021,7 +1021,7 @@ class AttributeInjectionTests(CottonTestCase):
                 html = template.render(Context({"payload": payload})).strip()
                 self.assertEqual(html, expected)
 
-    def test_falsy_html_boolean_attributes_are_dropped_from_attrs(self):
+    def test_false_and_none_are_dropped_from_attrs(self):
         self.create_template(
             "cotton/bool_attrs.html",
             """<input {{ attrs }} />""",
@@ -1031,8 +1031,8 @@ class AttributeInjectionTests(CottonTestCase):
             "bool_attrs_view.html",
             """
                 <c-bool-attrs name="a" :required="True" :disabled="False" :checked="is_checked" :readonly="None" />
-                <c-bool-attrs name="b" :attrs="{'required': False, 'disabled': True, 'multiple': 0}" />
-                <c-bool-attrs name="c" :hidden="'until-found'" />
+                <c-bool-attrs name="b" :attrs="{'required': False, 'disabled': True, 'size': 0}" />
+                <c-bool-attrs name="c" :hidden="'until-found'" :data-id="None" :title="missing_var" aria-pressed="false" />
             """,
             "view/",
             context={"is_checked": True},
@@ -1041,21 +1041,5 @@ class AttributeInjectionTests(CottonTestCase):
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
             self.assertContains(response, '<input name="a" required checked />')
-            self.assertContains(response, '<input name="b" disabled />')
-            self.assertContains(response, '<input name="c" hidden="until-found" />')
-
-    def test_none_and_false_are_dropped_from_any_attribute(self):
-        self.create_template(
-            "cotton/none_attrs.html",
-            """<div {{ attrs }}></div>""",
-        )
-
-        self.create_template(
-            "none_attrs_view.html",
-            """<c-none-attrs id="x" :data-id="None" :title="missing_var" :aria-expanded="False" aria-pressed="false" :count="0" />""",
-            "view/",
-        )
-
-        with self.settings(ROOT_URLCONF=self.url_conf()):
-            response = self.client.get("/view/")
-            self.assertContains(response, '<div id="x" aria-pressed="false" count="0"></div>')
+            self.assertContains(response, '<input name="b" disabled size="0" />')
+            self.assertContains(response, '<input name="c" hidden="until-found" aria-pressed="false" />')

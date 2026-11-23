@@ -118,7 +118,14 @@ class Attrs(Mapping):
                 continue
             if k.lower() in HTML_BOOLEAN_ATTRIBUTES and not v:
                 continue
-            parts.append(k if v is True else f"{k}={ensure_quoted(v)}")
+            if v is True:
+                parts.append(k)
+            elif v is False:
+                # ARIA states and enumerated attributes (aria-expanded, draggable,
+                # contenteditable) take "false" as a real value, distinct from absent.
+                parts.append(f'{k}="false"')
+            else:
+                parts.append(f"{k}={ensure_quoted(v)}")
         return mark_safe(" ".join(parts))
 
     def __getitem__(self, key):

@@ -57,7 +57,7 @@ To set one from a variable, pass it dynamically:
 <c-input name="email" :required="field.required" />
 ```
 
-`{{ attrs }}` follows the browser's rules for the HTML boolean attributes (`required`, `disabled`, `checked`, `selected`, `readonly`, `multiple`, `hidden` and the rest): a truthy value prints the bare name and a falsy one leaves the attribute out, so `required="False"` can't slip through. `None` leaves any attribute out.
+`{{ attrs }}` follows the browser's rules for the HTML boolean attributes (`required`, `disabled`, `checked`, `selected`, `readonly`, `multiple`, `hidden` and the rest): a truthy value prints the bare name and a falsy one leaves the attribute out, so `required="False"` can't slip through. On any other attribute `False` prints as `"false"`, since ARIA states like `aria-expanded` treat `"false"` and absent differently. `None` leaves any attribute out.
 
 ## Passing a dictionary with `:attrs`
 

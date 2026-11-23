@@ -27,7 +27,7 @@ All attributes the parent passed, minus anything declared in [`<c-vars />`](c-va
 <!-- <input type="text" name="email" placeholder="Email" required /> -->
 ```
 
-Boolean attributes print as the bare name, and a falsy value for an HTML boolean attribute such as `disabled` leaves it out, see [boolean attributes](attributes.md#boolean-attributes). `None` leaves any attribute out. Other values are quoted, choosing the quote style to suit the content.
+Boolean attributes print as the bare name, and a falsy value for an HTML boolean attribute such as `disabled` leaves it out, see [boolean attributes](attributes.md#boolean-attributes). On other attributes `False` prints as `"false"`. `None` leaves any attribute out. Other values are quoted, choosing the quote style to suit the content.
 
 `attrs` is also a mapping, so single values and iteration work:
 

@@ -1043,3 +1043,53 @@ class AttributeInjectionTests(CottonTestCase):
             self.assertContains(response, '<input name="a" required checked />')
             self.assertContains(response, '<input name="b" disabled size="0" />')
             self.assertContains(response, '<input name="c" hidden="until-found" aria-pressed="false" />')
+
+    def test_short_attribute_syntax_binds_same_named_variable(self):
+        self.create_template(
+            "cotton/short_attr.html",
+            """<input {{ attrs }} />[required={{ required }}][data_id={{ data_id }}]""",
+        )
+
+        self.create_template(
+            "short_attr_view.html",
+            """<c-short-attr name="a" :required :data-id />""",
+            "view/",
+            context={"required": True, "data_id": 7},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<input name="a" required data-id="7" />')
+            self.assertContains(response, "[required=True][data_id=7]")
+
+    def test_short_attribute_syntax_with_missing_variable_is_left_out(self):
+        self.create_template(
+            "cotton/short_attr_missing.html",
+            """<input {{ attrs }} />[{{ required|default:"unset" }}]""",
+        )
+
+        self.create_template(
+            "short_attr_missing_view.html",
+            """<c-short-attr-missing name="a" :required />""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<input name="a" />[unset]')
+
+    def test_bare_double_colon_prints_a_bare_single_colon_attribute(self):
+        self.create_template(
+            "cotton/bare_escaped.html",
+            """<div {{ attrs }}></div>""",
+        )
+
+        self.create_template(
+            "bare_escaped_view.html",
+            """<c-bare-escaped ::open />""",
+            "view/",
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, "<div :open></div>")

@@ -1044,7 +1044,7 @@ class AttributeInjectionTests(CottonTestCase):
             self.assertContains(response, '<input name="b" disabled />')
             self.assertContains(response, '<input name="c" hidden="until-found" />')
 
-    def test_none_is_dropped_and_false_prints_lowercase_on_other_attributes(self):
+    def test_none_and_false_are_dropped_from_any_attribute(self):
         self.create_template(
             "cotton/none_attrs.html",
             """<div {{ attrs }}></div>""",
@@ -1052,10 +1052,10 @@ class AttributeInjectionTests(CottonTestCase):
 
         self.create_template(
             "none_attrs_view.html",
-            """<c-none-attrs id="x" :data-id="None" :title="missing_var" :aria-expanded="False" :count="0" />""",
+            """<c-none-attrs id="x" :data-id="None" :title="missing_var" :aria-expanded="False" aria-pressed="false" :count="0" />""",
             "view/",
         )
 
         with self.settings(ROOT_URLCONF=self.url_conf()):
             response = self.client.get("/view/")
-            self.assertContains(response, '<div id="x" aria-expanded="false" count="0"></div>')
+            self.assertContains(response, '<div id="x" aria-pressed="false" count="0"></div>')

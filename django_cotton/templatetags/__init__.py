@@ -94,8 +94,9 @@ class UnprocessableDynamicAttr(Exception):
     pass
 
 
-# Attributes the browser reads by presence alone, so a value of False must drop
-# them rather than print required="False", which the browser treats as required.
+# Attributes the browser reads by presence alone. False and None drop any
+# attribute; for these, any falsy value (0, "") drops it too, since
+# required="" still means required.
 HTML_BOOLEAN_ATTRIBUTES = frozenset(
     """
     allowfullscreen async autofocus autoplay checked controls default defer disabled
@@ -114,18 +115,11 @@ class Attrs(Mapping):
     def __str__(self):
         parts = []
         for k, v in self._attrs.items():
-            if k in self._exclude_from_str or v is None:
+            if k in self._exclude_from_str or v is None or v is False:
                 continue
             if k.lower() in HTML_BOOLEAN_ATTRIBUTES and not v:
                 continue
-            if v is True:
-                parts.append(k)
-            elif v is False:
-                # ARIA states and enumerated attributes (aria-expanded, draggable,
-                # contenteditable) take "false" as a real value, distinct from absent.
-                parts.append(f'{k}="false"')
-            else:
-                parts.append(f"{k}={ensure_quoted(v)}")
+            parts.append(k if v is True else f"{k}={ensure_quoted(v)}")
         return mark_safe(" ".join(parts))
 
     def __getitem__(self, key):

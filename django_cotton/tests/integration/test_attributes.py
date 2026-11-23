@@ -1021,6 +1021,29 @@ class AttributeInjectionTests(CottonTestCase):
                 html = template.render(Context({"payload": payload})).strip()
                 self.assertEqual(html, expected)
 
+    def test_false_and_none_are_dropped_from_attrs(self):
+        self.create_template(
+            "cotton/bool_attrs.html",
+            """<input {{ attrs }} />""",
+        )
+
+        self.create_template(
+            "bool_attrs_view.html",
+            """
+                <c-bool-attrs name="a" :required="True" :disabled="False" :checked="is_checked" :readonly="None" />
+                <c-bool-attrs name="b" :attrs="{'required': False, 'disabled': True, 'size': 0}" />
+                <c-bool-attrs name="c" :hidden="'until-found'" :data-id="None" :title="missing_var" aria-pressed="false" />
+            """,
+            "view/",
+            context={"is_checked": True},
+        )
+
+        with self.settings(ROOT_URLCONF=self.url_conf()):
+            response = self.client.get("/view/")
+            self.assertContains(response, '<input name="a" required checked />')
+            self.assertContains(response, '<input name="b" disabled size="0" />')
+            self.assertContains(response, '<input name="c" hidden="until-found" aria-pressed="false" />')
+
     def test_short_attribute_syntax_binds_same_named_variable(self):
         self.create_template(
             "cotton/short_attr.html",

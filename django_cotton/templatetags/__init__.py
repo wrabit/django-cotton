@@ -101,13 +101,14 @@ class Attrs(Mapping):
         self._unprocessable: List[str] = []
 
     def __str__(self):
-        return mark_safe(
-            " ".join(
-                f"{k}" if v is True else f"{k}={ensure_quoted(v)}"
-                for k, v in self._attrs.items()
-                if k not in self._exclude_from_str
-            )
-        )
+        parts = []
+        for k, v in self._attrs.items():
+            # False and None leave the attribute out, so required="False" can't
+            # happen; the browser would read that as required.
+            if k in self._exclude_from_str or v is None or v is False:
+                continue
+            parts.append(k if v is True else f"{k}={ensure_quoted(v)}")
+        return mark_safe(" ".join(parts))
 
     def __getitem__(self, key):
         return self._attrs[key]

@@ -14,6 +14,27 @@ class CompilerUnitTests(unittest.TestCase):
         expected = '{% cotton:vars title="Test" %}'
         self.assertEqual(result, expected)
 
+    def test_compile_cvars_value_with_angle_bracket(self):
+        """A `>` inside a quoted value must not end the tag."""
+        source = '<c-vars title="a > b" />'
+        result = self.compiler.process(source)
+        self.assertEqual(result, '{% cotton:vars title="a > b" %}')
+
+    def test_compile_cvars_value_with_html(self):
+        source = '<c-vars html="<b>x</b>" />'
+        result = self.compiler.process(source)
+        self.assertEqual(result, '{% cotton:vars html="<b>x</b>" %}')
+
+    def test_compile_cvars_value_with_self_closing_sequence(self):
+        source = '<c-vars text="x /> y" />'
+        result = self.compiler.process(source)
+        self.assertEqual(result, '{% cotton:vars text="x /> y" %}')
+
+    def test_compile_cvars_paired_form_with_angle_bracket(self):
+        source = '<c-vars title="a > b">ignored</c-vars>'
+        result = self.compiler.process(source)
+        self.assertEqual(result, '{% cotton:vars title="a > b" %}')
+
     def test_compile_component_tag(self):
         source = '<c-test_button>Click</c-test_button>'
         result = self.compiler.process(source)

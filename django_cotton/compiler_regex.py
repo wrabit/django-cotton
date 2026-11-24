@@ -90,7 +90,13 @@ class Tag:
 
 class CottonCompiler:
     def __init__(self):
-        self.c_vars_pattern = re.compile(r"<c-vars\s([^>]*)(?:/>|>(.*?)</c-vars>)", re.DOTALL)
+        # Attribute values may contain `>` (`label="a > b"`, `html="<b>x</b>"`),
+        # so the attribute run has to step over quoted values instead of
+        # stopping at the first `>`.
+        c_vars_attrs = r"""(?:[^>"']|"[^"]*"|'[^']*')*"""
+        self.c_vars_pattern = re.compile(
+            rf"<c-vars\s({c_vars_attrs})(?:/>|>(.*?)</c-vars>)", re.DOTALL
+        )
         self.leading_load_tags_pattern = re.compile(r"^((?:\s*{%\s*load\b.*?%\}\s*)+)", re.DOTALL)
         self.ignore_pattern = re.compile(
             # Ignore Django's verbatim blocks (including named blocks)
